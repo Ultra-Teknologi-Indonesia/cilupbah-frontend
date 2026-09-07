@@ -30,12 +30,10 @@ function rangeForPeriod(period: PeriodValue) {
 
 export function Beranda() {
   const [period, setPeriod] = useState<PeriodValue>("30");
-  const [locationId, setLocationId] = useState("");
 
   const params = useMemo(() => {
-    const range = rangeForPeriod(period);
-    return locationId ? { ...range, location_id: locationId } : range;
-  }, [period, locationId]);
+    return rangeForPeriod(period);
+  }, [period]);
 
   const { data: summary, isLoading } = useDashboardSummary(params);
 
@@ -51,8 +49,6 @@ export function Beranda() {
           <DashboardControls
             period={period}
             onPeriodChange={setPeriod}
-            locationId={locationId}
-            onLocationChange={setLocationId}
           />
         }
       />
@@ -80,7 +76,6 @@ export function Beranda() {
             icon={PackageCheckIcon}
             emptyMessage="Semua pesanan yang siap sudah diproses."
             viewAllHref="/dashboard/pesanan?tab=ready-to-process"
-            locationId={locationId}
           />
           <ActionQueueTable
             queue="pending-cancel"
@@ -88,7 +83,6 @@ export function Beranda() {
             icon={XCircleIcon}
             emptyMessage="Tidak ada permintaan pembatalan."
             viewAllHref="/dashboard/pesanan?tab=cancellation"
-            locationId={locationId}
           />
           <ActionQueueTable
             queue="empty-stock"
@@ -96,7 +90,6 @@ export function Beranda() {
             icon={PackageXIcon}
             emptyMessage="Tidak ada pesanan dengan stok kurang."
             viewAllHref="/dashboard/pesanan?tab=empty-stock"
-            locationId={locationId}
           />
           <ActionQueueTable
             queue="failed-pick"
@@ -104,7 +97,6 @@ export function Beranda() {
             icon={AlertTriangleIcon}
             emptyMessage="Tidak ada pesanan gagal picking."
             viewAllHref="/dashboard/pesanan?tab=failed-pick"
-            locationId={locationId}
           />
         </div>
       </section>

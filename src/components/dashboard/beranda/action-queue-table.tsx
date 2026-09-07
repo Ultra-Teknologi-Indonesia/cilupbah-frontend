@@ -35,7 +35,6 @@ interface ActionQueueTableProps {
   emptyMessage: string;
 
   viewAllHref?: string;
-  locationId?: string;
 }
 
 const PER_PAGE = 5;
@@ -46,7 +45,6 @@ export function ActionQueueTable({
   icon: Icon,
   emptyMessage,
   viewAllHref,
-  locationId,
 }: ActionQueueTableProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -55,17 +53,12 @@ export function ActionQueueTable({
   const { data, isLoading } = useDashboardQueue(queue, {
     page: 1,
     per_page: PER_PAGE,
-    location_id: locationId || undefined,
   });
 
   const items = data?.items ?? [];
   const total = data?.meta?.total ?? 0;
 
   const isProcessQueue = queue === "ready-to-process";
-  const scopedViewAllHref = viewAllHref
-    ? `${viewAllHref}${locationId ? `&location_id=${encodeURIComponent(locationId)}` : ""}`
-    : undefined;
-
   const handleProcessAll = () =>
     moveToReady.mutate(
       items.map((it) => it.id),
@@ -104,9 +97,9 @@ export function ActionQueueTable({
               Proses semua
             </Button>
           ) : null}
-          {scopedViewAllHref ? (
+          {viewAllHref ? (
             <Button variant="ghost" size="sm" className="text-xs" asChild>
-              <Link href={scopedViewAllHref}>
+              <Link href={viewAllHref}>
                 Lihat semua
                 <ArrowRightIcon className="size-3.5" />
               </Link>
