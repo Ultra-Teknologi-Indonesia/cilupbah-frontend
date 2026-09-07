@@ -910,6 +910,9 @@ export type OrderCardVariant = "sales" | "outbound-ready";
 
 export function OutboundReadyActions({ order }: { order: Order }) {
   const [picklistOpen, setPicklistOpen] = React.useState(false);
+  const [deleteOpen, setDeleteOpen] = React.useState(false);
+  const { can } = usePermissions();
+  const canDeleteOrder = can("delete-pesanan");
   const isMarketplace = !!order.source && order.source !== "manual";
 
   const handlePrintLabel = () => {
@@ -958,6 +961,17 @@ export function OutboundReadyActions({ order }: { order: Order }) {
         <ClipboardListIcon className="size-3.5" />
         Buat Picklist
       </Button>
+      {canDeleteOrder && (
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-8 gap-1.5 text-xs text-destructive hover:text-destructive"
+          onClick={() => setDeleteOpen(true)}
+        >
+          <Trash2Icon className="size-3.5" />
+          Hapus
+        </Button>
+      )}
       <BuatPicklistDialog
         open={picklistOpen}
         onOpenChange={setPicklistOpen}
@@ -966,6 +980,13 @@ export function OutboundReadyActions({ order }: { order: Order }) {
         locationName={order.location_name ?? null}
         multiLocation={false}
         onCreated={() => setPicklistOpen(false)}
+      />
+      <DeleteOrderDialog
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        orders={[{ id: order.id, no: order.salesorder_no }]}
+        outcomeDescription="Pilih alasan penghapusan. Pesanan akan dipindahkan ke Gagal Picking agar dapat ditindaklanjuti."
+        outcomeLabel="dipindahkan ke Gagal Picking"
       />
     </>
   );

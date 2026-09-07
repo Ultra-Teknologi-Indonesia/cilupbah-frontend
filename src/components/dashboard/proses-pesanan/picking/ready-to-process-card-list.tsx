@@ -8,6 +8,7 @@ import {
   PackageOpenIcon,
   PrinterIcon,
   RefreshCwIcon,
+  Trash2Icon,
   TruckIcon,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -21,6 +22,7 @@ import {
 } from "@/components/ui/simple-pagination";
 import { OrderTable } from "@/components/dashboard/proses-pesanan/shared/order-table";
 import { AmbilNoResiDialog } from "@/components/dashboard/proses-pesanan/shared/ambil-no-resi-dialog";
+import { DeleteOrderDialog } from "@/components/dashboard/proses-pesanan/shared/delete-order-dialog";
 import { BulkBuatPicklistConfirmDialog } from "@/components/dashboard/proses-pesanan/picking/bulk-buat-picklist-confirm-dialog";
 import {
   FulfillmentFilterBar,
@@ -28,6 +30,7 @@ import {
 } from "@/components/dashboard/proses-pesanan/shared/fulfillment-filter-bar";
 import { UserSelectById } from "@/components/dashboard/shared/user-select-by-id";
 import { useMe } from "@/hooks/auth/use-auth";
+import { usePermissions } from "@/hooks/auth/use-permissions";
 import {
   fulfillmentKeys,
   useCreatePicklist,
@@ -71,6 +74,7 @@ export function ReadyToProcessCardList() {
   const [selected, setSelected] = React.useState<Set<string>>(new Set());
   const [pickerId, setPickerId] = React.useState<string>("");
   const [confirmOpen, setConfirmOpen] = React.useState(false);
+  const [deleteOpen, setDeleteOpen] = React.useState(false);
   const [ambilResiOpen, setAmbilResiOpen] = React.useState(false);
   const [resiOrderIds, setResiOrderIds] = React.useState<string[]>([]);
 
@@ -139,6 +143,8 @@ export function ReadyToProcessCardList() {
   const pickers = usePickers(locationId ?? undefined, undefined, !!locationId);
   const createPicklist = useCreatePicklist();
   const { data: me } = useMe();
+  const { can } = usePermissions();
+  const canDeleteOrder = can("delete-pesanan");
   const pickerOptions = React.useMemo(
     () =>
       (pickers.data ?? []).map((p) => ({
@@ -296,56 +302,71 @@ export function ReadyToProcessCardList() {
                 ) : null
               }
               actions={
-                multiLocation ? null : (
-                  <>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-muted-foreground">
-                        Picker
-                      </span>
-                      <UserSelectById
-                        value={pickerId}
-                        onChange={(id) => setPickerId(id)}
-                        options={pickerOptions}
-                        isLoading={pickers.isLoading}
-                        currentUserId={me?.id}
-                        disabled={!locationId || pickers.isLoading}
-                        placeholder={
-                          pickers.isLoading ? "Memuat…" : "Pilih picker…"
-                        }
-                        emptyText="Tidak ada picker di lokasi ini."
-                        className="w-72"
-                      />
-                    </div>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => setConfirmOpen(true)}
-                      disabled={createPicklist.isPending || !pickerId}
-                    >
-                      {createPicklist.isPending && (
-                        <Loader2Icon className="animate-spin" />
-                      )}
-                      Buat Picklist
-                    </Button>
-                    <Button
-                      size="sm"
-                      className="rounded-full gap-1.5"
-                      onClick={handleOpenAmbilResi}
-                    >
-                      <TruckIcon className="size-4" />
-                      Siap Kirim
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="rounded-full gap-1.5"
-                      onClick={handleOpenAmbilResi}
-                    >
-                      <PrinterIcon className="size-4" />
-                      Cetak Label
-                    </Button>
-                  </>
-                )
+                <>
+                    {!multiLocation && (
+                      <>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-muted-foreground">
+                            Picker
+                          </span>
+                          <UserSelectById
+                            value={pickerId}
+                            onChange={(id) => setPickerId(id)}
+                            options={pickerOptions}
+                            isLoading={pickers.isLoading}
+                            currentUserId={me?.id}
+                            disabled={!locationId || pickers.isLoading}
+                            placeholder={
+                              pickers.isLoading
+                                ? "Memuat…"
+                                : "Pilih picker…"
+                            }
+                            emptyText="Tidak ada picker di lokasi ini."
+                            className="w-72"
+                          />
+                        </div>
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          onClick={() => setConfirmOpen(true)}
+                          disabled={createPicklist.isPending || !pickerId}
+                        >
+                          {createPicklist.isPending && (
+                            <Loader2Icon className="animate-spin" />
+                          )}
+                          Buat Picklist
+                        </Button>
+                        <Button
+                          size="sm"
+                          className="rounded-full gap-1.5"
+                          onClick={handleOpenAmbilResi}
+                        >
+                          <TruckIcon className="size-4" />
+                          Siap Kirim
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="rounded-full gap-1.5"
+                          onClick={handleOpenAmbilResi}
+                        >
+                          <PrinterIcon className="size-4" />
+                          Cetak Label
+                        </Button>
+                      </>
+                    )}
+                    {canDeleteOrder && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full gap-1.5 text-destructive hover:text-destructive"
+                        onClick={() => setDeleteOpen(true)}
+                      >
+                        <Trash2Icon className="size-4" />
+                        Hapus
+                      </Button>
+                    )}
+                </>
               }
             />
 
@@ -393,6 +414,23 @@ export function ReadyToProcessCardList() {
         loading={createPicklist.isPending}
         onConfirm={handleCreatePicklist}
       />
+
+      {canDeleteOrder && (
+        <DeleteOrderDialog
+          open={deleteOpen}
+          onOpenChange={setDeleteOpen}
+          orders={selectedOrders.map((order) => ({
+            id: order.id,
+            no: order.salesorderNo,
+          }))}
+          outcomeDescription="Pilih alasan penghapusan. Pesanan akan dipindahkan ke Gagal Picking agar dapat ditindaklanjuti."
+          outcomeLabel="dipindahkan ke Gagal Picking"
+          bulkSuccessMessage={(count) =>
+            `${count} pesanan dipindahkan ke Gagal Picking.`
+          }
+          onDeleted={clearSelection}
+        />
+      )}
 
       <AmbilNoResiDialog
         open={ambilResiOpen}

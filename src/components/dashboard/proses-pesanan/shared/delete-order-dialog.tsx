@@ -43,11 +43,17 @@ export function DeleteOrderDialog({
   onOpenChange,
   orders,
   onDeleted,
+  outcomeDescription,
+  outcomeLabel,
+  bulkSuccessMessage,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   orders: DeleteOrderTarget[];
   onDeleted?: () => void;
+  outcomeDescription?: React.ReactNode;
+  outcomeLabel?: React.ReactNode;
+  bulkSuccessMessage?: (successfulCount: number) => string;
 }) {
   const [reasonCode, setReasonCode] =
     React.useState<PicklistFailReasonCode>("STOCK_EMPTY");
@@ -92,7 +98,10 @@ export function DeleteOrderDialog({
               (failed[0].message ? ` (${failed[0].message})` : ""),
           );
         } else {
-          toast.success(`${ok} pesanan dihapus dari fulfillment.`);
+          toast.success(
+            bulkSuccessMessage?.(ok) ??
+              `${ok} pesanan dihapus dari fulfillment.`,
+          );
         }
         onOpenChange(false);
         onDeleted?.();
@@ -137,8 +146,12 @@ export function DeleteOrderDialog({
               : "Hapus Pesanan dari Proses"}
           </DialogTitle>
           <DialogDescription>
-            Pilih alasan pesanan dihapus dari alur fulfillment. Pesanan akan
-            dikembalikan ke tahap sebelumnya sesuai proses saat ini.
+            {outcomeDescription ?? (
+              <>
+                Pilih alasan pesanan dihapus dari alur fulfillment. Pesanan
+                akan dikembalikan ke tahap sebelumnya sesuai proses saat ini.
+              </>
+            )}
           </DialogDescription>
         </DialogHeader>
 
@@ -151,7 +164,7 @@ export function DeleteOrderDialog({
           <div className="mt-2 text-xs text-muted-foreground">
             {isBulk ? "Semua pesanan" : "Pesanan"} akan{" "}
             <span className="font-semibold text-foreground">
-              dikembalikan ke tahap sebelumnya
+              {outcomeLabel ?? "dikembalikan ke tahap sebelumnya"}
             </span>{" "}
             dari alur proses fulfillment.
           </div>
