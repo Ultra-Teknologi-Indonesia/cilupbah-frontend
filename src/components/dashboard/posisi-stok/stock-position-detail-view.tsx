@@ -643,7 +643,7 @@ function MovementsSection({ itemId }: { itemId: string }) {
       view,
       page,
       per_page: perPage,
-      sort: "workflow",
+      sort: "-workflow",
     }),
     [
       itemId,
@@ -880,9 +880,9 @@ function MovementsSection({ itemId }: { itemId: string }) {
             </TableHead>
             <TableHead
               className="px-3 py-2.5 text-right text-xs uppercase tracking-wider text-muted-foreground"
-              title="Saldo stok fisik pada rak setelah aktivitas. Pelepasan cadangan tidak mengubah saldo ini."
+              title="Total stok fisik SKU setelah aktivitas. Pelepasan cadangan tidak mengubah saldo ini."
             >
-              Saldo pada rak setelah aktivitas
+              Saldo stok setelah aktivitas
             </TableHead>
             <TableHead className="w-[24rem] min-w-[18rem] px-3 py-2.5 text-xs uppercase tracking-wider text-muted-foreground">
               Keterangan
