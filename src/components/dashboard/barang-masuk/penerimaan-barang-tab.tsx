@@ -413,6 +413,13 @@ export function PenerimaanBarangTab() {
       },
 
       {
+        accessorKey: "created_by",
+        header: "Dibuat oleh",
+        cell: ({ row }) => (
+          <span>{row.original.created_by || "—"}</span>
+        ),
+      },
+      {
         id: "dikerjakan",
         header: "Dikerjakan",
         cell: ({ row }) => {
