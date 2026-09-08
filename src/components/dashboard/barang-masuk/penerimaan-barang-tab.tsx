@@ -609,7 +609,7 @@ export function PenerimaanBarangTab() {
         <FilterToolbar
           search={list.search}
           onSearchChange={list.setSearch}
-          searchPlaceholder="Cari no. penerimaan..."
+          searchPlaceholder="Cari no. penerimaan, referensi, nama pembuat..."
           align="end"
           onReset={hasActiveFilter || !!list.search ? list.resetAll : undefined}
           hasFilter={hasActiveFilter || !!list.search}
