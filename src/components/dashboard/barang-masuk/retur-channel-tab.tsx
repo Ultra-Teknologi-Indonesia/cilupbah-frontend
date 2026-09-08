@@ -468,30 +468,33 @@ export function ReturChannelTab() {
         cell: ({ row }) => {
           const item = row.original;
           return (
-            <div className="flex items-center justify-end gap-1.5">
-              <button
+            <div className="flex items-center justify-end gap-2">
+              <Button
                 type="button"
+                size="sm"
                 onClick={() => {
                   setAcceptTarget(item);
                   setProcessedBy("");
                 }}
-                className="inline-flex items-center gap-1 rounded-md bg-success/10 px-2 py-1 text-xs font-medium text-success transition-colors hover:bg-success/20"
+                className="h-8 gap-1.5"
               >
-                <CheckCircleIcon className="size-3.5" />
+                <CheckCircleIcon className="size-4" />
                 Setujui
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                variant="destructive"
+                size="sm"
                 onClick={() => {
                   setRejectTarget(item);
                   setProcessedBy("");
                   setRejectReason("");
                 }}
-                className="inline-flex items-center gap-1 rounded-md bg-destructive/10 px-2 py-1 text-xs font-medium text-destructive transition-colors hover:bg-destructive/20"
+                className="h-8 gap-1.5"
               >
-                <XCircleIcon className="size-3.5" />
+                <XCircleIcon className="size-4" />
                 Tolak
-              </button>
+              </Button>
             </div>
           );
         },
@@ -502,19 +505,32 @@ export function ReturChannelTab() {
         header: () => <div className="text-right">Aksi</div>,
         cell: ({ row }) => {
           const item = row.original;
+          const isCancelledShipped = item.reason_category === "CANCEL_SHIPPED";
           return (
             <div className="flex items-center justify-end">
-              <button
-                type="button"
-                onClick={() => {
-                  setCompleteTarget(item);
-                  setProcessedBy("");
-                }}
-                className="inline-flex items-center gap-1 rounded-md bg-success/10 px-2 py-1 text-xs font-medium text-success transition-colors hover:bg-success/20"
-              >
-                <FlagIcon className="size-3.5" />
-                Selesaikan
-              </button>
+              {isCancelledShipped ? (
+                <Button size="sm" className="h-8 gap-1.5" asChild>
+                  <Link
+                    href={`/dashboard/barang-masuk/penerimaan?penerimaan_search=${encodeURIComponent(item.return_number)}`}
+                  >
+                    <CheckCircleIcon className="size-4" />
+                    Buka Penerimaan
+                  </Link>
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => {
+                    setCompleteTarget(item);
+                    setProcessedBy("");
+                  }}
+                  className="h-8 gap-1.5"
+                >
+                  <FlagIcon className="size-4" />
+                  Selesaikan
+                </Button>
+              )}
             </div>
           );
         },
@@ -690,7 +706,11 @@ export function ReturChannelTab() {
           }
         }}
         title="Setujui Retur"
-        description={`Setujui retur ${acceptTarget?.return_number ?? ""}? Qty yang disetujui akan langsung diterima dan siap ditempatkan.`}
+        description={
+          acceptTarget?.reason_category === "CANCEL_SHIPPED"
+            ? `Paket retur ${acceptTarget?.return_number ?? ""} sudah diterima fisik di gudang? Sistem akan membuat dokumen penerimaan. Stok baru bertambah setelah SKU dipindai dan ditempatkan ke rak.`
+            : `Setujui retur ${acceptTarget?.return_number ?? ""}? Qty yang disetujui akan langsung diterima dan siap ditempatkan.`
+        }
         confirmLabel="Setujui"
         loading={acceptMutation.isPending}
         onConfirm={() => {
@@ -726,7 +746,9 @@ export function ReturChannelTab() {
 
           {acceptTarget && acceptTarget.items.length > 0 && (
             <div>
-              <Label className="text-sm font-medium">Qty disetujui</Label>
+              <Label className="text-sm font-medium">
+                {acceptTarget?.reason_category === "CANCEL_SHIPPED" ? "Qty paket diterima" : "Qty disetujui"}
+              </Label>
               <div className="mt-1.5 space-y-2">
                 {acceptTarget.items.map((it) => {
                   const current = approvedQty[it.item_id] ?? it.qty;

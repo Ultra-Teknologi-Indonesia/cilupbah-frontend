@@ -91,6 +91,7 @@ export function SalesReturnDetailView({ id }: { id: string }) {
   const canEditReturn = can("edit-retur-penjualan");
   const { data: ret, isLoading } = useSalesReturn(id);
   const isMarketplace = ret?.source === "marketplace";
+  const isCancelledShipped = ret?.reason_category === "CANCEL_SHIPPED";
   const { data: appeals = [] } = useSalesReturnAppeals(id, isMarketplace);
 
   const acceptMut = useAcceptSalesReturn();
@@ -205,16 +206,26 @@ export function SalesReturnDetailView({ id }: { id: string }) {
               </>
             )}
             {canEditReturn && ret.status === "ACCEPTED" && (
-              <Button
-                size="sm"
-                onClick={() => {
-                  closeAction();
-                  setAction("complete");
-                }}
-                className="bg-success text-white hover:bg-success/90"
-              >
-                <FlagIcon className="mr-1.5 size-4" /> Selesaikan
-              </Button>
+              isCancelledShipped ? (
+                <Button size="sm" asChild>
+                  <Link
+                    href={`/dashboard/barang-masuk/penerimaan?penerimaan_search=${encodeURIComponent(ret.return_number)}`}
+                  >
+                    <CheckCircleIcon className="mr-1.5 size-4" /> Buka Penerimaan
+                  </Link>
+                </Button>
+              ) : (
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    closeAction();
+                    setAction("complete");
+                  }}
+                  className="bg-success text-white hover:bg-success/90"
+                >
+                  <FlagIcon className="mr-1.5 size-4" /> Selesaikan
+                </Button>
+              )
             )}
             {canEditReturn && ret.status === "COMPLETED" && (
               <Button variant="outline" size="sm" asChild>
@@ -294,7 +305,7 @@ export function SalesReturnDetailView({ id }: { id: string }) {
         >
           <div className="flex items-center justify-between gap-2 px-5 pt-5">
             <p className="text-sm font-medium">Keputusan Marketplace</p>
-            {canEditReturn && isMpDecisionActionable(ret.marketplace_decision) && (
+            {canEditReturn && !isCancelledShipped && isMpDecisionActionable(ret.marketplace_decision) && (
               <div className="flex items-center gap-2">
                 <Button
                   size="sm"
@@ -470,7 +481,11 @@ export function SalesReturnDetailView({ id }: { id: string }) {
           if (!o) closeAction();
         }}
         title="Setujui Retur"
-        description={`Setujui retur ${ret.return_number}? Barang akan dijadwalkan masuk kembali ke stok.`}
+        description={
+          isCancelledShipped
+            ? `Paket retur ${ret.return_number} sudah diterima fisik di gudang? Sistem akan membuat dokumen penerimaan. Stok baru bertambah setelah SKU dipindai dan ditempatkan ke rak.`
+            : `Setujui retur ${ret.return_number}? Barang akan dijadwalkan masuk kembali ke stok.`
+        }
         confirmLabel="Setujui"
         loading={acceptMut.isPending}
         onConfirm={() => {
