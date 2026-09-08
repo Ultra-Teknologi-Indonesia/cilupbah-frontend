@@ -10,6 +10,7 @@ export const LaporanProdukService = {
     const sp = new URLSearchParams();
     sp.set("from", params.from);
     sp.set("to", params.to);
+    sp.set("format", params.format ?? "excel");
     params.location_ids?.forEach((id) => sp.append("location_ids[]", id));
     params.item_ids?.forEach((id) => sp.append("item_ids[]", id));
 

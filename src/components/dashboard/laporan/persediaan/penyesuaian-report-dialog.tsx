@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { PrinterIcon } from "lucide-react";
+import { DownloadIcon, Loader2, PrinterIcon } from "lucide-react";
 
 import {
   Dialog,
@@ -16,6 +16,9 @@ import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/ui/date-picker";
 import { ProductPickerCombobox } from "@/components/dashboard/laporan/shared/product-picker-combobox";
 import { LocationMultiCombobox } from "@/components/dashboard/laporan/shared/location-multi-combobox";
+import { ReportFormatRadio, type ReportFormat } from "@/components/dashboard/laporan/shared/report-format-radio";
+import { useAsyncExport } from "@/hooks/laporan/use-async-export";
+import { ReportService } from "@/services/laporan/report.service";
 
 interface PenyesuaianReportDialogProps {
   open: boolean;
@@ -44,6 +47,8 @@ export function PenyesuaianReportDialog({
   const [endDate, setEndDate] = React.useState<Date | undefined>(new Date());
   const [productIds, setProductIds] = React.useState<string[]>([]);
   const [locationIds, setLocationIds] = React.useState<string[]>([]);
+  const [format, setFormat] = React.useState<ReportFormat>("pdf");
+  const exportReport = useAsyncExport(ReportService.penyesuaianStokExportAsync);
 
   function handleOpenChange(next: boolean) {
     if (!next) {
@@ -51,6 +56,7 @@ export function PenyesuaianReportDialog({
       setEndDate(new Date());
       setProductIds([]);
       setLocationIds([]);
+      setFormat("pdf");
     }
     onOpenChange(next);
   }
@@ -58,24 +64,20 @@ export function PenyesuaianReportDialog({
   const invalidRange = Boolean(
     startDate && endDate && endDate.getTime() < startDate.getTime(),
   );
-  const canCetak = Boolean(startDate && endDate) && !invalidRange;
+  const canCetak = Boolean(startDate && endDate) && !invalidRange && !exportReport.isPending;
 
   function handleCetak() {
     if (!startDate || !endDate || invalidRange) return;
-    const start = formatDateISO(startDate);
-    const end = formatDateISO(endDate);
-    const params = new URLSearchParams();
-    if (productIds.length) params.set("product_ids", productIds.join(","));
-    if (locationIds.length) params.set("location_ids", locationIds.join(","));
-    const qs = params.toString();
-    window.open(
-      `/dashboard/document-preview/laporan-penyesuaian/${start}_${end}${
-        qs ? `?${qs}` : ""
-      }`,
-      "_blank",
-      "noopener,noreferrer",
+    exportReport.mutate(
+      {
+        start_date: formatDateISO(startDate),
+        end_date: formatDateISO(endDate),
+        product_ids: productIds.length ? productIds : undefined,
+        location_ids: locationIds.length ? locationIds : undefined,
+        format,
+      },
+      { onSuccess: () => handleOpenChange(false) },
     );
-    handleOpenChange(false);
   }
 
   return (
@@ -90,6 +92,7 @@ export function PenyesuaianReportDialog({
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
+          <ReportFormatRadio value={format} onChange={setFormat} />
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-2">
               <Label className="text-xs text-muted-foreground">
@@ -145,8 +148,8 @@ export function PenyesuaianReportDialog({
             Batal
           </Button>
           <Button variant="primary" onClick={handleCetak} disabled={!canCetak}>
-            <PrinterIcon className="size-4" />
-            Cetak
+            {exportReport.isPending ? <Loader2 className="size-4 animate-spin" /> : format === "pdf" ? <PrinterIcon className="size-4" /> : <DownloadIcon className="size-4" />}
+            {exportReport.isPending ? "Menyiapkan..." : format === "pdf" ? "Unduh PDF" : "Unduh Excel"}
           </Button>
         </DialogFooter>
       </DialogContent>

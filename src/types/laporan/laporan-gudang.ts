@@ -5,6 +5,7 @@ export interface TransferReportParams {
   from: string;
   to: string;
   item_ids?: string[];
+  format?: "excel" | "pdf";
 }
 
 export type PicklistReportMode = "tanggal" | "no_picklist";
@@ -12,6 +13,7 @@ export type PicklistReportMode = "tanggal" | "no_picklist";
 export interface PicklistExportParams {
   from: string;
   to: string;
+  format?: "excel" | "pdf";
 }
 
 export interface PicklistDetailPdfParams {
@@ -36,6 +38,7 @@ export interface ShipmentExportParams {
   courier_ids?: string[];
 
   status_mp?: string;
+  format?: "excel" | "pdf";
 }
 
 export interface ShipmentFilterOption {
@@ -57,6 +60,7 @@ export interface PutawayListParams {
   date: string;
   location_id: string;
   putaway_ids?: string[];
+  format?: "excel" | "pdf";
 }
 
 export interface PutawayPerformanceParams {
@@ -64,6 +68,7 @@ export interface PutawayPerformanceParams {
   from: string;
   to: string;
   location_ids?: string[];
+  format?: "excel" | "pdf";
 }
 
 export interface ShipmentByCourierParams {
@@ -71,6 +76,7 @@ export interface ShipmentByCourierParams {
   from: string;
   to: string;
   location_ids?: string[];
+  format?: "excel" | "pdf";
 }
 
 export interface OrderPerformanceParams {
@@ -79,4 +85,5 @@ export interface OrderPerformanceParams {
   from: string;
   to: string;
   location_ids?: string[];
+  format?: "excel" | "pdf";
 }

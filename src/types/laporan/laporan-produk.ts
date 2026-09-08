@@ -3,6 +3,7 @@ export interface SalesProductParams {
   to: string;
   location_ids?: string[];
   item_ids?: string[];
+  format?: "excel" | "pdf";
 }
 
 export interface SkuOption {

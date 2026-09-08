@@ -431,7 +431,7 @@ export function PenerimaanBarangTab() {
         accessorKey: "notes",
         header: "Keterangan",
         cell: ({ row }) => (
-          <span className="inline-block max-w-[200px] whitespace-normal break-words">
+          <span className="inline-block max-w-50 whitespace-normal wrap-break-words">
             {row.original.notes ?? "—"}
           </span>
         ),
@@ -578,7 +578,7 @@ export function PenerimaanBarangTab() {
       <LiquidGlass
         radius={20}
         intensity="subtle"
-        className="bg-white/30 dark:bg-white/[0.04]"
+        className="bg-white/30 dark:bg-white/4"
       >
         <div className="flex flex-wrap items-center justify-between gap-3 px-4 pt-3 sm:px-5">
           <Tabs

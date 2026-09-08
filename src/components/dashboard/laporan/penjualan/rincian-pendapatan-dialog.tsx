@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { DownloadIcon, Loader2 } from "lucide-react";
+import { DownloadIcon, Loader2, PrinterIcon } from "lucide-react";
 import { toast } from "sonner";
 import { apiError } from "@/lib/toast";
 
@@ -19,6 +19,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { DatePicker } from "@/components/ui/date-picker";
 import { SkuMultiComboboxLazy } from "@/components/dashboard/laporan/shared/sku-multi-combobox-lazy";
+import { ReportFormatRadio, type ReportFormat } from "@/components/dashboard/laporan/shared/report-format-radio";
 import { useExportRincianPendapatan } from "@/hooks/laporan/use-rincian-pendapatan";
 import type { RincianPendapatanMode } from "@/types/laporan/rincian-pendapatan";
 
@@ -54,6 +55,7 @@ export function RincianPendapatanDialog({
     startOfMonth(),
   );
   const [endDate, setEndDate] = React.useState<Date | undefined>(new Date());
+  const [format, setFormat] = React.useState<ReportFormat>("excel");
   const exportXlsx = useExportRincianPendapatan();
 
   function handleOpenChange(next: boolean) {
@@ -62,6 +64,7 @@ export function RincianPendapatanDialog({
       setItemIds([]);
       setStartDate(startOfMonth());
       setEndDate(new Date());
+      setFormat("excel");
     }
     onOpenChange(next);
   }
@@ -82,6 +85,7 @@ export function RincianPendapatanDialog({
         to: formatDateISO(endDate),
         item_ids:
           jenis === "per_barang" && itemIds.length ? itemIds : undefined,
+        format,
       },
       {
         onSuccess: () => {
@@ -100,11 +104,12 @@ export function RincianPendapatanDialog({
           <DialogTitle>Rincian Pendapatan</DialogTitle>
           <DialogDescription>
             Rincian pendapatan berikut HPP dan laba kotor — per faktur atau per
-            barang, dalam format Excel.
+            barang, dalam format Excel atau PDF.
           </DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
+          <ReportFormatRadio value={format} onChange={setFormat} />
           <div className="flex flex-col gap-2">
             <Label className="text-xs text-muted-foreground">
               Jenis Laporan
@@ -177,9 +182,9 @@ export function RincianPendapatanDialog({
             {exportXlsx.isPending ? (
               <Loader2 className="size-4 animate-spin" />
             ) : (
-              <DownloadIcon className="size-4" />
+              format === "excel" ? <DownloadIcon className="size-4" /> : <PrinterIcon className="size-4" />
             )}
-            Unduh Excel
+            {format === "excel" ? "Unduh Excel" : "Unduh PDF"}
           </Button>
         </DialogFooter>
       </DialogContent>

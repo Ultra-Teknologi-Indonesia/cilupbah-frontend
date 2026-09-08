@@ -23,6 +23,7 @@ export const LaporanGudangService = {
     sp.set("jenis", params.jenis);
     sp.set("from", params.from);
     sp.set("to", params.to);
+    sp.set("format", params.format ?? "excel");
     params.item_ids?.forEach((id) => sp.append("item_ids[]", id));
 
     return fetchBlobRaw(
@@ -35,6 +36,7 @@ export const LaporanGudangService = {
     const sp = new URLSearchParams();
     sp.set("from", params.from);
     sp.set("to", params.to);
+    sp.set("format", params.format ?? "excel");
 
     return fetchBlobRaw(
       `/reports/wms/pick-list/export?${sp.toString()}`,
@@ -121,6 +123,7 @@ export const LaporanGudangService = {
     sp.set("jenis", params.jenis);
     sp.set("from", params.from);
     sp.set("to", params.to);
+    sp.set("format", params.format ?? "excel");
     params.item_ids?.forEach((id) => sp.append("item_ids[]", id));
     const res = await fetchClient<ApiResponse<{ export_id: string }>>(
       `/reports/wms/transfer/export/async?${sp.toString()}`,
@@ -134,6 +137,7 @@ export const LaporanGudangService = {
     const sp = new URLSearchParams();
     sp.set("from", params.from);
     sp.set("to", params.to);
+    sp.set("format", params.format ?? "excel");
 
     const res = await fetchClient<ApiResponse<{ export_id: string }>>(
       "/reports/wms/pick-list/export/async?" + sp.toString(),
@@ -149,6 +153,7 @@ export const LaporanGudangService = {
     sp.set("mode", params.mode);
     sp.set("from", params.from);
     sp.set("to", params.to);
+    sp.set("format", params.format ?? "excel");
     params.location_ids?.forEach((id) => sp.append("location_ids[]", id));
     const res = await fetchClient<ApiResponse<{ export_id: string }>>(
       `/reports/wms/order-performance/export/async?${sp.toString()}`,
@@ -163,6 +168,7 @@ export const LaporanGudangService = {
     sp.set("mode", params.mode);
     sp.set("from", params.from);
     sp.set("to", params.to);
+    sp.set("format", params.format ?? "excel");
     params.location_ids?.forEach((id) => sp.append("location_ids[]", id));
     const res = await fetchClient<ApiResponse<{ export_id: string }>>(
       `/reports/wms/putaway-performance/export/async?${sp.toString()}`,
@@ -176,6 +182,7 @@ export const LaporanGudangService = {
     const sp = new URLSearchParams();
     sp.set("date", params.date);
     sp.set("location_id", params.location_id);
+    sp.set("format", params.format ?? "excel");
     params.putaway_ids?.forEach((id) => sp.append("putaway_ids[]", id));
     const res = await fetchClient<ApiResponse<{ export_id: string }>>(
       `/reports/wms/putaway-list/export/async?${sp.toString()}`,
@@ -190,6 +197,7 @@ export const LaporanGudangService = {
     sp.set("mode", params.mode);
     sp.set("from", params.from);
     sp.set("to", params.to);
+    sp.set("format", params.format ?? "excel");
     params.location_ids?.forEach((id) => sp.append("location_ids[]", id));
     const res = await fetchClient<ApiResponse<{ export_id: string }>>(
       `/reports/wms/shipment-by-courier/export/async?${sp.toString()}`,
@@ -202,6 +210,16 @@ export const LaporanGudangService = {
   ): Promise<string> => {
     const res = await fetchClient<ApiResponse<{ export_id: string }>>(
       `/reports/wms/pick-list/xlsx/async`,
+      { method: "POST", data: params },
+    );
+    return res.data.export_id;
+  },
+
+  exportPicklistDetailPdfAsync: async (
+    params: PicklistDetailPdfParams,
+  ): Promise<string> => {
+    const res = await fetchClient<ApiResponse<{ export_id: string }>>(
+      `/reports/wms/pick-list/pdf/async`,
       { method: "POST", data: params },
     );
     return res.data.export_id;
@@ -277,6 +295,7 @@ export const LaporanGudangService = {
       params.courier_ids.forEach((id) => sp.append("courier_ids[]", id));
     }
     if (params.status_mp) sp.set("status_mp", params.status_mp);
+    sp.set("format", params.format ?? "excel");
 
     const res = await fetchClient<ApiResponse<{ export_id: string }>>(
       `/reports/wms/shipment/export/async?${sp.toString()}`,

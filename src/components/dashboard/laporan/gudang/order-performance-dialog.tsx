@@ -105,27 +105,10 @@ export function OrderPerformanceDialog({
     const to = formatDateISO(endDate);
     const location_ids = locationIds.length ? locationIds : undefined;
 
-    if (format === "excel") {
-      exportXlsx.mutate(
-        { jenis, mode: effectiveMode, from, to, location_ids },
-        { onSuccess: () => handleOpenChange(false) },
-      );
-      return;
-    }
-
-    const id = `${jenis}_${effectiveMode}_${from}_${to}`;
-    const params = new URLSearchParams();
-    if (locationIds.length) params.set("location_ids", locationIds.join(","));
-    const qs = params.toString();
-
-    window.open(
-      `/dashboard/document-preview/laporan-performa-pesanan/${encodeURIComponent(id)}${
-        qs ? `?${qs}` : ""
-      }`,
-      "_blank",
-      "noopener,noreferrer",
+    exportXlsx.mutate(
+      { jenis, mode: effectiveMode, from, to, location_ids, format },
+      { onSuccess: () => handleOpenChange(false) },
     );
-    handleOpenChange(false);
   }
 
   return (

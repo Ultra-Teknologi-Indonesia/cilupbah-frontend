@@ -63,6 +63,12 @@ export function useExportPicklistDetail() {
   );
 }
 
+export function useExportPicklistDetailPdf() {
+  return useAsyncExport((params: PicklistDetailPdfParams) =>
+    LaporanGudangService.exportPicklistDetailPdfAsync(params),
+  );
+}
+
 export function useShipmentFilterOptions(enabled = true) {
   return useQuery({
     queryKey: ["laporan", "gudang", "shipment-options"],

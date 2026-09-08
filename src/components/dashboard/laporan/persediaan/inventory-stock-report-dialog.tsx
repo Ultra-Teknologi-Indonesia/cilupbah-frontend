@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { DownloadIcon, Loader2Icon, WarehouseIcon } from "lucide-react";
+import { DownloadIcon, Loader2Icon, PrinterIcon, WarehouseIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -26,6 +26,7 @@ import {
 import { LocationCombobox } from "@/components/dashboard/laporan/shared/location-combobox";
 import { LocationMultiCombobox } from "@/components/dashboard/laporan/shared/location-multi-combobox";
 import { SkuMultiComboboxLazy } from "@/components/dashboard/laporan/shared/sku-multi-combobox-lazy";
+import { ReportFormatRadio, type ReportFormat } from "@/components/dashboard/laporan/shared/report-format-radio";
 import { useAsyncExport } from "@/hooks/laporan/use-async-export";
 import { InventoryStockService } from "@/services/persediaan/inventory.service";
 
@@ -61,6 +62,7 @@ export function InventoryStockReportDialog({
   const [locationIds, setLocationIds] = React.useState<string[]>([]);
   const [stockFilter, setStockFilter] = React.useState<StockFilter>("all");
   const [onlyNotRestocked, setOnlyNotRestocked] = React.useState(false);
+  const [format, setFormat] = React.useState<ReportFormat>("excel");
 
   const exportXlsx = useAsyncExport((params: Parameters<typeof InventoryStockService.exportReport>[0]) =>
     InventoryStockService.exportReport(params),
@@ -73,6 +75,7 @@ export function InventoryStockReportDialog({
     setLocationIds([]);
     setStockFilter("all");
     setOnlyNotRestocked(false);
+    setFormat("excel");
   }
 
   function handleOpenChange(next: boolean): void {
@@ -93,6 +96,7 @@ export function InventoryStockReportDialog({
         as_of_date: reportType === "as_of_date" && asOfDate ? formatDateISO(asOfDate) : undefined,
         stock_filter: stockFilter,
         only_not_restocked: onlyNotRestocked,
+        format,
       },
       { onSuccess: () => handleOpenChange(false) },
     );
@@ -104,11 +108,12 @@ export function InventoryStockReportDialog({
         <DialogHeader>
           <DialogTitle>Export Persediaan Barang</DialogTitle>
           <DialogDescription>
-            Buat laporan Excel berdasarkan lokasi saat ini atau posisi stok sampai tanggal tertentu.
+            Buat laporan berdasarkan lokasi saat ini atau posisi stok sampai tanggal tertentu.
           </DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col gap-5">
+          <ReportFormatRadio value={format} onChange={setFormat} />
           <div className="flex flex-col gap-2">
             <Label className="text-xs text-muted-foreground">Cetak berdasarkan</Label>
             <RadioGroup
@@ -168,8 +173,8 @@ export function InventoryStockReportDialog({
         <DialogFooter>
           <Button variant="outline" onClick={() => handleOpenChange(false)} disabled={exportXlsx.isPending}>Batal</Button>
           <Button variant="primary" onClick={handleExport} disabled={!canExport || exportXlsx.isPending}>
-            {exportXlsx.isPending ? <Loader2Icon className="size-4 animate-spin" /> : <DownloadIcon className="size-4" />}
-            {exportXlsx.isPending ? "Menyiapkan..." : "Export Excel"}
+            {exportXlsx.isPending ? <Loader2Icon className="size-4 animate-spin" /> : format === "excel" ? <DownloadIcon className="size-4" /> : <PrinterIcon className="size-4" />}
+            {exportXlsx.isPending ? "Menyiapkan..." : format === "excel" ? "Unduh Excel" : "Unduh PDF"}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -184,6 +189,7 @@ export function InventoryRackReportDialog({
   const [locationId, setLocationId] = React.useState("");
   const [itemIds, setItemIds] = React.useState<string[]>([]);
   const [onlyWithStock, setOnlyWithStock] = React.useState(false);
+  const [format, setFormat] = React.useState<ReportFormat>("excel");
 
   const exportXlsx = useAsyncExport((params: Parameters<typeof InventoryStockService.exportReport>[0]) =>
     InventoryStockService.exportReport(params),
@@ -194,6 +200,7 @@ export function InventoryRackReportDialog({
       setLocationId("");
       setItemIds([]);
       setOnlyWithStock(false);
+      setFormat("excel");
     }
     onOpenChange(next);
   }
@@ -206,6 +213,7 @@ export function InventoryRackReportDialog({
         location_id: locationId,
         item_ids: itemIds.length ? itemIds : undefined,
         only_with_stock: onlyWithStock,
+        format,
       },
       { onSuccess: () => handleOpenChange(false) },
     );
@@ -225,6 +233,7 @@ export function InventoryRackReportDialog({
         </DialogHeader>
 
         <div className="flex flex-col gap-5">
+          <ReportFormatRadio value={format} onChange={setFormat} />
           <div className="flex flex-col gap-2">
             <Label className="text-xs text-muted-foreground">Gudang <span className="text-destructive">*</span></Label>
             <LocationCombobox value={locationId} onChange={setLocationId} placeholder="Pilih gudang" />
@@ -243,8 +252,8 @@ export function InventoryRackReportDialog({
         <DialogFooter>
           <Button variant="outline" onClick={() => handleOpenChange(false)} disabled={exportXlsx.isPending}>Batal</Button>
           <Button variant="primary" onClick={handleExport} disabled={!locationId || exportXlsx.isPending}>
-            {exportXlsx.isPending ? <Loader2Icon className="size-4 animate-spin" /> : <DownloadIcon className="size-4" />}
-            {exportXlsx.isPending ? "Menyiapkan..." : "Export Excel"}
+            {exportXlsx.isPending ? <Loader2Icon className="size-4 animate-spin" /> : format === "excel" ? <DownloadIcon className="size-4" /> : <PrinterIcon className="size-4" />}
+            {exportXlsx.isPending ? "Menyiapkan..." : format === "excel" ? "Unduh Excel" : "Unduh PDF"}
           </Button>
         </DialogFooter>
       </DialogContent>

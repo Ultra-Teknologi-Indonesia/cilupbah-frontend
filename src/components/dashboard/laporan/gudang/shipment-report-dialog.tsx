@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Loader2, PrinterIcon } from "lucide-react";
+import { DownloadIcon, Loader2, PrinterIcon } from "lucide-react";
 import { toast } from "sonner";
 import { apiError } from "@/lib/toast";
 
@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Combobox } from "@/components/ui/combobox";
 import { DatePicker } from "@/components/ui/date-picker";
+import { ReportFormatRadio, type ReportFormat } from "@/components/dashboard/laporan/shared/report-format-radio";
 import {
   useExportShipmentList,
   useShipmentFilterOptions,
@@ -49,6 +50,7 @@ export function ShipmentReportDialog({
   const [endDate, setEndDate] = React.useState<Date | undefined>(new Date());
   const [courierIds, setCourierIds] = React.useState<string[]>([]);
   const [status, setStatus] = React.useState<string>("");
+  const [format, setFormat] = React.useState<ReportFormat>("excel");
 
   const { data: options, isFetching } = useShipmentFilterOptions(open);
   const exportShipment = useExportShipmentList();
@@ -59,6 +61,7 @@ export function ShipmentReportDialog({
       setEndDate(new Date());
       setCourierIds([]);
       setStatus("");
+      setFormat("excel");
     }
     onOpenChange(next);
   }
@@ -77,6 +80,7 @@ export function ShipmentReportDialog({
         to: formatDateISO(endDate),
         courier_ids: courierIds.length ? courierIds : undefined,
         status_mp: status || undefined,
+        format,
       });
       toast.success("Berhasil mengunduh daftar pengiriman");
       handleOpenChange(false);
@@ -97,6 +101,7 @@ export function ShipmentReportDialog({
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
+          <ReportFormatRadio value={format} onChange={setFormat} />
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-2">
               <Label className="text-xs text-muted-foreground">
@@ -166,9 +171,9 @@ export function ShipmentReportDialog({
             {exportShipment.isPending ? (
               <Loader2 className="size-4 animate-spin" />
             ) : (
-              <PrinterIcon className="size-4" />
+              format === "excel" ? <DownloadIcon className="size-4" /> : <PrinterIcon className="size-4" />
             )}
-            Cetak
+            {format === "excel" ? "Unduh Excel" : "Unduh PDF"}
           </Button>
         </DialogFooter>
       </DialogContent>

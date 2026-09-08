@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Loader2, PrinterIcon } from "lucide-react";
+import { DownloadIcon, Loader2, PrinterIcon } from "lucide-react";
 import { toast } from "sonner";
 import { apiError } from "@/lib/toast";
 
@@ -19,6 +19,7 @@ import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/ui/date-picker";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ProductPickerCombobox } from "@/components/dashboard/laporan/shared/product-picker-combobox";
+import { ReportFormatRadio, type ReportFormat } from "@/components/dashboard/laporan/shared/report-format-radio";
 import { useExportTransferReport } from "@/hooks/laporan/use-laporan-gudang";
 import type { TransferReportJenis } from "@/types/laporan/laporan-gudang";
 
@@ -54,6 +55,7 @@ export function TransferReportDialog({
   );
   const [endDate, setEndDate] = React.useState<Date | undefined>(new Date());
   const [itemIds, setItemIds] = React.useState<string[]>([]);
+  const [format, setFormat] = React.useState<ReportFormat>("excel");
 
   const exportTransfer = useExportTransferReport();
 
@@ -63,6 +65,7 @@ export function TransferReportDialog({
       setStartDate(startOfMonth());
       setEndDate(new Date());
       setItemIds([]);
+      setFormat("excel");
     }
     onOpenChange(next);
   }
@@ -81,6 +84,7 @@ export function TransferReportDialog({
         from: formatDateISO(startDate),
         to: formatDateISO(endDate),
         item_ids: itemIds.length ? itemIds : undefined,
+        format,
       });
       toast.success("Berhasil mengunduh laporan transfer");
       handleOpenChange(false);
@@ -101,6 +105,7 @@ export function TransferReportDialog({
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
+          <ReportFormatRadio value={format} onChange={setFormat} />
           <div className="flex flex-col gap-2">
             <Label className="text-xs text-muted-foreground">
               Jenis Laporan
@@ -180,9 +185,9 @@ export function TransferReportDialog({
             {exportTransfer.isPending ? (
               <Loader2 className="size-4 animate-spin" />
             ) : (
-              <PrinterIcon className="size-4" />
+              format === "excel" ? <DownloadIcon className="size-4" /> : <PrinterIcon className="size-4" />
             )}
-            Cetak
+            {format === "excel" ? "Unduh Excel" : "Unduh PDF"}
           </Button>
         </DialogFooter>
       </DialogContent>

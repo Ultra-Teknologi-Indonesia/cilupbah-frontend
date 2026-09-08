@@ -5,4 +5,5 @@ export interface RincianPendapatanParams {
   from: string;
   to: string;
   item_ids?: string[];
+  format?: "excel" | "pdf";
 }

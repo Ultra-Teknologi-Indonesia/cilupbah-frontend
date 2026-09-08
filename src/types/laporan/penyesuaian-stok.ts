@@ -4,4 +4,5 @@ export interface PenyesuaianStokPdfParams {
   product_ids?: string[];
   location_ids?: string[];
   download?: boolean;
+  format?: "pdf" | "excel";
 }

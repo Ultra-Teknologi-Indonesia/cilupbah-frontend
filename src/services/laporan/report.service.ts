@@ -148,4 +148,14 @@ export const ReportService = {
       "application/pdf",
     );
   },
+
+  penyesuaianStokExportAsync: async (
+    params: PenyesuaianStokPdfParams,
+  ): Promise<string> => {
+    const response = await fetchClient<ApiResponse<{ export_id: string }>>(
+      `/reports/penyesuaian-stok/export/async`,
+      { method: "POST", data: params },
+    );
+    return response.data.export_id;
+  },
 };

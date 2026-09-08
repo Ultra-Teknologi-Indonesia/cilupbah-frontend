@@ -10,6 +10,7 @@ export const RincianPendapatanService = {
     sp.set("jenis", params.jenis);
     sp.set("from", params.from);
     sp.set("to", params.to);
+    sp.set("format", params.format ?? "excel");
     params.item_ids?.forEach((id) => sp.append("item_ids[]", id));
 
     const response = await fetchClient<ApiResponse<{ export_id: string }>>(

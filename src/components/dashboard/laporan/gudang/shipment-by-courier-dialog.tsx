@@ -83,27 +83,10 @@ export function ShipmentByCourierDialog({
     const to = formatDateISO(endDate);
     const location_ids = locationIds.length ? locationIds : undefined;
 
-    if (format === "excel") {
-      exportXlsx.mutate(
-        { mode, from, to, location_ids },
-        { onSuccess: () => handleOpenChange(false) },
-      );
-      return;
-    }
-
-    const id = `${mode}_${from}_${to}`;
-    const params = new URLSearchParams();
-    if (locationIds.length) params.set("location_ids", locationIds.join(","));
-    const qs = params.toString();
-
-    window.open(
-      `/dashboard/document-preview/laporan-pengiriman-ekspedisi/${encodeURIComponent(id)}${
-        qs ? `?${qs}` : ""
-      }`,
-      "_blank",
-      "noopener,noreferrer",
+    exportXlsx.mutate(
+      { mode, from, to, location_ids, format },
+      { onSuccess: () => handleOpenChange(false) },
     );
-    handleOpenChange(false);
   }
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { DownloadIcon, Loader2 } from "lucide-react";
+import { DownloadIcon, Loader2, PrinterIcon } from "lucide-react";
 import { toast } from "sonner";
 import { apiError } from "@/lib/toast";
 
@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/ui/date-picker";
+import { ReportFormatRadio, type ReportFormat } from "@/components/dashboard/laporan/shared/report-format-radio";
 import { useExportCustomerList } from "@/hooks/laporan/use-daftar-pelanggan";
 
 interface DaftarPelangganDialogProps {
@@ -43,12 +44,14 @@ export function DaftarPelangganDialog({
     startOfMonth(),
   );
   const [endDate, setEndDate] = React.useState<Date | undefined>(new Date());
+  const [format, setFormat] = React.useState<ReportFormat>("excel");
   const exportXlsx = useExportCustomerList();
 
   function handleOpenChange(next: boolean) {
     if (!next) {
       setStartDate(startOfMonth());
       setEndDate(new Date());
+      setFormat("excel");
     }
     onOpenChange(next);
   }
@@ -63,7 +66,7 @@ export function DaftarPelangganDialog({
     if (!startDate || !endDate || invalidRange) return;
 
     exportXlsx.mutate(
-      { from: formatDateISO(startDate), to: formatDateISO(endDate) },
+      { from: formatDateISO(startDate), to: formatDateISO(endDate), format },
       {
         onSuccess: () => {
           toast.success("Berhasil mengunduh daftar pelanggan");
@@ -80,12 +83,12 @@ export function DaftarPelangganDialog({
         <DialogHeader>
           <DialogTitle>Daftar Pelanggan</DialogTitle>
           <DialogDescription>
-            Daftar pelanggan (kontak) yang dibuat pada rentang tanggal, dalam
-            format Excel.
+            Daftar pelanggan (kontak) yang dibuat pada rentang tanggal.
           </DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
+          <ReportFormatRadio value={format} onChange={setFormat} />
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-2">
               <Label className="text-xs text-muted-foreground">
@@ -123,9 +126,9 @@ export function DaftarPelangganDialog({
             {exportXlsx.isPending ? (
               <Loader2 className="size-4 animate-spin" />
             ) : (
-              <DownloadIcon className="size-4" />
+              format === "excel" ? <DownloadIcon className="size-4" /> : <PrinterIcon className="size-4" />
             )}
-            Unduh Excel
+            {format === "excel" ? "Unduh Excel" : "Unduh PDF"}
           </Button>
         </DialogFooter>
       </DialogContent>

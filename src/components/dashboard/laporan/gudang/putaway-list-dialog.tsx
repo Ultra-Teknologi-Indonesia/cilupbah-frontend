@@ -80,27 +80,15 @@ export function PutawayListDialog({
   function handleCetak() {
     if (!date || !locationId) return;
 
-    if (format === "excel") {
-      exportXlsx.mutate(
-        {
-          date: dateISO,
-          location_id: locationId,
-          putaway_ids: putawayIds.length ? putawayIds : undefined,
-        },
-        { onSuccess: () => handleOpenChange(false) },
-      );
-      return;
-    }
-
-    const params = new URLSearchParams({ location_id: locationId });
-    if (putawayIds.length) params.set("putaway_ids", putawayIds.join(","));
-
-    window.open(
-      `/dashboard/document-preview/laporan-penempatan-barang/${encodeURIComponent(dateISO)}?${params.toString()}`,
-      "_blank",
-      "noopener,noreferrer",
+    exportXlsx.mutate(
+      {
+        date: dateISO,
+        location_id: locationId,
+        putaway_ids: putawayIds.length ? putawayIds : undefined,
+        format,
+      },
+      { onSuccess: () => handleOpenChange(false) },
     );
-    handleOpenChange(false);
   }
 
   return (

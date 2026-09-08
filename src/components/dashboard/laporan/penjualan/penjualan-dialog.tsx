@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { DownloadIcon, Loader2 } from "lucide-react";
+import { DownloadIcon, Loader2, PrinterIcon } from "lucide-react";
 import { toast } from "sonner";
 import { apiError } from "@/lib/toast";
 
@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { DatePicker } from "@/components/ui/date-picker";
 import { LocationMultiCombobox } from "@/components/dashboard/laporan/shared/location-multi-combobox";
+import { ReportFormatRadio, type ReportFormat } from "@/components/dashboard/laporan/shared/report-format-radio";
 import { useExportSalesList } from "@/hooks/laporan/use-laporan-penjualan";
 
 interface PenjualanDialogProps {
@@ -44,6 +45,7 @@ export function PenjualanDialog({ open, onOpenChange }: PenjualanDialogProps) {
     startOfMonth(),
   );
   const [endDate, setEndDate] = React.useState<Date | undefined>(new Date());
+  const [format, setFormat] = React.useState<ReportFormat>("excel");
   const exportXlsx = useExportSalesList();
 
   function handleOpenChange(next: boolean) {
@@ -52,6 +54,7 @@ export function PenjualanDialog({ open, onOpenChange }: PenjualanDialogProps) {
       setLocationIds([]);
       setStartDate(startOfMonth());
       setEndDate(new Date());
+      setFormat("excel");
     }
     onOpenChange(next);
   }
@@ -73,6 +76,7 @@ export function PenjualanDialog({ open, onOpenChange }: PenjualanDialogProps) {
         from: formatDateISO(startDate),
         to: formatDateISO(endDate),
         location_ids,
+        format,
       },
       {
         onSuccess: () => {
@@ -90,11 +94,12 @@ export function PenjualanDialog({ open, onOpenChange }: PenjualanDialogProps) {
         <DialogHeader>
           <DialogTitle>Penjualan</DialogTitle>
           <DialogDescription>
-            Daftar penjualan per pesanan (1 baris per order) dalam format Excel.
+            Daftar penjualan per pesanan (1 baris per order).
           </DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
+          <ReportFormatRadio value={format} onChange={setFormat} />
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-2">
               <Label className="text-xs text-muted-foreground">
@@ -154,9 +159,9 @@ export function PenjualanDialog({ open, onOpenChange }: PenjualanDialogProps) {
             {exportXlsx.isPending ? (
               <Loader2 className="size-4 animate-spin" />
             ) : (
-              <DownloadIcon className="size-4" />
+              format === "excel" ? <DownloadIcon className="size-4" /> : <PrinterIcon className="size-4" />
             )}
-            Unduh Excel
+            {format === "excel" ? "Unduh Excel" : "Unduh PDF"}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -24,6 +24,7 @@ export const InventoryStockService = {
     stock_filter?: "all" | "positive" | "zero";
     only_not_restocked?: boolean;
     only_with_stock?: boolean;
+    format?: "excel" | "pdf";
   }): Promise<string> => {
     const res = await fetchClient<
       ApiResponse<{ export_id: string; status: string }>

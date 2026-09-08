@@ -25,6 +25,7 @@ import {
 } from "@/components/dashboard/laporan/shared/report-format-radio";
 import {
   useExportPicklistDetail,
+  useExportPicklistDetailPdf,
   useExportPicklistReport,
   usePicklistSearch,
 } from "@/hooks/laporan/use-laporan-gudang";
@@ -71,6 +72,7 @@ export function PicklistReportDialog({
 
   const exportPicklist = useExportPicklistReport();
   const exportDetail = useExportPicklistDetail();
+  const exportDetailPdf = useExportPicklistDetailPdf();
 
   React.useEffect(() => {
     const t = setTimeout(() => setQuery(rawQuery), DEBOUNCE_MS);
@@ -122,10 +124,10 @@ export function PicklistReportDialog({
       ? Boolean(startDate && endDate) &&
         !invalidRange &&
         !exportPicklist.isPending
-      : Boolean(picklistId) && !exportDetail.isPending;
+      : Boolean(picklistId) && !exportDetail.isPending && !exportDetailPdf.isPending;
 
   const isExcelOutput = mode === "tanggal" || format === "excel";
-  const busy = exportPicklist.isPending || exportDetail.isPending;
+  const busy = exportPicklist.isPending || exportDetail.isPending || exportDetailPdf.isPending;
 
   async function handleCetak() {
     if (mode === "tanggal") {
@@ -159,18 +161,16 @@ export function PicklistReportDialog({
       return;
     }
 
-    const params = new URLSearchParams();
-    if (orderIds.length) params.set("order_ids", orderIds.join(","));
-    if (selected?.label) params.set("no", selected.label);
-    const qs = params.toString();
-    window.open(
-      `/dashboard/document-preview/laporan-picklist/${encodeURIComponent(picklistId)}${
-        qs ? `?${qs}` : ""
-      }`,
-      "_blank",
-      "noopener,noreferrer",
-    );
-    handleOpenChange(false);
+    try {
+      await exportDetailPdf.mutateAsync({
+        picklist_id: picklistId,
+        order_ids: orderIds.length ? orderIds : undefined,
+      });
+      toast.success("Berhasil mengunduh detail picklist");
+      handleOpenChange(false);
+    } catch (error) {
+      apiError(error, "Gagal mengunduh detail picklist");
+    }
   }
 
   return (

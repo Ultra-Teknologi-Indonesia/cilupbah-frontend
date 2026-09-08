@@ -7,6 +7,7 @@ export const LaporanReturPenjualanService = {
     const sp = new URLSearchParams();
     sp.set("from", params.from);
     sp.set("to", params.to);
+    sp.set("format", params.format ?? "excel");
     params.location_ids?.forEach((id) => sp.append("location_ids[]", id));
 
     const response = await fetchClient<ApiResponse<{ export_id: string }>>(

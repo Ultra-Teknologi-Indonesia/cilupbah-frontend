@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { DownloadIcon, Loader2 } from "lucide-react";
+import { DownloadIcon, Loader2, PrinterIcon } from "lucide-react";
 import { toast } from "sonner";
 import { apiError } from "@/lib/toast";
 
@@ -19,6 +19,7 @@ import { Switch } from "@/components/ui/switch";
 import { DatePicker } from "@/components/ui/date-picker";
 import { LocationMultiCombobox } from "@/components/dashboard/laporan/shared/location-multi-combobox";
 import { SkuMultiComboboxLazy } from "@/components/dashboard/laporan/shared/sku-multi-combobox-lazy";
+import { ReportFormatRadio, type ReportFormat } from "@/components/dashboard/laporan/shared/report-format-radio";
 import { useExportSalesProduct } from "@/hooks/laporan/use-laporan-produk";
 
 interface PenjualanProdukDialogProps {
@@ -49,6 +50,7 @@ export function PenjualanProdukDialog({
     startOfMonth(),
   );
   const [endDate, setEndDate] = React.useState<Date | undefined>(new Date());
+  const [format, setFormat] = React.useState<ReportFormat>("excel");
   const exportXlsx = useExportSalesProduct();
 
   function handleOpenChange(next: boolean) {
@@ -58,6 +60,7 @@ export function PenjualanProdukDialog({
       setLocationIds([]);
       setStartDate(startOfMonth());
       setEndDate(new Date());
+      setFormat("excel");
     }
     onOpenChange(next);
   }
@@ -78,6 +81,7 @@ export function PenjualanProdukDialog({
         item_ids: itemIds.length ? itemIds : undefined,
         location_ids:
           pickLocation && locationIds.length ? locationIds : undefined,
+        format,
       },
       {
         onSuccess: () => {
@@ -95,12 +99,12 @@ export function PenjualanProdukDialog({
         <DialogHeader>
           <DialogTitle>Penjualan Produk</DialogTitle>
           <DialogDescription>
-            Penjualan per produk (1 baris per barang pesanan) dalam format
-            Excel.
+            Penjualan per produk (1 baris per barang pesanan).
           </DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
+          <ReportFormatRadio value={format} onChange={setFormat} />
           <div className="flex flex-col gap-2">
             <Label className="text-xs text-muted-foreground">
               SKU (opsional, bisa lebih dari satu)
@@ -167,9 +171,9 @@ export function PenjualanProdukDialog({
             {exportXlsx.isPending ? (
               <Loader2 className="size-4 animate-spin" />
             ) : (
-              <DownloadIcon className="size-4" />
+              format === "excel" ? <DownloadIcon className="size-4" /> : <PrinterIcon className="size-4" />
             )}
-            Unduh Excel
+            {format === "excel" ? "Unduh Excel" : "Unduh PDF"}
           </Button>
         </DialogFooter>
       </DialogContent>
