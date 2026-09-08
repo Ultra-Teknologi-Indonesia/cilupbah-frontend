@@ -4,7 +4,8 @@ export type ScanFeedbackKind =
   | "sku_mismatch"
   | "order_canceled"
   | "order_cancel_requested"
-  | "courier_mismatch";
+  | "courier_mismatch"
+  | "order_already_packed";
 
 let zzfxCtx: AudioContext | null = null;
 
@@ -259,6 +260,7 @@ const VOICE_SRC: Partial<Record<ScanFeedbackKind, string>> = {
   courier_mismatch: "/audio/kurir-yang-discan-tidak-sesuai.mp3",
   order_cancel_requested: "/audio/sedang-request-cancel.mp3",
   order_canceled: "/audio/paket-cancel.mp3",
+  order_already_packed: "/audio/pesanan-sudah-pernah-dipacking.mp3",
 };
 
 const voiceBuffers = new Map<string, AudioBuffer>();
@@ -348,6 +350,8 @@ export function scanFeedbackFromErrorCode(
       return "courier_mismatch";
     case "sku_mismatch":
       return "sku_mismatch";
+    case "order_already_packed":
+      return "order_already_packed";
     default:
       return "error";
   }

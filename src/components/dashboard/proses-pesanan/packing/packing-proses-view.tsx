@@ -44,13 +44,28 @@ import type {
   PacklistDetail,
   PacklistItem,
 } from "@/types/proses-pesanan/fulfillment";
-import { playScanFeedback } from "@/lib/scan-feedback";
+import { playScanFeedback, primeScanAudio } from "@/lib/scan-feedback";
 import { usePrintWithDriverCall } from "@/hooks/proses-pesanan/use-driver-call";
 import { isShopeeInstantOrSameDay } from "@/lib/proses-pesanan/shopee";
 import { apiError } from "@/lib/toast";
 import { usePermissions } from "@/hooks/auth/use-permissions";
 
 const LIST_HREF = "/dashboard/proses-pesanan/packing";
+
+function isAlreadyPackedError(err: unknown): boolean {
+  if (!err || typeof err !== "object") return false;
+  const body = err as {
+    status?: number;
+    title?: unknown;
+    message?: unknown;
+  };
+  const text = [body.title, body.message]
+    .filter((value): value is string => typeof value === "string")
+    .join(" ")
+    .toLowerCase();
+
+  return body.status === 409 && text.includes("sudah pernah dipacking");
+}
 
 function ItemImage({
   src,
@@ -405,6 +420,7 @@ export function PackingProsesView() {
     if (!id) return;
     setCheckerId(id);
     setStage("packing");
+    primeScanAudio();
     playScanFeedback("ok");
     setTimeout(() => orderScanRef.current?.focus(), 80);
   };
@@ -442,11 +458,16 @@ export function PackingProsesView() {
       }
       refocusScan();
     } catch (err) {
-      playScanFeedback("error");
-      apiError(
-        err,
-        `Pesanan "${code}" tidak ditemukan atau belum siap packing.`,
-      );
+      if (isAlreadyPackedError(err)) {
+        playScanFeedback("order_already_packed");
+        toast.error("Pesanan Sudah Pernah Dipacking");
+      } else {
+        playScanFeedback("error");
+        apiError(
+          err,
+          `Pesanan "${code}" tidak ditemukan atau belum siap packing.`,
+        );
+      }
       orderScanRef.current?.focus();
     }
   };
@@ -598,6 +619,7 @@ export function PackingProsesView() {
                       value={orderScan}
                       onChange={(e) => setOrderScan(e.target.value)}
                       onKeyDown={(e) => {
+                        primeScanAudio();
                         if (e.key === "Enter") {
                           e.preventDefault();
                           handleScanOrder();
