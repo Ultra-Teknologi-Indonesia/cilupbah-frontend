@@ -150,6 +150,7 @@ export function useFulfillmentCounts(enabled = true) {
     queryKey: fulfillmentKeys.counts(),
     queryFn: () => OutboundService.counts(),
     staleTime: STALE,
+    refetchInterval: STALE,
     enabled,
   });
 }

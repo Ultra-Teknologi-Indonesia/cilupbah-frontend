@@ -494,7 +494,9 @@ export const OutboundService = {
           current_page: payload?.current_page ?? 1,
           last_page: payload?.last_page ?? 1,
           per_page: payload?.per_page ?? 20,
-          total: payload?.total ?? items.length,
+          // Jangan memakai items.length sebagai total, karena items hanya isi
+          // halaman aktif dan dapat membuat badge terlihat lebih kecil.
+          total: payload?.total ?? 0,
         };
 
     return {
