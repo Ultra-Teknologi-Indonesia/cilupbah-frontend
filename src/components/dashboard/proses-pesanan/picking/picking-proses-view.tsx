@@ -310,9 +310,8 @@ export function PickingProsesView({ id }: { id: string }) {
   React.useEffect(() => {
     if (pl && pl.status === "COMPLETED") {
       toast.info(`Picklist ${pl.picklistNo} sudah selesai.`);
-      router.replace(LIST_HREF);
     }
-  }, [pl, router]);
+  }, [pl]);
 
   const didAutoStart = React.useRef(false);
   React.useEffect(() => {
