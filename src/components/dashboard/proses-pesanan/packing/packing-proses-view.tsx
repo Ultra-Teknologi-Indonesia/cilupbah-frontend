@@ -45,8 +45,6 @@ import type {
   PacklistItem,
 } from "@/types/proses-pesanan/fulfillment";
 import { playScanFeedback, primeScanAudio } from "@/lib/scan-feedback";
-import { usePrintWithDriverCall } from "@/hooks/proses-pesanan/use-driver-call";
-import { isShopeeInstantOrSameDay } from "@/lib/proses-pesanan/shopee";
 import { apiError } from "@/lib/toast";
 import { usePermissions } from "@/hooks/auth/use-permissions";
 
@@ -275,7 +273,6 @@ export function PackingProsesView() {
   const { data: me } = useMe();
   const { can } = usePermissions();
   const canEditPacking = can("edit-packing");
-  const canEditShipping = can("edit-pengiriman");
   const scanOrder = useScanOrder();
   const packItem = usePackItem();
   const verifyBarcode = useVerifyBarcode();
@@ -346,8 +343,6 @@ export function PackingProsesView() {
     })),
   );
 
-  const printWithDriverCall = usePrintWithDriverCall();
-
   const completedRef = React.useRef<Set<string>>(new Set());
   React.useEffect(() => {
     packlists.forEach((pl) => {
@@ -366,19 +361,6 @@ export function PackingProsesView() {
         completePacklist.mutate(pl.id, {
           onSuccess: () => {
             toast.success(`Packing ${pl.packlistNo} selesai.`);
-            if (
-              pl.orderId &&
-              isShopeeInstantOrSameDay({
-                source: pl.source,
-                shippingProvider: pl.shippingProvider,
-                shippingType: pl.shippingType,
-                isInstant: pl.isInstant,
-              })
-            ) {
-              if (canEditShipping) {
-                printWithDriverCall.mutate({ orderId: pl.orderId });
-              }
-            }
             const remaining = packlistIdsRef.current.filter((x) => x !== pl.id);
             setPacklistIds(remaining);
             if (remaining.length === 0) {
@@ -398,9 +380,7 @@ export function PackingProsesView() {
     packlists,
     packItem.isPending,
     completePacklist,
-    printWithDriverCall,
     canEditPacking,
-    canEditShipping,
   ]);
 
   const pickerList = React.useMemo(() => pickers.data ?? [], [pickers.data]);

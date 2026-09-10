@@ -60,6 +60,24 @@ function isInternalManualOrder(order: Order): boolean {
   return order.is_manual === true && !hasChannelIdentity;
 }
 
+function shipmentProviderKey(
+  provider: string | null | undefined,
+  source: string | null | undefined,
+  isInstant: boolean,
+): string {
+  const normalized = (provider ?? "").trim().toLowerCase();
+
+  if (!isInstant || !source?.toLowerCase().includes("shopee")) {
+    return normalized;
+  }
+
+  return normalized
+    .replace(/same[\s_-]?day|instant|instan/g, "")
+    .replace(/shopee[\s_-]*(express|xpress)/g, "spx")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
 type CardFilterState = {
   shipping_provider: string;
   courier_code: string;
@@ -252,9 +270,20 @@ export function FulfillmentCardList({
     () =>
       new Set(
         selectedOrders.map((m) =>
-          (m.raw.shippingProvider ?? "").trim().toLowerCase(),
+          shipmentProviderKey(
+            m.raw.shippingProvider,
+            m.raw.source,
+            Boolean(m.ui.is_instant),
+          ),
         ),
       ),
+    [selectedOrders],
+  );
+
+  const selectedShipmentProvider = React.useMemo(
+    () =>
+      selectedOrders.find((m) => m.raw.shippingProvider?.trim())?.raw
+        .shippingProvider ?? null,
     [selectedOrders],
   );
 
@@ -522,7 +551,7 @@ export function FulfillmentCardList({
           })()}
           shippingProvider={
             shipmentProviderKeys.size === 1
-              ? selectedOrders[0]?.raw.shippingProvider
+              ? selectedShipmentProvider
               : null
           }
           shippingType={
