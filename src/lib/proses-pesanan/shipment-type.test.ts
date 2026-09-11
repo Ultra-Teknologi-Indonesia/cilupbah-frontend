@@ -22,6 +22,11 @@ describe("shipment type helpers", () => {
     expect(guessShipmentTypeFromCourierName("SAME_DAY")).toBe("INSTANT");
   });
 
+  it("uses the courier classification instead of a marketplace channel label", () => {
+    expect(guessShipmentTypeFromCourierName("Gojek Instant")).toBe("INSTANT");
+    expect(guessShipmentTypeFromCourierName("TIKTOK")).toBe("REGULAR");
+  });
+
   it("uses the shipment number to distinguish dropdown options", () => {
     expect(
       formatShipmentLabel({

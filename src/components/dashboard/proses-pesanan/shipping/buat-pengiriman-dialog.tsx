@@ -30,7 +30,6 @@ interface BuatPengirimanDialogProps {
   onCreated?: () => void;
   marketplaceSource?: string | null;
   shippingProvider?: string | null;
-  shippingType?: string | null;
 
   locationId?: string | null;
 
@@ -48,7 +47,6 @@ export function BuatPengirimanDialog({
   onCreated,
   marketplaceSource,
   shippingProvider,
-  shippingType,
   locationId,
   locationName,
   multiLocation,
@@ -67,7 +65,6 @@ export function BuatPengirimanDialog({
           onCreated={onCreated}
           marketplaceSource={marketplaceSource}
           shippingProvider={shippingProvider}
-          shippingType={shippingType}
           locationId={locationId}
           locationName={locationName}
           multiLocation={multiLocation}
@@ -84,7 +81,6 @@ function PengirimanForm({
   onCreated,
   marketplaceSource,
   shippingProvider,
-  shippingType,
   locationId,
   locationName,
   multiLocation,
@@ -95,7 +91,6 @@ function PengirimanForm({
   onCreated?: () => void;
   marketplaceSource?: string | null;
   shippingProvider?: string | null;
-  shippingType?: string | null;
   locationId?: string | null;
   locationName?: string | null;
   multiLocation?: boolean;
@@ -156,9 +151,10 @@ function PengirimanForm({
       return;
     }
 
-    const shipmentType = shippingType
-      ? guessShipmentTypeFromCourierName(shippingType)
-      : guessShipmentTypeFromCourierName(courierName);
+    // `shippingType` is the marketplace/channel label (for example, `TIKTOK`)
+    // and is not the delivery service. The actual courier is authoritative for
+    // shipment classification, especially for providers such as Gojek Instant.
+    const shipmentType = guessShipmentTypeFromCourierName(courierName);
 
     const payload = {
       shipment_no: shipmentNo.trim() || null,

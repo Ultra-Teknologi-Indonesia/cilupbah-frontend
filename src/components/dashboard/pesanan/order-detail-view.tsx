@@ -1435,7 +1435,6 @@ export function OrderDetailView({ orderId }: { orderId: string }) {
           locationName={order.location_name}
           marketplaceSource={isMarketplace ? order.source : undefined}
           shippingProvider={order.shipping?.provider}
-          shippingType={order.shipping_type}
           onCreated={refetch}
         />
       )}

@@ -741,15 +741,6 @@ export function OrderActions({
           locationName={order.location_name}
           marketplaceSource={order.source ?? undefined}
           shippingProvider={order.shipping?.provider ?? undefined}
-          shippingType={
-            isShopeeInstantOrSameDay({
-              source: order.source,
-              shippingProvider: order.shipping?.provider,
-              isInstant: order.is_instant,
-            })
-              ? "INSTANT"
-              : undefined
-          }
         />}
         {canDeleteOrder && <DeleteOrderDialog
           open={deleteOpen}

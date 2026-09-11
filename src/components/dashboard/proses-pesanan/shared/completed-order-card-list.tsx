@@ -554,9 +554,6 @@ export function FulfillmentCardList({
               ? selectedShipmentProvider
               : null
           }
-          shippingType={
-            hasMixedShipmentTypes ? null : selectedOrders[0]?.raw.shippingType
-          }
         />
       )}
     </div>
