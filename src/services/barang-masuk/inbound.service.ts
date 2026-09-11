@@ -188,7 +188,11 @@ export const InboundService = {
     const res = await fetchClient<
       ApiResponse<{
         cancelled: string[];
-        failed: { id: string; message: string }[];
+        failed: {
+          id: string;
+          transaction_number?: string | null;
+          message: string;
+        }[];
       }>
     >(`/inbounds/bulk-cancel`, {
       method: "POST",

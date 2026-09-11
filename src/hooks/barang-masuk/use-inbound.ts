@@ -111,7 +111,11 @@ export function useBulkCancelInbounds() {
       const ok = res?.cancelled?.length ?? 0;
       if (failed > 0) {
         const details = (res?.failed ?? [])
-          .map((item) => item.message?.trim())
+          .map((item) => {
+            const number = item.transaction_number?.trim();
+            const message = item.message?.trim() || "Tidak ada detail kegagalan.";
+            return number ? `${number}: ${message}` : message;
+          })
           .filter(Boolean)
           .join(" • ");
 
