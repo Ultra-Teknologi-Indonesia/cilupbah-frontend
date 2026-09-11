@@ -110,7 +110,15 @@ export function useBulkCancelInbounds() {
       const failed = res?.failed?.length ?? 0;
       const ok = res?.cancelled?.length ?? 0;
       if (failed > 0) {
-        toast.warning(`${ok} penerimaan dihapus, ${failed} gagal`);
+        const details = (res?.failed ?? [])
+          .map((item) => item.message?.trim())
+          .filter(Boolean)
+          .join(" • ");
+
+        toast.warning(`${ok} penerimaan dihapus, ${failed} gagal`, {
+          description: details || "Tidak ada detail kegagalan dari server.",
+          duration: 10000,
+        });
       } else {
         toast.success(`${ok} penerimaan dihapus`);
       }
