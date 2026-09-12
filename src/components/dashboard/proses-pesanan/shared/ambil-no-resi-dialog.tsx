@@ -286,7 +286,7 @@ export function AmbilNoResiDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[96vw] max-w-[96vw] sm:max-w-[96vw] md:max-w-6xl xl:max-w-7xl max-h-[90vh] flex flex-col p-0 gap-0 overflow-hidden sm:rounded-2xl">
+      <DialogContent className="h-[min(90vh,860px)] w-[96vw] max-w-[96vw] sm:max-w-[96vw] md:max-w-6xl xl:max-w-7xl max-h-[90vh] flex flex-col p-0 gap-0 overflow-hidden sm:rounded-2xl">
         <DialogHeader className="px-6 py-4 border-b border-border/60 bg-muted/20">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">

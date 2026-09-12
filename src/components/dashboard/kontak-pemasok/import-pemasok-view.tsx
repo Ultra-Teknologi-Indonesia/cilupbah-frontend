@@ -124,15 +124,20 @@ export function ImportPemasokDialog({
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent
         className={cn(
-          "flex max-h-[90vh] flex-col gap-0 p-0",
-          result ? "w-fit max-w-[95vw] sm:max-w-[95vw]" : "w-full sm:max-w-lg",
+          "flex max-h-[90vh] flex-col gap-0 overflow-hidden p-0",
+          result
+            ? "h-[min(90vh,860px)] w-[calc(100vw-2rem)] max-w-[95vw] sm:max-w-6xl"
+            : "w-full sm:max-w-lg",
         )}
       >
         <DialogHeader className="shrink-0 border-b px-6 py-4">
           <DialogTitle>Import</DialogTitle>
         </DialogHeader>
 
-        <ScrollArea className="min-h-0 flex-1">
+        <ScrollArea
+          className="min-h-0 flex-1 overflow-hidden"
+          viewportClassName="h-full w-full"
+        >
           <div className="flex flex-col gap-4 p-6">
             {showUploadStep && (
               <>
@@ -334,7 +339,7 @@ export function ImportPemasokDialog({
         </ScrollArea>
 
         {showUploadStep && (
-          <div className="shrink-0 border-t px-6 py-4 flex justify-end">
+          <div className="shrink-0 border-t bg-background px-6 py-4 flex justify-end">
             <Button
               onClick={handleImport}
               disabled={!file || validateMut.isPending}

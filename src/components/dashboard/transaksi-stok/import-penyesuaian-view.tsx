@@ -145,17 +145,27 @@ export function ImportPenyesuaianDialog({
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent
         className={cn(
-          "flex max-h-[90vh] flex-col gap-0 p-0",
+          "flex max-h-[90vh] flex-col gap-0 overflow-hidden p-0",
           preview
-            ? "w-fit max-w-[95vw] sm:max-w-[95vw]"
+            ? "h-[min(90vh,860px)] w-[calc(100vw-2rem)] max-w-[95vw] sm:max-w-6xl"
             : "w-full sm:max-w-2xl",
         )}
       >
         <DialogHeader className="shrink-0 border-b px-6 py-4">
-          <DialogTitle>Import Penyesuaian Stok</DialogTitle>
+          <DialogTitle>
+            {preview ? "Periksa Import Penyesuaian Stok" : "Import Penyesuaian Stok"}
+          </DialogTitle>
+          {preview && (
+            <p className="text-xs text-muted-foreground">
+              Tinjau hasil validasi sebelum menyimpan perubahan stok
+            </p>
+          )}
         </DialogHeader>
 
-        <ScrollArea className="min-h-0 flex-1">
+        <ScrollArea
+          className="min-h-0 flex-1 overflow-hidden"
+          viewportClassName="h-full w-full"
+        >
           <div className="flex flex-col gap-4 p-6">
             <div className="sr-only" aria-hidden="true">
               <UserSelect
@@ -289,7 +299,7 @@ export function ImportPenyesuaianDialog({
           </div>
         </ScrollArea>
 
-        <div className="shrink-0 border-t px-6 py-3">
+        <div className="shrink-0 border-t bg-background px-6 py-3">
           <div className="flex items-center justify-end gap-2">
             {preview ? (
               <>
@@ -339,6 +349,17 @@ function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
   const s = preview.summary;
   return (
     <div className="flex flex-col gap-4">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p className="text-sm font-semibold">Ringkasan validasi</p>
+          <p className="text-xs text-muted-foreground">
+            {preview.items.length.toLocaleString("id-ID")} item siap ditinjau
+          </p>
+        </div>
+        <span className="text-xs text-muted-foreground">
+          Gulir untuk melihat semua baris
+        </span>
+      </div>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <SummaryCard label="Total Baris" value={s.total_rows} />
         <SummaryCard label="Valid" value={s.valid} tone="ok" />
@@ -398,9 +419,6 @@ function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
               <TableHead className="px-3 py-2.5 text-right text-muted-foreground">
                 Selisih
               </TableHead>
-              <TableHead className="px-3 py-2.5 text-right text-muted-foreground">
-                Harga Pokok
-              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="divide-y divide-border">
@@ -447,11 +465,6 @@ function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
                   )}
                 >
                   {it.difference > 0 ? `+${it.difference}` : it.difference}
-                </TableCell>
-                <TableCell className="px-3 py-2 text-right font-mono tabular-nums">
-                  {it.unit_cost != null
-                    ? it.unit_cost.toLocaleString("id-ID")
-                    : "—"}
                 </TableCell>
               </TableRow>
             ))}

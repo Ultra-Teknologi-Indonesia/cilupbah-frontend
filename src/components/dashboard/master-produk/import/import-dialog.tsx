@@ -135,7 +135,7 @@ export function ImportDialog({ type, open, onOpenChange, onQueued }: Props) {
         className={cn(
           "transition-all duration-200",
           isPreviewed
-            ? "sm:max-w-4xl max-h-[90vh] flex flex-col p-0"
+            ? "h-[min(90vh,860px)] sm:max-w-4xl max-h-[90vh] flex flex-col overflow-hidden p-0"
             : "sm:max-w-lg",
         )}
       >

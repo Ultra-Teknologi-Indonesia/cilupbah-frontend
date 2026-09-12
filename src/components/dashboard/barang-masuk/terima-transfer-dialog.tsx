@@ -93,7 +93,7 @@ export function TerimaTransferDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[90vh] flex-col gap-4 sm:max-w-[720px]">
+      <DialogContent className="flex h-[min(90vh,860px)] max-h-[90vh] flex-col gap-4 overflow-hidden sm:max-w-[720px]">
         <DialogHeader>
           <DialogTitle>
             Terima Transfer{" "}

@@ -283,7 +283,7 @@ export function DownloadSatuanDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[90vh] flex-col gap-0 overflow-hidden p-0 sm:max-w-5xl">
+      <DialogContent className="flex h-[min(90vh,860px)] max-h-[90vh] flex-col gap-0 overflow-hidden p-0 sm:max-w-5xl">
         <DialogHeader className="border-b border-border/60 px-6 py-5">
           <DialogTitle className="text-lg">Download Dari Channel</DialogTitle>
           <DialogDescription>

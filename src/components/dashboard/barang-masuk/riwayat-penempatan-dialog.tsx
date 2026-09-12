@@ -88,7 +88,7 @@ export function RiwayatPenempatanDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full sm:max-w-4xl lg:max-w-5xl max-h-[88vh] flex flex-col p-0 gap-0 overflow-hidden rounded-3xl">
+      <DialogContent className="h-[min(88vh,860px)] w-full sm:max-w-4xl lg:max-w-5xl max-h-[88vh] flex flex-col p-0 gap-0 overflow-hidden rounded-3xl">
         {/* Dialog Header with pr-16 to avoid overlapping close button */}
         <DialogHeader className="px-6 pt-6 pb-4 border-b border-border/60 bg-muted/20 pr-16">
           <div className="flex flex-wrap items-center justify-between gap-3">
