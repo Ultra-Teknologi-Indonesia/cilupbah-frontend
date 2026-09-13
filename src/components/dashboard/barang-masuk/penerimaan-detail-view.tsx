@@ -126,17 +126,22 @@ export function PenerimaanDetailView({ id }: { id: string }) {
   const withdrawMutation = useWithdrawParticipant(id);
   const finalizeMutation = useFinalizeInbound(id);
 
-  const canFinalize = React.useMemo(() => {
-    if (!inbound) return false;
-    if (!canEditInbound) return false;
-    // COMPLETED dapat muncul pada data lama yang selesai otomatis. Tampilkan
-    // tombol agar admin dapat menutup sesi dan menormalkannya ke RECEIVED.
-    return ["DRAFT", "PARTIAL"].includes(inbound.status) ||
-      (inbound.status === "COMPLETED" &&
-        (inbound.edit_lock?.active_participants?.length ?? 0) > 0);
-  }, [inbound, canEditInbound]);
-
   const activeParticipants = inbound?.edit_lock?.active_participants ?? [];
+
+  const canFinalize = React.useMemo(() => {
+    if (!inbound || !canEditInbound) return false;
+
+    if (["DRAFT", "PARTIAL"].includes(inbound.status)) return true;
+
+    // RECEIVED dapat tercapai setelah seluruh qty diterima melalui mobile,
+    // sementara sesi mobile masih aktif atau data lama belum difinalisasi.
+    // Admin tetap perlu tombol ini untuk menutup sesi dan menetapkan
+    // once_received_at sebelum koreksi atau penghapusan diizinkan.
+    return (
+      ["RECEIVED", "COMPLETED"].includes(inbound.status) &&
+      (activeParticipants.length > 0 || inbound.once_received_at == null)
+    );
+  }, [activeParticipants.length, canEditInbound, inbound]);
 
   const saveReceivedQty = async (itemId: string, qty: number) => {
     if (!inbound) return;
