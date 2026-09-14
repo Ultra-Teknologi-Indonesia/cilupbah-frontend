@@ -164,7 +164,10 @@ export function ImportPenyesuaianDialog({
 
         <ScrollArea
           className="min-h-0 flex-1 overflow-hidden"
-          viewportClassName="h-full w-full min-w-0"
+          viewportClassName={cn(
+            "h-full w-full min-w-0",
+            preview && "!overflow-hidden",
+          )}
         >
           <div
             className={cn(
