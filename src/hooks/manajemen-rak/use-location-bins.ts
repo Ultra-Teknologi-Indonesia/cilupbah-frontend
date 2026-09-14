@@ -47,12 +47,13 @@ export function useLocationBins(
 export function useLocationBinsInfinite(
   locationId: string | undefined,
   params: Omit<BinListParams, "page"> = {},
+  options: { enabled?: boolean } = {},
 ) {
   return useInfiniteQuery({
     queryKey: ["location-bins", "infinite", locationId ?? "", params] as const,
     queryFn: ({ pageParam }) =>
       LocationBinService.list(locationId!, { ...params, page: pageParam }),
-    enabled: !!locationId,
+    enabled: !!locationId && (options.enabled ?? true),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
       const currentPage = Number(lastPage?.meta?.current_page ?? 1);

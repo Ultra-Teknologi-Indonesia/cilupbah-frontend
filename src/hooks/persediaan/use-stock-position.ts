@@ -25,6 +25,8 @@ export const inventoryKeys = {
   movements: (params: StockMovementParams) =>
     [...all, "movements", params] as const,
   itemStock: (itemId: string) => [...all, "item-stock", itemId] as const,
+  skuStockAtLocation: (sku: string, locationId: string) =>
+    [...all, "sku-stock-at-location", locationId, sku] as const,
   movementFilters: () => [...all, "movement-filters"] as const,
   aggregatedByIds: (ids: string[]) =>
     [...all, "aggregated-by-ids", [...ids].sort()] as const,
@@ -71,6 +73,27 @@ export function useItemStock(itemId: string) {
     queryFn: () => InventoryStockService.getItemStock(itemId),
     ...freshOnViewOptions,
     enabled: !!itemId,
+  });
+}
+
+/**
+ * Loads the live bin balances for one SKU only when a caller explicitly needs
+ * them. This keeps row-based editors from issuing one request per visible row.
+ */
+export function useSkuStockAtLocation(
+  sku: string,
+  locationId: string,
+  enabled: boolean,
+) {
+  const normalizedSku = sku.trim();
+
+  return useQuery({
+    queryKey: inventoryKeys.skuStockAtLocation(normalizedSku, locationId),
+    queryFn: () => InventoryStockService.bySku(normalizedSku, locationId),
+    enabled: enabled && !!normalizedSku && !!locationId,
+    staleTime: 30_000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 }
 

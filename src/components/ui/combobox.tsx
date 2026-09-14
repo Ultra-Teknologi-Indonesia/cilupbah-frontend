@@ -37,6 +37,10 @@ interface ComboboxBaseProps {
   onQueryChange?: (query: string) => void;
   loading?: boolean;
 
+  /** Lets consumers defer remote data loading until this menu is opened. */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+
   wrap?: boolean;
 
   onLoadMore?: () => void;
@@ -75,6 +79,8 @@ export function Combobox({
   createLabel = (q) => `Buat "${q}"`,
   onQueryChange,
   loading,
+  open: controlledOpen,
+  onOpenChange,
   wrap,
   onLoadMore,
   hasMore,
@@ -82,12 +88,25 @@ export function Combobox({
   multiple,
   maxVisible = 2,
 }: ComboboxProps) {
-  const [open, setOpen] = React.useState(false);
+  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const scrollRef = React.useRef<HTMLDivElement>(null);
   const sentinelRef = React.useRef<HTMLLIElement>(null);
 
   const isMulti = multiple === true;
+  const open = controlledOpen ?? uncontrolledOpen;
+
+  const setOpen = React.useCallback(
+    (nextOpen: boolean) => {
+      if (controlledOpen === undefined) setUncontrolledOpen(nextOpen);
+      if (nextOpen) {
+        setQuery("");
+        onQueryChange?.("");
+      }
+      onOpenChange?.(nextOpen);
+    },
+    [controlledOpen, onOpenChange, onQueryChange],
+  );
   const selectedValues: string[] = isMulti
     ? ((value as string[]) ?? [])
     : (value as string | null | undefined)
@@ -173,13 +192,7 @@ export function Combobox({
     <Popover
       modal={true}
       open={open}
-      onOpenChange={(o) => {
-        setOpen(o);
-        if (o) {
-          setQuery("");
-          onQueryChange?.("");
-        }
-      }}
+      onOpenChange={setOpen}
     >
       <PopoverTrigger asChild>
         <button

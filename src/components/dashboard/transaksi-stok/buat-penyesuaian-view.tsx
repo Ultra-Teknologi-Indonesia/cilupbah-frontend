@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/simple-pagination";
 import { useLocations } from "@/hooks/manajemen-rak/use-locations";
 import { useLocationBinsInfinite } from "@/hooks/manajemen-rak/use-location-bins";
+import { useSkuStockAtLocation } from "@/hooks/persediaan/use-stock-position";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import {
   useCreateStockAdjustment,
@@ -206,12 +207,14 @@ function lineFromAdjustmentItem(item: StockAdjustmentItem): LineDraft {
 
 function AdjustmentBinCombobox({
   locationId,
+  sku,
   availableBins,
   value,
   onChange,
   disabled,
 }: {
   locationId: string;
+  sku: string;
   availableBins: LineBin[];
   value: string;
   onChange: (
@@ -222,8 +225,10 @@ function AdjustmentBinCombobox({
   ) => void;
   disabled?: boolean;
 }) {
+  const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search, 250);
+  const skuStock = useSkuStockAtLocation(sku, locationId, open);
 
   const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useLocationBinsInfinite(locationId || undefined, {
@@ -231,7 +236,16 @@ function AdjustmentBinCombobox({
       perPage: 30,
       sort: "bin_final_code",
       filter: { is_inbound: false },
-    });
+    }, { enabled: open });
+
+  const liveSkuBins = useMemo(
+    () => toAdjustableLineBins(skuStock.data?.data.available_bins ?? []),
+    [skuStock.data],
+  );
+  const selectableBins = useMemo(
+    () => mergeLineBins(availableBins, liveSkuBins),
+    [availableBins, liveSkuBins],
+  );
 
   const { options, binMap } = useMemo(() => {
     const opts: ComboboxOption[] = [];
@@ -242,7 +256,7 @@ function AdjustmentBinCombobox({
     >();
 
     const term = debouncedSearch.trim().toLowerCase();
-    for (const b of availableBins) {
+    for (const b of selectableBins) {
       if (!isAdjustableBinCode(b.code)) continue;
       nextBinMap.set(b.id, {
         code: b.code,
@@ -286,7 +300,7 @@ function AdjustmentBinCombobox({
     }
 
     return { options: opts, binMap: nextBinMap };
-  }, [availableBins, data, debouncedSearch, value]);
+  }, [selectableBins, data, debouncedSearch, value]);
 
   return (
     <Combobox
@@ -301,7 +315,9 @@ function AdjustmentBinCombobox({
         onChange(v, info?.code ?? "", info?.onHand ?? 0, info?.avgCost);
       }}
       onQueryChange={setSearch}
-      loading={isLoading}
+      open={open}
+      onOpenChange={setOpen}
+      loading={isLoading || skuStock.isLoading}
       onLoadMore={() => {
         if (hasNextPage && !isFetchingNextPage) {
           fetchNextPage();
@@ -311,9 +327,14 @@ function AdjustmentBinCombobox({
       loadingMore={isFetchingNextPage}
       placeholder="Scan / pilih rak"
       searchPlaceholder="Scan / cari rak…"
-      emptyText={isLoading ? "Mencari rak…" : "Tidak ada rak di lokasi ini"}
+      emptyText={
+        isLoading || skuStock.isLoading
+          ? "Memuat daftar rak…"
+          : "Tidak ada rak di lokasi ini"
+      }
       disabled={disabled || !locationId}
       className="h-9 min-w-[160px]"
+      wrap
     />
   );
 }
@@ -374,7 +395,6 @@ export function PenyesuaianFormPage({
   const [scanning, setScanning] = useState(false);
   const [scanFlash, setScanFlash] = useState<"ok" | "err" | null>(null);
   const scanRef = useRef<HTMLInputElement>(null);
-  const visibleLineIdentity = lines.map((line) => line.lineId).join("|");
 
   const { data: locData } = useLocations({ perPage: 100 });
   const createMut = useCreateStockAdjustment();
@@ -441,58 +461,6 @@ export function PenyesuaianFormPage({
     removedAdjustmentItemIds,
     addedEditLines,
   ]);
-
-  useEffect(() => {
-    if (!isEdit || !locationId || lines.length === 0) return;
-
-    let cancelled = false;
-    void Promise.all(
-      lines.map(async (line) => {
-        if (!line.sku) return null;
-        try {
-          const response = await InventoryStockService.bySku(
-            line.sku,
-            locationId,
-          );
-          return {
-            lineId: line.lineId,
-            bins: toAdjustableLineBins(response.data.available_bins ?? []),
-          };
-        } catch {
-          return null;
-        }
-      }),
-    ).then((results) => {
-      if (cancelled) return;
-      const binsByLine = new Map(
-        results
-          .filter(
-            (result): result is { lineId: string; bins: LineBin[] } =>
-              result !== null,
-          )
-          .map((result) => [result.lineId, result.bins]),
-      );
-
-      setLines((current) =>
-        current.map((line) => ({
-          ...line,
-          // Preserve the historical bin even when it currently has zero stock
-          // or is absent from the live SKU lookup.
-          availableBins: mergeLineBins(
-            line.availableBins,
-            binsByLine.get(line.lineId) ?? [],
-          ),
-        })),
-      );
-    });
-
-    return () => {
-      cancelled = true;
-    };
-    // `lines` is intentionally not a dependency: updating enriched bin options
-    // would otherwise immediately refetch the same SKU lookups.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEdit, locationId, editPage, editItemsData, visibleLineIdentity]);
 
   useEffect(() => {
     if (locationId) scanRef.current?.focus();
@@ -1101,6 +1069,7 @@ export function PenyesuaianFormPage({
                       <TableCell className="align-top py-2.5">
                         <AdjustmentBinCombobox
                           locationId={locationId}
+                          sku={l.sku}
                           availableBins={l.availableBins}
                           value={l.binId}
                           onChange={(binId, binCode, onHand, avgCost) => {
