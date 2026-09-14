@@ -63,6 +63,10 @@ type EditablePurchaseOrderItem = PurchaseOrderItemFormData & {
   variant_label?: string;
 };
 
+type PurchaseOrderPatchUpdate = NonNullable<
+  NonNullable<PurchaseOrderPatchData["changes"]>["update"]
+>[number];
+
 function toPatchItem(item: EditablePurchaseOrderItem) {
   return {
     item_id: item.item_id,
@@ -369,7 +373,7 @@ export function PesananFormPage({ mode, id }: Props) {
       const creates = validItems
         .filter((item) => !item.id)
         .map(toPatchItem);
-      const updates = validItems.flatMap((item) => {
+      const updates: PurchaseOrderPatchUpdate[] = validItems.flatMap((item) => {
         if (!item.id) return [];
         const previous = initial.items.get(item.id);
         if (!previous) return [];
@@ -385,7 +389,9 @@ export function PesananFormPage({ mode, id }: Props) {
         ] as const) {
           if (current[key] !== previous[key]) change[key] = current[key];
         }
-        return Object.keys(change).length > 1 ? [change] : [];
+        return Object.keys(change).length > 1
+          ? [change as PurchaseOrderPatchUpdate]
+          : [];
       });
 
       const patch: PurchaseOrderPatchData = {
