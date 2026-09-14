@@ -57,6 +57,7 @@ import { InventoryStockService } from "@/services/persediaan/inventory.service";
 import { cn } from "@/lib/utils";
 import { playScanFeedback } from "@/lib/scan-feedback";
 import { usePermissions } from "@/hooks/auth/use-permissions";
+import { FormErrorAlert } from "@/components/dashboard/shared/form-error-alert";
 
 const LIST_HREF = "/dashboard/transaksi-stok?tab=penyesuaian";
 const EDIT_ITEMS_PER_PAGE = 20;
@@ -91,6 +92,39 @@ let lineIdSequence = 0;
 function makeLineId(itemId: string): string {
   lineIdSequence += 1;
   return `${itemId}-${Date.now()}-${lineIdSequence}`;
+}
+
+function saveErrorBanner(error: unknown): {
+  title: string;
+  message: string;
+  issues: Array<{ label: string; message: string }>;
+} | null {
+  if (!error || typeof error !== "object") return null;
+
+  const response = error as {
+    title?: unknown;
+    message?: unknown;
+    errors?: unknown;
+  };
+  const text = (value: unknown): string | undefined =>
+    typeof value === "string" && value.trim() ? value.trim() : undefined;
+  const errors =
+    response.errors && typeof response.errors === "object"
+      ? (response.errors as { issues?: unknown })
+      : null;
+  const issues = Array.isArray(errors?.issues)
+    ? errors.issues.flatMap((issue) => {
+        if (!issue || typeof issue !== "object") return [];
+        const message = text((issue as { message?: unknown }).message);
+        return message ? [{ label: "", message }] : [];
+      })
+    : [];
+
+  return {
+    title: text(response.title) ?? "Perubahan stok tidak dapat diproses",
+    message: text(response.message) ?? "Perubahan stok tidak dapat disimpan.",
+    issues,
+  };
 }
 
 function todayStr(): string {
@@ -345,6 +379,7 @@ export function PenyesuaianFormPage({
   const { data: locData } = useLocations({ perPage: 100 });
   const createMut = useCreateStockAdjustment();
   const patchMut = usePatchStockAdjustment();
+  const saveError = saveErrorBanner(patchMut.error ?? createMut.error);
 
   const locationOptions = useMemo(
     () =>
@@ -824,6 +859,18 @@ export function PenyesuaianFormPage({
             : [{ label: "Buat Penyesuaian" }]),
         ]}
       />
+
+      {saveError && (
+        <FormErrorAlert
+          title={saveError.title}
+          description={saveError.message}
+          items={saveError.issues}
+          onDismiss={() => {
+            patchMut.reset();
+            createMut.reset();
+          }}
+        />
+      )}
 
       <LiquidGlass
         radius={16}

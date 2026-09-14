@@ -48,6 +48,7 @@ export const useCreateStockAdjustment = createMutationHook({
     StockAdjustmentService.create(data),
   successMessage: "Koreksi stok berhasil dibuat",
   errorMessage: "Gagal membuat koreksi stok",
+  silentError: true,
   invalidates: () => [stockAdjustmentKeys.lists, ...STOCK_VIEW_KEYS],
 });
 
@@ -69,6 +70,9 @@ export const usePatchStockAdjustment = createMutationHook({
     StockAdjustmentService.patch(id, data),
   successMessage: "Koreksi stok berhasil diperbarui",
   errorMessage: "Gagal memperbarui koreksi stok",
+  // The form keeps a detailed, dismissible banner visible until the operator
+  // has read and resolved the failed stock validation.
+  silentError: true,
   invalidates: ({ id }) => [
     stockAdjustmentKeys.lists,
     stockAdjustmentKeys.detail(id),
