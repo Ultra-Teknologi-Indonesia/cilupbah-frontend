@@ -295,7 +295,7 @@ export function PenyesuaianDetail({ id }: { id: string }) {
         className="bg-white/30 dark:bg-white/[0.04] p-5"
       >
         <SectionTitle className="mb-4">
-          Daftar Item ({itemsData?.meta?.total ?? 0})
+          Daftar Item ({adj.items_count ?? 0})
         </SectionTitle>
         <div className="border border-border/40 rounded-lg overflow-hidden">
           <DataTable

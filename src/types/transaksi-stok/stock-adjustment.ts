@@ -35,6 +35,8 @@ export interface StockAdjustment {
   created_by: string;
   created_at: string;
   updated_at: string;
+  /** Total document rows, independent of any item-table search filter. */
+  items_count?: number;
   location?: {
     id: string;
     location_name: string;
