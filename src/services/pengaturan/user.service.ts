@@ -61,6 +61,8 @@ export const UserService = {
       q?: string;
       search?: string;
       role?: string | string[];
+      locationId?: string;
+      permission?: string;
       page?: number;
       perPage?: number;
     } = {},
@@ -70,6 +72,8 @@ export const UserService = {
     if (query) qs.set("q", query);
     if (params.page) qs.set("page", String(params.page));
     if (params.perPage) qs.set("per_page", String(params.perPage));
+    if (params.locationId) qs.set("location_id", params.locationId);
+    if (params.permission) qs.set("permission", params.permission);
     if (params.role) {
       if (Array.isArray(params.role)) {
         qs.set("role", params.role.join(","));

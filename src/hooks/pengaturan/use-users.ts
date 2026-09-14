@@ -1,6 +1,11 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 import { UserService } from "@/services/pengaturan/user.service";
 import type {
@@ -31,6 +36,8 @@ export function useUserLookup(
     q?: string;
     search?: string;
     role?: string | string[];
+    locationId?: string;
+    permission?: string;
     page?: number;
     perPage?: number;
   } = {},
@@ -39,6 +46,34 @@ export function useUserLookup(
   return useQuery({
     queryKey: ["pengaturan", "pengguna", "lookup", params],
     queryFn: () => UserService.lookup(params),
+    enabled,
+    staleTime: 30 * 1000,
+  });
+}
+
+export function useInfiniteUserLookup(
+  params: {
+    q?: string;
+    locationId?: string;
+    permission?: string;
+    perPage?: number;
+  } = {},
+  enabled = true,
+) {
+  return useInfiniteQuery({
+    queryKey: ["pengaturan", "pengguna", "lookup-infinite", params],
+    queryFn: ({ pageParam }) =>
+      UserService.lookup({
+        ...params,
+        page: pageParam,
+      }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      const meta = lastPage.meta;
+      return meta.current_page < meta.last_page
+        ? meta.current_page + 1
+        : undefined;
+    },
     enabled,
     staleTime: 30 * 1000,
   });

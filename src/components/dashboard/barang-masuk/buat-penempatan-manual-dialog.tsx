@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";
 
@@ -16,7 +16,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Combobox } from "@/components/ui/combobox";
-import { useUserLookup } from "@/hooks/pengaturan/use-users";
+import { useInfiniteUserLookup } from "@/hooks/pengaturan/use-users";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { fetchClient } from "@/lib/api-client";
 import { toast } from "sonner";
 import { apiError } from "@/lib/toast";
@@ -37,12 +38,10 @@ export function BuatPenempatanManualDialog({
   onSuccess,
 }: BuatPenempatanManualDialogProps) {
   const queryClient = useQueryClient();
-  const { data: usersData, isLoading: usersLoading } = useUserLookup({
-    perPage: 100,
-    role: "putaway",
-  });
   const [assignedTo, setAssignedTo] = useState("");
   const [notes, setNotes] = useState("");
+  const [staffSearch, setStaffSearch] = useState("");
+  const debouncedStaffSearch = useDebouncedValue(staffSearch, 250);
 
   const { totalSku, totalQty } = useMemo(() => {
     const skuSet = new Set<string>();
@@ -67,10 +66,52 @@ export function BuatPenempatanManualDialog({
     return { totalSku: skuSet.size, totalQty: qty };
   }, [inbounds]);
 
-  const userOptions = (usersData?.items ?? []).map((u) => ({
-    value: u.id,
-    label: `${u.name}`,
-  }));
+  const locationIds = useMemo(
+    () =>
+      [...new Set(inbounds.map((inbound) => inbound.location_id).filter(Boolean))],
+    [inbounds],
+  );
+  const assignmentLocationId =
+    locationIds.length === 1 ? locationIds[0] : undefined;
+
+  const staffLookup = useInfiniteUserLookup(
+    {
+      q: debouncedStaffSearch || undefined,
+      perPage: 20,
+      locationId: assignmentLocationId,
+      permission: "edit-penempatan",
+    },
+    open && !!assignmentLocationId,
+  );
+
+  const {
+    data: staffData,
+    isLoading: staffLoading,
+    isFetching: staffFetching,
+    hasNextPage: hasMoreStaff,
+    isFetchingNextPage: fetchingMoreStaff,
+    fetchNextPage: fetchMoreStaff,
+  } = staffLookup;
+
+  const staffOptions = useMemo(() => {
+    const options = staffData?.pages.flatMap((page) => page.items) ?? [];
+    const unique = new Map(options.map((user) => [user.id, user]));
+
+    return [...unique.values()].map((user) => ({
+      value: user.id,
+      label: user.name,
+    }));
+  }, [staffData]);
+
+  const handleStaffQueryChange = useCallback((query: string) => {
+    setStaffSearch(query);
+  }, []);
+
+  const handleLoadMoreStaff = useCallback(() => {
+    if (hasMoreStaff && !fetchingMoreStaff) {
+      void fetchMoreStaff();
+    }
+  }, [fetchMoreStaff, fetchingMoreStaff, hasMoreStaff]);
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -156,13 +197,22 @@ export function BuatPenempatanManualDialog({
               Tugaskan Ke
             </Label>
             <Combobox
-              options={userOptions}
+              options={staffOptions}
               value={assignedTo}
               onChange={(v) => setAssignedTo(v ?? "")}
-              placeholder={usersLoading ? "Memuat..." : "Pilih pengguna..."}
+              placeholder={
+                !assignmentLocationId
+                  ? "Lokasi penerimaan tidak sama"
+                  : "Pilih pengguna..."
+              }
               searchPlaceholder="Cari pengguna..."
               className="w-full"
-              disabled={usersLoading}
+              disabled={!assignmentLocationId}
+              loading={staffLoading || staffFetching}
+              onQueryChange={handleStaffQueryChange}
+              onLoadMore={handleLoadMoreStaff}
+              hasMore={hasMoreStaff}
+              loadingMore={fetchingMoreStaff}
             />
           </div>
 

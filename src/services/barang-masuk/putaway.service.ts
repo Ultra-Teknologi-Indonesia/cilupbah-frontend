@@ -7,7 +7,7 @@ import type {
 } from "@/types/barang-masuk/putaway";
 
 export interface AssignStaffPayload {
-  data: { putaway_id: string; assigned_to: number }[];
+  data: { putaway_id: string; assigned_to: string }[];
   performed_by: string;
 }
 
