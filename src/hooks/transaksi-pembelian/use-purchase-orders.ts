@@ -12,7 +12,7 @@ import { PurchaseOrderService } from "@/services/transaksi-pembelian/purchase-or
 import { InboundService } from "@/services/barang-masuk/inbound.service";
 import type {
   PurchaseOrderListParams,
-  PurchaseOrderFormData,
+  PurchaseOrderPatchData,
 } from "@/types/transaksi-pembelian/purchase-order";
 
 const STALE = 30 * 1000;
@@ -68,8 +68,8 @@ export function useCreatePurchaseOrder() {
 export function useUpdatePurchaseOrder() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: PurchaseOrderFormData }) =>
-      PurchaseOrderService.update(id, data),
+    mutationFn: ({ id, data }: { id: string; data: PurchaseOrderPatchData }) =>
+      PurchaseOrderService.patch(id, data),
     onSuccess: () => {
       toast.success("Pesanan pembelian berhasil diperbarui");
       qc.invalidateQueries({ queryKey: ["purchase-order"] });

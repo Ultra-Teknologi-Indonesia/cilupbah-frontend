@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { EmptyState } from "@/components/ui/empty-state";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -46,12 +46,33 @@ import {
   ProductPickerDialog,
   type PickedProduct,
 } from "./product-picker-dialog";
-import type { PurchaseOrderItemFormData } from "@/types/transaksi-pembelian/purchase-order";
+import type {
+  PurchaseOrderFormData,
+  PurchaseOrderItemFormData,
+  PurchaseOrderPatchData,
+} from "@/types/transaksi-pembelian/purchase-order";
 import { formatCurrency } from "@/lib/format";
 
 interface Props {
   mode: "create" | "edit";
   id?: string;
+}
+
+type EditablePurchaseOrderItem = PurchaseOrderItemFormData & {
+  thumbnail?: string | null;
+  variant_label?: string;
+};
+
+function toPatchItem(item: EditablePurchaseOrderItem) {
+  return {
+    item_id: item.item_id,
+    description: item.description || null,
+    unit: item.unit || null,
+    qty: Number(item.qty),
+    unit_price: Number(item.unit_price),
+    disc: Number(item.disc),
+    shipping_cost: Number(item.shipping_cost ?? 0),
+  };
 }
 
 function RequiredStar() {
@@ -115,13 +136,12 @@ export function PesananFormPage({ mode, id }: Props) {
   const [refNo, setRefNo] = useState("");
   const [paymentTerm, setPaymentTerm] = useState("0");
   const [notes, setNotes] = useState("");
-  const [items, setItems] = useState<
-    (PurchaseOrderItemFormData & {
-      thumbnail?: string | null;
-      variant_label?: string;
-    })[]
-  >([]);
+  const [items, setItems] = useState<EditablePurchaseOrderItem[]>([]);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const initialRef = useRef<{
+    headers: Omit<PurchaseOrderFormData, "items"> & { po_number?: string | null };
+    items: Map<string, ReturnType<typeof toPatchItem>>;
+  } | null>(null);
 
   const { data: contactsData } = useContacts({
     per_page: 100,
@@ -129,11 +149,12 @@ export function PesananFormPage({ mode, id }: Props) {
   });
   const { data: locData } = useLocations({ perPage: 100 });
 
-  const [prevExistingId, setPrevExistingId] = useState<string | undefined>(
-    undefined,
-  );
-  if (mode === "edit" && existingPO && prevExistingId !== existingPO.id) {
-    setPrevExistingId(existingPO.id);
+  // The fetched PO is an external source of truth; hydrate the editable draft
+  // once its identity changes instead of mutating React state during render.
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => {
+    if (mode !== "edit" || !existingPO) return;
+
     setPoNumber(existingPO.po_number);
     setPoNumberAuto(false);
     setContactId(existingPO.contact_id);
@@ -144,8 +165,7 @@ export function PesananFormPage({ mode, id }: Props) {
     setRefNo(existingPO.ref_no ?? "");
     setPaymentTerm(existingPO.payment_term?.toString() ?? "0");
     setNotes(existingPO.notes ?? "");
-    setItems(
-      (existingPO.items ?? []).map((it) => ({
+    const hydratedItems: EditablePurchaseOrderItem[] = (existingPO.items ?? []).map((it) => ({
         id: it.id,
         received_qty: Number(it.received_qty ?? 0),
         item_id: it.item_id,
@@ -165,9 +185,28 @@ export function PesananFormPage({ mode, id }: Props) {
           it.product?.image_url ??
           null,
         variant_label: it.variant?.options?.map((o) => o.value).join(", "),
-      })),
-    );
-  }
+      }));
+    setItems(hydratedItems);
+    initialRef.current = {
+      headers: {
+        po_number: existingPO.po_number ?? null,
+        contact_id: existingPO.contact_id,
+        location_id: existingPO.location_id,
+        order_date: existingPO.order_date,
+        expected_date: existingPO.expected_date ?? undefined,
+        ref_no: existingPO.ref_no ?? undefined,
+        payment_term: existingPO.payment_term ?? null,
+        is_tax_included: existingPO.is_tax_included ?? false,
+        notes: existingPO.notes ?? undefined,
+      },
+      items: new Map(
+        hydratedItems
+          .filter((item) => item.id)
+          .map((item) => [item.id!, toPatchItem(item)]),
+      ),
+    };
+  }, [mode, existingPO]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const contactOptions = useMemo(
     () =>
@@ -277,7 +316,7 @@ export function PesananFormPage({ mode, id }: Props) {
 
   function handleSubmit() {
     if (!canSubmit) return;
-    const payload = {
+    const payload: PurchaseOrderFormData = {
       contact_id: contactId,
       location_id: locationId,
       order_date: orderDate!.toISOString().split("T")[0],
@@ -301,8 +340,64 @@ export function PesananFormPage({ mode, id }: Props) {
     };
 
     if (mode === "edit" && id) {
+      const initial = initialRef.current;
+      if (!initial) return;
+
+      const currentHeaders = {
+        po_number: poNumberAuto ? null : poNumber || null,
+        contact_id: contactId,
+        location_id: locationId,
+        order_date: orderDate!.toISOString().split("T")[0],
+        ref_no: refNo || null,
+        payment_term: paymentTerm ? Number(paymentTerm) : null,
+        notes: notes || null,
+      };
+      const headerChanges: Omit<PurchaseOrderPatchData, "changes"> = {};
+      for (const [key, value] of Object.entries(currentHeaders)) {
+        const initialValue = initial.headers[key as keyof typeof initial.headers] ?? null;
+        if (value !== initialValue) {
+          Object.assign(headerChanges, { [key]: value });
+        }
+      }
+
+      const currentExistingIds = new Set(
+        validItems.map((item) => item.id).filter((itemId): itemId is string => Boolean(itemId)),
+      );
+      const deleteIds = Array.from(initial.items.keys()).filter(
+        (itemId) => !currentExistingIds.has(itemId),
+      );
+      const creates = validItems
+        .filter((item) => !item.id)
+        .map(toPatchItem);
+      const updates = validItems.flatMap((item) => {
+        if (!item.id) return [];
+        const previous = initial.items.get(item.id);
+        if (!previous) return [];
+        const current = toPatchItem(item);
+        const change: Record<string, string | number | null> = { id: item.id };
+        for (const key of [
+          "description",
+          "unit",
+          "qty",
+          "unit_price",
+          "disc",
+          "shipping_cost",
+        ] as const) {
+          if (current[key] !== previous[key]) change[key] = current[key];
+        }
+        return Object.keys(change).length > 1 ? [change] : [];
+      });
+
+      const patch: PurchaseOrderPatchData = {
+        ...headerChanges,
+        changes: {
+          ...(creates.length > 0 ? { create: creates } : {}),
+          ...(updates.length > 0 ? { update: updates } : {}),
+          ...(deleteIds.length > 0 ? { delete_ids: deleteIds } : {}),
+        },
+      };
       updateMut.mutate(
-        { id, data: payload },
+        { id, data: patch },
         {
           onSuccess: () =>
             router.push(`/dashboard/transaksi-pembelian/pesanan/${id}`),

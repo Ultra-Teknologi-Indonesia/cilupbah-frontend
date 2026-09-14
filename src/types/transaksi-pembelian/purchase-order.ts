@@ -88,8 +88,8 @@ export interface PurchaseOrderItemFormData {
   item_id: string;
   product_name?: string;
   product_sku?: string;
-  description?: string;
-  unit?: string;
+  description?: string | null;
+  unit?: string | null;
   qty: number;
   unit_price: number;
   disc: number;
@@ -100,6 +100,7 @@ export interface PurchaseOrderItemFormData {
 }
 
 export interface PurchaseOrderFormData {
+  po_number?: string;
   contact_id: string;
   location_id: string;
   order_date: string;
@@ -109,4 +110,17 @@ export interface PurchaseOrderFormData {
   is_tax_included?: boolean;
   notes?: string;
   items: PurchaseOrderItemFormData[];
+}
+
+export interface PurchaseOrderPatchData
+  extends Partial<Omit<PurchaseOrderFormData, "items">> {
+  changes?: {
+    create?: Omit<PurchaseOrderItemFormData, "id" | "received_qty">[];
+    update?: Array<
+      { id: string } & Partial<
+        Omit<PurchaseOrderItemFormData, "id" | "item_id" | "received_qty">
+      >
+    >;
+    delete_ids?: string[];
+  };
 }

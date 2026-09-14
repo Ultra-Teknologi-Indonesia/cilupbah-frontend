@@ -5,6 +5,7 @@ import type {
   PurchaseOrderItem,
   PurchaseOrderListParams,
   PurchaseOrderFormData,
+  PurchaseOrderPatchData,
 } from "@/types/transaksi-pembelian/purchase-order";
 
 export interface ReceivePOPayload {
@@ -103,6 +104,17 @@ export const PurchaseOrderService = {
       `/purchase/orders/${id}`,
       {
         method: "PUT",
+        data,
+      },
+    );
+    return res.data;
+  },
+
+  patch: async (id: string, data: PurchaseOrderPatchData) => {
+    const res = await fetchClient<ApiResponse<PurchaseOrder>>(
+      `/purchase/orders/${id}`,
+      {
+        method: "PATCH",
         data,
       },
     );
