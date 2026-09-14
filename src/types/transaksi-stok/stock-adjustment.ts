@@ -76,3 +76,21 @@ export interface StockAdjustmentFormData {
   created_by: string;
   items: StockAdjustmentItemInput[];
 }
+
+/**
+ * Server-side change set for editing a paginated adjustment. Persisted rows
+ * carry their own id; the client never needs to materialise every document page
+ * just to preserve untouched rows.
+ */
+export interface StockAdjustmentPatchData {
+  transaction_date?: string;
+  is_beginning_balance?: boolean;
+  notes?: string | null;
+  changes?: {
+    create?: StockAdjustmentItemInput[];
+    update?: Array<
+      Omit<StockAdjustmentItemInput, "item_id"> & { id: string }
+    >;
+    delete_ids?: string[];
+  };
+}

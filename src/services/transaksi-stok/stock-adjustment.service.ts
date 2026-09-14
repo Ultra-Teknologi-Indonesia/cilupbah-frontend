@@ -5,6 +5,7 @@ import type {
   StockAdjustmentItem,
   StockAdjustmentListParams,
   StockAdjustmentFormData,
+  StockAdjustmentPatchData,
 } from "@/types/transaksi-stok/stock-adjustment";
 
 const BASE = "/inventory/adjustments/documents";
@@ -67,6 +68,17 @@ export const StockAdjustmentService = {
       `${BASE}/${id}`,
       {
         method: "PUT",
+        data,
+      },
+    );
+    return res.data;
+  },
+
+  patch: async (id: string, data: StockAdjustmentPatchData) => {
+    const res = await fetchClient<ApiResponse<StockAdjustment>>(
+      `${BASE}/${id}`,
+      {
+        method: "PATCH",
         data,
       },
     );

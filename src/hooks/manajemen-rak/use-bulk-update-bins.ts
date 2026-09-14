@@ -17,7 +17,7 @@ export function useBulkUpdateBins(locationId?: string) {
   return useMutation({
     mutationFn: (bins: BulkUpdateBin[]) => {
       if (!locationId) throw new Error("locationId is required");
-      return LocationService.bulkUpdateBins(locationId, bins);
+      return LocationService.patchBins(locationId, bins);
     },
     onSuccess: () => {
       if (locationId) {

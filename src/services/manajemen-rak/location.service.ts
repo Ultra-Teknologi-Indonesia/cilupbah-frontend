@@ -122,7 +122,7 @@ export const LocationService = {
     });
   },
 
-  bulkUpdateBins: async (
+  patchBins: async (
     locationId: string,
     bins: {
       id: string;
@@ -132,8 +132,8 @@ export const LocationService = {
     }[],
   ): Promise<{ updated: number }> => {
     const res = await fetchClient<ApiResponse<{ updated: number }>>(
-      `/locations/${locationId}/bins/bulk`,
-      { method: "PUT", data: { bins } },
+      `/locations/${locationId}/bins`,
+      { method: "PATCH", data: { bins } },
     );
     return res.data;
   },

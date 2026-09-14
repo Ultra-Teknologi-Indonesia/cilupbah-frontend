@@ -8,6 +8,7 @@ import {
 import type {
   StockAdjustmentListParams,
   StockAdjustmentFormData,
+  StockAdjustmentPatchData,
 } from "@/types/transaksi-stok/stock-adjustment";
 import {
   createDetailHook,
@@ -53,6 +54,19 @@ export const useCreateStockAdjustment = createMutationHook({
 export const useUpdateStockAdjustment = createMutationHook({
   mutationFn: ({ id, data }: { id: string; data: StockAdjustmentFormData }) =>
     StockAdjustmentService.update(id, data),
+  successMessage: "Koreksi stok berhasil diperbarui",
+  errorMessage: "Gagal memperbarui koreksi stok",
+  invalidates: ({ id }) => [
+    stockAdjustmentKeys.lists,
+    stockAdjustmentKeys.detail(id),
+    [...stockAdjustmentKeys.detail(id), "items"],
+    ...STOCK_VIEW_KEYS,
+  ],
+});
+
+export const usePatchStockAdjustment = createMutationHook({
+  mutationFn: ({ id, data }: { id: string; data: StockAdjustmentPatchData }) =>
+    StockAdjustmentService.patch(id, data),
   successMessage: "Koreksi stok berhasil diperbarui",
   errorMessage: "Gagal memperbarui koreksi stok",
   invalidates: ({ id }) => [

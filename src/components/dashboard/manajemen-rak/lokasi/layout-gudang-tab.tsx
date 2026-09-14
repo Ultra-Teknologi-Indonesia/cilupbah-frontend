@@ -1420,7 +1420,7 @@ export function LayoutGudangTab({
   >(() => new Map());
 
   const [editedMap, setEditedMap] = React.useState<
-    Map<string, Partial<BinPreviewItem>>
+    Map<string, BinDraft>
   >(() => new Map());
 
   const list = useListState<Record<string, never>>(
@@ -1569,23 +1569,9 @@ export function LayoutGudangTab({
   });
   React.useEffect(() => {
     if (serverMode) {
-      const items: BinDraft[] = [];
-      for (const [binId, patch] of editedMap.entries()) {
-        const row = binsQuery.data?.items.find((b) => b.id === binId);
-        if (!row) continue;
-        items.push({
-          id: binId,
-          floorCode: row.floorCode ?? "",
-          rowCode: row.rowCode ?? "",
-          columnCode: row.columnCode ?? "",
-          binCode: row.binCode ?? "",
-          binFinalCode: patch.binFinalCode ?? row.binFinalCode,
-          isStockAcknowledged:
-            patch.isStockAcknowledged ?? row.isStockAcknowledged,
-          isLargeBin: patch.isLargeBin ?? row.isLargeBin,
-        });
-      }
-      onBinsChangeRef.current?.(items);
+      // Keep complete snapshots of edited rows. Looking up a row only in the
+      // current page used to discard edits after pagination or a new search.
+      onBinsChangeRef.current?.(Array.from(editedMap.values()));
     } else {
       onBinsChangeRef.current?.(localBins.map(toDraft));
     }
@@ -1652,21 +1638,21 @@ export function LayoutGudangTab({
   };
 
   const patchEdit = (
-    binId: string,
+    row: BinRow,
     field: keyof BinPreviewItem,
     value: unknown,
   ) => {
     setEditedMap((prev) => {
       const next = new Map(prev);
-      const existing = next.get(binId) ?? {};
-      next.set(binId, { ...existing, [field]: value });
+      const existing = next.get(row.id) ?? toDraft(row);
+      next.set(row.id, { ...existing, [field]: value });
       return next;
     });
   };
 
   const serverRows: BinRow[] = serverMode
     ? (binsQuery.data?.items ?? []).map((row) => {
-        const patch = editedMap.get(row.id) ?? {};
+        const patch = editedMap.get(row.id);
         return {
           id: row.id,
           binId: row.id,
@@ -1674,10 +1660,10 @@ export function LayoutGudangTab({
           rowCode: row.rowCode ?? "",
           columnCode: row.columnCode ?? "",
           binCode: row.binCode ?? "",
-          binFinalCode: patch.binFinalCode ?? row.binFinalCode,
+          binFinalCode: patch?.binFinalCode ?? row.binFinalCode,
           isStockAcknowledged:
-            patch.isStockAcknowledged ?? row.isStockAcknowledged,
-          isLargeBin: patch.isLargeBin ?? row.isLargeBin,
+            patch?.isStockAcknowledged ?? row.isStockAcknowledged,
+          isLargeBin: patch?.isLargeBin ?? row.isLargeBin,
           isInbound: row.isInbound,
           allowsMultiSku: row.allowsMultiSku,
           skus: row.skus,
@@ -2205,7 +2191,7 @@ export function LayoutGudangTab({
                             onChange={(e) =>
                               serverMode && b.binId
                                 ? patchEdit(
-                                    b.binId,
+                                    b,
                                     "binFinalCode",
                                     e.target.value,
                                   )
@@ -2326,7 +2312,7 @@ export function LayoutGudangTab({
                           checked={b.isStockAcknowledged}
                           onCheckedChange={(v) =>
                             serverMode && b.binId
-                              ? patchEdit(b.binId, "isStockAcknowledged", v)
+                              ? patchEdit(b, "isStockAcknowledged", v)
                               : updateLocalBin(b.id, "isStockAcknowledged", v)
                           }
                           disabled={disabled || isPending}
@@ -2337,7 +2323,7 @@ export function LayoutGudangTab({
                           checked={b.isLargeBin}
                           onCheckedChange={(v) =>
                             serverMode && b.binId
-                              ? patchEdit(b.binId, "isLargeBin", v)
+                              ? patchEdit(b, "isLargeBin", v)
                               : updateLocalBin(b.id, "isLargeBin", v)
                           }
                           disabled={disabled || isPending}

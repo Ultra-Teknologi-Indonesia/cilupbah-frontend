@@ -3,7 +3,6 @@ import Image from "next/image";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { toast } from "sonner";
 import {
   Loader2Icon,
   PackageSearchIcon,
@@ -39,14 +38,13 @@ import { useLocationBinsInfinite } from "@/hooks/manajemen-rak/use-location-bins
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import {
   useCreateStockAdjustment,
-  useUpdateStockAdjustment,
+  usePatchStockAdjustment,
   useStockAdjustmentDetail,
   useStockAdjustmentItems,
 } from "@/hooks/transaksi-stok/use-stock-adjustments";
-// eslint-disable-next-line no-restricted-imports -- Full document materialisation is deferred until explicit save, preserving the replace-all API contract.
-import { StockAdjustmentService } from "@/services/transaksi-stok/stock-adjustment.service";
 import type {
   StockAdjustmentFormData,
+  StockAdjustmentPatchData,
   StockAdjustmentItem,
 } from "@/types/transaksi-stok/stock-adjustment";
 import {
@@ -62,7 +60,6 @@ import { usePermissions } from "@/hooks/auth/use-permissions";
 
 const LIST_HREF = "/dashboard/transaksi-stok?tab=penyesuaian";
 const EDIT_ITEMS_PER_PAGE = 20;
-const EDIT_ITEM_FETCH_CONCURRENCY = 4;
 
 interface LineBin {
   id: string;
@@ -171,43 +168,6 @@ function lineFromAdjustmentItem(item: StockAdjustmentItem): LineDraft {
         ]
       : [],
   };
-}
-
-async function fetchAllAdjustmentItems(
-  id: string,
-): Promise<StockAdjustmentItem[]> {
-  const firstPage = await StockAdjustmentService.getItems(id, {
-    page: 1,
-    per_page: EDIT_ITEMS_PER_PAGE,
-    sort: "-created_at,-id",
-  });
-  const pages = new Array<StockAdjustmentItem[]>(firstPage.meta.last_page);
-  pages[0] = firstPage.items;
-  let nextPage = 2;
-
-  const worker = async () => {
-    while (nextPage <= firstPage.meta.last_page) {
-      const page = nextPage;
-      nextPage += 1;
-      const response = await StockAdjustmentService.getItems(id, {
-        page,
-        per_page: EDIT_ITEMS_PER_PAGE,
-        sort: "-created_at,-id",
-      });
-      pages[page - 1] = response.items;
-    }
-  };
-
-  await Promise.all(
-    Array.from(
-      {
-        length: Math.min(EDIT_ITEM_FETCH_CONCURRENCY, firstPage.meta.last_page),
-      },
-      () => worker(),
-    ),
-  );
-
-  return pages.flat();
 }
 
 function AdjustmentBinCombobox({
@@ -372,7 +332,6 @@ export function PenyesuaianFormPage({
     Set<string>
   >(new Set());
   const [addedEditLines, setAddedEditLines] = useState<LineDraft[]>([]);
-  const [isPreparingUpdate, setIsPreparingUpdate] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pickerSearch, setPickerSearch] = useState<string | undefined>(
     undefined,
@@ -385,7 +344,7 @@ export function PenyesuaianFormPage({
 
   const { data: locData } = useLocations({ perPage: 100 });
   const createMut = useCreateStockAdjustment();
-  const updateMut = useUpdateStockAdjustment();
+  const patchMut = usePatchStockAdjustment();
 
   const locationOptions = useMemo(
     () =>
@@ -740,16 +699,24 @@ export function PenyesuaianFormPage({
       )
     : lines.length;
 
-  const canSubmit =
-    canMutate &&
-    !!locationId &&
-    !!transactionDate &&
-    totalLineCount > 0 &&
-    validLines.length === lines.length &&
-    !hasDuplicateItemBin;
+  const changedEditLines = [
+    ...Object.values(editOverrides),
+    ...addedEditLines,
+  ];
+  const canSubmit = isEdit
+    ? canMutate &&
+      !!locationId &&
+      !!transactionDate &&
+      totalLineCount > 0 &&
+      changedEditLines.every(isValidLine)
+    : canMutate &&
+      !!locationId &&
+      !!transactionDate &&
+      totalLineCount > 0 &&
+      validLines.length === lines.length &&
+      !hasDuplicateItemBin;
 
-  const isSaving =
-    createMut.isPending || updateMut.isPending || isPreparingUpdate;
+  const isSaving = createMut.isPending || patchMut.isPending;
 
   const lineToInput = (line: LineDraft) => ({
     item_id: line.itemId,
@@ -772,62 +739,37 @@ export function PenyesuaianFormPage({
     items: payloadLines.map(lineToInput),
   });
 
+  const makePatchPayload = (): StockAdjustmentPatchData => ({
+    transaction_date: transactionDate,
+    notes: notes.trim() || null,
+    changes: {
+      create: addedEditLines.map(lineToInput),
+      update: Object.values(editOverrides).map((line) => ({
+        id: line.adjustmentItemId!,
+        bin_id: line.binId || undefined,
+        mode: "DELTA" as const,
+        input_value: Number(line.delta),
+        unit_cost: line.unitCost ? Number(line.unitCost) : undefined,
+        notes: line.notes.trim() || undefined,
+      })),
+      delete_ids: [...removedAdjustmentItemIds],
+    },
+  });
+
   const handleSubmit = async () => {
     if (!canSubmit || isSaving) return;
 
     if (isEdit && id) {
-      setIsPreparingUpdate(true);
-      try {
-        // PUT replaces the document as a whole. Fetch its paginated rows only
-        // when saving, merge the edits, then submit one complete payload. This
-        // prevents a page-sized edit from deleting unseen rows.
-        const persistedItems = await fetchAllAdjustmentItems(id);
-        const mergedLines = persistedItems
-          .filter((item) => !removedAdjustmentItemIds.has(item.id))
-          .map((item) => {
-            const initial = lineFromAdjustmentItem(item);
-            const override = editOverrides[item.id];
-
-            return override
-              ? {
-                  ...initial,
-                  ...override,
-                  availableBins: mergeLineBins(
-                    initial.availableBins,
-                    override.availableBins,
-                  ),
-                }
-              : initial;
-          });
-        const payloadLines = [...mergedLines, ...addedEditLines];
-        const allValid = payloadLines.every(isValidLine);
-        const hasDuplicate =
-          new Set(payloadLines.map((line) => `${line.itemId}|${line.binId}`))
-            .size !== payloadLines.length;
-
-        if (payloadLines.length === 0 || !allValid || hasDuplicate) {
-          toast.error(
-            hasDuplicate
-              ? "Ada SKU yang tercantum lebih dari sekali pada rak yang sama."
-              : "Lengkapi rak dan selisih yang valid pada semua baris sebelum menyimpan.",
-          );
-          return;
-        }
-
-        updateMut.mutate(
-          { id, data: makePayload(payloadLines) },
-          {
-            onSuccess: () =>
-              router.push(`/dashboard/transaksi-stok/penyesuaian/${id}`),
-          },
-        );
-      } catch {
-        toast.error(
-          "Gagal menyiapkan seluruh item penyesuaian untuk disimpan.",
-        );
-      } finally {
-        setIsPreparingUpdate(false);
-      }
+      // Send only the user's create/update/delete changes. The server locks the
+      // full document and validates the resulting document atomically, so unseen
+      // pages stay untouched without the browser downloading every one of them.
+      patchMut.mutate(
+        { id, data: makePatchPayload() },
+        {
+          onSuccess: () =>
+            router.push(`/dashboard/transaksi-stok/penyesuaian/${id}`),
+        },
+      );
 
       return;
     }
@@ -943,6 +885,7 @@ export function PenyesuaianFormPage({
                 value={createdBy}
                 onChange={setCreatedBy}
                 placeholder="Pilih pengguna…"
+                disabled={isEdit}
                 className="h-9"
               />
             </div>
