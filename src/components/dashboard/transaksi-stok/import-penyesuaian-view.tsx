@@ -164,9 +164,14 @@ export function ImportPenyesuaianDialog({
 
         <ScrollArea
           className="min-h-0 flex-1 overflow-hidden"
-          viewportClassName="h-full w-full"
+          viewportClassName="h-full w-full min-w-0"
         >
-          <div className="flex flex-col gap-4 p-6">
+          <div
+            className={cn(
+              "flex min-w-0 flex-col gap-4 p-6",
+              preview && "h-full min-h-0",
+            )}
+          >
             <div className="sr-only" aria-hidden="true">
               <UserSelect
                 value={createdBy}
@@ -348,7 +353,7 @@ export function ImportPenyesuaianDialog({
 function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
   const s = preview.summary;
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex h-full min-h-0 min-w-0 flex-col gap-4">
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-sm font-semibold">Ringkasan validasi</p>
@@ -357,7 +362,7 @@ function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
           </p>
         </div>
         <span className="text-xs text-muted-foreground">
-          Gulir untuk melihat semua baris
+          Gulir tabel untuk melihat semua baris
         </span>
       </div>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -389,87 +394,91 @@ function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
       )}
 
       {preview.items.length > 0 && (
-        <Table
-          containerClassName="rounded-lg border border-border"
-          className="min-w-[900px]"
-        >
-          <TableHeader className="bg-muted/40 text-xs uppercase tracking-wider text-muted-foreground">
-            <TableRow>
-              <TableHead className="px-3 py-2.5 text-muted-foreground">
-                #
-              </TableHead>
-              <TableHead className="px-3 py-2.5 text-muted-foreground">
-                SKU / Produk
-              </TableHead>
-              <TableHead className="px-3 py-2.5 text-muted-foreground">
-                Rak
-              </TableHead>
-              <TableHead className="px-3 py-2.5 text-muted-foreground">
-                Mode
-              </TableHead>
-              <TableHead className="px-3 py-2.5 text-right text-muted-foreground">
-                Input
-              </TableHead>
-              <TableHead className="px-3 py-2.5 text-right text-muted-foreground">
-                On Hand
-              </TableHead>
-              <TableHead className="px-3 py-2.5 text-right text-muted-foreground">
-                Qty Akhir
-              </TableHead>
-              <TableHead className="px-3 py-2.5 text-right text-muted-foreground">
-                Selisih
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody className="divide-y divide-border">
-            {preview.items.map((it, idx) => (
-              <TableRow key={it.row_no} className="bg-background/50">
-                <TableCell className="px-3 py-2 font-mono text-xs text-muted-foreground">
-                  {idx + 1}
-                </TableCell>
-                <TableCell className="px-3 py-2">
-                  <p className="font-medium">{it.product_name || it.sku}</p>
-                  <p className="font-mono text-2xs text-muted-foreground">
-                    {it.sku}
-                  </p>
-                </TableCell>
-                <TableCell className="px-3 py-2 font-mono text-xs">
-                  {it.bin_code}
-                </TableCell>
-                <TableCell className="px-3 py-2">
-                  <span
+        <div className="min-h-0 min-w-0 w-full flex-1 overflow-auto rounded-lg border border-border pb-2">
+          <Table
+            scrollContainer={false}
+            className="w-full min-w-[980px] table-fixed"
+          >
+            <TableHeader className="bg-muted/40 text-xs uppercase tracking-wider text-muted-foreground">
+              <TableRow>
+                <TableHead className="w-12 px-3 py-2.5 text-muted-foreground">
+                  #
+                </TableHead>
+                <TableHead className="w-[38%] px-3 py-2.5 text-muted-foreground">
+                  SKU / Produk
+                </TableHead>
+                <TableHead className="w-32 px-3 py-2.5 text-muted-foreground">
+                  Rak
+                </TableHead>
+                <TableHead className="w-24 px-3 py-2.5 text-muted-foreground">
+                  Mode
+                </TableHead>
+                <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
+                  Input
+                </TableHead>
+                <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
+                  On Hand
+                </TableHead>
+                <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
+                  Qty Akhir
+                </TableHead>
+                <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
+                  Selisih
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className="divide-y divide-border">
+              {preview.items.map((it, idx) => (
+                <TableRow key={it.row_no} className="bg-background/50">
+                  <TableCell className="w-12 px-3 py-2 font-mono text-xs text-muted-foreground">
+                    {idx + 1}
+                  </TableCell>
+                  <TableCell className="w-[38%] max-w-0 whitespace-normal px-3 py-2 align-top">
+                    <p className="break-words whitespace-normal font-medium leading-5">
+                      {it.product_name || it.sku}
+                    </p>
+                    <p className="break-all whitespace-normal font-mono text-2xs text-muted-foreground">
+                      {it.sku}
+                    </p>
+                  </TableCell>
+                  <TableCell className="w-32 px-3 py-2 font-mono text-xs">
+                    {it.bin_code}
+                  </TableCell>
+                  <TableCell className="w-24 px-3 py-2">
+                    <span
+                      className={cn(
+                        "inline-flex items-center rounded px-2 py-0.5 text-2xs font-medium",
+                        it.mode === "DELTA"
+                          ? "bg-blue-500/10 text-blue-700 dark:text-blue-400"
+                          : "bg-purple-500/10 text-purple-700 dark:text-purple-400",
+                      )}
+                    >
+                      {it.mode}
+                    </span>
+                  </TableCell>
+                  <TableCell className="w-24 px-3 py-2 text-right font-mono tabular-nums">
+                    {it.input_value > 0 ? `+${it.input_value}` : it.input_value}
+                  </TableCell>
+                  <TableCell className="w-24 px-3 py-2 text-right font-mono tabular-nums text-muted-foreground">
+                    {it.system_qty}
+                  </TableCell>
+                  <TableCell className="w-24 px-3 py-2 text-right font-mono font-semibold tabular-nums">
+                    {it.actual_qty}
+                  </TableCell>
+                  <TableCell
                     className={cn(
-                      "inline-flex items-center rounded px-2 py-0.5 text-2xs font-medium",
-                      it.mode === "DELTA"
-                        ? "bg-blue-500/10 text-blue-700 dark:text-blue-400"
-                        : "bg-purple-500/10 text-purple-700 dark:text-purple-400",
+                      "w-24 px-3 py-2 text-right font-mono tabular-nums",
+                      it.difference > 0 && "text-success",
+                      it.difference < 0 && "text-destructive",
                     )}
                   >
-                    {it.mode}
-                  </span>
-                </TableCell>
-                <TableCell className="px-3 py-2 text-right font-mono tabular-nums">
-                  {it.input_value > 0 ? `+${it.input_value}` : it.input_value}
-                </TableCell>
-                <TableCell className="px-3 py-2 text-right font-mono tabular-nums text-muted-foreground">
-                  {it.system_qty}
-                </TableCell>
-                <TableCell className="px-3 py-2 text-right font-mono font-semibold tabular-nums">
-                  {it.actual_qty}
-                </TableCell>
-                <TableCell
-                  className={cn(
-                    "px-3 py-2 text-right font-mono tabular-nums",
-                    it.difference > 0 && "text-success",
-                    it.difference < 0 && "text-destructive",
-                  )}
-                >
-                  {it.difference > 0 ? `+${it.difference}` : it.difference}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                    {it.difference > 0 ? `+${it.difference}` : it.difference}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       )}
     </div>
   );
