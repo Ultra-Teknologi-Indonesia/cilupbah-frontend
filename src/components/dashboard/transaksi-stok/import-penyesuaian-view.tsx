@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   DownloadIcon,
   FileSpreadsheetIcon,
   Loader2Icon,
+  SearchIcon,
   UploadCloudIcon,
 } from "lucide-react";
 
@@ -20,6 +21,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { SimplePagination, TABLE_PAGE_SIZES } from "@/components/ui/simple-pagination";
 import {
   Table,
   TableBody,
@@ -33,7 +35,9 @@ import { useLocations } from "@/hooks/manajemen-rak/use-locations";
 import {
   usePreviewStockAdjustmentImport,
   useConfirmStockAdjustmentImport,
+  usePreviewStockAdjustmentImportPage,
 } from "@/hooks/transaksi-stok/use-stock-adjustment-import";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
 
 // eslint-disable-next-line no-restricted-imports
 import { StockAdjustmentImportService } from "@/services/transaksi-stok/stock-adjustment-import.service";
@@ -136,7 +140,7 @@ export function ImportPenyesuaianDialog({
   const canPreview = !!file && !!locationId && !previewMut.isPending;
   const canConfirm =
     !!preview &&
-    preview.items.length > 0 &&
+    preview.summary.valid > 0 &&
     preview.errors.length === 0 &&
     !!createdBy.trim() &&
     !confirmMut.isPending;
@@ -326,7 +330,7 @@ export function ImportPenyesuaianDialog({
                   )}
                   {preview.errors.length > 0
                     ? `Terdapat ${preview.errors.length} error`
-                    : `Konfirmasi Import (${preview.items.length} item)`}
+                    : `Konfirmasi Import (${preview.summary.valid} item)`}
                 </Button>
               </>
             ) : (
@@ -356,6 +360,41 @@ export function ImportPenyesuaianDialog({
 function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
   const s = preview.summary;
   const [showDetails, setShowDetails] = useState(false);
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(
+    preview.pagination?.per_page ?? 25,
+  );
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("row_no");
+  const debouncedSearch = useDebouncedValue(search, 300);
+  const pageQuery = usePreviewStockAdjustmentImportPage({
+    token: preview.token,
+    query: {
+      page,
+      per_page: perPage,
+      search: debouncedSearch,
+      sort,
+    },
+  });
+  const pageData = pageQuery.data?.data ?? preview;
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, perPage, sort]);
+
+  useEffect(() => {
+    setPage(1);
+    setPerPage(preview.pagination?.per_page ?? 25);
+    setSearch("");
+    setSort("row_no");
+  }, [preview.token]);
+
+  const pagination = pageData.pagination ?? {
+    current_page: 1,
+    last_page: 1,
+    per_page: pageData.items.length,
+    total: pageData.items.length,
+  };
 
   return (
     <div className="flex h-full min-h-0 min-w-0 flex-col gap-3">
@@ -363,10 +402,10 @@ function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
         <div>
           <p className="text-sm font-semibold">Ringkasan validasi</p>
           <p className="text-xs text-muted-foreground">
-            {preview.items.length.toLocaleString("id-ID")} item siap ditinjau
+            {s.valid.toLocaleString("id-ID")} item siap ditinjau
           </p>
         </div>
-        {preview.items.length > 0 && (
+        {s.valid > 0 && (
           <Button
             type="button"
             variant="ghost"
@@ -406,8 +445,40 @@ function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
         </div>
       )}
 
-      {preview.items.length > 0 && (
-        <div className="min-h-0 min-w-0 w-full flex-1 overflow-auto rounded-lg border border-border pb-2">
+      {s.valid > 0 && (
+        <div className="flex min-h-0 min-w-0 w-full flex-1 flex-col overflow-hidden rounded-lg border border-border">
+          <div className="flex shrink-0 flex-col gap-2 border-b border-border bg-background/80 p-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="relative min-w-0 flex-1 sm:max-w-sm">
+              <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Cari SKU, produk, atau rak…"
+                className="h-9 pl-9"
+                aria-label="Cari hasil preview import"
+              />
+            </div>
+            <label className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground">
+              Urutkan
+              <select
+                value={sort}
+                onChange={(event) => setSort(event.target.value)}
+                className="h-9 rounded-md border border-input bg-background px-2 text-sm text-foreground"
+                aria-label="Urutkan hasil preview import"
+              >
+                <option value="row_no">Urutan file</option>
+                <option value="sku">SKU (A–Z)</option>
+                <option value="-sku">SKU (Z–A)</option>
+                <option value="product_name">Produk (A–Z)</option>
+                <option value="bin_code">Rak (A–Z)</option>
+                <option value="input_value">Input terkecil</option>
+                <option value="-input_value">Input terbesar</option>
+                <option value="difference">Selisih terkecil</option>
+                <option value="-difference">Selisih terbesar</option>
+              </select>
+            </label>
+          </div>
+          <div className="min-h-0 min-w-0 flex-1 overflow-auto">
           <Table
             scrollContainer={false}
             className={cn(
@@ -453,10 +524,10 @@ function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
               </TableRow>
             </TableHeader>
             <TableBody className="divide-y divide-border">
-              {preview.items.map((it, idx) => (
+              {pageData.items.map((it) => (
                 <TableRow key={it.row_no} className="bg-background/50">
                   <TableCell className="w-12 px-3 py-2 font-mono text-xs text-muted-foreground">
-                    {idx + 1}
+                    {it.row_no}
                   </TableCell>
                   <TableCell
                     className={cn(
@@ -512,6 +583,23 @@ function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
               ))}
             </TableBody>
           </Table>
+          </div>
+          <div className="shrink-0 bg-background px-3 pb-3">
+            <SimplePagination
+              page={pagination.current_page}
+              lastPage={pagination.last_page}
+              perPage={pagination.per_page}
+              onPageChange={setPage}
+              onPerPageChange={(size) => {
+                setPerPage(size);
+                setPage(1);
+              }}
+              pageSizeOptions={TABLE_PAGE_SIZES.filter((size) => size <= 100)}
+              isFetching={pageQuery.isFetching}
+              total={pagination.total}
+              label="baris"
+            />
+          </div>
         </div>
       )}
     </div>

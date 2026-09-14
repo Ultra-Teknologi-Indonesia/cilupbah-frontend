@@ -5,7 +5,7 @@ type ApiErrorBody = {
   title?: string | null;
   message?: string | null;
   request_id?: string | null;
-  errors?: Record<string, string[] | string> | null;
+  errors?: Record<string, unknown> | null;
 };
 
 const SERVER_ERROR_TITLE = "Terjadi kesalahan server";
@@ -20,10 +20,22 @@ function extractValidationSummary(
 ): string | null {
   if (!errors || typeof errors !== "object") return null;
   const flat: string[] = [];
-  for (const value of Object.values(errors)) {
-    if (Array.isArray(value)) flat.push(...value);
-    else if (typeof value === "string") flat.push(value);
-  }
+
+  const collect = (value: unknown): void => {
+    if (typeof value === "string") {
+      if (value.trim()) flat.push(value.trim());
+      return;
+    }
+    if (Array.isArray(value)) {
+      value.forEach(collect);
+      return;
+    }
+    if (value && typeof value === "object") {
+      Object.values(value).forEach(collect);
+    }
+  };
+
+  Object.values(errors).forEach(collect);
   return flat.length ? flat.join(" ") : null;
 }
 

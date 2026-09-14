@@ -33,12 +33,31 @@ export interface ImportPreviewSummary {
   warnings: number;
 }
 
+export interface ImportPreviewPagination {
+  current_page: number;
+  last_page: number;
+  per_page: number;
+  total: number;
+}
+
+export interface ImportPreviewQuery {
+  page?: number;
+  per_page?: number;
+  search?: string;
+  sort?: string;
+}
+
 export interface ImportPreviewResponse {
   token: string;
   items: ImportPreviewItem[];
   errors: ImportPreviewError[];
   warnings: ImportPreviewWarning[];
   summary: ImportPreviewSummary;
+  pagination?: ImportPreviewPagination;
+  query?: {
+    search: string;
+    sort: string;
+  };
 }
 
 export interface ImportConfirmPayload {
