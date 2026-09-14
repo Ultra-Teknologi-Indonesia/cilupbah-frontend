@@ -26,6 +26,7 @@ interface PageTitleProps {
   breadcrumb?: BreadcrumbEntry[];
   actions?: React.ReactNode;
   backHref?: string;
+  backMode?: "history" | "href";
   sticky?: boolean;
   className?: string;
 }
@@ -60,6 +61,7 @@ export function PageTitle({
   breadcrumb,
   actions,
   backHref,
+  backMode = "history",
   sticky,
   className,
 }: PageTitleProps) {
@@ -78,12 +80,12 @@ export function PageTitle({
         return;
       }
 
-      if (canGoBack()) {
+      if (backMode === "history" && canGoBack()) {
         e.preventDefault();
         router.back();
       }
     },
-    [router],
+    [backMode, router],
   );
 
   return (

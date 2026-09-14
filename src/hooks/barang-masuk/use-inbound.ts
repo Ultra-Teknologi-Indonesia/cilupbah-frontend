@@ -119,10 +119,16 @@ export function useBulkCancelInbounds() {
           .filter(Boolean)
           .join(" • ");
 
-        toast.warning(`${ok} penerimaan dihapus, ${failed} gagal`, {
-          description: details || "Tidak ada detail kegagalan dari server.",
-          duration: 10000,
-        });
+        const notify = ok > 0 ? toast.warning : toast.error;
+        notify(
+          ok > 0
+            ? `${ok} penerimaan dihapus, ${failed} gagal`
+            : `Tidak ada penerimaan yang dihapus (${failed} gagal)`,
+          {
+            description: details || "Tidak ada detail kegagalan dari server.",
+            duration: 10000,
+          },
+        );
       } else {
         toast.success(`${ok} penerimaan dihapus`);
       }

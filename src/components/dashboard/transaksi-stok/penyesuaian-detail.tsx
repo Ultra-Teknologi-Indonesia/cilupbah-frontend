@@ -217,6 +217,7 @@ export function PenyesuaianDetail({ id }: { id: string }) {
       <PageTitle
         title={adj.adjustment_no}
         backHref="/dashboard/transaksi-stok?tab=penyesuaian"
+        backMode="href"
         breadcrumb={[
           { label: "Persediaan" },
           {
