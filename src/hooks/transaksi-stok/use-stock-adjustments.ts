@@ -1,5 +1,5 @@
 "use client";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 
 import {
   StockAdjustmentService,
@@ -38,6 +38,7 @@ export const useStockAdjustmentItems = (
   return useQuery({
     queryKey: [...stockAdjustmentKeys.detail(id), "items", params],
     queryFn: () => StockAdjustmentService.getItems(id, params),
+    placeholderData: keepPreviousData,
   });
 };
 

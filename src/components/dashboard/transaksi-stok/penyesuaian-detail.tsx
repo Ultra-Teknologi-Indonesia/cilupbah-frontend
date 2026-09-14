@@ -21,6 +21,7 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table/data-table";
+import { TABLE_PAGE_SIZES } from "@/components/ui/simple-pagination";
 import { SectionTitle } from "@/components/dashboard/shared/section-title";
 import { PageTitle } from "@/components/dashboard/page-title";
 import {
@@ -51,17 +52,15 @@ export function PenyesuaianDetail({ id }: { id: string }) {
   const canExport = can("export-penyesuaian-stok");
   const { data: adj, isLoading } = useStockAdjustmentDetail(id);
 
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 20 });
   const [globalFilter, setGlobalFilter] = useState("");
 
-  const { data: itemsData, isLoading: _itemsLoading } = useStockAdjustmentItems(
-    id,
-    {
+  const { data: itemsData, isFetching: isFetchingItems } =
+    useStockAdjustmentItems(id, {
       page: pagination.pageIndex + 1,
       per_page: pagination.pageSize,
       search: globalFilter || undefined,
-    },
-  );
+    });
 
   const deleteMut = useDeleteStockAdjustment();
 
@@ -228,36 +227,42 @@ export function PenyesuaianDetail({ id }: { id: string }) {
         ]}
         actions={
           <div className="flex items-center gap-2">
-            {canExport && <Button
-              variant="outline"
-              size="sm"
-              onClick={handleExport}
-              disabled={!itemsData?.items?.length}
-            >
-              <DownloadIcon className="mr-1.5 size-3.5" />
-              Export CSV
-            </Button>}
-            {canEdit && <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                router.push(
-                  `/dashboard/transaksi-stok/penyesuaian/${adj.id}/edit`,
-                )
-              }
-            >
-              <PencilIcon className="mr-1.5 size-3.5" />
-              Ubah
-            </Button>}
-            {canDelete && <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => setDeleteOpen(true)}
-              disabled={deleteMut.isPending}
-            >
-              <Trash2Icon className="mr-1.5 size-3.5" />
-              Hapus
-            </Button>}
+            {canExport && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleExport}
+                disabled={!itemsData?.items?.length}
+              >
+                <DownloadIcon className="mr-1.5 size-3.5" />
+                Export CSV
+              </Button>
+            )}
+            {canEdit && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  router.push(
+                    `/dashboard/transaksi-stok/penyesuaian/${adj.id}/edit`,
+                  )
+                }
+              >
+                <PencilIcon className="mr-1.5 size-3.5" />
+                Ubah
+              </Button>
+            )}
+            {canDelete && (
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => setDeleteOpen(true)}
+                disabled={deleteMut.isPending}
+              >
+                <Trash2Icon className="mr-1.5 size-3.5" />
+                Hapus
+              </Button>
+            )}
           </div>
         }
       />
@@ -303,6 +308,8 @@ export function PenyesuaianDetail({ id }: { id: string }) {
             onSearchChange={setGlobalFilter}
             searchPlaceholder="Cari item..."
             manualPagination={true}
+            isFetching={isFetchingItems}
+            pageSizeOptions={TABLE_PAGE_SIZES}
             enableColumnVisibility={false}
             tableContainerClassName="border-0 bg-transparent backdrop-blur-none [&_[data-slot=table-header]]:bg-transparent"
             emptyState={<EmptyState title="Belum ada item." />}
@@ -310,25 +317,27 @@ export function PenyesuaianDetail({ id }: { id: string }) {
         </div>
       </LiquidGlass>
 
-      {canDelete && <ConfirmDialog
-        open={deleteOpen}
-        onOpenChange={(open) => {
-          if (!open) setDeleteOpen(false);
-        }}
-        title="Hapus Koreksi Stok"
-        description={`Hapus koreksi stok "${adj.adjustment_no}"? Tindakan ini tidak dapat dibatalkan.`}
-        confirmLabel="Hapus"
-        variant="destructive"
-        loading={deleteMut.isPending}
-        onConfirm={() => {
-          deleteMut.mutate(adj.id, {
-            onSuccess: () => {
-              setDeleteOpen(false);
-              router.push("/dashboard/transaksi-stok?tab=penyesuaian");
-            },
-          });
-        }}
-      />}
+      {canDelete && (
+        <ConfirmDialog
+          open={deleteOpen}
+          onOpenChange={(open) => {
+            if (!open) setDeleteOpen(false);
+          }}
+          title="Hapus Koreksi Stok"
+          description={`Hapus koreksi stok "${adj.adjustment_no}"? Tindakan ini tidak dapat dibatalkan.`}
+          confirmLabel="Hapus"
+          variant="destructive"
+          loading={deleteMut.isPending}
+          onConfirm={() => {
+            deleteMut.mutate(adj.id, {
+              onSuccess: () => {
+                setDeleteOpen(false);
+                router.push("/dashboard/transaksi-stok?tab=penyesuaian");
+              },
+            });
+          }}
+        />
+      )}
     </div>
   );
 }

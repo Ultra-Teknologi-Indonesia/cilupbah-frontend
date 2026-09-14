@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 import {
   Loader2Icon,
   PackageSearchIcon,
@@ -29,6 +30,10 @@ import { PageTitle } from "@/components/dashboard/page-title";
 import { FormFooter } from "@/components/dashboard/shared/form-footer";
 import { UserSelect } from "@/components/dashboard/shared/user-select";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  SimplePagination,
+  TABLE_PAGE_SIZES,
+} from "@/components/ui/simple-pagination";
 import { useLocations } from "@/hooks/manajemen-rak/use-locations";
 import { useLocationBinsInfinite } from "@/hooks/manajemen-rak/use-location-bins";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
@@ -38,6 +43,12 @@ import {
   useStockAdjustmentDetail,
   useStockAdjustmentItems,
 } from "@/hooks/transaksi-stok/use-stock-adjustments";
+// eslint-disable-next-line no-restricted-imports -- Full document materialisation is deferred until explicit save, preserving the replace-all API contract.
+import { StockAdjustmentService } from "@/services/transaksi-stok/stock-adjustment.service";
+import type {
+  StockAdjustmentFormData,
+  StockAdjustmentItem,
+} from "@/types/transaksi-stok/stock-adjustment";
 import {
   StockedProductPickerDialog,
   type StockedPickedProduct,
@@ -50,6 +61,8 @@ import { playScanFeedback } from "@/lib/scan-feedback";
 import { usePermissions } from "@/hooks/auth/use-permissions";
 
 const LIST_HREF = "/dashboard/transaksi-stok?tab=penyesuaian";
+const EDIT_ITEMS_PER_PAGE = 20;
+const EDIT_ITEM_FETCH_CONCURRENCY = 4;
 
 interface LineBin {
   id: string;
@@ -60,6 +73,7 @@ interface LineBin {
 
 interface LineDraft {
   lineId: string;
+  adjustmentItemId?: string;
   itemId: string;
   sku: string;
   name: string;
@@ -106,6 +120,94 @@ function toAdjustableLineBins(
       onHand: bin.on_hand,
       avgCost: bin.avg_cost,
     }));
+}
+
+function mergeLineBins(...binLists: LineBin[][]): LineBin[] {
+  const byId = new Map<string, LineBin>();
+
+  for (const bins of binLists) {
+    for (const bin of bins) {
+      if (isAdjustableBinCode(bin.code)) byId.set(bin.id, bin);
+    }
+  }
+
+  return [...byId.values()];
+}
+
+function lineFromAdjustmentItem(item: StockAdjustmentItem): LineDraft {
+  const product = item.product;
+  const sku = product?.sku ?? "";
+  const binCode = item.bin?.bin_final_code ?? "";
+  const binId = isAdjustableBinCode(binCode)
+    ? (item.bin_id ?? item.bin?.id ?? "")
+    : "";
+  const systemQty = item.system_qty ?? 0;
+  const actualQty = item.actual_qty ?? 0;
+
+  return {
+    lineId: `adjustment-item-${item.id}`,
+    adjustmentItemId: item.id,
+    itemId: item.item_id,
+    sku,
+    name: (product?.product?.name ?? sku) || "—",
+    variantLabel: sku,
+    thumbnail:
+      product?.media?.[0]?.url || product?.product?.media?.[0]?.url || null,
+    binId,
+    binCode,
+    binOnHand: systemQty,
+    binAvgCost: item.unit_cost != null ? Number(item.unit_cost) : 0,
+    delta: String(actualQty - systemQty),
+    unitCost: item.unit_cost != null ? String(item.unit_cost) : "",
+    notes: item.notes ?? "",
+    availableBins: binId
+      ? [
+          {
+            id: binId,
+            code: binCode,
+            onHand: systemQty,
+            avgCost: Number(item.unit_cost ?? 0),
+          },
+        ]
+      : [],
+  };
+}
+
+async function fetchAllAdjustmentItems(
+  id: string,
+): Promise<StockAdjustmentItem[]> {
+  const firstPage = await StockAdjustmentService.getItems(id, {
+    page: 1,
+    per_page: EDIT_ITEMS_PER_PAGE,
+    sort: "-created_at,-id",
+  });
+  const pages = new Array<StockAdjustmentItem[]>(firstPage.meta.last_page);
+  pages[0] = firstPage.items;
+  let nextPage = 2;
+
+  const worker = async () => {
+    while (nextPage <= firstPage.meta.last_page) {
+      const page = nextPage;
+      nextPage += 1;
+      const response = await StockAdjustmentService.getItems(id, {
+        page,
+        per_page: EDIT_ITEMS_PER_PAGE,
+        sort: "-created_at,-id",
+      });
+      pages[page - 1] = response.items;
+    }
+  };
+
+  await Promise.all(
+    Array.from(
+      {
+        length: Math.min(EDIT_ITEM_FETCH_CONCURRENCY, firstPage.meta.last_page),
+      },
+      () => worker(),
+    ),
+  );
+
+  return pages.flat();
 }
 
 function AdjustmentBinCombobox({
@@ -239,12 +341,21 @@ export function PenyesuaianFormPage({
   const canMutate = can(
     isEdit ? "edit-penyesuaian-stok" : "create-penyesuaian-stok",
   );
+  const [editPage, setEditPage] = useState(1);
+  const [editPerPage, setEditPerPage] = useState(EDIT_ITEMS_PER_PAGE);
 
   // Edit queries
   const { data: editDetail, isLoading: isLoadingDetail } =
     useStockAdjustmentDetail(isEdit ? id! : "");
-  const { data: editItemsData, isLoading: isLoadingItems } =
-    useStockAdjustmentItems(isEdit ? id! : "", { per_page: 500 });
+  const {
+    data: editItemsData,
+    isLoading: isLoadingItems,
+    isFetching: isFetchingItems,
+  } = useStockAdjustmentItems(isEdit ? id! : "", {
+    page: editPage,
+    per_page: editPerPage,
+    sort: "-created_at,-id",
+  });
 
   const [locationId, setLocationId] = useState(
     () => searchParams.get("location_id") ?? "",
@@ -254,6 +365,14 @@ export function PenyesuaianFormPage({
   const [notes, setNotes] = useState("");
   const [createdBy, setCreatedBy] = useState("");
   const [lines, setLines] = useState<LineDraft[]>([]);
+  const [editOverrides, setEditOverrides] = useState<Record<string, LineDraft>>(
+    {},
+  );
+  const [removedAdjustmentItemIds, setRemovedAdjustmentItemIds] = useState<
+    Set<string>
+  >(new Set());
+  const [addedEditLines, setAddedEditLines] = useState<LineDraft[]>([]);
+  const [isPreparingUpdate, setIsPreparingUpdate] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pickerSearch, setPickerSearch] = useState<string | undefined>(
     undefined,
@@ -262,6 +381,7 @@ export function PenyesuaianFormPage({
   const [scanning, setScanning] = useState(false);
   const [scanFlash, setScanFlash] = useState<"ok" | "err" | null>(null);
   const scanRef = useRef<HTMLInputElement>(null);
+  const visibleLineIdentity = lines.map((line) => line.lineId).join("|");
 
   const { data: locData } = useLocations({ perPage: 100 });
   const createMut = useCreateStockAdjustment();
@@ -276,14 +396,13 @@ export function PenyesuaianFormPage({
     [locData],
   );
 
-  // Populate data in edit mode
-  const editPopulatedRef = useRef(false);
+  // Populate document metadata only once. Item rows are deliberately loaded
+  // page-by-page below, so opening a large adjustment remains fast.
+  const editMetadataPopulatedRef = useRef(false);
   useEffect(() => {
-    if (!isEdit || editPopulatedRef.current) return;
-    if (!editDetail || !editItemsData) return;
+    if (!isEdit || editMetadataPopulatedRef.current || !editDetail) return;
 
-    editPopulatedRef.current = true;
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- Initialises the editable draft once after both API resources are available.
+    editMetadataPopulatedRef.current = true;
     setLocationId(editDetail.location_id ?? editDetail.location?.id ?? "");
     setTransactionDate(
       editDetail.transaction_date
@@ -293,80 +412,93 @@ export function PenyesuaianFormPage({
     setAdjustmentNo(editDetail.adjustment_no ?? "[auto]");
     setNotes(editDetail.notes ?? "");
     setCreatedBy(editDetail.created_by ?? "");
+  }, [isEdit, editDetail]);
 
-    const loadedLines: LineDraft[] = (editItemsData.items ?? []).map((item) => {
-      const prod = item.product;
-      const sku = prod?.sku ?? "";
-      const name = prod?.product?.name ?? sku ?? "—";
-      const imageUrl =
-        prod?.media?.[0]?.url || prod?.product?.media?.[0]?.url || null;
-      const binCode = item.bin?.bin_final_code ?? "";
-      const binId = isAdjustableBinCode(binCode)
-        ? (item.bin_id ?? item.bin?.id ?? "")
-        : "";
-      const systemQty = item.system_qty ?? 0;
-      const actualQty = item.actual_qty ?? 0;
-      const delta = String(actualQty - systemQty);
-      const unitCost = item.unit_cost != null ? String(item.unit_cost) : "";
+  useEffect(() => {
+    if (!isEdit || !editItemsData) return;
 
-      return {
-        lineId: makeLineId(item.item_id),
-        itemId: item.item_id,
-        sku,
-        name,
-        variantLabel: sku,
-        thumbnail: imageUrl,
-        binId,
-        binCode,
-        binOnHand: systemQty,
-        binAvgCost: item.unit_cost != null ? Number(item.unit_cost) : 0,
-        delta,
-        unitCost,
-        notes: item.notes ?? "",
-        availableBins: binId
-          ? [
-              {
-                id: binId,
-                code: binCode,
-                onHand: systemQty,
-                avgCost: Number(item.unit_cost ?? 0),
-              },
-            ]
-          : [],
-      };
+    const pageLines = editItemsData.items
+      .filter((item) => !removedAdjustmentItemIds.has(item.id))
+      .map((item) => {
+        const initial = lineFromAdjustmentItem(item);
+        const override = editOverrides[item.id];
+
+        return override
+          ? {
+              ...initial,
+              ...override,
+              availableBins: mergeLineBins(
+                initial.availableBins,
+                override.availableBins,
+              ),
+            }
+          : initial;
+      });
+
+    // New items have no persisted page yet. Keep them visible at the start of
+    // the editor and merge them into the full payload only when saving.
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Mirrors the requested server page into the transient editor draft.
+    setLines(editPage === 1 ? [...pageLines, ...addedEditLines] : pageLines);
+  }, [
+    isEdit,
+    editItemsData,
+    editPage,
+    editOverrides,
+    removedAdjustmentItemIds,
+    addedEditLines,
+  ]);
+
+  useEffect(() => {
+    if (!isEdit || !locationId || lines.length === 0) return;
+
+    let cancelled = false;
+    void Promise.all(
+      lines.map(async (line) => {
+        if (!line.sku) return null;
+        try {
+          const response = await InventoryStockService.bySku(
+            line.sku,
+            locationId,
+          );
+          return {
+            lineId: line.lineId,
+            bins: toAdjustableLineBins(response.data.available_bins ?? []),
+          };
+        } catch {
+          return null;
+        }
+      }),
+    ).then((results) => {
+      if (cancelled) return;
+      const binsByLine = new Map(
+        results
+          .filter(
+            (result): result is { lineId: string; bins: LineBin[] } =>
+              result !== null,
+          )
+          .map((result) => [result.lineId, result.bins]),
+      );
+
+      setLines((current) =>
+        current.map((line) => ({
+          ...line,
+          // Preserve the historical bin even when it currently has zero stock
+          // or is absent from the live SKU lookup.
+          availableBins: mergeLineBins(
+            line.availableBins,
+            binsByLine.get(line.lineId) ?? [],
+          ),
+        })),
+      );
     });
 
-    setLines(loadedLines);
-
-    // Asynchronously enhance available bins for loaded lines
-    if (editDetail.location_id) {
-      loadedLines.forEach(async (l) => {
-        if (!l.sku) return;
-        try {
-          const res = await InventoryStockService.bySku(
-            l.sku,
-            editDetail.location_id,
-          );
-          if (res?.data?.available_bins) {
-            setLines((prev) =>
-              prev.map((line) =>
-                line.lineId === l.lineId
-                  ? {
-                      ...line,
-                      availableBins: toAdjustableLineBins(
-                        res.data.available_bins,
-                      ),
-                    }
-                  : line,
-              ),
-            );
-          }
-        } catch {
-          // ignore
-        }
-      });
-    }
-  }, [isEdit, editDetail, editItemsData]);
+    return () => {
+      cancelled = true;
+    };
+    // `lines` is intentionally not a dependency: updating enriched bin options
+    // would otherwise immediately refetch the same SKU lookups.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEdit, locationId, editPage, editItemsData, visibleLineIdentity]);
 
   useEffect(() => {
     if (locationId) scanRef.current?.focus();
@@ -443,63 +575,94 @@ export function PenyesuaianFormPage({
         const primary =
           bins.find((bin) => bin.id === variant.primary_bin?.id) ?? bins[0];
 
-        setLines((prev) => {
-          return [
-            ...prev,
-            {
-              lineId: makeLineId(variant.id),
-              itemId: variant.id,
-              sku: variant.sku,
-              name: variant.product_name ?? variant.sku,
-              variantLabel: variant.variant_label ?? p.variantLabel ?? "",
-              thumbnail: variant.thumbnail_url ?? p.thumbnail ?? null,
-              binId: primary?.id ?? "",
-              binCode: primary?.code ?? "",
-              binOnHand: primary?.onHand ?? 0,
-              binAvgCost: primary?.avgCost ?? variant.avg_cost ?? 0,
-              delta: "",
-              unitCost:
-                (primary?.avgCost ?? variant.avg_cost) != null
-                  ? String(primary?.avgCost ?? variant.avg_cost)
-                  : "",
-              notes: "",
-              availableBins: bins,
-            },
-          ];
-        });
+        const line: LineDraft = {
+          lineId: makeLineId(variant.id),
+          itemId: variant.id,
+          sku: variant.sku,
+          name: variant.product_name ?? variant.sku,
+          variantLabel: variant.variant_label ?? p.variantLabel ?? "",
+          thumbnail: variant.thumbnail_url ?? p.thumbnail ?? null,
+          binId: primary?.id ?? "",
+          binCode: primary?.code ?? "",
+          binOnHand: primary?.onHand ?? 0,
+          binAvgCost: primary?.avgCost ?? variant.avg_cost ?? 0,
+          delta: "",
+          unitCost:
+            (primary?.avgCost ?? variant.avg_cost) != null
+              ? String(primary?.avgCost ?? variant.avg_cost)
+              : "",
+          notes: "",
+          availableBins: bins,
+        };
+        appendLine(line);
       } catch {
-        setLines((prev) => {
-          return [
-            ...prev,
-            {
-              lineId: makeLineId(p.itemId),
-              itemId: p.itemId,
-              sku: p.sku,
-              name: p.name,
-              variantLabel: p.variantLabel ?? "",
-              thumbnail: p.thumbnail ?? null,
-              binId: "",
-              binCode: "",
-              binOnHand: 0,
-              binAvgCost: 0,
-              delta: "",
-              unitCost: "",
-              notes: "",
-              availableBins: [],
-            },
-          ];
+        appendLine({
+          lineId: makeLineId(p.itemId),
+          itemId: p.itemId,
+          sku: p.sku,
+          name: p.name,
+          variantLabel: p.variantLabel ?? "",
+          thumbnail: p.thumbnail ?? null,
+          binId: "",
+          binCode: "",
+          binOnHand: 0,
+          binAvgCost: 0,
+          delta: "",
+          unitCost: "",
+          notes: "",
+          availableBins: [],
         });
       }
     }
   };
 
+  const appendLine = (line: LineDraft) => {
+    if (isEdit) {
+      setAddedEditLines((current) => [...current, line]);
+      setEditPage(1);
+      return;
+    }
+
+    setLines((current) => [...current, line]);
+  };
+
   const updateLine = (lineId: string, patch: Partial<LineDraft>) => {
+    const currentLine = lines.find((line) => line.lineId === lineId);
+    if (isEdit && currentLine?.adjustmentItemId) {
+      setEditOverrides((current) => ({
+        ...current,
+        [currentLine.adjustmentItemId!]: {
+          ...(current[currentLine.adjustmentItemId!] ?? currentLine),
+          ...patch,
+        },
+      }));
+    } else if (isEdit && currentLine) {
+      setAddedEditLines((current) =>
+        current.map((line) =>
+          line.lineId === lineId ? { ...line, ...patch } : line,
+        ),
+      );
+    }
+
     setLines((prev) =>
       prev.map((l) => (l.lineId === lineId ? { ...l, ...patch } : l)),
     );
   };
 
   const removeLine = (lineId: string) => {
+    const currentLine = lines.find((line) => line.lineId === lineId);
+    if (isEdit && currentLine?.adjustmentItemId) {
+      setRemovedAdjustmentItemIds((current) => {
+        const next = new Set(current);
+        next.add(currentLine.adjustmentItemId!);
+        return next;
+      });
+    } else if (isEdit) {
+      setAddedEditLines((current) =>
+        current.filter((line) => line.lineId !== lineId),
+      );
+    }
+
     setLines((prev) => prev.filter((l) => l.lineId !== lineId));
   };
 
@@ -522,30 +685,27 @@ export function PenyesuaianFormPage({
       const primary =
         bins.find((bin) => bin.id === variant.primary_bin?.id) ?? bins[0];
 
-      setLines((prev) => [
-        ...prev,
-        {
-          lineId: makeLineId(variant.id),
-          itemId: variant.id,
-          sku: variant.sku,
-          name: variant.product_name ?? variant.sku,
-          variantLabel: variant.variant_label,
-          thumbnail: variant.thumbnail_url,
-          binId: primary?.id ?? "",
-          binCode: primary?.code ?? "",
-          binOnHand: primary?.onHand ?? 0,
-          binAvgCost: primary?.avgCost ?? variant.avg_cost ?? 0,
-          delta: "",
-          unitCost:
-            primary?.avgCost != null
-              ? String(primary.avgCost)
-              : variant.avg_cost != null
-                ? String(variant.avg_cost)
-                : "",
-          notes: "",
-          availableBins: bins,
-        },
-      ]);
+      appendLine({
+        lineId: makeLineId(variant.id),
+        itemId: variant.id,
+        sku: variant.sku,
+        name: variant.product_name ?? variant.sku,
+        variantLabel: variant.variant_label,
+        thumbnail: variant.thumbnail_url,
+        binId: primary?.id ?? "",
+        binCode: primary?.code ?? "",
+        binOnHand: primary?.onHand ?? 0,
+        binAvgCost: primary?.avgCost ?? variant.avg_cost ?? 0,
+        delta: "",
+        unitCost:
+          primary?.avgCost != null
+            ? String(primary.avgCost)
+            : variant.avg_cost != null
+              ? String(variant.avg_cost)
+              : "",
+        notes: "",
+        availableBins: bins,
+      });
       flash("ok");
     } catch {
       flash("err");
@@ -553,6 +713,13 @@ export function PenyesuaianFormPage({
       setScanning(false);
       setScanCode("");
     }
+  };
+
+  const isValidLine = (line: LineDraft) => {
+    const delta = Number(line.delta);
+    return (
+      line.delta !== "" && !Number.isNaN(delta) && delta !== 0 && !!line.binId
+    );
   };
 
   const validLines = lines.filter((l) => {
@@ -564,47 +731,109 @@ export function PenyesuaianFormPage({
     new Set(validLines.map((l) => `${l.itemId}|${l.binId}`)).size !==
     validLines.length;
 
+  const totalLineCount = isEdit
+    ? Math.max(
+        0,
+        (editItemsData?.meta.total ?? 0) -
+          removedAdjustmentItemIds.size +
+          addedEditLines.length,
+      )
+    : lines.length;
+
   const canSubmit =
     canMutate &&
     !!locationId &&
     !!transactionDate &&
-    lines.length > 0 &&
+    totalLineCount > 0 &&
     validLines.length === lines.length &&
     !hasDuplicateItemBin;
 
-  const isSaving = createMut.isPending || updateMut.isPending;
+  const isSaving =
+    createMut.isPending || updateMut.isPending || isPreparingUpdate;
 
-  const handleSubmit = () => {
+  const lineToInput = (line: LineDraft) => ({
+    item_id: line.itemId,
+    bin_id: line.binId || undefined,
+    mode: "DELTA" as const,
+    input_value: Number(line.delta),
+    unit_cost: line.unitCost ? Number(line.unitCost) : undefined,
+    notes: line.notes.trim() || undefined,
+  });
+
+  const makePayload = (payloadLines: LineDraft[]): StockAdjustmentFormData => ({
+    transaction_date: transactionDate,
+    location_id: locationId,
+    adjustment_no:
+      adjustmentNo.trim() === "" || adjustmentNo.trim() === "[auto]"
+        ? undefined
+        : adjustmentNo.trim(),
+    notes: notes.trim() || undefined,
+    created_by: createdBy.trim(),
+    items: payloadLines.map(lineToInput),
+  });
+
+  const handleSubmit = async () => {
     if (!canSubmit || isSaving) return;
 
-    const payload = {
-      transaction_date: transactionDate,
-      location_id: locationId,
-      adjustment_no:
-        adjustmentNo.trim() === "" || adjustmentNo.trim() === "[auto]"
-          ? undefined
-          : adjustmentNo.trim(),
-      notes: notes.trim() || undefined,
-      created_by: createdBy.trim(),
-      items: lines.map((l) => ({
-        item_id: l.itemId,
-        bin_id: l.binId || undefined,
-        mode: "DELTA" as const,
-        input_value: Number(l.delta),
-        unit_cost: l.unitCost ? Number(l.unitCost) : undefined,
-        notes: l.notes.trim() || undefined,
-      })),
-    };
-
     if (isEdit && id) {
-      updateMut.mutate(
-        { id, data: payload },
-        {
-          onSuccess: () =>
-            router.push(`/dashboard/transaksi-stok/penyesuaian/${id}`),
-        },
-      );
-    } else {
+      setIsPreparingUpdate(true);
+      try {
+        // PUT replaces the document as a whole. Fetch its paginated rows only
+        // when saving, merge the edits, then submit one complete payload. This
+        // prevents a page-sized edit from deleting unseen rows.
+        const persistedItems = await fetchAllAdjustmentItems(id);
+        const mergedLines = persistedItems
+          .filter((item) => !removedAdjustmentItemIds.has(item.id))
+          .map((item) => {
+            const initial = lineFromAdjustmentItem(item);
+            const override = editOverrides[item.id];
+
+            return override
+              ? {
+                  ...initial,
+                  ...override,
+                  availableBins: mergeLineBins(
+                    initial.availableBins,
+                    override.availableBins,
+                  ),
+                }
+              : initial;
+          });
+        const payloadLines = [...mergedLines, ...addedEditLines];
+        const allValid = payloadLines.every(isValidLine);
+        const hasDuplicate =
+          new Set(payloadLines.map((line) => `${line.itemId}|${line.binId}`))
+            .size !== payloadLines.length;
+
+        if (payloadLines.length === 0 || !allValid || hasDuplicate) {
+          toast.error(
+            hasDuplicate
+              ? "Ada SKU yang tercantum lebih dari sekali pada rak yang sama."
+              : "Lengkapi rak dan selisih yang valid pada semua baris sebelum menyimpan.",
+          );
+          return;
+        }
+
+        updateMut.mutate(
+          { id, data: makePayload(payloadLines) },
+          {
+            onSuccess: () =>
+              router.push(`/dashboard/transaksi-stok/penyesuaian/${id}`),
+          },
+        );
+      } catch {
+        toast.error(
+          "Gagal menyiapkan seluruh item penyesuaian untuk disimpan.",
+        );
+      } finally {
+        setIsPreparingUpdate(false);
+      }
+
+      return;
+    }
+
+    const payload = makePayload(lines);
+    if (!isEdit) {
       createMut.mutate(payload, {
         onSuccess: () => router.push(LIST_HREF),
       });
@@ -742,12 +971,12 @@ export function PenyesuaianFormPage({
             <div>
               <p className="text-sm font-semibold">Daftar Item Penyesuaian</p>
               <p className="text-xs text-muted-foreground">
-                {lines.length} baris dipilih • Masukkan selisih (+ / -) untuk
+                {totalLineCount} baris dipilih • Masukkan selisih (+ / -) untuk
                 setiap rak
               </p>
               <p className="mt-1 text-xs text-muted-foreground">
-                Isi jumlah perubahan stok, bukan stok akhir. Pilih beberapa
-                SKU sekaligus; setiap baris dapat menggunakan rak berbeda.
+                Isi jumlah perubahan stok, bukan stok akhir. Pilih beberapa SKU
+                sekaligus; setiap baris dapat menggunakan rak berbeda.
               </p>
             </div>
 
@@ -845,7 +1074,12 @@ export function PenyesuaianFormPage({
                   return (
                     <TableRow key={l.lineId}>
                       <TableCell className="text-center font-mono text-xs text-muted-foreground align-top pt-3.5">
-                        {index + 1}
+                        {isEdit
+                          ? ((editItemsData?.meta.current_page ?? 1) - 1) *
+                              (editItemsData?.meta.per_page ?? editPerPage) +
+                            index +
+                            1
+                          : index + 1}
                       </TableCell>
 
                       <TableCell className="align-top py-2.5">
@@ -949,6 +1183,23 @@ export function PenyesuaianFormPage({
             </TableBody>
           </Table>
 
+          {isEdit && editItemsData?.meta && (
+            <SimplePagination
+              page={editItemsData.meta.current_page}
+              lastPage={editItemsData.meta.last_page}
+              onPageChange={setEditPage}
+              perPage={editItemsData.meta.per_page}
+              onPerPageChange={(perPage) => {
+                setEditPerPage(perPage);
+                setEditPage(1);
+              }}
+              pageSizeOptions={TABLE_PAGE_SIZES}
+              isFetching={isFetchingItems}
+              total={totalLineCount}
+              label="baris"
+            />
+          )}
+
           {hasDuplicateItemBin && (
             <p className="text-xs text-destructive">
               SKU yang sama boleh memakai rak berbeda, tetapi tidak boleh
@@ -976,10 +1227,12 @@ export function PenyesuaianFormPage({
         <Button variant="outline" onClick={() => router.push(backHref)}>
           Batal
         </Button>
-        {canMutate && <Button onClick={handleSubmit} disabled={!canSubmit || isSaving}>
-          {isSaving && <Loader2Icon className="mr-2 size-4 animate-spin" />}
-          {isEdit ? "Simpan Perubahan" : "Simpan Penyesuaian"}
-        </Button>}
+        {canMutate && (
+          <Button onClick={handleSubmit} disabled={!canSubmit || isSaving}>
+            {isSaving && <Loader2Icon className="mr-2 size-4 animate-spin" />}
+            {isEdit ? "Simpan Perubahan" : "Simpan Penyesuaian"}
+          </Button>
+        )}
       </FormFooter>
 
       <StockedProductPickerDialog
