@@ -352,8 +352,10 @@ export function ImportPenyesuaianDialog({
 
 function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
   const s = preview.summary;
+  const [showDetails, setShowDetails] = useState(false);
+
   return (
-    <div className="flex h-full min-h-0 min-w-0 flex-col gap-4">
+    <div className="flex h-full min-h-0 min-w-0 flex-col gap-3">
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-sm font-semibold">Ringkasan validasi</p>
@@ -361,11 +363,19 @@ function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
             {preview.items.length.toLocaleString("id-ID")} item siap ditinjau
           </p>
         </div>
-        <span className="text-xs text-muted-foreground">
-          Gulir tabel untuk melihat semua baris
-        </span>
+        {preview.items.length > 0 && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            aria-expanded={showDetails}
+            onClick={() => setShowDetails((visible) => !visible)}
+          >
+            {showDetails ? "Sembunyikan detail" : "Tampilkan detail"}
+          </Button>
+        )}
       </div>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <SummaryCard label="Total Baris" value={s.total_rows} />
         <SummaryCard label="Valid" value={s.valid} tone="ok" />
         <SummaryCard label="Error" value={s.errors} tone="err" />
@@ -397,14 +407,22 @@ function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
         <div className="min-h-0 min-w-0 w-full flex-1 overflow-auto rounded-lg border border-border pb-2">
           <Table
             scrollContainer={false}
-            className="w-full min-w-[980px] table-fixed"
+            className={cn(
+              "w-full table-fixed",
+              showDetails ? "min-w-[980px]" : "min-w-[760px]",
+            )}
           >
             <TableHeader className="bg-muted/40 text-xs uppercase tracking-wider text-muted-foreground">
               <TableRow>
                 <TableHead className="w-12 px-3 py-2.5 text-muted-foreground">
                   #
                 </TableHead>
-                <TableHead className="w-[38%] px-3 py-2.5 text-muted-foreground">
+                <TableHead
+                  className={cn(
+                    "px-3 py-2.5 text-muted-foreground",
+                    showDetails ? "w-[38%]" : "w-[52%]",
+                  )}
+                >
                   SKU / Produk
                 </TableHead>
                 <TableHead className="w-32 px-3 py-2.5 text-muted-foreground">
@@ -416,15 +434,19 @@ function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
                 <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
                   Input
                 </TableHead>
-                <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
-                  On Hand
-                </TableHead>
-                <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
-                  Qty Akhir
-                </TableHead>
-                <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
-                  Selisih
-                </TableHead>
+                {showDetails && (
+                  <>
+                    <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
+                      On Hand
+                    </TableHead>
+                    <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
+                      Qty Akhir
+                    </TableHead>
+                    <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
+                      Selisih
+                    </TableHead>
+                  </>
+                )}
               </TableRow>
             </TableHeader>
             <TableBody className="divide-y divide-border">
@@ -433,7 +455,12 @@ function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
                   <TableCell className="w-12 px-3 py-2 font-mono text-xs text-muted-foreground">
                     {idx + 1}
                   </TableCell>
-                  <TableCell className="w-[38%] max-w-0 whitespace-normal px-3 py-2 align-top">
+                  <TableCell
+                    className={cn(
+                      "max-w-0 whitespace-normal px-3 py-2 align-top",
+                      showDetails ? "w-[38%]" : "w-[52%]",
+                    )}
+                  >
                     <p className="break-words whitespace-normal font-medium leading-5">
                       {it.product_name || it.sku}
                     </p>
@@ -459,21 +486,25 @@ function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
                   <TableCell className="w-24 px-3 py-2 text-right font-mono tabular-nums">
                     {it.input_value > 0 ? `+${it.input_value}` : it.input_value}
                   </TableCell>
-                  <TableCell className="w-24 px-3 py-2 text-right font-mono tabular-nums text-muted-foreground">
-                    {it.system_qty}
-                  </TableCell>
-                  <TableCell className="w-24 px-3 py-2 text-right font-mono font-semibold tabular-nums">
-                    {it.actual_qty}
-                  </TableCell>
-                  <TableCell
-                    className={cn(
-                      "w-24 px-3 py-2 text-right font-mono tabular-nums",
-                      it.difference > 0 && "text-success",
-                      it.difference < 0 && "text-destructive",
-                    )}
-                  >
-                    {it.difference > 0 ? `+${it.difference}` : it.difference}
-                  </TableCell>
+                  {showDetails && (
+                    <>
+                      <TableCell className="w-24 px-3 py-2 text-right font-mono tabular-nums text-muted-foreground">
+                        {it.system_qty}
+                      </TableCell>
+                      <TableCell className="w-24 px-3 py-2 text-right font-mono font-semibold tabular-nums">
+                        {it.actual_qty}
+                      </TableCell>
+                      <TableCell
+                        className={cn(
+                          "w-24 px-3 py-2 text-right font-mono tabular-nums",
+                          it.difference > 0 && "text-success",
+                          it.difference < 0 && "text-destructive",
+                        )}
+                      >
+                        {it.difference > 0 ? `+${it.difference}` : it.difference}
+                      </TableCell>
+                    </>
+                  )}
                 </TableRow>
               ))}
             </TableBody>
@@ -494,11 +525,11 @@ function SummaryCard({
   tone?: "ok" | "err" | "warn";
 }) {
   return (
-    <div className="rounded-lg border border-border bg-background/50 px-3 py-2.5">
-      <p className="text-xs text-muted-foreground">{label}</p>
+    <div className="flex items-baseline justify-between gap-2 rounded-md border border-border bg-background/50 px-3 py-2">
+      <p className="text-2xs text-muted-foreground">{label}</p>
       <p
         className={cn(
-          "mt-0.5 text-xl font-semibold tabular-nums",
+          "text-lg font-semibold tabular-nums",
           tone === "ok" && "text-success",
           tone === "err" && "text-destructive",
           tone === "warn" && "text-warning",
