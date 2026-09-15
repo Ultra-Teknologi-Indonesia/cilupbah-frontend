@@ -1419,9 +1419,9 @@ export function LayoutGudangTab({
     Map<string, PendingPutawaySku>
   >(() => new Map());
 
-  const [editedMap, setEditedMap] = React.useState<
-    Map<string, BinDraft>
-  >(() => new Map());
+  const [editedMap, setEditedMap] = React.useState<Map<string, BinDraft>>(
+    () => new Map(),
+  );
 
   const list = useListState<Record<string, never>>(
     {},
@@ -2190,11 +2190,7 @@ export function LayoutGudangTab({
                             value={b.binFinalCode}
                             onChange={(e) =>
                               serverMode && b.binId
-                                ? patchEdit(
-                                    b,
-                                    "binFinalCode",
-                                    e.target.value,
-                                  )
+                                ? patchEdit(b, "binFinalCode", e.target.value)
                                 : updateLocalBin(
                                     b.id,
                                     "binFinalCode",

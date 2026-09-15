@@ -1,1 +1,255 @@
-{"nodes": [{"id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_docs_plan_pengaturan_lokasi_md", "label": "PLAN-pengaturan-lokasi.md", "file_type": "document", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L1"}, {"id": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi", "label": "Planning \u2014 Manajemen Gudang \u203a Pengaturan \u203a Lokasi", "file_type": "document", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L1"}, {"id": "docs_plan_pengaturan_lokasi_0_konteks_scope", "label": "0. Konteks & scope", "file_type": "document", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L6"}, {"id": "docs_plan_pengaturan_lokasi_1_stack_konvensi_fe_mengikuti_pola_master_produk", "label": "1. Stack & konvensi FE (mengikuti pola `master-produk`)", "file_type": "document", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L15"}, {"id": "docs_plan_pengaturan_lokasi_2_keputusan_yang_sudah_dikunci", "label": "2. Keputusan yang sudah dikunci", "file_type": "document", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L21"}, {"id": "docs_plan_pengaturan_lokasi_3_kontrak_api_be_sudah_ada", "label": "3. Kontrak API BE (sudah ada)", "file_type": "document", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L32"}, {"id": "docs_plan_pengaturan_lokasi_verifikasi_endpoint_kode_rak_sudah_dicek", "label": "Verifikasi endpoint kode rak (\u2705 sudah dicek)", "file_type": "document", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L46"}, {"id": "docs_plan_pengaturan_lokasi_4_penyesuaian_be_yang_diperlukan_milestone_1", "label": "4. Penyesuaian BE yang diperlukan (Milestone 1)", "file_type": "document", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L63"}, {"id": "docs_plan_pengaturan_lokasi_5_fe_plumbing_milestone_2", "label": "5. FE plumbing (Milestone 2)", "file_type": "document", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L76"}, {"id": "docs_plan_pengaturan_lokasi_6_list_page_milestone_3_image_3_final", "label": "6. List page (Milestone 3 \u2014 Image #3, final)", "file_type": "document", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L94"}, {"id": "docs_plan_pengaturan_lokasi_7_tambah_edit_milestone_4_image_10_11", "label": "7. Tambah/Edit (Milestone 4 \u2014 Image #10/#11)", "file_type": "document", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L112"}, {"id": "docs_plan_pengaturan_lokasi_tab_informasi_lokasi_11", "label": "Tab Informasi Lokasi (#11)", "file_type": "document", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L125"}, {"id": "docs_plan_pengaturan_lokasi_tab_layout_gudang_10", "label": "Tab Layout Gudang (#10)", "file_type": "document", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L142"}, {"id": "docs_plan_pengaturan_lokasi_8_sub_keputusan_saat_eksekusi_milestone_4", "label": "8. Sub-keputusan saat eksekusi Milestone 4", "file_type": "document", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L149"}, {"id": "docs_plan_pengaturan_lokasi_9_urutan_status", "label": "9. Urutan & status", "file_type": "document", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L154"}, {"id": "docs_plan_pengaturan_lokasi_10_ditunda_di_luar_fokus", "label": "10. Ditunda (di luar fokus)", "file_type": "document", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L162"}], "edges": [{"source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_docs_plan_pengaturan_lokasi_md", "target": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L1", "weight": 1.0}, {"source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi", "target": "docs_plan_pengaturan_lokasi_0_konteks_scope", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L6", "weight": 1.0}, {"source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi", "target": "docs_plan_pengaturan_lokasi_1_stack_konvensi_fe_mengikuti_pola_master_produk", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L15", "weight": 1.0}, {"source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi", "target": "docs_plan_pengaturan_lokasi_2_keputusan_yang_sudah_dikunci", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L21", "weight": 1.0}, {"source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi", "target": "docs_plan_pengaturan_lokasi_3_kontrak_api_be_sudah_ada", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L32", "weight": 1.0}, {"source": "docs_plan_pengaturan_lokasi_3_kontrak_api_be_sudah_ada", "target": "docs_plan_pengaturan_lokasi_verifikasi_endpoint_kode_rak_sudah_dicek", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L46", "weight": 1.0}, {"source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi", "target": "docs_plan_pengaturan_lokasi_4_penyesuaian_be_yang_diperlukan_milestone_1", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L63", "weight": 1.0}, {"source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi", "target": "docs_plan_pengaturan_lokasi_5_fe_plumbing_milestone_2", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L76", "weight": 1.0}, {"source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi", "target": "docs_plan_pengaturan_lokasi_6_list_page_milestone_3_image_3_final", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L94", "weight": 1.0}, {"source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi", "target": "docs_plan_pengaturan_lokasi_7_tambah_edit_milestone_4_image_10_11", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L112", "weight": 1.0}, {"source": "docs_plan_pengaturan_lokasi_7_tambah_edit_milestone_4_image_10_11", "target": "docs_plan_pengaturan_lokasi_tab_informasi_lokasi_11", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L125", "weight": 1.0}, {"source": "docs_plan_pengaturan_lokasi_7_tambah_edit_milestone_4_image_10_11", "target": "docs_plan_pengaturan_lokasi_tab_layout_gudang_10", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L142", "weight": 1.0}, {"source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi", "target": "docs_plan_pengaturan_lokasi_8_sub_keputusan_saat_eksekusi_milestone_4", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L149", "weight": 1.0}, {"source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi", "target": "docs_plan_pengaturan_lokasi_9_urutan_status", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L154", "weight": 1.0}, {"source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi", "target": "docs_plan_pengaturan_lokasi_10_ditunda_di_luar_fokus", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/PLAN-pengaturan-lokasi.md", "source_location": "L162", "weight": 1.0}], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_docs_plan_pengaturan_lokasi_md",
+      "label": "PLAN-pengaturan-lokasi.md",
+      "file_type": "document",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi",
+      "label": "Planning \u2014 Manajemen Gudang \u203a Pengaturan \u203a Lokasi",
+      "file_type": "document",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "docs_plan_pengaturan_lokasi_0_konteks_scope",
+      "label": "0. Konteks & scope",
+      "file_type": "document",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L6"
+    },
+    {
+      "id": "docs_plan_pengaturan_lokasi_1_stack_konvensi_fe_mengikuti_pola_master_produk",
+      "label": "1. Stack & konvensi FE (mengikuti pola `master-produk`)",
+      "file_type": "document",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L15"
+    },
+    {
+      "id": "docs_plan_pengaturan_lokasi_2_keputusan_yang_sudah_dikunci",
+      "label": "2. Keputusan yang sudah dikunci",
+      "file_type": "document",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L21"
+    },
+    {
+      "id": "docs_plan_pengaturan_lokasi_3_kontrak_api_be_sudah_ada",
+      "label": "3. Kontrak API BE (sudah ada)",
+      "file_type": "document",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L32"
+    },
+    {
+      "id": "docs_plan_pengaturan_lokasi_verifikasi_endpoint_kode_rak_sudah_dicek",
+      "label": "Verifikasi endpoint kode rak (\u2705 sudah dicek)",
+      "file_type": "document",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L46"
+    },
+    {
+      "id": "docs_plan_pengaturan_lokasi_4_penyesuaian_be_yang_diperlukan_milestone_1",
+      "label": "4. Penyesuaian BE yang diperlukan (Milestone 1)",
+      "file_type": "document",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L63"
+    },
+    {
+      "id": "docs_plan_pengaturan_lokasi_5_fe_plumbing_milestone_2",
+      "label": "5. FE plumbing (Milestone 2)",
+      "file_type": "document",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L76"
+    },
+    {
+      "id": "docs_plan_pengaturan_lokasi_6_list_page_milestone_3_image_3_final",
+      "label": "6. List page (Milestone 3 \u2014 Image #3, final)",
+      "file_type": "document",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L94"
+    },
+    {
+      "id": "docs_plan_pengaturan_lokasi_7_tambah_edit_milestone_4_image_10_11",
+      "label": "7. Tambah/Edit (Milestone 4 \u2014 Image #10/#11)",
+      "file_type": "document",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L112"
+    },
+    {
+      "id": "docs_plan_pengaturan_lokasi_tab_informasi_lokasi_11",
+      "label": "Tab Informasi Lokasi (#11)",
+      "file_type": "document",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L125"
+    },
+    {
+      "id": "docs_plan_pengaturan_lokasi_tab_layout_gudang_10",
+      "label": "Tab Layout Gudang (#10)",
+      "file_type": "document",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L142"
+    },
+    {
+      "id": "docs_plan_pengaturan_lokasi_8_sub_keputusan_saat_eksekusi_milestone_4",
+      "label": "8. Sub-keputusan saat eksekusi Milestone 4",
+      "file_type": "document",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L149"
+    },
+    {
+      "id": "docs_plan_pengaturan_lokasi_9_urutan_status",
+      "label": "9. Urutan & status",
+      "file_type": "document",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L154"
+    },
+    {
+      "id": "docs_plan_pengaturan_lokasi_10_ditunda_di_luar_fokus",
+      "label": "10. Ditunda (di luar fokus)",
+      "file_type": "document",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L162"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_docs_plan_pengaturan_lokasi_md",
+      "target": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi",
+      "target": "docs_plan_pengaturan_lokasi_0_konteks_scope",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi",
+      "target": "docs_plan_pengaturan_lokasi_1_stack_konvensi_fe_mengikuti_pola_master_produk",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi",
+      "target": "docs_plan_pengaturan_lokasi_2_keputusan_yang_sudah_dikunci",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi",
+      "target": "docs_plan_pengaturan_lokasi_3_kontrak_api_be_sudah_ada",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_plan_pengaturan_lokasi_3_kontrak_api_be_sudah_ada",
+      "target": "docs_plan_pengaturan_lokasi_verifikasi_endpoint_kode_rak_sudah_dicek",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi",
+      "target": "docs_plan_pengaturan_lokasi_4_penyesuaian_be_yang_diperlukan_milestone_1",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L63",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi",
+      "target": "docs_plan_pengaturan_lokasi_5_fe_plumbing_milestone_2",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L76",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi",
+      "target": "docs_plan_pengaturan_lokasi_6_list_page_milestone_3_image_3_final",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L94",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi",
+      "target": "docs_plan_pengaturan_lokasi_7_tambah_edit_milestone_4_image_10_11",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L112",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_plan_pengaturan_lokasi_7_tambah_edit_milestone_4_image_10_11",
+      "target": "docs_plan_pengaturan_lokasi_tab_informasi_lokasi_11",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L125",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_plan_pengaturan_lokasi_7_tambah_edit_milestone_4_image_10_11",
+      "target": "docs_plan_pengaturan_lokasi_tab_layout_gudang_10",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L142",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi",
+      "target": "docs_plan_pengaturan_lokasi_8_sub_keputusan_saat_eksekusi_milestone_4",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L149",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi",
+      "target": "docs_plan_pengaturan_lokasi_9_urutan_status",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L154",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_plan_pengaturan_lokasi_planning_manajemen_gudang_pengaturan_lokasi",
+      "target": "docs_plan_pengaturan_lokasi_10_ditunda_di_luar_fokus",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLAN-pengaturan-lokasi.md",
+      "source_location": "L162",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

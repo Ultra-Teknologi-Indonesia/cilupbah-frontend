@@ -118,7 +118,8 @@ export function useRejectReplenishment() {
       qc.invalidateQueries({ queryKey: ["monitor-stok"] });
       qc.invalidateQueries({ queryKey: KEYS.pendingCount() });
       toast.success("Permintaan ditolak", {
-        description: "SKU kembali tersedia di Monitor Stok untuk diajukan ulang.",
+        description:
+          "SKU kembali tersedia di Monitor Stok untuk diajukan ulang.",
       });
     },
     onError: (err) => {

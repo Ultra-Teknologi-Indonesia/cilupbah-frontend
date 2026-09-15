@@ -126,7 +126,8 @@ function KpiCard({
                   className={cn(
                     "inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 font-semibold",
                     delta.dir === "up" && "bg-success/10 text-success",
-                    delta.dir === "down" && "bg-destructive/10 text-destructive",
+                    delta.dir === "down" &&
+                      "bg-destructive/10 text-destructive",
                     delta.dir === "flat" && "bg-muted text-muted-foreground",
                   )}
                 >

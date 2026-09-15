@@ -32,9 +32,7 @@ describe("permission hierarchy", () => {
 
 describe("dashboard route permissions", () => {
   it("uses the specific permission for sensitive child routes", () => {
-    expect(permissionForPath("/dashboard/produk/123/edit")).toBe(
-      "edit-produk",
-    );
+    expect(permissionForPath("/dashboard/produk/123/edit")).toBe("edit-produk");
     expect(permissionForPath("/dashboard/barang-masuk/retur/123")).toBe(
       "view-retur-penjualan",
     );

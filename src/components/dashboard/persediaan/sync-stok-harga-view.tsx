@@ -558,14 +558,12 @@ export function SyncStokHargaView({
                                     }
                                     aria-label={`Sync ${row.itemCode} di ${store.shopName}`}
                                   />
+                                ) : mode === "sync" ? (
+                                  <span className="text-2xs text-muted-foreground">
+                                    {cell.syncEnabled ? "Aktif" : "Nonaktif"}
+                                  </span>
                                 ) : (
-                                  mode === "sync" ? (
-                                    <span className="text-2xs text-muted-foreground">
-                                      {cell.syncEnabled ? "Aktif" : "Nonaktif"}
-                                    </span>
-                                  ) : (
                                   <CheckIcon className="mx-auto size-4 text-success" />
-                                  )
                                 )}
                               </TableCell>
                             );

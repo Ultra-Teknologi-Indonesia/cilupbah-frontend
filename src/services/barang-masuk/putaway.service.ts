@@ -166,10 +166,9 @@ export const PutawayService = {
   },
 
   bulkPdfAsync: async (ids: string[]) => {
-    const res = await fetchClient<ApiResponse<{ export_id: string; status: string; total: number }>>(
-      "/putaway/bulk/pdf/async",
-      { method: "POST", data: { ids } },
-    );
+    const res = await fetchClient<
+      ApiResponse<{ export_id: string; status: string; total: number }>
+    >("/putaway/bulk/pdf/async", { method: "POST", data: { ids } });
     return res.data;
   },
 

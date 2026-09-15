@@ -188,10 +188,13 @@ export function PickingProsesView({ id }: { id: string }) {
   const unassignMutation = useUnassignPicklist(id);
   const resetMutation = useResetPicklistAssignment(id);
 
-  const staffQuery = useUserLookup({
-    role: "picker",
-    perPage: 50,
-  }, canEditPicking || canDeletePicking);
+  const staffQuery = useUserLookup(
+    {
+      role: "picker",
+      perPage: 50,
+    },
+    canEditPicking || canDeletePicking,
+  );
   const staffOptions = React.useMemo(
     () =>
       (staffQuery.data?.items ?? [])
@@ -1117,28 +1120,35 @@ export function PickingProsesView({ id }: { id: string }) {
         </DialogContent>
       </Dialog>
 
-      {canDeleteOrder && <DeleteOrderDialog
-        open={!!deleteOrderTarget}
-        onOpenChange={(open) => {
-          if (!open) setDeleteOrderTarget(null);
-        }}
-        orders={
-          deleteOrderTarget?.orderId
-            ? [{ id: deleteOrderTarget.orderId, no: deleteOrderTarget.orderNo }]
-            : []
-        }
-        onDeleted={() => {
-          const deletedOrderId = deleteOrderTarget?.orderId;
-          const remainingOrderIds = new Set(
-            items
-              .filter((i) => i.orderId && i.orderId !== deletedOrderId)
-              .map((i) => i.orderId),
-          );
-          if (remainingOrderIds.size === 0) {
-            router.replace(LIST_HREF);
+      {canDeleteOrder && (
+        <DeleteOrderDialog
+          open={!!deleteOrderTarget}
+          onOpenChange={(open) => {
+            if (!open) setDeleteOrderTarget(null);
+          }}
+          orders={
+            deleteOrderTarget?.orderId
+              ? [
+                  {
+                    id: deleteOrderTarget.orderId,
+                    no: deleteOrderTarget.orderNo,
+                  },
+                ]
+              : []
           }
-        }}
-      />}
+          onDeleted={() => {
+            const deletedOrderId = deleteOrderTarget?.orderId;
+            const remainingOrderIds = new Set(
+              items
+                .filter((i) => i.orderId && i.orderId !== deletedOrderId)
+                .map((i) => i.orderId),
+            );
+            if (remainingOrderIds.size === 0) {
+              router.replace(LIST_HREF);
+            }
+          }}
+        />
+      )}
 
       <UnassignReasonDialog
         open={unassignOpen}

@@ -370,24 +370,26 @@ export function TransferKeluarTab() {
     [openTransferPdf],
   );
 
-  const openBulkTransferPdf = useCallback(async (ids: string[]) => {
-    const previewWindow = window.open("about:blank", "_blank");
+  const openBulkTransferPdf = useCallback(
+    async (ids: string[]) => {
+      const previewWindow = window.open("about:blank", "_blank");
 
-    try {
-      const result = await bulkPdfMutation.mutateAsync(ids);
-      const previewUrl =
-        `/dashboard/document-preview/transfer-out-bulk-export/${encodeURIComponent(result.export_id)}`;
+      try {
+        const result = await bulkPdfMutation.mutateAsync(ids);
+        const previewUrl = `/dashboard/document-preview/transfer-out-bulk-export/${encodeURIComponent(result.export_id)}`;
 
-      if (previewWindow && !previewWindow.closed) {
-        previewWindow.location.href = previewUrl;
-      } else {
-        window.open(previewUrl, "_blank", "noopener,noreferrer");
+        if (previewWindow && !previewWindow.closed) {
+          previewWindow.location.href = previewUrl;
+        } else {
+          window.open(previewUrl, "_blank", "noopener,noreferrer");
+        }
+      } catch (error) {
+        previewWindow?.close();
+        apiError(error, "Gagal menyiapkan PDF transfer bulk");
       }
-    } catch (error) {
-      previewWindow?.close();
-      apiError(error, "Gagal menyiapkan PDF transfer bulk");
-    }
-  }, [bulkPdfMutation]);
+    },
+    [bulkPdfMutation],
+  );
 
   const handleBulkPrint = useCallback(
     async (items: InventoryTransfer[], resetSelection: () => void) => {
@@ -518,34 +520,95 @@ export function TransferKeluarTab() {
       const missingBin = hasMissingBin(item);
       return (
         <div className="flex items-center gap-1">
-          {canExportTransfer && canCreateTransfer && <Button
+          {canExportTransfer && canCreateTransfer && (
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => handlePrint(item)}
+              disabled={printingId === item.id || missingBin}
+              aria-label="Cetak Surat Jalan & kirim"
+              title={
+                missingBin
+                  ? "Pilih rak asal untuk semua item dulu"
+                  : "Cetak Surat Jalan & kirim"
+              }
+            >
+              {printingId === item.id ? (
+                <Loader2Icon className="size-3.5 animate-spin" />
+              ) : (
+                <PrinterIcon className="size-3.5" />
+              )}
+            </Button>
+          )}
+          {canEditTransfer && (
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => handleEdit(item)}
+              aria-label="Ubah transfer"
+              title="Ubah transfer"
+            >
+              <PencilIcon className="size-3.5" />
+            </Button>
+          )}
+          {canDeleteTransfer && (
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => setDeleteTarget(item)}
+              aria-label="Hapus transfer"
+              title="Hapus transfer"
+              className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+            >
+              <Trash2Icon className="size-3.5" />
+            </Button>
+          )}
+        </div>
+      );
+    },
+    [
+      canCreateTransfer,
+      canDeleteTransfer,
+      canEditTransfer,
+      canExportTransfer,
+      handlePrint,
+      handleEdit,
+      printingId,
+    ],
+  );
+
+  const transitActions = useCallback(
+    (item: InventoryTransfer) => (
+      <div className="flex items-center gap-1">
+        {canExportTransfer && (
+          <Button
             variant="ghost"
             size="icon-sm"
-            onClick={() => handlePrint(item)}
-            disabled={printingId === item.id || missingBin}
-            aria-label="Cetak Surat Jalan & kirim"
-            title={
-              missingBin
-                ? "Pilih rak asal untuk semua item dulu"
-                : "Cetak Surat Jalan & kirim"
-            }
+            onClick={() => handleReprint(item)}
+            disabled={printingId === item.id}
+            aria-label="Cetak ulang Surat Jalan"
+            title="Cetak ulang Surat Jalan"
           >
             {printingId === item.id ? (
               <Loader2Icon className="size-3.5 animate-spin" />
             ) : (
               <PrinterIcon className="size-3.5" />
             )}
-          </Button>}
-          {canEditTransfer && <Button
+          </Button>
+        )}
+        {canEditTransfer && (
+          <Button
             variant="ghost"
             size="icon-sm"
             onClick={() => handleEdit(item)}
-            aria-label="Ubah transfer"
-            title="Ubah transfer"
+            aria-label="Ubah transfer (dikembalikan ke Baru Dibuat)"
+            title="Ubah transfer (dikembalikan ke Baru Dibuat)"
           >
             <PencilIcon className="size-3.5" />
-          </Button>}
-          {canDeleteTransfer && <Button
+          </Button>
+        )}
+        {canDeleteTransfer && (
+          <Button
             variant="ghost"
             size="icon-sm"
             onClick={() => setDeleteTarget(item)}
@@ -554,81 +617,51 @@ export function TransferKeluarTab() {
             className="text-destructive hover:bg-destructive/10 hover:text-destructive"
           >
             <Trash2Icon className="size-3.5" />
-          </Button>}
-        </div>
-      );
-    },
-    [canCreateTransfer, canDeleteTransfer, canEditTransfer, canExportTransfer, handlePrint, handleEdit, printingId],
-  );
-
-  const transitActions = useCallback(
-    (item: InventoryTransfer) => (
-      <div className="flex items-center gap-1">
-        {canExportTransfer && <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={() => handleReprint(item)}
-          disabled={printingId === item.id}
-          aria-label="Cetak ulang Surat Jalan"
-          title="Cetak ulang Surat Jalan"
-        >
-          {printingId === item.id ? (
-            <Loader2Icon className="size-3.5 animate-spin" />
-          ) : (
-            <PrinterIcon className="size-3.5" />
-          )}
-        </Button>}
-        {canEditTransfer && <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={() => handleEdit(item)}
-          aria-label="Ubah transfer (dikembalikan ke Baru Dibuat)"
-          title="Ubah transfer (dikembalikan ke Baru Dibuat)"
-        >
-          <PencilIcon className="size-3.5" />
-        </Button>}
-        {canDeleteTransfer && <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={() => setDeleteTarget(item)}
-          aria-label="Hapus transfer"
-          title="Hapus transfer"
-          className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-        >
-          <Trash2Icon className="size-3.5" />
-        </Button>}
+          </Button>
+        )}
       </div>
     ),
-    [canDeleteTransfer, canEditTransfer, canExportTransfer, handleReprint, handleEdit, printingId],
+    [
+      canDeleteTransfer,
+      canEditTransfer,
+      canExportTransfer,
+      handleReprint,
+      handleEdit,
+      printingId,
+    ],
   );
 
   const reprintActions = useCallback(
     (item: InventoryTransfer) => (
       <div className="flex items-center gap-1">
-        {canExportTransfer && <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={() => handleReprint(item)}
-          disabled={printingId === item.id}
-          aria-label="Cetak ulang Surat Jalan"
-          title="Cetak ulang Surat Jalan"
-        >
-          {printingId === item.id ? (
-            <Loader2Icon className="size-3.5 animate-spin" />
-          ) : (
-            <PrinterIcon className="size-3.5" />
-          )}
-        </Button>}
-        {canDeleteTransfer && <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={() => setDeleteTarget(item)}
-          aria-label="Batalkan & reset ke draft (kembalikan stok ke gudang asal)"
-          title="Batalkan & reset ke draft (kembalikan stok ke gudang asal)"
-          className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-        >
-          <Trash2Icon className="size-3.5" />
-        </Button>}
+        {canExportTransfer && (
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={() => handleReprint(item)}
+            disabled={printingId === item.id}
+            aria-label="Cetak ulang Surat Jalan"
+            title="Cetak ulang Surat Jalan"
+          >
+            {printingId === item.id ? (
+              <Loader2Icon className="size-3.5 animate-spin" />
+            ) : (
+              <PrinterIcon className="size-3.5" />
+            )}
+          </Button>
+        )}
+        {canDeleteTransfer && (
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={() => setDeleteTarget(item)}
+            aria-label="Batalkan & reset ke draft (kembalikan stok ke gudang asal)"
+            title="Batalkan & reset ke draft (kembalikan stok ke gudang asal)"
+            className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+          >
+            <Trash2Icon className="size-3.5" />
+          </Button>
+        )}
       </div>
     ),
     [canDeleteTransfer, canExportTransfer, handleReprint, printingId],
@@ -642,21 +675,23 @@ export function TransferKeluarTab() {
       const ids = selected.map((i) => i.id);
       return (
         <>
-          {canExportTransfer && <Button
-            size="sm"
-            variant="outline"
-            disabled={bulkPrinting}
-            onClick={() =>
-              handleBulkPrint(selected, () => table.resetRowSelection())
-            }
-          >
-            {bulkPrinting ? (
-              <Loader2Icon className="mr-1.5 size-4 animate-spin" />
-            ) : (
-              <PrinterIcon className="mr-1.5 size-4" />
-            )}
-            Cetak {ids.length}
-          </Button>}
+          {canExportTransfer && (
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={bulkPrinting}
+              onClick={() =>
+                handleBulkPrint(selected, () => table.resetRowSelection())
+              }
+            >
+              {bulkPrinting ? (
+                <Loader2Icon className="mr-1.5 size-4 animate-spin" />
+              ) : (
+                <PrinterIcon className="mr-1.5 size-4" />
+              )}
+              Cetak {ids.length}
+            </Button>
+          )}
           {canDeleteTransfer && (
             <Button
               size="sm"
@@ -675,12 +710,7 @@ export function TransferKeluarTab() {
         </>
       );
     },
-    [
-      bulkPrinting,
-      canDeleteTransfer,
-      canExportTransfer,
-      handleBulkPrint,
-    ],
+    [bulkPrinting, canDeleteTransfer, canExportTransfer, handleBulkPrint],
   );
 
   return (
@@ -705,23 +735,27 @@ export function TransferKeluarTab() {
             </TabsList>
           </Tabs>
           <div className="flex items-center gap-2">
-            {canCreateTransfer && <Button
-              size="sm"
-              variant="outline"
-              onClick={() => setImportOpen(true)}
-            >
-              <UploadIcon className="mr-1.5 size-4" />
-              Import
-            </Button>}
-            {canCreateTransfer && <Button
-              size="sm"
-              onClick={() =>
-                router.push("/dashboard/barang-keluar/transfer/tambah")
-              }
-            >
-              <PlusIcon className="mr-1.5 size-4" />
-              Tambah baru
-            </Button>}
+            {canCreateTransfer && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setImportOpen(true)}
+              >
+                <UploadIcon className="mr-1.5 size-4" />
+                Import
+              </Button>
+            )}
+            {canCreateTransfer && (
+              <Button
+                size="sm"
+                onClick={() =>
+                  router.push("/dashboard/barang-keluar/transfer/tambah")
+                }
+              >
+                <PlusIcon className="mr-1.5 size-4" />
+                Tambah baru
+              </Button>
+            )}
           </div>
         </div>
 

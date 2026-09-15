@@ -1,136 +1,127 @@
 {
-    "slug": "finance",
-    "name": "Finance",
-    "description": "Kas & bank, jurnal, akun COA, mapping akuntansi.",
-    "endpoints_count": 1,
-    "undocumented": 0,
-    "endpoints": [
+  "slug": "finance",
+  "name": "Finance",
+  "description": "Kas & bank, jurnal, akun COA, mapping akuntansi.",
+  "endpoints_count": 1,
+  "undocumented": 0,
+  "endpoints": [
+    {
+      "id": "api.finance.accounts.lookup",
+      "module_slug": "finance",
+      "module_name": "Finance",
+      "method": "GET",
+      "path": "/api/v1/accounts/lookup/all",
+      "summary": "Ambil semua (tanpa paginasi) akun COA",
+      "description": "Ambil semua (tanpa paginasi) akun COA.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-akun].",
+      "purpose": "Membutuhkan izin: owner, view-akun. Mendukung filter, sort, search, dan pagination (Spatie Query Builder — lihat section Filter/Sort/Search).",
+      "controller": "Modules\\Finance\\Http\\Controllers\\AccountLookupController",
+      "action": "all",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "view-akun"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [],
+      "query_params": [
         {
-            "id": "api.finance.accounts.lookup",
-            "module_slug": "finance",
-            "module_name": "Finance",
-            "method": "GET",
-            "path": "/api/v1/accounts/lookup/all",
-            "summary": "Ambil semua (tanpa paginasi) akun COA",
-            "description": "Ambil semua (tanpa paginasi) akun COA.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-akun].",
-            "purpose": "Membutuhkan izin: owner, view-akun. Mendukung filter, sort, search, dan pagination (Spatie Query Builder — lihat section Filter/Sort/Search).",
-            "controller": "Modules\\Finance\\Http\\Controllers\\AccountLookupController",
-            "action": "all",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "view-akun"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [],
-            "query_params": [
-                {
-                    "name": "type",
-                    "type": "string",
-                    "description": "Field type (tipe string).",
-                    "required": false
-                }
-            ],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": [
-                    {
-                        "account_id": "mixed",
-                        "account_code": "mixed",
-                        "account_name": "mixed",
-                        "account_type": "mixed"
-                    }
-                ],
-                "meta": {
-                    "current_page": "integer",
-                    "per_page": "integer",
-                    "total": "integer",
-                    "last_page": "integer"
-                }
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": [
-                    {
-                        "account_id": "019ea2afad1d733eafb905816d10590e",
-                        "account_code": "string",
-                        "account_name": "string",
-                        "account_type": "string"
-                    }
-                ],
-                "meta": {
-                    "current_page": 1,
-                    "per_page": 10,
-                    "total": 1,
-                    "last_page": 1
-                }
-            },
-            "response_resource": "Modules\\Finance\\Http\\Resources\\AccountLookupResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
+          "name": "type",
+          "type": "string",
+          "description": "Field type (tipe string).",
+          "required": false
         }
-    ]
+      ],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": [
+          {
+            "account_id": "mixed",
+            "account_code": "mixed",
+            "account_name": "mixed",
+            "account_type": "mixed"
+          }
+        ],
+        "meta": {
+          "current_page": "integer",
+          "per_page": "integer",
+          "total": "integer",
+          "last_page": "integer"
+        }
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": [
+          {
+            "account_id": "019ea2afad1d733eafb905816d10590e",
+            "account_code": "string",
+            "account_name": "string",
+            "account_type": "string"
+          }
+        ],
+        "meta": {
+          "current_page": 1,
+          "per_page": 10,
+          "total": 1,
+          "last_page": 1
+        }
+      },
+      "response_resource": "Modules\\Finance\\Http\\Resources\\AccountLookupResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    }
+  ]
 }

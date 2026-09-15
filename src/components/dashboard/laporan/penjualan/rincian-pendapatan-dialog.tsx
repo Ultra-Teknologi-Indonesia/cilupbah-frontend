@@ -19,7 +19,10 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { DatePicker } from "@/components/ui/date-picker";
 import { SkuMultiComboboxLazy } from "@/components/dashboard/laporan/shared/sku-multi-combobox-lazy";
-import { ReportFormatRadio, type ReportFormat } from "@/components/dashboard/laporan/shared/report-format-radio";
+import {
+  ReportFormatRadio,
+  type ReportFormat,
+} from "@/components/dashboard/laporan/shared/report-format-radio";
 import { useExportRincianPendapatan } from "@/hooks/laporan/use-rincian-pendapatan";
 import type { RincianPendapatanMode } from "@/types/laporan/rincian-pendapatan";
 
@@ -92,7 +95,8 @@ export function RincianPendapatanDialog({
           toast.success("Berhasil mengunduh rincian pendapatan");
           handleOpenChange(false);
         },
-        onError: (error) => apiError(error, "Gagal mengunduh rincian pendapatan"),
+        onError: (error) =>
+          apiError(error, "Gagal mengunduh rincian pendapatan"),
       },
     );
   }
@@ -181,8 +185,10 @@ export function RincianPendapatanDialog({
           <Button variant="primary" onClick={handleCetak} disabled={!canCetak}>
             {exportXlsx.isPending ? (
               <Loader2 className="size-4 animate-spin" />
+            ) : format === "excel" ? (
+              <DownloadIcon className="size-4" />
             ) : (
-              format === "excel" ? <DownloadIcon className="size-4" /> : <PrinterIcon className="size-4" />
+              <PrinterIcon className="size-4" />
             )}
             {format === "excel" ? "Unduh Excel" : "Unduh PDF"}
           </Button>

@@ -1,5 +1,4 @@
-export const SHIPPING_LABEL_AUDIT_EVENT =
-  "cilupbah:shipping-label-printed";
+export const SHIPPING_LABEL_AUDIT_EVENT = "cilupbah:shipping-label-printed";
 
 const STORAGE_KEY = "cilupbah:shipping-label-printed";
 
@@ -62,7 +61,9 @@ export function notifyShippingLabelPrinted(orderIds: string[]): void {
   }
 }
 
-export function subscribeToShippingLabelPrinted(listener: Listener): () => void {
+export function subscribeToShippingLabelPrinted(
+  listener: Listener,
+): () => void {
   if (typeof window === "undefined") return () => undefined;
 
   const onCustomEvent = (event: Event) => {

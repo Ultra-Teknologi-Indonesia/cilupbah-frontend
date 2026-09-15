@@ -376,12 +376,7 @@ export function PackingProsesView() {
         });
       }
     });
-  }, [
-    packlists,
-    packItem.isPending,
-    completePacklist,
-    canEditPacking,
-  ]);
+  }, [packlists, packItem.isPending, completePacklist, canEditPacking]);
 
   const pickerList = React.useMemo(() => pickers.data ?? [], [pickers.data]);
   const checkerName = pickerList.find((p) => p.id === checkerId)?.name ?? null;

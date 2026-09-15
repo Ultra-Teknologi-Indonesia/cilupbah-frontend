@@ -1,1 +1,255 @@
-{"nodes": [{"id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_plan_master_produk_md", "label": "PLAN-MASTER-PRODUK.md", "file_type": "document", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L1"}, {"id": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk", "label": "PLAN \u2014 Halaman Master Produk", "file_type": "document", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L1"}, {"id": "cilupbah_fe_plan_master_produk_1_ringkasan_backend_sumber_kebenaran", "label": "1. Ringkasan Backend (sumber kebenaran)", "file_type": "document", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L12"}, {"id": "cilupbah_fe_plan_master_produk_1_1_listing_master_utama_untuk_halaman_ini", "label": "1.1 Listing master (utama untuk halaman ini)", "file_type": "document", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L18"}, {"id": "cilupbah_fe_plan_master_produk_1_2_crud_produk_penuh_apiresource_products", "label": "1.2 CRUD produk penuh (`apiResource products`)", "file_type": "document", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L34"}, {"id": "cilupbah_fe_plan_master_produk_1_3_payload_create_update_createproductrequest", "label": "1.3 Payload create/update (`CreateProductRequest`)", "file_type": "document", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L45"}, {"id": "cilupbah_fe_plan_master_produk_1_4_lookups_operasi_pendukung", "label": "1.4 Lookups & operasi pendukung", "file_type": "document", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L59"}, {"id": "cilupbah_fe_plan_master_produk_1_5_bentuk_response_standar", "label": "1.5 Bentuk response standar", "file_type": "document", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L70"}, {"id": "cilupbah_fe_plan_master_produk_2_use_case_yang_harus_ditangani", "label": "2. Use case yang harus ditangani", "file_type": "document", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L83"}, {"id": "cilupbah_fe_plan_master_produk_3_arsitektur_struktur_file_fe", "label": "3. Arsitektur & struktur file (FE)", "file_type": "document", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L113"}, {"id": "cilupbah_fe_plan_master_produk_kontrak_datatable_reusable", "label": "Kontrak DataTable (reusable)", "file_type": "document", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L149"}, {"id": "cilupbah_fe_plan_master_produk_4_fase_pengerjaan", "label": "4. Fase pengerjaan", "file_type": "document", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L179"}, {"id": "cilupbah_fe_plan_master_produk_5_model_data_fe_selaras_be_dipakai_sejak_mock", "label": "5. Model data FE (selaras BE, dipakai sejak mock)", "file_type": "document", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L195"}, {"id": "cilupbah_fe_plan_master_produk_6_kolom_tabel_default", "label": "6. Kolom tabel (default)", "file_type": "document", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L228"}, {"id": "cilupbah_fe_plan_master_produk_7_keputusan_asumsi", "label": "7. Keputusan & asumsi", "file_type": "document", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L239"}, {"id": "cilupbah_fe_plan_master_produk_8_risiko_catatan", "label": "8. Risiko / catatan", "file_type": "document", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L254"}], "edges": [{"source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_plan_master_produk_md", "target": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L1", "weight": 1.0}, {"source": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk", "target": "cilupbah_fe_plan_master_produk_1_ringkasan_backend_sumber_kebenaran", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L12", "weight": 1.0}, {"source": "cilupbah_fe_plan_master_produk_1_ringkasan_backend_sumber_kebenaran", "target": "cilupbah_fe_plan_master_produk_1_1_listing_master_utama_untuk_halaman_ini", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L18", "weight": 1.0}, {"source": "cilupbah_fe_plan_master_produk_1_ringkasan_backend_sumber_kebenaran", "target": "cilupbah_fe_plan_master_produk_1_2_crud_produk_penuh_apiresource_products", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L34", "weight": 1.0}, {"source": "cilupbah_fe_plan_master_produk_1_ringkasan_backend_sumber_kebenaran", "target": "cilupbah_fe_plan_master_produk_1_3_payload_create_update_createproductrequest", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L45", "weight": 1.0}, {"source": "cilupbah_fe_plan_master_produk_1_ringkasan_backend_sumber_kebenaran", "target": "cilupbah_fe_plan_master_produk_1_4_lookups_operasi_pendukung", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L59", "weight": 1.0}, {"source": "cilupbah_fe_plan_master_produk_1_ringkasan_backend_sumber_kebenaran", "target": "cilupbah_fe_plan_master_produk_1_5_bentuk_response_standar", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L70", "weight": 1.0}, {"source": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk", "target": "cilupbah_fe_plan_master_produk_2_use_case_yang_harus_ditangani", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L83", "weight": 1.0}, {"source": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk", "target": "cilupbah_fe_plan_master_produk_3_arsitektur_struktur_file_fe", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L113", "weight": 1.0}, {"source": "cilupbah_fe_plan_master_produk_3_arsitektur_struktur_file_fe", "target": "cilupbah_fe_plan_master_produk_kontrak_datatable_reusable", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L149", "weight": 1.0}, {"source": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk", "target": "cilupbah_fe_plan_master_produk_4_fase_pengerjaan", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L179", "weight": 1.0}, {"source": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk", "target": "cilupbah_fe_plan_master_produk_5_model_data_fe_selaras_be_dipakai_sejak_mock", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L195", "weight": 1.0}, {"source": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk", "target": "cilupbah_fe_plan_master_produk_6_kolom_tabel_default", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L228", "weight": 1.0}, {"source": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk", "target": "cilupbah_fe_plan_master_produk_7_keputusan_asumsi", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L239", "weight": 1.0}, {"source": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk", "target": "cilupbah_fe_plan_master_produk_8_risiko_catatan", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLAN-MASTER-PRODUK.md", "source_location": "L254", "weight": 1.0}], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_plan_master_produk_md",
+      "label": "PLAN-MASTER-PRODUK.md",
+      "file_type": "document",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk",
+      "label": "PLAN \u2014 Halaman Master Produk",
+      "file_type": "document",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_plan_master_produk_1_ringkasan_backend_sumber_kebenaran",
+      "label": "1. Ringkasan Backend (sumber kebenaran)",
+      "file_type": "document",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L12"
+    },
+    {
+      "id": "cilupbah_fe_plan_master_produk_1_1_listing_master_utama_untuk_halaman_ini",
+      "label": "1.1 Listing master (utama untuk halaman ini)",
+      "file_type": "document",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L18"
+    },
+    {
+      "id": "cilupbah_fe_plan_master_produk_1_2_crud_produk_penuh_apiresource_products",
+      "label": "1.2 CRUD produk penuh (`apiResource products`)",
+      "file_type": "document",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L34"
+    },
+    {
+      "id": "cilupbah_fe_plan_master_produk_1_3_payload_create_update_createproductrequest",
+      "label": "1.3 Payload create/update (`CreateProductRequest`)",
+      "file_type": "document",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L45"
+    },
+    {
+      "id": "cilupbah_fe_plan_master_produk_1_4_lookups_operasi_pendukung",
+      "label": "1.4 Lookups & operasi pendukung",
+      "file_type": "document",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L59"
+    },
+    {
+      "id": "cilupbah_fe_plan_master_produk_1_5_bentuk_response_standar",
+      "label": "1.5 Bentuk response standar",
+      "file_type": "document",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L70"
+    },
+    {
+      "id": "cilupbah_fe_plan_master_produk_2_use_case_yang_harus_ditangani",
+      "label": "2. Use case yang harus ditangani",
+      "file_type": "document",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L83"
+    },
+    {
+      "id": "cilupbah_fe_plan_master_produk_3_arsitektur_struktur_file_fe",
+      "label": "3. Arsitektur & struktur file (FE)",
+      "file_type": "document",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L113"
+    },
+    {
+      "id": "cilupbah_fe_plan_master_produk_kontrak_datatable_reusable",
+      "label": "Kontrak DataTable (reusable)",
+      "file_type": "document",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L149"
+    },
+    {
+      "id": "cilupbah_fe_plan_master_produk_4_fase_pengerjaan",
+      "label": "4. Fase pengerjaan",
+      "file_type": "document",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L179"
+    },
+    {
+      "id": "cilupbah_fe_plan_master_produk_5_model_data_fe_selaras_be_dipakai_sejak_mock",
+      "label": "5. Model data FE (selaras BE, dipakai sejak mock)",
+      "file_type": "document",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L195"
+    },
+    {
+      "id": "cilupbah_fe_plan_master_produk_6_kolom_tabel_default",
+      "label": "6. Kolom tabel (default)",
+      "file_type": "document",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L228"
+    },
+    {
+      "id": "cilupbah_fe_plan_master_produk_7_keputusan_asumsi",
+      "label": "7. Keputusan & asumsi",
+      "file_type": "document",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L239"
+    },
+    {
+      "id": "cilupbah_fe_plan_master_produk_8_risiko_catatan",
+      "label": "8. Risiko / catatan",
+      "file_type": "document",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L254"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_plan_master_produk_md",
+      "target": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk",
+      "target": "cilupbah_fe_plan_master_produk_1_ringkasan_backend_sumber_kebenaran",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_plan_master_produk_1_ringkasan_backend_sumber_kebenaran",
+      "target": "cilupbah_fe_plan_master_produk_1_1_listing_master_utama_untuk_halaman_ini",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_plan_master_produk_1_ringkasan_backend_sumber_kebenaran",
+      "target": "cilupbah_fe_plan_master_produk_1_2_crud_produk_penuh_apiresource_products",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L34",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_plan_master_produk_1_ringkasan_backend_sumber_kebenaran",
+      "target": "cilupbah_fe_plan_master_produk_1_3_payload_create_update_createproductrequest",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L45",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_plan_master_produk_1_ringkasan_backend_sumber_kebenaran",
+      "target": "cilupbah_fe_plan_master_produk_1_4_lookups_operasi_pendukung",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L59",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_plan_master_produk_1_ringkasan_backend_sumber_kebenaran",
+      "target": "cilupbah_fe_plan_master_produk_1_5_bentuk_response_standar",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L70",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk",
+      "target": "cilupbah_fe_plan_master_produk_2_use_case_yang_harus_ditangani",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L83",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk",
+      "target": "cilupbah_fe_plan_master_produk_3_arsitektur_struktur_file_fe",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L113",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_plan_master_produk_3_arsitektur_struktur_file_fe",
+      "target": "cilupbah_fe_plan_master_produk_kontrak_datatable_reusable",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L149",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk",
+      "target": "cilupbah_fe_plan_master_produk_4_fase_pengerjaan",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L179",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk",
+      "target": "cilupbah_fe_plan_master_produk_5_model_data_fe_selaras_be_dipakai_sejak_mock",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L195",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk",
+      "target": "cilupbah_fe_plan_master_produk_6_kolom_tabel_default",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L228",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk",
+      "target": "cilupbah_fe_plan_master_produk_7_keputusan_asumsi",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L239",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_plan_master_produk_plan_halaman_master_produk",
+      "target": "cilupbah_fe_plan_master_produk_8_risiko_catatan",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLAN-MASTER-PRODUK.md",
+      "source_location": "L254",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

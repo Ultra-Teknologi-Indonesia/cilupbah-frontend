@@ -482,12 +482,11 @@ export const OutboundService = {
     params: FulfillmentListParams,
   ): Promise<ListResult<FulfillmentOrder>> => {
     const res = await fetchClient<
-      ApiPaginated<RawFulfillmentOrder> | ApiResponse<LegacyPaginator<RawFulfillmentOrder>>
-    >(
-      `/outbound/orders/${stage}?${buildQuery(params)}`,
-    );
+      | ApiPaginated<RawFulfillmentOrder>
+      | ApiResponse<LegacyPaginator<RawFulfillmentOrder>>
+    >(`/outbound/orders/${stage}?${buildQuery(params)}`);
     const payload = res.data;
-    const items = Array.isArray(payload) ? payload : payload?.data ?? [];
+    const items = Array.isArray(payload) ? payload : (payload?.data ?? []);
     const legacyMeta = Array.isArray(payload)
       ? null
       : {
@@ -1296,10 +1295,12 @@ export const OutboundService = {
   },
 
   picklistBulkPdfAsync: async (orderIds: string[]) => {
-    const res = await fetchClient<ApiResponse<{ export_id: string; status: string; total: number }>>(
-      `/outbound/picklists/documents/bulk/pdf/async`,
-      { method: "POST", data: { order_ids: orderIds } },
-    );
+    const res = await fetchClient<
+      ApiResponse<{ export_id: string; status: string; total: number }>
+    >(`/outbound/picklists/documents/bulk/pdf/async`, {
+      method: "POST",
+      data: { order_ids: orderIds },
+    });
     return res.data;
   },
 
@@ -1312,10 +1313,12 @@ export const OutboundService = {
   },
 
   invoiceBulkPdfAsync: async (orderIds: string[]) => {
-    const res = await fetchClient<ApiResponse<{ export_id: string; status: string; total: number }>>(
-      `/sales/invoices/bulk-pdf/async`,
-      { method: "POST", data: { order_ids: orderIds } },
-    );
+    const res = await fetchClient<
+      ApiResponse<{ export_id: string; status: string; total: number }>
+    >(`/sales/invoices/bulk-pdf/async`, {
+      method: "POST",
+      data: { order_ids: orderIds },
+    });
     return res.data;
   },
 
@@ -1428,10 +1431,12 @@ export const OutboundService = {
   },
 
   manifestBulkPdfAsync: async (orderIds: string[]) => {
-    const res = await fetchClient<ApiResponse<{ export_id: string; status: string; total: number }>>(
-      `/outbound/shipments/documents/bulk/manifest-pdf/async`,
-      { method: "POST", data: { order_ids: orderIds } },
-    );
+    const res = await fetchClient<
+      ApiResponse<{ export_id: string; status: string; total: number }>
+    >(`/outbound/shipments/documents/bulk/manifest-pdf/async`, {
+      method: "POST",
+      data: { order_ids: orderIds },
+    });
     return res.data;
   },
 

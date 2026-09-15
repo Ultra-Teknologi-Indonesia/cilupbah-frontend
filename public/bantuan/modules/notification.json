@@ -1,1100 +1,1029 @@
 {
-    "slug": "notification",
-    "name": "Notification",
-    "description": "Notifikasi in-app, WA, email.",
-    "endpoints_count": 9,
-    "undocumented": 0,
-    "endpoints": [
+  "slug": "notification",
+  "name": "Notification",
+  "description": "Notifikasi in-app, WA, email.",
+  "endpoints_count": 9,
+  "undocumented": 0,
+  "endpoints": [
+    {
+      "id": "api.",
+      "module_slug": "notification",
+      "module_name": "Notification",
+      "method": "GET",
+      "path": "/api/v1/dashboard/task-counts",
+      "summary": "Hitung jumlah per tab task counts",
+      "description": "Hitung jumlah per tab task counts.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: default policy modul.",
+      "purpose": "Mengembalikan data untuk ditampilkan di UI.",
+      "controller": "Modules\\Notification\\Http\\Controllers\\DashboardController",
+      "action": "taskCounts",
+      "auth": "auth:sanctum",
+      "roles": [],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": "mixed"
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": {}
+      },
+      "response_resource": null,
+      "response_errors": [
         {
-            "id": "api.",
-            "module_slug": "notification",
-            "module_name": "Notification",
-            "method": "GET",
-            "path": "/api/v1/dashboard/task-counts",
-            "summary": "Hitung jumlah per tab task counts",
-            "description": "Hitung jumlah per tab task counts.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: default policy modul.",
-            "purpose": "Mengembalikan data untuk ditampilkan di UI.",
-            "controller": "Modules\\Notification\\Http\\Controllers\\DashboardController",
-            "action": "taskCounts",
-            "auth": "auth:sanctum",
-            "roles": [],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": "mixed"
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": {}
-            },
-            "response_resource": null,
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
         },
         {
-            "id": "api.",
-            "module_slug": "notification",
-            "module_name": "Notification",
-            "method": "DELETE",
-            "path": "/api/v1/device-tokens",
-            "summary": "Hapus device tokens",
-            "description": "Hapus device tokens.\nResponse: 200/204. Perhatikan aturan revert/soft-delete yang berlaku pada resource ini.\nOtorisasi: default policy modul.",
-            "purpose": "Menghapus resource. Ikuti aturan revert/soft-delete yang berlaku.",
-            "controller": "Modules\\Notification\\Http\\Controllers\\DeviceTokenController",
-            "action": "destroy",
-            "auth": "auth:sanctum",
-            "roles": [],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": "object|null"
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Token removed",
-                "data": {}
-            },
-            "response_resource": null,
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                204,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.",
-                    "method": "POST",
-                    "path": "/api/v1/device-tokens",
-                    "summary": "Buat device tokens"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
         },
         {
-            "id": "api.",
-            "module_slug": "notification",
-            "module_name": "Notification",
-            "method": "POST",
-            "path": "/api/v1/device-tokens",
-            "summary": "Buat device tokens",
-            "description": "Buat device tokens.\nResponse: 201 dengan data resource yang baru dibuat. Trigger side-effects sesuai domain (event/job/notifikasi) — lihat section Side Effects.\nOtorisasi: default policy modul.",
-            "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membuat resource baru atau memicu aksi domain.",
-            "controller": "Modules\\Notification\\Http\\Controllers\\DeviceTokenController",
-            "action": "store",
-            "auth": "auth:sanctum",
-            "roles": [],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": "Modules\\Notification\\Http\\Requests\\StoreDeviceTokenRequest",
-            "path_params": [],
-            "query_params": [],
-            "body_schema": {
-                "fcm_token": {
-                    "type": "string",
-                    "required": true,
-                    "rules": [
-                        "required",
-                        "string",
-                        "max:500"
-                    ],
-                    "constraints": {
-                        "max": 500
-                    },
-                    "description": "Field fcm token (tipe string)."
-                },
-                "device_id": {
-                    "type": "string",
-                    "required": false,
-                    "rules": [
-                        "nullable",
-                        "string",
-                        "max:255"
-                    ],
-                    "constraints": {
-                        "max": 255
-                    },
-                    "description": "ID device (referensi ke resource device)."
-                },
-                "platform": {
-                    "type": "string",
-                    "required": false,
-                    "rules": [
-                        "nullable",
-                        "string",
-                        "in:android,ios"
-                    ],
-                    "enum": [
-                        "android",
-                        "ios"
-                    ],
-                    "description": "Field platform (tipe string)."
-                }
-            },
-            "body_example": {
-                "fcm_token": "string",
-                "device_id": 1,
-                "platform": "android"
-            },
-            "validation": [
-                "fcm_token: required|string|max:500",
-                "device_id: nullable|string|max:255",
-                "platform: nullable|string|in:android,ios"
-            ],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": []
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": []
-            },
-            "response_resource": "Modules\\Notification\\Http\\Resources\\DeviceTokenResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                201,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.",
-                    "method": "DELETE",
-                    "path": "/api/v1/device-tokens",
-                    "summary": "Hapus device tokens"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
         },
         {
-            "id": "api.",
-            "module_slug": "notification",
-            "module_name": "Notification",
-            "method": "GET",
-            "path": "/api/v1/notifications",
-            "summary": "Ambil daftar notifikasi",
-            "description": "Ambil daftar notifikasi.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: default policy modul.",
-            "purpose": "Mendukung filter, sort, search, dan pagination (Spatie Query Builder — lihat section Filter/Sort/Search).",
-            "controller": "Modules\\Notification\\Http\\Controllers\\NotificationController",
-            "action": "index",
-            "auth": "auth:sanctum",
-            "roles": [],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": "mixed"
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": {}
-            },
-            "response_resource": null,
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [
-                "created_at"
-            ],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": "-created_at",
-            "related_endpoints": [
-                {
-                    "id": "api.",
-                    "method": "GET",
-                    "path": "/api/v1/notifications/unread-count",
-                    "summary": "Ambil daftar notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "GET",
-                    "path": "/api/v1/notifications/{notification}",
-                    "summary": "Ambil detail notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "PATCH",
-                    "path": "/api/v1/notifications/{notification}/read",
-                    "summary": "Ubah notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "POST",
-                    "path": "/api/v1/notifications/read-all",
-                    "summary": "Buat notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "DELETE",
-                    "path": "/api/v1/notifications/{notification}",
-                    "summary": "Hapus notifikasi"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.",
-            "module_slug": "notification",
-            "module_name": "Notification",
-            "method": "POST",
-            "path": "/api/v1/notifications/read-all",
-            "summary": "Buat notifikasi",
-            "description": "Buat notifikasi.\nResponse: 201 dengan data resource yang baru dibuat. Trigger side-effects sesuai domain (event/job/notifikasi) — lihat section Side Effects.\nOtorisasi: default policy modul.",
-            "purpose": "Membuat resource baru atau memicu aksi domain.",
-            "controller": "Modules\\Notification\\Http\\Controllers\\NotificationController",
-            "action": "markAllAsRead",
-            "auth": "auth:sanctum",
-            "roles": [],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": "object|null"
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "All notifications marked as read",
-                "data": {}
-            },
-            "response_resource": null,
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                201,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.",
-                    "method": "GET",
-                    "path": "/api/v1/notifications",
-                    "summary": "Ambil daftar notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "GET",
-                    "path": "/api/v1/notifications/unread-count",
-                    "summary": "Ambil daftar notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "GET",
-                    "path": "/api/v1/notifications/{notification}",
-                    "summary": "Ambil detail notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "PATCH",
-                    "path": "/api/v1/notifications/{notification}/read",
-                    "summary": "Ubah notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "DELETE",
-                    "path": "/api/v1/notifications/{notification}",
-                    "summary": "Hapus notifikasi"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.",
-            "module_slug": "notification",
-            "module_name": "Notification",
-            "method": "GET",
-            "path": "/api/v1/notifications/unread-count",
-            "summary": "Ambil daftar notifikasi",
-            "description": "Ambil daftar notifikasi.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: default policy modul.",
-            "purpose": "Mengembalikan data untuk ditampilkan di UI.",
-            "controller": "Modules\\Notification\\Http\\Controllers\\NotificationController",
-            "action": "unreadCount",
-            "auth": "auth:sanctum",
-            "roles": [],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": "mixed"
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": {}
-            },
-            "response_resource": null,
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.",
-                    "method": "GET",
-                    "path": "/api/v1/notifications",
-                    "summary": "Ambil daftar notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "GET",
-                    "path": "/api/v1/notifications/{notification}",
-                    "summary": "Ambil detail notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "PATCH",
-                    "path": "/api/v1/notifications/{notification}/read",
-                    "summary": "Ubah notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "POST",
-                    "path": "/api/v1/notifications/read-all",
-                    "summary": "Buat notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "DELETE",
-                    "path": "/api/v1/notifications/{notification}",
-                    "summary": "Hapus notifikasi"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.",
-            "module_slug": "notification",
-            "module_name": "Notification",
-            "method": "DELETE",
-            "path": "/api/v1/notifications/{notification}",
-            "summary": "Hapus notifikasi",
-            "description": "Hapus notifikasi.\nResponse: 200/204. Perhatikan aturan revert/soft-delete yang berlaku pada resource ini.\nOtorisasi: default policy modul.",
-            "purpose": "Menghapus resource. Ikuti aturan revert/soft-delete yang berlaku.",
-            "controller": "Modules\\Notification\\Http\\Controllers\\NotificationController",
-            "action": "destroy",
-            "auth": "auth:sanctum",
-            "roles": [],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [
-                {
-                    "name": "notification",
-                    "type": "string",
-                    "required": true,
-                    "description": "Field notification (tipe string)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": "object|null"
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Notification deleted",
-                "data": {}
-            },
-            "response_resource": null,
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                204,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.",
-                    "method": "GET",
-                    "path": "/api/v1/notifications",
-                    "summary": "Ambil daftar notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "GET",
-                    "path": "/api/v1/notifications/unread-count",
-                    "summary": "Ambil daftar notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "GET",
-                    "path": "/api/v1/notifications/{notification}",
-                    "summary": "Ambil detail notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "PATCH",
-                    "path": "/api/v1/notifications/{notification}/read",
-                    "summary": "Ubah notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "POST",
-                    "path": "/api/v1/notifications/read-all",
-                    "summary": "Buat notifikasi"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.",
-            "module_slug": "notification",
-            "module_name": "Notification",
-            "method": "GET",
-            "path": "/api/v1/notifications/{notification}",
-            "summary": "Ambil detail notifikasi",
-            "description": "Ambil detail notifikasi.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: default policy modul.",
-            "purpose": "Mengembalikan data untuk ditampilkan di UI.",
-            "controller": "Modules\\Notification\\Http\\Controllers\\NotificationController",
-            "action": "show",
-            "auth": "auth:sanctum",
-            "roles": [],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [
-                {
-                    "name": "notification",
-                    "type": "string",
-                    "required": true,
-                    "description": "Field notification (tipe string)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": []
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": []
-            },
-            "response_resource": "Modules\\Notification\\Http\\Resources\\NotificationResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.",
-                    "method": "GET",
-                    "path": "/api/v1/notifications",
-                    "summary": "Ambil daftar notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "GET",
-                    "path": "/api/v1/notifications/unread-count",
-                    "summary": "Ambil daftar notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "PATCH",
-                    "path": "/api/v1/notifications/{notification}/read",
-                    "summary": "Ubah notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "POST",
-                    "path": "/api/v1/notifications/read-all",
-                    "summary": "Buat notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "DELETE",
-                    "path": "/api/v1/notifications/{notification}",
-                    "summary": "Hapus notifikasi"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.",
-            "module_slug": "notification",
-            "module_name": "Notification",
-            "method": "PATCH",
-            "path": "/api/v1/notifications/{notification}/read",
-            "summary": "Ubah notifikasi",
-            "description": "Ubah notifikasi.\nResponse: 200 dengan data resource yang sudah diperbarui.\nOtorisasi: default policy modul.",
-            "purpose": "Memperbarui resource yang sudah ada.",
-            "controller": "Modules\\Notification\\Http\\Controllers\\NotificationController",
-            "action": "markAsRead",
-            "auth": "auth:sanctum",
-            "roles": [],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [
-                {
-                    "name": "notification",
-                    "type": "string",
-                    "required": true,
-                    "description": "Field notification (tipe string)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": []
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": []
-            },
-            "response_resource": "Modules\\Notification\\Http\\Resources\\NotificationResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.",
-                    "method": "GET",
-                    "path": "/api/v1/notifications",
-                    "summary": "Ambil daftar notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "GET",
-                    "path": "/api/v1/notifications/unread-count",
-                    "summary": "Ambil daftar notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "GET",
-                    "path": "/api/v1/notifications/{notification}",
-                    "summary": "Ambil detail notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "POST",
-                    "path": "/api/v1/notifications/read-all",
-                    "summary": "Buat notifikasi"
-                },
-                {
-                    "id": "api.",
-                    "method": "DELETE",
-                    "path": "/api/v1/notifications/{notification}",
-                    "summary": "Hapus notifikasi"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
         }
-    ]
+      ],
+      "status_codes": [200, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.",
+      "module_slug": "notification",
+      "module_name": "Notification",
+      "method": "DELETE",
+      "path": "/api/v1/device-tokens",
+      "summary": "Hapus device tokens",
+      "description": "Hapus device tokens.\nResponse: 200/204. Perhatikan aturan revert/soft-delete yang berlaku pada resource ini.\nOtorisasi: default policy modul.",
+      "purpose": "Menghapus resource. Ikuti aturan revert/soft-delete yang berlaku.",
+      "controller": "Modules\\Notification\\Http\\Controllers\\DeviceTokenController",
+      "action": "destroy",
+      "auth": "auth:sanctum",
+      "roles": [],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": "object|null"
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Token removed",
+        "data": {}
+      },
+      "response_resource": null,
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [204, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.",
+          "method": "POST",
+          "path": "/api/v1/device-tokens",
+          "summary": "Buat device tokens"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.",
+      "module_slug": "notification",
+      "module_name": "Notification",
+      "method": "POST",
+      "path": "/api/v1/device-tokens",
+      "summary": "Buat device tokens",
+      "description": "Buat device tokens.\nResponse: 201 dengan data resource yang baru dibuat. Trigger side-effects sesuai domain (event/job/notifikasi) — lihat section Side Effects.\nOtorisasi: default policy modul.",
+      "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membuat resource baru atau memicu aksi domain.",
+      "controller": "Modules\\Notification\\Http\\Controllers\\DeviceTokenController",
+      "action": "store",
+      "auth": "auth:sanctum",
+      "roles": [],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": "Modules\\Notification\\Http\\Requests\\StoreDeviceTokenRequest",
+      "path_params": [],
+      "query_params": [],
+      "body_schema": {
+        "fcm_token": {
+          "type": "string",
+          "required": true,
+          "rules": ["required", "string", "max:500"],
+          "constraints": {
+            "max": 500
+          },
+          "description": "Field fcm token (tipe string)."
+        },
+        "device_id": {
+          "type": "string",
+          "required": false,
+          "rules": ["nullable", "string", "max:255"],
+          "constraints": {
+            "max": 255
+          },
+          "description": "ID device (referensi ke resource device)."
+        },
+        "platform": {
+          "type": "string",
+          "required": false,
+          "rules": ["nullable", "string", "in:android,ios"],
+          "enum": ["android", "ios"],
+          "description": "Field platform (tipe string)."
+        }
+      },
+      "body_example": {
+        "fcm_token": "string",
+        "device_id": 1,
+        "platform": "android"
+      },
+      "validation": [
+        "fcm_token: required|string|max:500",
+        "device_id: nullable|string|max:255",
+        "platform: nullable|string|in:android,ios"
+      ],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": []
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": []
+      },
+      "response_resource": "Modules\\Notification\\Http\\Resources\\DeviceTokenResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [201, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.",
+          "method": "DELETE",
+          "path": "/api/v1/device-tokens",
+          "summary": "Hapus device tokens"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.",
+      "module_slug": "notification",
+      "module_name": "Notification",
+      "method": "GET",
+      "path": "/api/v1/notifications",
+      "summary": "Ambil daftar notifikasi",
+      "description": "Ambil daftar notifikasi.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: default policy modul.",
+      "purpose": "Mendukung filter, sort, search, dan pagination (Spatie Query Builder — lihat section Filter/Sort/Search).",
+      "controller": "Modules\\Notification\\Http\\Controllers\\NotificationController",
+      "action": "index",
+      "auth": "auth:sanctum",
+      "roles": [],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": "mixed"
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": {}
+      },
+      "response_resource": null,
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": ["created_at"],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": "-created_at",
+      "related_endpoints": [
+        {
+          "id": "api.",
+          "method": "GET",
+          "path": "/api/v1/notifications/unread-count",
+          "summary": "Ambil daftar notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "GET",
+          "path": "/api/v1/notifications/{notification}",
+          "summary": "Ambil detail notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "PATCH",
+          "path": "/api/v1/notifications/{notification}/read",
+          "summary": "Ubah notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "POST",
+          "path": "/api/v1/notifications/read-all",
+          "summary": "Buat notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "DELETE",
+          "path": "/api/v1/notifications/{notification}",
+          "summary": "Hapus notifikasi"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.",
+      "module_slug": "notification",
+      "module_name": "Notification",
+      "method": "POST",
+      "path": "/api/v1/notifications/read-all",
+      "summary": "Buat notifikasi",
+      "description": "Buat notifikasi.\nResponse: 201 dengan data resource yang baru dibuat. Trigger side-effects sesuai domain (event/job/notifikasi) — lihat section Side Effects.\nOtorisasi: default policy modul.",
+      "purpose": "Membuat resource baru atau memicu aksi domain.",
+      "controller": "Modules\\Notification\\Http\\Controllers\\NotificationController",
+      "action": "markAllAsRead",
+      "auth": "auth:sanctum",
+      "roles": [],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": "object|null"
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "All notifications marked as read",
+        "data": {}
+      },
+      "response_resource": null,
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [201, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.",
+          "method": "GET",
+          "path": "/api/v1/notifications",
+          "summary": "Ambil daftar notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "GET",
+          "path": "/api/v1/notifications/unread-count",
+          "summary": "Ambil daftar notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "GET",
+          "path": "/api/v1/notifications/{notification}",
+          "summary": "Ambil detail notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "PATCH",
+          "path": "/api/v1/notifications/{notification}/read",
+          "summary": "Ubah notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "DELETE",
+          "path": "/api/v1/notifications/{notification}",
+          "summary": "Hapus notifikasi"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.",
+      "module_slug": "notification",
+      "module_name": "Notification",
+      "method": "GET",
+      "path": "/api/v1/notifications/unread-count",
+      "summary": "Ambil daftar notifikasi",
+      "description": "Ambil daftar notifikasi.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: default policy modul.",
+      "purpose": "Mengembalikan data untuk ditampilkan di UI.",
+      "controller": "Modules\\Notification\\Http\\Controllers\\NotificationController",
+      "action": "unreadCount",
+      "auth": "auth:sanctum",
+      "roles": [],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": "mixed"
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": {}
+      },
+      "response_resource": null,
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.",
+          "method": "GET",
+          "path": "/api/v1/notifications",
+          "summary": "Ambil daftar notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "GET",
+          "path": "/api/v1/notifications/{notification}",
+          "summary": "Ambil detail notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "PATCH",
+          "path": "/api/v1/notifications/{notification}/read",
+          "summary": "Ubah notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "POST",
+          "path": "/api/v1/notifications/read-all",
+          "summary": "Buat notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "DELETE",
+          "path": "/api/v1/notifications/{notification}",
+          "summary": "Hapus notifikasi"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.",
+      "module_slug": "notification",
+      "module_name": "Notification",
+      "method": "DELETE",
+      "path": "/api/v1/notifications/{notification}",
+      "summary": "Hapus notifikasi",
+      "description": "Hapus notifikasi.\nResponse: 200/204. Perhatikan aturan revert/soft-delete yang berlaku pada resource ini.\nOtorisasi: default policy modul.",
+      "purpose": "Menghapus resource. Ikuti aturan revert/soft-delete yang berlaku.",
+      "controller": "Modules\\Notification\\Http\\Controllers\\NotificationController",
+      "action": "destroy",
+      "auth": "auth:sanctum",
+      "roles": [],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [
+        {
+          "name": "notification",
+          "type": "string",
+          "required": true,
+          "description": "Field notification (tipe string)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": "object|null"
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Notification deleted",
+        "data": {}
+      },
+      "response_resource": null,
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [204, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.",
+          "method": "GET",
+          "path": "/api/v1/notifications",
+          "summary": "Ambil daftar notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "GET",
+          "path": "/api/v1/notifications/unread-count",
+          "summary": "Ambil daftar notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "GET",
+          "path": "/api/v1/notifications/{notification}",
+          "summary": "Ambil detail notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "PATCH",
+          "path": "/api/v1/notifications/{notification}/read",
+          "summary": "Ubah notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "POST",
+          "path": "/api/v1/notifications/read-all",
+          "summary": "Buat notifikasi"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.",
+      "module_slug": "notification",
+      "module_name": "Notification",
+      "method": "GET",
+      "path": "/api/v1/notifications/{notification}",
+      "summary": "Ambil detail notifikasi",
+      "description": "Ambil detail notifikasi.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: default policy modul.",
+      "purpose": "Mengembalikan data untuk ditampilkan di UI.",
+      "controller": "Modules\\Notification\\Http\\Controllers\\NotificationController",
+      "action": "show",
+      "auth": "auth:sanctum",
+      "roles": [],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [
+        {
+          "name": "notification",
+          "type": "string",
+          "required": true,
+          "description": "Field notification (tipe string)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": []
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": []
+      },
+      "response_resource": "Modules\\Notification\\Http\\Resources\\NotificationResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.",
+          "method": "GET",
+          "path": "/api/v1/notifications",
+          "summary": "Ambil daftar notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "GET",
+          "path": "/api/v1/notifications/unread-count",
+          "summary": "Ambil daftar notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "PATCH",
+          "path": "/api/v1/notifications/{notification}/read",
+          "summary": "Ubah notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "POST",
+          "path": "/api/v1/notifications/read-all",
+          "summary": "Buat notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "DELETE",
+          "path": "/api/v1/notifications/{notification}",
+          "summary": "Hapus notifikasi"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.",
+      "module_slug": "notification",
+      "module_name": "Notification",
+      "method": "PATCH",
+      "path": "/api/v1/notifications/{notification}/read",
+      "summary": "Ubah notifikasi",
+      "description": "Ubah notifikasi.\nResponse: 200 dengan data resource yang sudah diperbarui.\nOtorisasi: default policy modul.",
+      "purpose": "Memperbarui resource yang sudah ada.",
+      "controller": "Modules\\Notification\\Http\\Controllers\\NotificationController",
+      "action": "markAsRead",
+      "auth": "auth:sanctum",
+      "roles": [],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [
+        {
+          "name": "notification",
+          "type": "string",
+          "required": true,
+          "description": "Field notification (tipe string)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": []
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": []
+      },
+      "response_resource": "Modules\\Notification\\Http\\Resources\\NotificationResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.",
+          "method": "GET",
+          "path": "/api/v1/notifications",
+          "summary": "Ambil daftar notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "GET",
+          "path": "/api/v1/notifications/unread-count",
+          "summary": "Ambil daftar notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "GET",
+          "path": "/api/v1/notifications/{notification}",
+          "summary": "Ambil detail notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "POST",
+          "path": "/api/v1/notifications/read-all",
+          "summary": "Buat notifikasi"
+        },
+        {
+          "id": "api.",
+          "method": "DELETE",
+          "path": "/api/v1/notifications/{notification}",
+          "summary": "Hapus notifikasi"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    }
+  ]
 }

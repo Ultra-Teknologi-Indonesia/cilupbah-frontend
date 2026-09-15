@@ -550,9 +550,7 @@ export function FulfillmentCardList({
             return sources.size === 1 ? selectedOrders[0]?.raw.source : null;
           })()}
           shippingProvider={
-            shipmentProviderKeys.size === 1
-              ? selectedShipmentProvider
-              : null
+            shipmentProviderKeys.size === 1 ? selectedShipmentProvider : null
           }
         />
       )}

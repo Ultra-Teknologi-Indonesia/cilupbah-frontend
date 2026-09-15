@@ -1,137 +1,137 @@
 {
-    "generated_at": "2026-08-05T03:47:45+00:00",
-    "version": "1.0.0",
-    "totals": {
-        "modules": 18,
-        "endpoints": 858,
-        "undocumented": 0
+  "generated_at": "2026-08-05T03:47:45+00:00",
+  "version": "1.0.0",
+  "totals": {
+    "modules": 18,
+    "endpoints": 858,
+    "undocumented": 0
+  },
+  "modules": [
+    {
+      "slug": "auth",
+      "name": "Auth",
+      "description": "Autentikasi, pengguna, role/permission (RBAC), profil saya.",
+      "endpoints_count": 34,
+      "undocumented": 0
     },
-    "modules": [
-        {
-            "slug": "auth",
-            "name": "Auth",
-            "description": "Autentikasi, pengguna, role/permission (RBAC), profil saya.",
-            "endpoints_count": 34,
-            "undocumented": 0
-        },
-        {
-            "slug": "channel",
-            "name": "Channel",
-            "description": "Integrasi marketplace: Shopee, Lazada, TikTok, WooCommerce.",
-            "endpoints_count": 102,
-            "undocumented": 0
-        },
-        {
-            "slug": "dashboard",
-            "name": "Dashboard",
-            "description": "KPI, ringkasan, antrian pekerjaan.",
-            "endpoints_count": 2,
-            "undocumented": 0
-        },
-        {
-            "slug": "finance",
-            "name": "Finance",
-            "description": "Kas & bank, jurnal, akun COA, mapping akuntansi.",
-            "endpoints_count": 1,
-            "undocumented": 0
-        },
-        {
-            "slug": "inbound",
-            "name": "Inbound",
-            "description": "Penerimaan barang (dari PO / Transfer masuk) & penempatan (putaway).",
-            "endpoints_count": 31,
-            "undocumented": 0
-        },
-        {
-            "slug": "inventory",
-            "name": "Inventory",
-            "description": "Stok, mutasi, transfer bin, transfer antar gudang, penyesuaian, opname.",
-            "endpoints_count": 167,
-            "undocumented": 0
-        },
-        {
-            "slug": "notification",
-            "name": "Notification",
-            "description": "Notifikasi in-app, WA, email.",
-            "endpoints_count": 9,
-            "undocumented": 0
-        },
-        {
-            "slug": "outbound",
-            "name": "Outbound",
-            "description": "Picking, packing, shipping, kurir, resi.",
-            "endpoints_count": 93,
-            "undocumented": 0
-        },
-        {
-            "slug": "product",
-            "name": "Product",
-            "description": "Produk, varian, bundle, mapping channel, kategori, merek.",
-            "endpoints_count": 144,
-            "undocumented": 0
-        },
-        {
-            "slug": "purchase",
-            "name": "Purchase",
-            "description": "Pesanan pembelian (PO), tagihan (bill), pembayaran.",
-            "endpoints_count": 20,
-            "undocumented": 0
-        },
-        {
-            "slug": "region",
-            "name": "Region",
-            "description": "Master wilayah (provinsi, kota, kecamatan, kelurahan).",
-            "endpoints_count": 5,
-            "undocumented": 0
-        },
-        {
-            "slug": "report",
-            "name": "Report",
-            "description": "Laporan HPP, persediaan, retur, stok minus, dsb.",
-            "endpoints_count": 38,
-            "undocumented": 0
-        },
-        {
-            "slug": "sales",
-            "name": "Sales",
-            "description": "Pesanan penjualan, retur, invoice, pembayaran, toko internal.",
-            "endpoints_count": 119,
-            "undocumented": 0
-        },
-        {
-            "slug": "supplier",
-            "name": "Supplier",
-            "description": "Kontak pemasok & pelanggan.",
-            "endpoints_count": 28,
-            "undocumented": 0
-        },
-        {
-            "slug": "tax",
-            "name": "Tax",
-            "description": "Master pajak.",
-            "endpoints_count": 6,
-            "undocumented": 0
-        },
-        {
-            "slug": "warehouse",
-            "name": "Warehouse",
-            "description": "Gudang, zona, rak (bin), lokasi.",
-            "endpoints_count": 43,
-            "undocumented": 0
-        },
-        {
-            "slug": "warranty",
-            "name": "Warranty",
-            "description": "Garansi produk.",
-            "endpoints_count": 6,
-            "undocumented": 0
-        },
-        {
-            "slug": "webhook",
-            "name": "Webhook",
-            "description": "Endpoint webhook masuk dari channel.",
-            "endpoints_count": 10,
-            "undocumented": 0
-        }
-    ]
+    {
+      "slug": "channel",
+      "name": "Channel",
+      "description": "Integrasi marketplace: Shopee, Lazada, TikTok, WooCommerce.",
+      "endpoints_count": 102,
+      "undocumented": 0
+    },
+    {
+      "slug": "dashboard",
+      "name": "Dashboard",
+      "description": "KPI, ringkasan, antrian pekerjaan.",
+      "endpoints_count": 2,
+      "undocumented": 0
+    },
+    {
+      "slug": "finance",
+      "name": "Finance",
+      "description": "Kas & bank, jurnal, akun COA, mapping akuntansi.",
+      "endpoints_count": 1,
+      "undocumented": 0
+    },
+    {
+      "slug": "inbound",
+      "name": "Inbound",
+      "description": "Penerimaan barang (dari PO / Transfer masuk) & penempatan (putaway).",
+      "endpoints_count": 31,
+      "undocumented": 0
+    },
+    {
+      "slug": "inventory",
+      "name": "Inventory",
+      "description": "Stok, mutasi, transfer bin, transfer antar gudang, penyesuaian, opname.",
+      "endpoints_count": 167,
+      "undocumented": 0
+    },
+    {
+      "slug": "notification",
+      "name": "Notification",
+      "description": "Notifikasi in-app, WA, email.",
+      "endpoints_count": 9,
+      "undocumented": 0
+    },
+    {
+      "slug": "outbound",
+      "name": "Outbound",
+      "description": "Picking, packing, shipping, kurir, resi.",
+      "endpoints_count": 93,
+      "undocumented": 0
+    },
+    {
+      "slug": "product",
+      "name": "Product",
+      "description": "Produk, varian, bundle, mapping channel, kategori, merek.",
+      "endpoints_count": 144,
+      "undocumented": 0
+    },
+    {
+      "slug": "purchase",
+      "name": "Purchase",
+      "description": "Pesanan pembelian (PO), tagihan (bill), pembayaran.",
+      "endpoints_count": 20,
+      "undocumented": 0
+    },
+    {
+      "slug": "region",
+      "name": "Region",
+      "description": "Master wilayah (provinsi, kota, kecamatan, kelurahan).",
+      "endpoints_count": 5,
+      "undocumented": 0
+    },
+    {
+      "slug": "report",
+      "name": "Report",
+      "description": "Laporan HPP, persediaan, retur, stok minus, dsb.",
+      "endpoints_count": 38,
+      "undocumented": 0
+    },
+    {
+      "slug": "sales",
+      "name": "Sales",
+      "description": "Pesanan penjualan, retur, invoice, pembayaran, toko internal.",
+      "endpoints_count": 119,
+      "undocumented": 0
+    },
+    {
+      "slug": "supplier",
+      "name": "Supplier",
+      "description": "Kontak pemasok & pelanggan.",
+      "endpoints_count": 28,
+      "undocumented": 0
+    },
+    {
+      "slug": "tax",
+      "name": "Tax",
+      "description": "Master pajak.",
+      "endpoints_count": 6,
+      "undocumented": 0
+    },
+    {
+      "slug": "warehouse",
+      "name": "Warehouse",
+      "description": "Gudang, zona, rak (bin), lokasi.",
+      "endpoints_count": 43,
+      "undocumented": 0
+    },
+    {
+      "slug": "warranty",
+      "name": "Warranty",
+      "description": "Garansi produk.",
+      "endpoints_count": 6,
+      "undocumented": 0
+    },
+    {
+      "slug": "webhook",
+      "name": "Webhook",
+      "description": "Endpoint webhook masuk dari channel.",
+      "endpoints_count": 10,
+      "undocumented": 0
+    }
+  ]
 }

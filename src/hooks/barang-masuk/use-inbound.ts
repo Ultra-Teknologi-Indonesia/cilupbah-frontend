@@ -113,7 +113,8 @@ export function useBulkCancelInbounds() {
         const details = (res?.failed ?? [])
           .map((item) => {
             const number = item.transaction_number?.trim();
-            const message = item.message?.trim() || "Tidak ada detail kegagalan.";
+            const message =
+              item.message?.trim() || "Tidak ada detail kegagalan.";
             return number ? `${number}: ${message}` : message;
           })
           .filter(Boolean)

@@ -56,7 +56,6 @@ export function DashboardControls({
           </DropdownMenuRadioGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-
     </div>
   );
 }

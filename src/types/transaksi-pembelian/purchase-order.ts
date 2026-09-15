@@ -112,8 +112,9 @@ export interface PurchaseOrderFormData {
   items: PurchaseOrderItemFormData[];
 }
 
-export interface PurchaseOrderPatchData
-  extends Partial<Omit<PurchaseOrderFormData, "items">> {
+export interface PurchaseOrderPatchData extends Partial<
+  Omit<PurchaseOrderFormData, "items">
+> {
   changes?: {
     create?: Omit<PurchaseOrderItemFormData, "id" | "received_qty">[];
     update?: Array<

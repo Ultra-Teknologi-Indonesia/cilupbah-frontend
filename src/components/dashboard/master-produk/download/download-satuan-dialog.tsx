@@ -475,23 +475,25 @@ export function DownloadSatuanDialog({
                             <p className="line-clamp-1 text-sm font-medium">
                               {item.name}
                             </p>
-                            {item.hasBundleMapping && !item.hasRegularMapping && (
-                              <span className="shrink-0 rounded bg-emerald-500/10 px-1.5 py-0.5 text-3xs font-medium text-emerald-600 dark:text-emerald-400">
-                                Terhubung ke Bundle
-                              </span>
-                            )}
-                            {item.alreadyDownloaded && !item.hasBundleMapping && (
-                              <span className="shrink-0 rounded bg-emerald-500/10 px-1.5 py-0.5 text-3xs font-medium text-emerald-600 dark:text-emerald-400">
-                                Terhubung ke Master
-                              </span>
-                            )}
+                            {item.hasBundleMapping &&
+                              !item.hasRegularMapping && (
+                                <span className="shrink-0 rounded bg-emerald-500/10 px-1.5 py-0.5 text-3xs font-medium text-emerald-600 dark:text-emerald-400">
+                                  Terhubung ke Bundle
+                                </span>
+                              )}
+                            {item.alreadyDownloaded &&
+                              !item.hasBundleMapping && (
+                                <span className="shrink-0 rounded bg-emerald-500/10 px-1.5 py-0.5 text-3xs font-medium text-emerald-600 dark:text-emerald-400">
+                                  Terhubung ke Master
+                                </span>
+                              )}
                             {item.downloadAction === "download" &&
                               item.masterProductId &&
                               item.masterStatus !== "deleted" && (
-                              <span className="shrink-0 rounded bg-amber-500/10 px-1.5 py-0.5 text-3xs font-medium text-amber-700 dark:text-amber-400">
-                                Mapping perlu disinkronkan
-                              </span>
-                            )}
+                                <span className="shrink-0 rounded bg-amber-500/10 px-1.5 py-0.5 text-3xs font-medium text-amber-700 dark:text-amber-400">
+                                  Mapping perlu disinkronkan
+                                </span>
+                              )}
                           </div>
                           <p
                             className="truncate font-mono text-xs text-muted-foreground"
@@ -499,9 +501,12 @@ export function DownloadSatuanDialog({
                           >
                             SKU: {item.sellerSku ?? "—"}
                             {item.sellerSkus.length > 1 && (
-                              <span className="font-sans"> · {item.sellerSkus.length} varian</span>
-                            )}
-                            {" "}·{" "}
+                              <span className="font-sans">
+                                {" "}
+                                · {item.sellerSkus.length} varian
+                              </span>
+                            )}{" "}
+                            ·{" "}
                             {item.shopName ??
                               item.channelName ??
                               item.channelCode}

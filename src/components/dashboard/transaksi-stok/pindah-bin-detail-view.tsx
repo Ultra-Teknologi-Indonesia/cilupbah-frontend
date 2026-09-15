@@ -225,17 +225,19 @@ export function PindahBinDetailView({ id }: { id: string }) {
         ]}
         actions={
           <div className="flex items-center gap-2">
-            {canEditTransfer && <Button
-              size="sm"
-              onClick={() =>
-                router.push(
-                  `/dashboard/transaksi-stok/pindah-bin/${trf.id}/edit`,
-                )
-              }
-            >
-              <PencilIcon className="mr-1.5 size-3.5" />
-              Edit
-            </Button>}
+            {canEditTransfer && (
+              <Button
+                size="sm"
+                onClick={() =>
+                  router.push(
+                    `/dashboard/transaksi-stok/pindah-bin/${trf.id}/edit`,
+                  )
+                }
+              >
+                <PencilIcon className="mr-1.5 size-3.5" />
+                Edit
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="icon-sm"

@@ -1,10 +1,7 @@
 export type BulkLabelBatchStatus = "processing" | "ready" | "failed";
 
 export type BulkLabelArchiveStatus =
-  | "pending"
-  | "processing"
-  | "archived"
-  | "failed";
+  "pending" | "processing" | "archived" | "failed";
 
 export type BulkLabelItemStatus =
   | "pending"

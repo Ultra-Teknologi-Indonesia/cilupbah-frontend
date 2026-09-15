@@ -71,7 +71,8 @@ export function BinTransferReceiptListTable() {
   const { can } = usePermissions();
   const canEditTransfer = can("edit-pindah-bin");
   const canExportTransfer = can("export-pindah-bin");
-  const [revertTarget, setRevertTarget] = useState<BinTransferReceiptListItem | null>(null);
+  const [revertTarget, setRevertTarget] =
+    useState<BinTransferReceiptListItem | null>(null);
 
   const items = useMemo(
     () => (data?.data ?? []) as BinTransferReceiptListItem[],
@@ -180,7 +181,9 @@ export function BinTransferReceiptListTable() {
                 aria-label="Lihat Detail"
                 title="Lihat Detail"
               >
-                <Link href={`/dashboard/transaksi-stok/penerimaan-transfer/${item.id}`}>
+                <Link
+                  href={`/dashboard/transaksi-stok/penerimaan-transfer/${item.id}`}
+                >
                   <EyeIcon className="size-3.5" />
                 </Link>
               </Button>

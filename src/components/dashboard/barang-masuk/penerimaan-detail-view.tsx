@@ -230,20 +230,22 @@ export function PenerimaanDetailView({ id }: { id: string }) {
             onWithdraw={(userId) => withdrawMutation.mutate({ userId })}
           />
           <div className="flex items-center justify-end gap-2 print:hidden">
-            {canExportInbound && <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                window.open(
-                  `/dashboard/document-preview/inbound-receipt/${inbound.id}`,
-                  "_blank",
-                  "noopener,noreferrer",
-                )
-              }
-            >
-              <PrinterIcon className="mr-1.5 size-4" />
-              Cetak
-            </Button>}
+            {canExportInbound && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  window.open(
+                    `/dashboard/document-preview/inbound-receipt/${inbound.id}`,
+                    "_blank",
+                    "noopener,noreferrer",
+                  )
+                }
+              >
+                <PrinterIcon className="mr-1.5 size-4" />
+                Cetak
+              </Button>
+            )}
             {canFinalize && (
               <Button
                 size="sm"

@@ -1,1 +1,191 @@
-{"nodes": [{"id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_produk_lifecycle_fe_plan_md", "label": "PRODUK_LIFECYCLE_FE_PLAN.md", "file_type": "document", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L1"}, {"id": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio", "label": "Plan \u2014 Lengkapi FE Alur Pengelolaan Produk (selaras Jubelio)", "file_type": "document", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L1"}, {"id": "cilupbah_fe_produk_lifecycle_fe_plan_konteks", "label": "Konteks", "file_type": "document", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L3"}, {"id": "cilupbah_fe_produk_lifecycle_fe_plan_ia_navigasi_rekomendasi_ux_page_vs_tab", "label": "IA & Navigasi \u2014 rekomendasi UX (page vs tab)", "file_type": "document", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L28"}, {"id": "cilupbah_fe_produk_lifecycle_fe_plan_endpoint_be_acuan_sudah_ada", "label": "Endpoint BE (acuan, sudah ada)", "file_type": "document", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L64"}, {"id": "cilupbah_fe_produk_lifecycle_fe_plan_fase_u_upload_ke_marketplace_prioritas_1", "label": "FASE U \u2014 Upload ke marketplace  \ud83d\udd34 prioritas 1", "file_type": "document", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L94"}, {"id": "cilupbah_fe_produk_lifecycle_fe_plan_fase_l_listing_marketplace_produk_channel_prioritas_2", "label": "FASE L \u2014 Listing Marketplace (Produk Channel)  \ud83d\udd34 prioritas 2", "file_type": "document", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L124"}, {"id": "cilupbah_fe_produk_lifecycle_fe_plan_fase_m_pantauan_monitoring_prioritas_3", "label": "FASE M \u2014 Pantauan / Monitoring  \ud83d\udfe0 prioritas 3", "file_type": "document", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L154"}, {"id": "cilupbah_fe_produk_lifecycle_fe_plan_fase_r_in_review_daftar_review_prioritas_4_kecil", "label": "FASE R \u2014 In Review (daftar review)  \ud83d\udfe2 prioritas 4 (kecil)", "file_type": "document", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L180"}, {"id": "cilupbah_fe_produk_lifecycle_fe_plan_fase_n_naikkan_produk_promosi_iklan_boost_opsional_dikerjakan_terakhir", "label": "FASE N \u2014 Naikkan Produk = Promosi & Iklan (boost)  \u26aa OPSIONAL \u00b7 DIKERJAKAN TERAKHIR", "file_type": "document", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L193"}, {"id": "cilupbah_fe_produk_lifecycle_fe_plan_urutan_prioritas", "label": "Urutan & prioritas", "file_type": "document", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L243"}, {"id": "cilupbah_fe_produk_lifecycle_fe_plan_catatan_risiko", "label": "Catatan & risiko", "file_type": "document", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L258"}], "edges": [{"source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_produk_lifecycle_fe_plan_md", "target": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L1", "weight": 1.0}, {"source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio", "target": "cilupbah_fe_produk_lifecycle_fe_plan_konteks", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L3", "weight": 1.0}, {"source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio", "target": "cilupbah_fe_produk_lifecycle_fe_plan_ia_navigasi_rekomendasi_ux_page_vs_tab", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L28", "weight": 1.0}, {"source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio", "target": "cilupbah_fe_produk_lifecycle_fe_plan_endpoint_be_acuan_sudah_ada", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L64", "weight": 1.0}, {"source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio", "target": "cilupbah_fe_produk_lifecycle_fe_plan_fase_u_upload_ke_marketplace_prioritas_1", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L94", "weight": 1.0}, {"source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio", "target": "cilupbah_fe_produk_lifecycle_fe_plan_fase_l_listing_marketplace_produk_channel_prioritas_2", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L124", "weight": 1.0}, {"source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio", "target": "cilupbah_fe_produk_lifecycle_fe_plan_fase_m_pantauan_monitoring_prioritas_3", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L154", "weight": 1.0}, {"source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio", "target": "cilupbah_fe_produk_lifecycle_fe_plan_fase_r_in_review_daftar_review_prioritas_4_kecil", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L180", "weight": 1.0}, {"source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio", "target": "cilupbah_fe_produk_lifecycle_fe_plan_fase_n_naikkan_produk_promosi_iklan_boost_opsional_dikerjakan_terakhir", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L193", "weight": 1.0}, {"source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio", "target": "cilupbah_fe_produk_lifecycle_fe_plan_urutan_prioritas", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L243", "weight": 1.0}, {"source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio", "target": "cilupbah_fe_produk_lifecycle_fe_plan_catatan_risiko", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md", "source_location": "L258", "weight": 1.0}], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_produk_lifecycle_fe_plan_md",
+      "label": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "file_type": "document",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio",
+      "label": "Plan \u2014 Lengkapi FE Alur Pengelolaan Produk (selaras Jubelio)",
+      "file_type": "document",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_produk_lifecycle_fe_plan_konteks",
+      "label": "Konteks",
+      "file_type": "document",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L3"
+    },
+    {
+      "id": "cilupbah_fe_produk_lifecycle_fe_plan_ia_navigasi_rekomendasi_ux_page_vs_tab",
+      "label": "IA & Navigasi \u2014 rekomendasi UX (page vs tab)",
+      "file_type": "document",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L28"
+    },
+    {
+      "id": "cilupbah_fe_produk_lifecycle_fe_plan_endpoint_be_acuan_sudah_ada",
+      "label": "Endpoint BE (acuan, sudah ada)",
+      "file_type": "document",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L64"
+    },
+    {
+      "id": "cilupbah_fe_produk_lifecycle_fe_plan_fase_u_upload_ke_marketplace_prioritas_1",
+      "label": "FASE U \u2014 Upload ke marketplace  \ud83d\udd34 prioritas 1",
+      "file_type": "document",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L94"
+    },
+    {
+      "id": "cilupbah_fe_produk_lifecycle_fe_plan_fase_l_listing_marketplace_produk_channel_prioritas_2",
+      "label": "FASE L \u2014 Listing Marketplace (Produk Channel)  \ud83d\udd34 prioritas 2",
+      "file_type": "document",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L124"
+    },
+    {
+      "id": "cilupbah_fe_produk_lifecycle_fe_plan_fase_m_pantauan_monitoring_prioritas_3",
+      "label": "FASE M \u2014 Pantauan / Monitoring  \ud83d\udfe0 prioritas 3",
+      "file_type": "document",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L154"
+    },
+    {
+      "id": "cilupbah_fe_produk_lifecycle_fe_plan_fase_r_in_review_daftar_review_prioritas_4_kecil",
+      "label": "FASE R \u2014 In Review (daftar review)  \ud83d\udfe2 prioritas 4 (kecil)",
+      "file_type": "document",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L180"
+    },
+    {
+      "id": "cilupbah_fe_produk_lifecycle_fe_plan_fase_n_naikkan_produk_promosi_iklan_boost_opsional_dikerjakan_terakhir",
+      "label": "FASE N \u2014 Naikkan Produk = Promosi & Iklan (boost)  \u26aa OPSIONAL \u00b7 DIKERJAKAN TERAKHIR",
+      "file_type": "document",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L193"
+    },
+    {
+      "id": "cilupbah_fe_produk_lifecycle_fe_plan_urutan_prioritas",
+      "label": "Urutan & prioritas",
+      "file_type": "document",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L243"
+    },
+    {
+      "id": "cilupbah_fe_produk_lifecycle_fe_plan_catatan_risiko",
+      "label": "Catatan & risiko",
+      "file_type": "document",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L258"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_produk_lifecycle_fe_plan_md",
+      "target": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio",
+      "target": "cilupbah_fe_produk_lifecycle_fe_plan_konteks",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio",
+      "target": "cilupbah_fe_produk_lifecycle_fe_plan_ia_navigasi_rekomendasi_ux_page_vs_tab",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio",
+      "target": "cilupbah_fe_produk_lifecycle_fe_plan_endpoint_be_acuan_sudah_ada",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L64",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio",
+      "target": "cilupbah_fe_produk_lifecycle_fe_plan_fase_u_upload_ke_marketplace_prioritas_1",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L94",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio",
+      "target": "cilupbah_fe_produk_lifecycle_fe_plan_fase_l_listing_marketplace_produk_channel_prioritas_2",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L124",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio",
+      "target": "cilupbah_fe_produk_lifecycle_fe_plan_fase_m_pantauan_monitoring_prioritas_3",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L154",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio",
+      "target": "cilupbah_fe_produk_lifecycle_fe_plan_fase_r_in_review_daftar_review_prioritas_4_kecil",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L180",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio",
+      "target": "cilupbah_fe_produk_lifecycle_fe_plan_fase_n_naikkan_produk_promosi_iklan_boost_opsional_dikerjakan_terakhir",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L193",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio",
+      "target": "cilupbah_fe_produk_lifecycle_fe_plan_urutan_prioritas",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L243",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_produk_lifecycle_fe_plan_plan_lengkapi_fe_alur_pengelolaan_produk_selaras_jubelio",
+      "target": "cilupbah_fe_produk_lifecycle_fe_plan_catatan_risiko",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRODUK_LIFECYCLE_FE_PLAN.md",
+      "source_location": "L258",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

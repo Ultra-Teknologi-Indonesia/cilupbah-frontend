@@ -148,8 +148,8 @@ export function DeleteOrderDialog({
           <DialogDescription>
             {outcomeDescription ?? (
               <>
-                Pilih alasan pesanan dihapus dari alur fulfillment. Pesanan
-                akan dikembalikan ke tahap sebelumnya sesuai proses saat ini.
+                Pilih alasan pesanan dihapus dari alur fulfillment. Pesanan akan
+                dikembalikan ke tahap sebelumnya sesuai proses saat ini.
               </>
             )}
           </DialogDescription>

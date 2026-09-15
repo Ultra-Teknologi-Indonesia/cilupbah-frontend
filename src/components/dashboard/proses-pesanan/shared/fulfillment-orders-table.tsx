@@ -742,8 +742,7 @@ export function FulfillmentOrdersTable({
       cetakLabel: actions.cetakLabel && canViewShipping,
       cetakPicklist: actions.cetakPicklist && canViewPicking,
       cetakFaktur: actions.cetakFaktur && canViewOrder,
-      fakturLabel:
-        actions.fakturLabel && canViewOrder && canViewShipping,
+      fakturLabel: actions.fakturLabel && canViewOrder && canViewShipping,
       suratJalan: actions.suratJalan && canViewOrder,
       siapDikirim: actions.siapDikirim && canEditOrder,
       selesaikanPesanan: actions.selesaikanPesanan && canEditOrder,
@@ -1233,7 +1232,9 @@ export function FulfillmentOrdersTable({
                     : undefined
                 }
                 onRetryPickup={canEditOrder ? handleRetryPickup : undefined}
-                onDismissCancel={canEditShipping ? handleDismissCancel : undefined}
+                onDismissCancel={
+                  canEditShipping ? handleDismissCancel : undefined
+                }
                 onDeleteOrder={canDeleteOrder ? setDeleteTarget : undefined}
                 shipPending={readyToShip.isPending}
                 completePending={markComplete.isPending}

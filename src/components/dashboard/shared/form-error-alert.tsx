@@ -30,7 +30,10 @@ export function FormErrorAlert({
         {items.length > 0 ? (
           <ul className="max-h-72 list-disc space-y-0.5 overflow-y-auto pl-4 text-sm text-destructive/90">
             {items.map((it, i) => (
-              <li key={`${it.label}-${i}`} className="whitespace-pre-line break-words">
+              <li
+                key={`${it.label}-${i}`}
+                className="whitespace-pre-line break-words"
+              >
                 {it.label ? (
                   <span className="font-medium">{it.label}: </span>
                 ) : null}

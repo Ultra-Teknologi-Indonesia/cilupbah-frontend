@@ -1,1 +1,191 @@
-{"nodes": [{"id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_milestone_md", "label": "MILESTONE.md", "file_type": "document", "source_file": "MILESTONE.md", "source_location": "L1"}, {"id": "cilupbah_fe_milestone_milestone_halaman_fe_cilupbah", "label": "Milestone Halaman FE \u2014 Cilupbah", "file_type": "document", "source_file": "MILESTONE.md", "source_location": "L1"}, {"id": "cilupbah_fe_milestone_sudah_ada", "label": "\u2705 Sudah ada", "file_type": "document", "source_file": "MILESTONE.md", "source_location": "L10"}, {"id": "cilupbah_fe_milestone_milestone_1_produk_prioritas", "label": "\ud83c\udfaf Milestone 1 \u2014 PRODUK (prioritas)", "file_type": "document", "source_file": "MILESTONE.md", "source_location": "L23"}, {"id": "cilupbah_fe_milestone_sprint_berikutnya_disarankan", "label": "Sprint berikutnya (disarankan)", "file_type": "document", "source_file": "MILESTONE.md", "source_location": "L42"}, {"id": "cilupbah_fe_milestone_milestone_berikutnya", "label": "Milestone berikutnya", "file_type": "document", "source_file": "MILESTONE.md", "source_location": "L47"}, {"id": "cilupbah_fe_milestone_m2_persediaan", "label": "M2 \u00b7 Persediaan", "file_type": "document", "source_file": "MILESTONE.md", "source_location": "L49"}, {"id": "cilupbah_fe_milestone_m3_penjualan", "label": "M3 \u00b7 Penjualan", "file_type": "document", "source_file": "MILESTONE.md", "source_location": "L55"}, {"id": "cilupbah_fe_milestone_m4_pembelian", "label": "M4 \u00b7 Pembelian", "file_type": "document", "source_file": "MILESTONE.md", "source_location": "L61"}, {"id": "cilupbah_fe_milestone_m5_gudang", "label": "M5 \u00b7 Gudang", "file_type": "document", "source_file": "MILESTONE.md", "source_location": "L66"}, {"id": "cilupbah_fe_milestone_m6_laporan_keuangan", "label": "M6 \u00b7 Laporan & Keuangan", "file_type": "document", "source_file": "MILESTONE.md", "source_location": "L71"}, {"id": "cilupbah_fe_milestone_konvensi_per_halaman", "label": "Konvensi per halaman", "file_type": "document", "source_file": "MILESTONE.md", "source_location": "L81"}], "edges": [{"source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_milestone_md", "target": "cilupbah_fe_milestone_milestone_halaman_fe_cilupbah", "relation": "contains", "confidence": "EXTRACTED", "source_file": "MILESTONE.md", "source_location": "L1", "weight": 1.0}, {"source": "cilupbah_fe_milestone_milestone_halaman_fe_cilupbah", "target": "cilupbah_fe_milestone_sudah_ada", "relation": "contains", "confidence": "EXTRACTED", "source_file": "MILESTONE.md", "source_location": "L10", "weight": 1.0}, {"source": "cilupbah_fe_milestone_milestone_halaman_fe_cilupbah", "target": "cilupbah_fe_milestone_milestone_1_produk_prioritas", "relation": "contains", "confidence": "EXTRACTED", "source_file": "MILESTONE.md", "source_location": "L23", "weight": 1.0}, {"source": "cilupbah_fe_milestone_milestone_1_produk_prioritas", "target": "cilupbah_fe_milestone_sprint_berikutnya_disarankan", "relation": "contains", "confidence": "EXTRACTED", "source_file": "MILESTONE.md", "source_location": "L42", "weight": 1.0}, {"source": "cilupbah_fe_milestone_milestone_halaman_fe_cilupbah", "target": "cilupbah_fe_milestone_milestone_berikutnya", "relation": "contains", "confidence": "EXTRACTED", "source_file": "MILESTONE.md", "source_location": "L47", "weight": 1.0}, {"source": "cilupbah_fe_milestone_milestone_berikutnya", "target": "cilupbah_fe_milestone_m2_persediaan", "relation": "contains", "confidence": "EXTRACTED", "source_file": "MILESTONE.md", "source_location": "L49", "weight": 1.0}, {"source": "cilupbah_fe_milestone_milestone_berikutnya", "target": "cilupbah_fe_milestone_m3_penjualan", "relation": "contains", "confidence": "EXTRACTED", "source_file": "MILESTONE.md", "source_location": "L55", "weight": 1.0}, {"source": "cilupbah_fe_milestone_milestone_berikutnya", "target": "cilupbah_fe_milestone_m4_pembelian", "relation": "contains", "confidence": "EXTRACTED", "source_file": "MILESTONE.md", "source_location": "L61", "weight": 1.0}, {"source": "cilupbah_fe_milestone_milestone_berikutnya", "target": "cilupbah_fe_milestone_m5_gudang", "relation": "contains", "confidence": "EXTRACTED", "source_file": "MILESTONE.md", "source_location": "L66", "weight": 1.0}, {"source": "cilupbah_fe_milestone_milestone_berikutnya", "target": "cilupbah_fe_milestone_m6_laporan_keuangan", "relation": "contains", "confidence": "EXTRACTED", "source_file": "MILESTONE.md", "source_location": "L71", "weight": 1.0}, {"source": "cilupbah_fe_milestone_milestone_halaman_fe_cilupbah", "target": "cilupbah_fe_milestone_konvensi_per_halaman", "relation": "contains", "confidence": "EXTRACTED", "source_file": "MILESTONE.md", "source_location": "L81", "weight": 1.0}], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_milestone_md",
+      "label": "MILESTONE.md",
+      "file_type": "document",
+      "source_file": "MILESTONE.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_milestone_milestone_halaman_fe_cilupbah",
+      "label": "Milestone Halaman FE \u2014 Cilupbah",
+      "file_type": "document",
+      "source_file": "MILESTONE.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_milestone_sudah_ada",
+      "label": "\u2705 Sudah ada",
+      "file_type": "document",
+      "source_file": "MILESTONE.md",
+      "source_location": "L10"
+    },
+    {
+      "id": "cilupbah_fe_milestone_milestone_1_produk_prioritas",
+      "label": "\ud83c\udfaf Milestone 1 \u2014 PRODUK (prioritas)",
+      "file_type": "document",
+      "source_file": "MILESTONE.md",
+      "source_location": "L23"
+    },
+    {
+      "id": "cilupbah_fe_milestone_sprint_berikutnya_disarankan",
+      "label": "Sprint berikutnya (disarankan)",
+      "file_type": "document",
+      "source_file": "MILESTONE.md",
+      "source_location": "L42"
+    },
+    {
+      "id": "cilupbah_fe_milestone_milestone_berikutnya",
+      "label": "Milestone berikutnya",
+      "file_type": "document",
+      "source_file": "MILESTONE.md",
+      "source_location": "L47"
+    },
+    {
+      "id": "cilupbah_fe_milestone_m2_persediaan",
+      "label": "M2 \u00b7 Persediaan",
+      "file_type": "document",
+      "source_file": "MILESTONE.md",
+      "source_location": "L49"
+    },
+    {
+      "id": "cilupbah_fe_milestone_m3_penjualan",
+      "label": "M3 \u00b7 Penjualan",
+      "file_type": "document",
+      "source_file": "MILESTONE.md",
+      "source_location": "L55"
+    },
+    {
+      "id": "cilupbah_fe_milestone_m4_pembelian",
+      "label": "M4 \u00b7 Pembelian",
+      "file_type": "document",
+      "source_file": "MILESTONE.md",
+      "source_location": "L61"
+    },
+    {
+      "id": "cilupbah_fe_milestone_m5_gudang",
+      "label": "M5 \u00b7 Gudang",
+      "file_type": "document",
+      "source_file": "MILESTONE.md",
+      "source_location": "L66"
+    },
+    {
+      "id": "cilupbah_fe_milestone_m6_laporan_keuangan",
+      "label": "M6 \u00b7 Laporan & Keuangan",
+      "file_type": "document",
+      "source_file": "MILESTONE.md",
+      "source_location": "L71"
+    },
+    {
+      "id": "cilupbah_fe_milestone_konvensi_per_halaman",
+      "label": "Konvensi per halaman",
+      "file_type": "document",
+      "source_file": "MILESTONE.md",
+      "source_location": "L81"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_milestone_md",
+      "target": "cilupbah_fe_milestone_milestone_halaman_fe_cilupbah",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "MILESTONE.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_milestone_milestone_halaman_fe_cilupbah",
+      "target": "cilupbah_fe_milestone_sudah_ada",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "MILESTONE.md",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_milestone_milestone_halaman_fe_cilupbah",
+      "target": "cilupbah_fe_milestone_milestone_1_produk_prioritas",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "MILESTONE.md",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_milestone_milestone_1_produk_prioritas",
+      "target": "cilupbah_fe_milestone_sprint_berikutnya_disarankan",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "MILESTONE.md",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_milestone_milestone_halaman_fe_cilupbah",
+      "target": "cilupbah_fe_milestone_milestone_berikutnya",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "MILESTONE.md",
+      "source_location": "L47",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_milestone_milestone_berikutnya",
+      "target": "cilupbah_fe_milestone_m2_persediaan",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "MILESTONE.md",
+      "source_location": "L49",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_milestone_milestone_berikutnya",
+      "target": "cilupbah_fe_milestone_m3_penjualan",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "MILESTONE.md",
+      "source_location": "L55",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_milestone_milestone_berikutnya",
+      "target": "cilupbah_fe_milestone_m4_pembelian",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "MILESTONE.md",
+      "source_location": "L61",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_milestone_milestone_berikutnya",
+      "target": "cilupbah_fe_milestone_m5_gudang",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "MILESTONE.md",
+      "source_location": "L66",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_milestone_milestone_berikutnya",
+      "target": "cilupbah_fe_milestone_m6_laporan_keuangan",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "MILESTONE.md",
+      "source_location": "L71",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_milestone_milestone_halaman_fe_cilupbah",
+      "target": "cilupbah_fe_milestone_konvensi_per_halaman",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "MILESTONE.md",
+      "source_location": "L81",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

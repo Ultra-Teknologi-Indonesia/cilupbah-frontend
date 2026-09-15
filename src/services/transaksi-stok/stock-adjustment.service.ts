@@ -101,10 +101,9 @@ export const StockAdjustmentService = {
   },
 
   bulkPdfAsync: async (ids: string[]) => {
-    const res = await fetchClient<ApiResponse<{ export_id: string; status: string; total: number }>>(
-      `${BASE}/bulk/pdf/async`,
-      { method: "POST", data: { ids } },
-    );
+    const res = await fetchClient<
+      ApiResponse<{ export_id: string; status: string; total: number }>
+    >(`${BASE}/bulk/pdf/async`, { method: "POST", data: { ids } });
     return res.data;
   },
 
@@ -116,7 +115,9 @@ export const StockAdjustmentService = {
     return res.data;
   },
 
-  exportXlsx: async (params: StockAdjustmentListParams = {}): Promise<string> => {
+  exportXlsx: async (
+    params: StockAdjustmentListParams = {},
+  ): Promise<string> => {
     const sp = new URLSearchParams();
     if (params.search) sp.set("search", params.search);
     if (params["filter[location_id]"])

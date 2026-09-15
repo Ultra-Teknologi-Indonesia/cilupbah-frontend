@@ -681,12 +681,13 @@ function MovementsSection({ itemId }: { itemId: string }) {
   const currentStockDescription = selectedLocationName
     ? "Gabungan stok dari seluruh rak di lokasi ini."
     : "Gabungan stok dari seluruh rak di semua lokasi.";
-  const currentSnapshot = movements.length > 0
-    ? {
-        balance: movements[0].current_balance ?? 0,
-        available: movements[0].current_available_balance ?? 0,
-      }
-    : null;
+  const currentSnapshot =
+    movements.length > 0
+      ? {
+          balance: movements[0].current_balance ?? 0,
+          available: movements[0].current_available_balance ?? 0,
+        }
+      : null;
 
   const viewBar = (
     <div className="flex flex-wrap items-center gap-2">
@@ -828,7 +829,9 @@ function MovementsSection({ itemId }: { itemId: string }) {
       {currentSnapshot && (
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-primary/15 bg-primary/[0.04] px-4 py-3">
           <div>
-            <p className="text-xs font-semibold text-foreground">{currentStockTitle}</p>
+            <p className="text-xs font-semibold text-foreground">
+              {currentStockTitle}
+            </p>
             <p className="mt-0.5 text-xs text-muted-foreground">
               {currentStockDescription}
             </p>
@@ -1493,7 +1496,9 @@ function PesananSection({ itemId }: { itemId: string }) {
                   )}
                 </TableCell>
                 <TableCell className="px-3 py-2.5 text-muted-foreground">
-                  {o.transaction_date ? formatDateTimeWib(o.transaction_date) : "—"}
+                  {o.transaction_date
+                    ? formatDateTimeWib(o.transaction_date)
+                    : "—"}
                 </TableCell>
                 <TableCell className="px-3 py-2.5 text-right font-mono text-sm font-semibold tabular-nums">
                   {itemQty(o)}
@@ -1666,10 +1671,13 @@ export function StockPositionDetailView({ itemId }: { itemId: string }) {
           <div className="flex items-start gap-3">
             <BoxIcon className="mt-0.5 size-5 shrink-0 text-blue-600 dark:text-blue-400" />
             <div>
-              <h3 className="text-sm font-semibold">Stok bundle dihitung dari komponen</h3>
+              <h3 className="text-sm font-semibold">
+                Stok bundle dihitung dari komponen
+              </h3>
               <p className="mt-1 text-sm text-muted-foreground">
-                Angka di atas adalah kapasitas bundle yang bisa dirakit pada lokasi yang sama.
-                Kronologi, rak, dan pesanan tetap tercatat pada masing-masing SKU komponen.
+                Angka di atas adalah kapasitas bundle yang bisa dirakit pada
+                lokasi yang sama. Kronologi, rak, dan pesanan tetap tercatat
+                pada masing-masing SKU komponen.
               </p>
             </div>
           </div>

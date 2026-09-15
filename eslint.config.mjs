@@ -11,9 +11,9 @@ const eslintConfig = defineConfig([
           argsIgnorePattern: "^_",
           varsIgnorePattern: "^_",
           caughtErrorsIgnorePattern: "^_",
-        }
+        },
       ],
-    }
+    },
   },
   ...nextVitals,
   ...nextTs,

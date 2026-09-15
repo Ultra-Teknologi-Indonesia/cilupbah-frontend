@@ -303,69 +303,67 @@ export function ReadyToProcessCardList() {
               }
               actions={
                 <>
-                    {!multiLocation && (
-                      <>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-muted-foreground">
-                            Picker
-                          </span>
-                          <UserSelectById
-                            value={pickerId}
-                            onChange={(id) => setPickerId(id)}
-                            options={pickerOptions}
-                            isLoading={pickers.isLoading}
-                            currentUserId={me?.id}
-                            disabled={!locationId || pickers.isLoading}
-                            placeholder={
-                              pickers.isLoading
-                                ? "Memuat…"
-                                : "Pilih picker…"
-                            }
-                            emptyText="Tidak ada picker di lokasi ini."
-                            className="w-72"
-                          />
-                        </div>
-                        <Button
-                          variant="primary"
-                          size="sm"
-                          onClick={() => setConfirmOpen(true)}
-                          disabled={createPicklist.isPending || !pickerId}
-                        >
-                          {createPicklist.isPending && (
-                            <Loader2Icon className="animate-spin" />
-                          )}
-                          Buat Picklist
-                        </Button>
-                        <Button
-                          size="sm"
-                          className="rounded-full gap-1.5"
-                          onClick={handleOpenAmbilResi}
-                        >
-                          <TruckIcon className="size-4" />
-                          Siap Kirim
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="rounded-full gap-1.5"
-                          onClick={handleOpenAmbilResi}
-                        >
-                          <PrinterIcon className="size-4" />
-                          Cetak Label
-                        </Button>
-                      </>
-                    )}
-                    {canDeleteOrder && (
+                  {!multiLocation && (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-muted-foreground">
+                          Picker
+                        </span>
+                        <UserSelectById
+                          value={pickerId}
+                          onChange={(id) => setPickerId(id)}
+                          options={pickerOptions}
+                          isLoading={pickers.isLoading}
+                          currentUserId={me?.id}
+                          disabled={!locationId || pickers.isLoading}
+                          placeholder={
+                            pickers.isLoading ? "Memuat…" : "Pilih picker…"
+                          }
+                          emptyText="Tidak ada picker di lokasi ini."
+                          className="w-72"
+                        />
+                      </div>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => setConfirmOpen(true)}
+                        disabled={createPicklist.isPending || !pickerId}
+                      >
+                        {createPicklist.isPending && (
+                          <Loader2Icon className="animate-spin" />
+                        )}
+                        Buat Picklist
+                      </Button>
+                      <Button
+                        size="sm"
+                        className="rounded-full gap-1.5"
+                        onClick={handleOpenAmbilResi}
+                      >
+                        <TruckIcon className="size-4" />
+                        Siap Kirim
+                      </Button>
                       <Button
                         variant="outline"
                         size="sm"
-                        className="rounded-full gap-1.5 text-destructive hover:text-destructive"
-                        onClick={() => setDeleteOpen(true)}
+                        className="rounded-full gap-1.5"
+                        onClick={handleOpenAmbilResi}
                       >
-                        <Trash2Icon className="size-4" />
-                        Hapus
+                        <PrinterIcon className="size-4" />
+                        Cetak Label
                       </Button>
-                    )}
+                    </>
+                  )}
+                  {canDeleteOrder && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-full gap-1.5 text-destructive hover:text-destructive"
+                      onClick={() => setDeleteOpen(true)}
+                    >
+                      <Trash2Icon className="size-4" />
+                      Hapus
+                    </Button>
+                  )}
                 </>
               }
             />

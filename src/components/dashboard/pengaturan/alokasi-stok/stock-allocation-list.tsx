@@ -106,42 +106,45 @@ function StockAllocationRow({
           </span>
         ) : (
           <>
-        <RadioGroup
-          value={mode}
-          onValueChange={handleModeChange}
-          className="flex w-auto flex-row items-center gap-4"
-        >
-          <label
-            htmlFor={`total-${store.storeId}`}
-            className="flex cursor-pointer items-center gap-1.5 text-sm"
-          >
-            <RadioGroupItem id={`total-${store.storeId}`} value="total" />
-            Stok Total
-          </label>
-          <label
-            htmlFor={`location-${store.storeId}`}
-            className="flex cursor-pointer items-center gap-1.5 text-sm"
-          >
-            <RadioGroupItem id={`location-${store.storeId}`} value="location" />
-            Lokasi Stok
-          </label>
-        </RadioGroup>
+            <RadioGroup
+              value={mode}
+              onValueChange={handleModeChange}
+              className="flex w-auto flex-row items-center gap-4"
+            >
+              <label
+                htmlFor={`total-${store.storeId}`}
+                className="flex cursor-pointer items-center gap-1.5 text-sm"
+              >
+                <RadioGroupItem id={`total-${store.storeId}`} value="total" />
+                Stok Total
+              </label>
+              <label
+                htmlFor={`location-${store.storeId}`}
+                className="flex cursor-pointer items-center gap-1.5 text-sm"
+              >
+                <RadioGroupItem
+                  id={`location-${store.storeId}`}
+                  value="location"
+                />
+                Lokasi Stok
+              </label>
+            </RadioGroup>
 
-        {mode === "location" && (
-          <Combobox
-            options={locationOptions}
-            value={locationId}
-            onChange={handleLocationChange}
-            placeholder="Pilih gudang…"
-            searchPlaceholder="Cari gudang…"
-            loading={locLoading}
-            className="w-56"
-          />
-        )}
+            {mode === "location" && (
+              <Combobox
+                options={locationOptions}
+                value={locationId}
+                onChange={handleLocationChange}
+                placeholder="Pilih gudang…"
+                searchPlaceholder="Cari gudang…"
+                loading={locLoading}
+                className="w-56"
+              />
+            )}
 
-        {updateMut.isPending && (
-          <Loader2Icon className="size-4 shrink-0 animate-spin text-muted-foreground" />
-        )}
+            {updateMut.isPending && (
+              <Loader2Icon className="size-4 shrink-0 animate-spin text-muted-foreground" />
+            )}
           </>
         )}
       </div>

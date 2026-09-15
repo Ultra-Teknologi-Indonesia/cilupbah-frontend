@@ -591,15 +591,17 @@ function CourierPickupCard({
             Identitas kurir & kode pengambilan saat pesanan diambil.
           </p>
         </div>
-        {onEdit && <Button
-          variant="outline"
-          size="sm"
-          className="gap-1.5"
-          onClick={onEdit}
-        >
-          <PencilIcon className="size-3.5" />
-          {hasData ? "Ubah" : "Tambah"}
-        </Button>}
+        {onEdit && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-1.5"
+            onClick={onEdit}
+          >
+            <PencilIcon className="size-3.5" />
+            {hasData ? "Ubah" : "Tambah"}
+          </Button>
+        )}
       </div>
 
       {hasData ? (
@@ -688,19 +690,21 @@ export function OrderDetailView({ orderId }: { orderId: string }) {
 
   const order = data?.data;
 
-  const isMarketplace = !!order?.source && order.source !== "manual" && order.source !== "offline";
+  const isMarketplace =
+    !!order?.source && order.source !== "manual" && order.source !== "offline";
 
   const canEditOrder = can("edit-pesanan");
   const canExportOrder = can("export-pesanan");
   const canExportShipping = can("export-pengiriman");
-  const canRequestCancel = !!order && canEditOrder && canRequestChannelCancel(order);
+  const canRequestCancel =
+    !!order && canEditOrder && canRequestChannelCancel(order);
   const canManualCancel = !!order && canEditOrder && !isMarketplace;
   const canCreateShipment = Boolean(
     order &&
-      can("create-pengiriman") &&
-      order.status === "packed" &&
-      !order.is_canceled &&
-      !order.scheduled_shipment,
+    can("create-pengiriman") &&
+    order.status === "packed" &&
+    !order.is_canceled &&
+    !order.scheduled_shipment,
   );
 
   const handlePrintInvoice = () => {
@@ -811,25 +815,27 @@ export function OrderDetailView({ orderId }: { orderId: string }) {
                 Buat Pengiriman
               </Button>
             )}
-            {canExportOrder && <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="gap-1.5">
-                  <DownloadIcon className="size-4" />
-                  Export
-                  <ChevronDownIcon className="size-3.5 opacity-60" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={handlePrintBreakdown}>
-                  <FileTextIcon className="size-4" />
-                  Rincian Pesanan
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handlePrintInvoice}>
-                  <FileTextIcon className="size-4" />
-                  Faktur
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>}
+            {canExportOrder && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="gap-1.5">
+                    <DownloadIcon className="size-4" />
+                    Export
+                    <ChevronDownIcon className="size-3.5 opacity-60" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={handlePrintBreakdown}>
+                    <FileTextIcon className="size-4" />
+                    Rincian Pesanan
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handlePrintInvoice}>
+                    <FileTextIcon className="size-4" />
+                    Faktur
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -853,14 +859,18 @@ export function OrderDetailView({ orderId }: { orderId: string }) {
                   </DropdownMenuItem>
                 )}
                 {canManualCancel && (
-                  <DropdownMenuItem variant="destructive" onClick={() => setManualCancelOpen(true)}>
+                  <DropdownMenuItem
+                    variant="destructive"
+                    onClick={() => setManualCancelOpen(true)}
+                  >
                     <BanIcon className="size-4" />
                     Batalkan Pesanan
                   </DropdownMenuItem>
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
-            {canExportShipping && isMarketplace &&
+            {canExportShipping &&
+              isMarketplace &&
               order.shipping?.tracking_number &&
               !order.is_canceled &&
               !["shipped", "completed", "cancelled", "returned"].includes(
@@ -1248,7 +1258,9 @@ export function OrderDetailView({ orderId }: { orderId: string }) {
                   {order.items.length === 0 && (
                     <TableRow>
                       <TableCell
-                          colSpan={order.status === "pending" && canEditOrder ? 7 : 6}
+                        colSpan={
+                          order.status === "pending" && canEditOrder ? 7 : 6
+                        }
                         className="py-8 text-center text-sm text-muted-foreground"
                       >
                         Tidak ada produk.
@@ -1408,23 +1420,27 @@ export function OrderDetailView({ orderId }: { orderId: string }) {
         </div>
       </div>
 
-      {canEditOrder && <ContactBuyerDialog
-        open={contactOpen}
-        onOpenChange={setContactOpen}
-        orderId={order.id}
-        orderNo={order.salesorder_no}
-        defaultChannel={order.contact_channel ?? undefined}
-        defaultDecision={order.customer_decision ?? undefined}
-        defaultNote={order.contact_note ?? undefined}
-      />}
+      {canEditOrder && (
+        <ContactBuyerDialog
+          open={contactOpen}
+          onOpenChange={setContactOpen}
+          orderId={order.id}
+          orderNo={order.salesorder_no}
+          defaultChannel={order.contact_channel ?? undefined}
+          defaultDecision={order.customer_decision ?? undefined}
+          defaultNote={order.contact_note ?? undefined}
+        />
+      )}
 
-      {canEditOrder && <CourierPickupDialog
-        open={pickupOpen}
-        onOpenChange={setPickupOpen}
-        orderId={order.id}
-        orderNo={order.salesorder_no}
-        pickup={order.courier_pickup}
-      />}
+      {canEditOrder && (
+        <CourierPickupDialog
+          open={pickupOpen}
+          onOpenChange={setPickupOpen}
+          orderId={order.id}
+          orderNo={order.salesorder_no}
+          pickup={order.courier_pickup}
+        />
+      )}
 
       {canCreateShipment && (
         <BuatPengirimanDialog
@@ -1470,22 +1486,24 @@ export function OrderDetailView({ orderId }: { orderId: string }) {
         />
       )}
 
-      {canEditOrder && <ConfirmDialog
-        open={!!deletingItemId}
-        onOpenChange={(o) => !o && setDeletingItemId(null)}
-        title="Hapus item pesanan?"
-        description="Perubahan hanya berlaku di sistem internal, tidak dikirim ke marketplace."
-        confirmLabel="Ya, Hapus"
-        variant="destructive"
-        loading={deleteItem.isPending}
-        onConfirm={() => {
-          if (!deletingItemId) return;
-          deleteItem.mutate(
-            { orderId: order.id, itemId: deletingItemId },
-            { onSuccess: () => setDeletingItemId(null) },
-          );
-        }}
-      />}
+      {canEditOrder && (
+        <ConfirmDialog
+          open={!!deletingItemId}
+          onOpenChange={(o) => !o && setDeletingItemId(null)}
+          title="Hapus item pesanan?"
+          description="Perubahan hanya berlaku di sistem internal, tidak dikirim ke marketplace."
+          confirmLabel="Ya, Hapus"
+          variant="destructive"
+          loading={deleteItem.isPending}
+          onConfirm={() => {
+            if (!deletingItemId) return;
+            deleteItem.mutate(
+              { orderId: order.id, itemId: deletingItemId },
+              { onSuccess: () => setDeletingItemId(null) },
+            );
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -1510,15 +1528,17 @@ function ContactSummary({
             Catatan komunikasi dengan pembeli untuk pesanan stok kosong.
           </p>
         </div>
-        {onEdit && <Button
-          variant="outline"
-          size="sm"
-          className="gap-1.5"
-          onClick={onEdit}
-        >
-          <MessageCircleIcon className="size-3.5" />
-          Ubah
-        </Button>}
+        {onEdit && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-1.5"
+            onClick={onEdit}
+          >
+            <MessageCircleIcon className="size-3.5" />
+            Ubah
+          </Button>
+        )}
       </div>
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">

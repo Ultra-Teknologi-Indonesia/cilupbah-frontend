@@ -622,12 +622,14 @@ export function PackingDetailView({ id }: { id: string }) {
         </aside>
       </div>
 
-      {canDeleteOrder && <DeleteOrderDialog
-        open={deleteOrderOpen}
-        onOpenChange={setDeleteOrderOpen}
-        orders={pk.orderId ? [{ id: pk.orderId, no: pk.orderNo }] : []}
-        onDeleted={() => router.push(LIST_HREF)}
-      />}
+      {canDeleteOrder && (
+        <DeleteOrderDialog
+          open={deleteOrderOpen}
+          onOpenChange={setDeleteOrderOpen}
+          orders={pk.orderId ? [{ id: pk.orderId, no: pk.orderNo }] : []}
+          onDeleted={() => router.push(LIST_HREF)}
+        />
+      )}
     </div>
   );
 }

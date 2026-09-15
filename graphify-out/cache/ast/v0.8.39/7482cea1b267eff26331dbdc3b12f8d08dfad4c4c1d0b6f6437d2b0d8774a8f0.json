@@ -1,1 +1,415 @@
-{"nodes": [{"id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_performance_audit_md", "label": "PERFORMANCE_AUDIT.md", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L1"}, {"id": "cilupbah_fe_performance_audit_audit_performa_frontend_cilupbah_wms_next_js_16_app_router", "label": "Audit Performa Frontend \u2014 Cilupbah WMS (Next.js 16 App Router)", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L1"}, {"id": "cilupbah_fe_performance_audit_ringkasan_eksekutif", "label": "Ringkasan Eksekutif", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L9"}, {"id": "cilupbah_fe_performance_audit_1_ssr_blocking_streaming", "label": "1. SSR Blocking & Streaming", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L26"}, {"id": "cilupbah_fe_performance_audit_1_1_suspense_adalah_dead_code_temuan_utama", "label": "1.1 `<Suspense>` adalah dead code (temuan utama)", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L28"}, {"id": "cilupbah_fe_performance_audit_1_2_loading_tsx_suspense_redundan", "label": "1.2 `loading.tsx` + `<Suspense>` redundan", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L96"}, {"id": "cilupbah_fe_performance_audit_1_3_tidak_ada_error_tsx_sama_sekali_0_file", "label": "1.3 Tidak ada `error.tsx` sama sekali (0 file)", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L100"}, {"id": "cilupbah_fe_performance_audit_2_navigasi_aksi_instan", "label": "2. Navigasi & Aksi Instan", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L106"}, {"id": "cilupbah_fe_performance_audit_2_1_router_push_tanpa_usetransition_64_titik", "label": "2.1 `router.push` tanpa `useTransition` (64 titik)", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L108"}, {"id": "cilupbah_fe_performance_audit_2_2_prefetch_belum_dimanfaatkan", "label": "2.2 Prefetch belum dimanfaatkan", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L128"}, {"id": "cilupbah_fe_performance_audit_2_3_mutasi_tanpa_optimistic_update_useoptimistic_0_onmutate_1", "label": "2.3 Mutasi tanpa optimistic update (`useOptimistic` = 0, `onMutate` = 1)", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L136"}, {"id": "cilupbah_fe_performance_audit_3_penyebab_fetch_storm_waterfall", "label": "3. Penyebab Fetch Storm & Waterfall", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L163"}, {"id": "cilupbah_fe_performance_audit_3_1_fetch_storm_invalidasi_key_akar_temuan_utama", "label": "3.1 Fetch storm: invalidasi key akar (temuan utama)", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L165"}, {"id": "cilupbah_fe_performance_audit_3_2_waterfall_query_dependen_berantai", "label": "3.2 Waterfall: query dependen berantai", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L185"}, {"id": "cilupbah_fe_performance_audit_3_3_dedup_re_render_querykey_dengan_objek_params", "label": "3.3 Dedup & re-render: `queryKey` dengan objek params", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L194"}, {"id": "cilupbah_fe_performance_audit_3_4_proxy_api_app_menambah_1_hop_di_jalur_kritis", "label": "3.4 Proxy `/api/app` menambah 1 hop di jalur kritis", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L209"}, {"id": "cilupbah_fe_performance_audit_4_beban_client_vs_server_use_client_terlalu_tinggi", "label": "4. Beban Client vs Server (\"use client\" terlalu tinggi)", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L217"}, {"id": "cilupbah_fe_performance_audit_4_1_angka", "label": "4.1 Angka", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L219"}, {"id": "cilupbah_fe_performance_audit_4_2_phantomprovider_impor_sisi_efek_yang_menambah_beban", "label": "4.2 `PhantomProvider` \u2014 impor sisi-efek yang menambah beban", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L225"}, {"id": "cilupbah_fe_performance_audit_4_3_boundary_client_terlalu_tinggi_pola_view_monolitik", "label": "4.3 Boundary client terlalu tinggi \u2014 pola view monolitik", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L232"}, {"id": "cilupbah_fe_performance_audit_4_4_konfigurasi_react_query_global", "label": "4.4 Konfigurasi React Query global", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L241"}, {"id": "cilupbah_fe_performance_audit_rencana_aksi_prioritas_dampak_effort", "label": "Rencana Aksi (prioritas dampak/effort)", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L247"}, {"id": "cilupbah_fe_performance_audit_p0_dampak_tinggi_effort_rendah", "label": "P0 \u2014 Dampak tinggi, effort rendah", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L249"}, {"id": "cilupbah_fe_performance_audit_p1_dampak_tinggi_effort_menengah", "label": "P1 \u2014 Dampak tinggi, effort menengah", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L254"}, {"id": "cilupbah_fe_performance_audit_p2_struktural", "label": "P2 \u2014 Struktural", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L259"}, {"id": "cilupbah_fe_performance_audit_lampiran_bukti_terukur", "label": "Lampiran \u2014 Bukti Terukur", "file_type": "document", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L266"}], "edges": [{"source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_performance_audit_md", "target": "cilupbah_fe_performance_audit_audit_performa_frontend_cilupbah_wms_next_js_16_app_router", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L1", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_audit_performa_frontend_cilupbah_wms_next_js_16_app_router", "target": "cilupbah_fe_performance_audit_ringkasan_eksekutif", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L9", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_audit_performa_frontend_cilupbah_wms_next_js_16_app_router", "target": "cilupbah_fe_performance_audit_1_ssr_blocking_streaming", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L26", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_1_ssr_blocking_streaming", "target": "cilupbah_fe_performance_audit_1_1_suspense_adalah_dead_code_temuan_utama", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L28", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_1_ssr_blocking_streaming", "target": "cilupbah_fe_performance_audit_1_2_loading_tsx_suspense_redundan", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L96", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_1_ssr_blocking_streaming", "target": "cilupbah_fe_performance_audit_1_3_tidak_ada_error_tsx_sama_sekali_0_file", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L100", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_audit_performa_frontend_cilupbah_wms_next_js_16_app_router", "target": "cilupbah_fe_performance_audit_2_navigasi_aksi_instan", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L106", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_2_navigasi_aksi_instan", "target": "cilupbah_fe_performance_audit_2_1_router_push_tanpa_usetransition_64_titik", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L108", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_2_navigasi_aksi_instan", "target": "cilupbah_fe_performance_audit_2_2_prefetch_belum_dimanfaatkan", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L128", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_2_navigasi_aksi_instan", "target": "cilupbah_fe_performance_audit_2_3_mutasi_tanpa_optimistic_update_useoptimistic_0_onmutate_1", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L136", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_audit_performa_frontend_cilupbah_wms_next_js_16_app_router", "target": "cilupbah_fe_performance_audit_3_penyebab_fetch_storm_waterfall", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L163", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_3_penyebab_fetch_storm_waterfall", "target": "cilupbah_fe_performance_audit_3_1_fetch_storm_invalidasi_key_akar_temuan_utama", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L165", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_3_penyebab_fetch_storm_waterfall", "target": "cilupbah_fe_performance_audit_3_2_waterfall_query_dependen_berantai", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L185", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_3_penyebab_fetch_storm_waterfall", "target": "cilupbah_fe_performance_audit_3_3_dedup_re_render_querykey_dengan_objek_params", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L194", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_3_penyebab_fetch_storm_waterfall", "target": "cilupbah_fe_performance_audit_3_4_proxy_api_app_menambah_1_hop_di_jalur_kritis", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L209", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_audit_performa_frontend_cilupbah_wms_next_js_16_app_router", "target": "cilupbah_fe_performance_audit_4_beban_client_vs_server_use_client_terlalu_tinggi", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L217", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_4_beban_client_vs_server_use_client_terlalu_tinggi", "target": "cilupbah_fe_performance_audit_4_1_angka", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L219", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_4_beban_client_vs_server_use_client_terlalu_tinggi", "target": "cilupbah_fe_performance_audit_4_2_phantomprovider_impor_sisi_efek_yang_menambah_beban", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L225", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_4_beban_client_vs_server_use_client_terlalu_tinggi", "target": "cilupbah_fe_performance_audit_4_3_boundary_client_terlalu_tinggi_pola_view_monolitik", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L232", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_4_beban_client_vs_server_use_client_terlalu_tinggi", "target": "cilupbah_fe_performance_audit_4_4_konfigurasi_react_query_global", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L241", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_audit_performa_frontend_cilupbah_wms_next_js_16_app_router", "target": "cilupbah_fe_performance_audit_rencana_aksi_prioritas_dampak_effort", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L247", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_rencana_aksi_prioritas_dampak_effort", "target": "cilupbah_fe_performance_audit_p0_dampak_tinggi_effort_rendah", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L249", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_rencana_aksi_prioritas_dampak_effort", "target": "cilupbah_fe_performance_audit_p1_dampak_tinggi_effort_menengah", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L254", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_rencana_aksi_prioritas_dampak_effort", "target": "cilupbah_fe_performance_audit_p2_struktural", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L259", "weight": 1.0}, {"source": "cilupbah_fe_performance_audit_audit_performa_frontend_cilupbah_wms_next_js_16_app_router", "target": "cilupbah_fe_performance_audit_lampiran_bukti_terukur", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PERFORMANCE_AUDIT.md", "source_location": "L266", "weight": 1.0}], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_performance_audit_md",
+      "label": "PERFORMANCE_AUDIT.md",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_audit_performa_frontend_cilupbah_wms_next_js_16_app_router",
+      "label": "Audit Performa Frontend \u2014 Cilupbah WMS (Next.js 16 App Router)",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_ringkasan_eksekutif",
+      "label": "Ringkasan Eksekutif",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L9"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_1_ssr_blocking_streaming",
+      "label": "1. SSR Blocking & Streaming",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L26"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_1_1_suspense_adalah_dead_code_temuan_utama",
+      "label": "1.1 `<Suspense>` adalah dead code (temuan utama)",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L28"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_1_2_loading_tsx_suspense_redundan",
+      "label": "1.2 `loading.tsx` + `<Suspense>` redundan",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L96"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_1_3_tidak_ada_error_tsx_sama_sekali_0_file",
+      "label": "1.3 Tidak ada `error.tsx` sama sekali (0 file)",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L100"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_2_navigasi_aksi_instan",
+      "label": "2. Navigasi & Aksi Instan",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L106"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_2_1_router_push_tanpa_usetransition_64_titik",
+      "label": "2.1 `router.push` tanpa `useTransition` (64 titik)",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L108"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_2_2_prefetch_belum_dimanfaatkan",
+      "label": "2.2 Prefetch belum dimanfaatkan",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L128"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_2_3_mutasi_tanpa_optimistic_update_useoptimistic_0_onmutate_1",
+      "label": "2.3 Mutasi tanpa optimistic update (`useOptimistic` = 0, `onMutate` = 1)",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L136"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_3_penyebab_fetch_storm_waterfall",
+      "label": "3. Penyebab Fetch Storm & Waterfall",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L163"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_3_1_fetch_storm_invalidasi_key_akar_temuan_utama",
+      "label": "3.1 Fetch storm: invalidasi key akar (temuan utama)",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L165"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_3_2_waterfall_query_dependen_berantai",
+      "label": "3.2 Waterfall: query dependen berantai",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L185"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_3_3_dedup_re_render_querykey_dengan_objek_params",
+      "label": "3.3 Dedup & re-render: `queryKey` dengan objek params",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L194"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_3_4_proxy_api_app_menambah_1_hop_di_jalur_kritis",
+      "label": "3.4 Proxy `/api/app` menambah 1 hop di jalur kritis",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L209"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_4_beban_client_vs_server_use_client_terlalu_tinggi",
+      "label": "4. Beban Client vs Server (\"use client\" terlalu tinggi)",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L217"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_4_1_angka",
+      "label": "4.1 Angka",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L219"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_4_2_phantomprovider_impor_sisi_efek_yang_menambah_beban",
+      "label": "4.2 `PhantomProvider` \u2014 impor sisi-efek yang menambah beban",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L225"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_4_3_boundary_client_terlalu_tinggi_pola_view_monolitik",
+      "label": "4.3 Boundary client terlalu tinggi \u2014 pola view monolitik",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L232"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_4_4_konfigurasi_react_query_global",
+      "label": "4.4 Konfigurasi React Query global",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L241"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_rencana_aksi_prioritas_dampak_effort",
+      "label": "Rencana Aksi (prioritas dampak/effort)",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L247"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_p0_dampak_tinggi_effort_rendah",
+      "label": "P0 \u2014 Dampak tinggi, effort rendah",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L249"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_p1_dampak_tinggi_effort_menengah",
+      "label": "P1 \u2014 Dampak tinggi, effort menengah",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L254"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_p2_struktural",
+      "label": "P2 \u2014 Struktural",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L259"
+    },
+    {
+      "id": "cilupbah_fe_performance_audit_lampiran_bukti_terukur",
+      "label": "Lampiran \u2014 Bukti Terukur",
+      "file_type": "document",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L266"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_performance_audit_md",
+      "target": "cilupbah_fe_performance_audit_audit_performa_frontend_cilupbah_wms_next_js_16_app_router",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_audit_performa_frontend_cilupbah_wms_next_js_16_app_router",
+      "target": "cilupbah_fe_performance_audit_ringkasan_eksekutif",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_audit_performa_frontend_cilupbah_wms_next_js_16_app_router",
+      "target": "cilupbah_fe_performance_audit_1_ssr_blocking_streaming",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_1_ssr_blocking_streaming",
+      "target": "cilupbah_fe_performance_audit_1_1_suspense_adalah_dead_code_temuan_utama",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_1_ssr_blocking_streaming",
+      "target": "cilupbah_fe_performance_audit_1_2_loading_tsx_suspense_redundan",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L96",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_1_ssr_blocking_streaming",
+      "target": "cilupbah_fe_performance_audit_1_3_tidak_ada_error_tsx_sama_sekali_0_file",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L100",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_audit_performa_frontend_cilupbah_wms_next_js_16_app_router",
+      "target": "cilupbah_fe_performance_audit_2_navigasi_aksi_instan",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L106",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_2_navigasi_aksi_instan",
+      "target": "cilupbah_fe_performance_audit_2_1_router_push_tanpa_usetransition_64_titik",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L108",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_2_navigasi_aksi_instan",
+      "target": "cilupbah_fe_performance_audit_2_2_prefetch_belum_dimanfaatkan",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L128",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_2_navigasi_aksi_instan",
+      "target": "cilupbah_fe_performance_audit_2_3_mutasi_tanpa_optimistic_update_useoptimistic_0_onmutate_1",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L136",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_audit_performa_frontend_cilupbah_wms_next_js_16_app_router",
+      "target": "cilupbah_fe_performance_audit_3_penyebab_fetch_storm_waterfall",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L163",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_3_penyebab_fetch_storm_waterfall",
+      "target": "cilupbah_fe_performance_audit_3_1_fetch_storm_invalidasi_key_akar_temuan_utama",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L165",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_3_penyebab_fetch_storm_waterfall",
+      "target": "cilupbah_fe_performance_audit_3_2_waterfall_query_dependen_berantai",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L185",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_3_penyebab_fetch_storm_waterfall",
+      "target": "cilupbah_fe_performance_audit_3_3_dedup_re_render_querykey_dengan_objek_params",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L194",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_3_penyebab_fetch_storm_waterfall",
+      "target": "cilupbah_fe_performance_audit_3_4_proxy_api_app_menambah_1_hop_di_jalur_kritis",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L209",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_audit_performa_frontend_cilupbah_wms_next_js_16_app_router",
+      "target": "cilupbah_fe_performance_audit_4_beban_client_vs_server_use_client_terlalu_tinggi",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L217",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_4_beban_client_vs_server_use_client_terlalu_tinggi",
+      "target": "cilupbah_fe_performance_audit_4_1_angka",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L219",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_4_beban_client_vs_server_use_client_terlalu_tinggi",
+      "target": "cilupbah_fe_performance_audit_4_2_phantomprovider_impor_sisi_efek_yang_menambah_beban",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L225",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_4_beban_client_vs_server_use_client_terlalu_tinggi",
+      "target": "cilupbah_fe_performance_audit_4_3_boundary_client_terlalu_tinggi_pola_view_monolitik",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L232",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_4_beban_client_vs_server_use_client_terlalu_tinggi",
+      "target": "cilupbah_fe_performance_audit_4_4_konfigurasi_react_query_global",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L241",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_audit_performa_frontend_cilupbah_wms_next_js_16_app_router",
+      "target": "cilupbah_fe_performance_audit_rencana_aksi_prioritas_dampak_effort",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L247",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_rencana_aksi_prioritas_dampak_effort",
+      "target": "cilupbah_fe_performance_audit_p0_dampak_tinggi_effort_rendah",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L249",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_rencana_aksi_prioritas_dampak_effort",
+      "target": "cilupbah_fe_performance_audit_p1_dampak_tinggi_effort_menengah",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L254",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_rencana_aksi_prioritas_dampak_effort",
+      "target": "cilupbah_fe_performance_audit_p2_struktural",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L259",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_performance_audit_audit_performa_frontend_cilupbah_wms_next_js_16_app_router",
+      "target": "cilupbah_fe_performance_audit_lampiran_bukti_terukur",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PERFORMANCE_AUDIT.md",
+      "source_location": "L266",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

@@ -31,7 +31,12 @@ export function LocationMultiCombobox({
   );
 
   React.useEffect(() => {
-    if (!autoSelectSingle || isLoading || value.length > 0 || options.length !== 1) {
+    if (
+      !autoSelectSingle ||
+      isLoading ||
+      value.length > 0 ||
+      options.length !== 1
+    ) {
       return;
     }
 

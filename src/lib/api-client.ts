@@ -107,10 +107,7 @@ export async function fetchClient<T>(
     : `/${endpoint}`;
 
   const requestOptions: AxiosRequestConfig = { ...options };
-  if (
-    typeof FormData !== "undefined" &&
-    options?.data instanceof FormData
-  ) {
+  if (typeof FormData !== "undefined" && options?.data instanceof FormData) {
     requestOptions.headers = {
       ...(options.headers || {}),
       "Content-Type": undefined,

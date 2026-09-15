@@ -111,10 +111,7 @@ export function PermintaanRestockView() {
         intensity="subtle"
         className="w-fit bg-white/40 p-1 dark:bg-white/[0.06]"
       >
-        <Tabs
-          value={status}
-          onValueChange={handleStatusChange}
-        >
+        <Tabs value={status} onValueChange={handleStatusChange}>
           <TabsList className="bg-transparent">
             {STATUS_TABS.map((t) => (
               <TabsTrigger key={t.value} value={t.value}>

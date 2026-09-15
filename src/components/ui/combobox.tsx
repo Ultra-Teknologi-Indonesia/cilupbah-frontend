@@ -189,11 +189,7 @@ export function Combobox({
   const hiddenCount = wrap ? 0 : selectedValues.length - maxVisible;
 
   return (
-    <Popover
-      modal={true}
-      open={open}
-      onOpenChange={setOpen}
-    >
+    <Popover modal={true} open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <button
           type="button"

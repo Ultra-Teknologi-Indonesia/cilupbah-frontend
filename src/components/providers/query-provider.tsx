@@ -19,7 +19,9 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
               if (failureCount >= 2) return false;
 
               const status = getApiErrorStatus(error);
-              return status === undefined || RETRYABLE_HTTP_STATUSES.has(status);
+              return (
+                status === undefined || RETRYABLE_HTTP_STATUSES.has(status)
+              );
             },
             retryDelay: (attemptIndex) =>
               Math.min(1000 * 2 ** attemptIndex, 8000),

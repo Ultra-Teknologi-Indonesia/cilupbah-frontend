@@ -125,9 +125,15 @@ export function ActionQueueTable({
           <TableHeader className="[&_tr]:border-b-0">
             <TableRow className="bg-muted/80 hover:bg-muted/80">
               <TableHead className="h-10">No. Pesanan</TableHead>
-              <TableHead className="hidden h-10 md:table-cell">Channel</TableHead>
-              <TableHead className="hidden h-10 2xl:table-cell">Pelanggan</TableHead>
-              <TableHead className="hidden h-10 lg:table-cell">Tanggal</TableHead>
+              <TableHead className="hidden h-10 md:table-cell">
+                Channel
+              </TableHead>
+              <TableHead className="hidden h-10 2xl:table-cell">
+                Pelanggan
+              </TableHead>
+              <TableHead className="hidden h-10 lg:table-cell">
+                Tanggal
+              </TableHead>
               <TableHead className="h-10 text-right">Aksi</TableHead>
             </TableRow>
           </TableHeader>
@@ -179,7 +185,12 @@ function QueueRow({
           <span className="text-muted-foreground">—</span>
         )}
       </TableCell>
-      <TableCell className={cn("hidden 2xl:table-cell", !row.customer_name && "text-muted-foreground")}>
+      <TableCell
+        className={cn(
+          "hidden 2xl:table-cell",
+          !row.customer_name && "text-muted-foreground",
+        )}
+      >
         {row.customer_name || "—"}
       </TableCell>
       <TableCell className="hidden text-muted-foreground lg:table-cell">

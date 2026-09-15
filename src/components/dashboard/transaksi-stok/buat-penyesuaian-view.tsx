@@ -231,12 +231,16 @@ function AdjustmentBinCombobox({
   const skuStock = useSkuStockAtLocation(sku, locationId, open);
 
   const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useLocationBinsInfinite(locationId || undefined, {
-      search: debouncedSearch.trim() || undefined,
-      perPage: 30,
-      sort: "bin_final_code",
-      filter: { is_inbound: false },
-    }, { enabled: open });
+    useLocationBinsInfinite(
+      locationId || undefined,
+      {
+        search: debouncedSearch.trim() || undefined,
+        perPage: 30,
+        sort: "bin_final_code",
+        filter: { is_inbound: false },
+      },
+      { enabled: open },
+    );
 
   const liveSkuBins = useMemo(
     () => toAdjustableLineBins(skuStock.data?.data.available_bins ?? []),
@@ -702,10 +706,7 @@ export function PenyesuaianFormPage({
       )
     : lines.length;
 
-  const changedEditLines = [
-    ...Object.values(editOverrides),
-    ...addedEditLines,
-  ];
+  const changedEditLines = [...Object.values(editOverrides), ...addedEditLines];
   const canSubmit = isEdit
     ? canMutate &&
       !!locationId &&

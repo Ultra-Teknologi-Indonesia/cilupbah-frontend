@@ -1,7 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { ClipboardListIcon, FileSpreadsheetIcon, QrCodeIcon, WarehouseIcon } from "lucide-react";
+import {
+  ClipboardListIcon,
+  FileSpreadsheetIcon,
+  QrCodeIcon,
+  WarehouseIcon,
+} from "lucide-react";
 
 import {
   Card,

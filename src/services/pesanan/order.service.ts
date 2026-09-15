@@ -195,10 +195,13 @@ export const OrderService = {
   },
 
   cancelManualOrder: (orderId: string, reason?: string) => {
-    return fetchClient<ApiResponse<Order>>(`/sales/orders/${orderId}/cancel-manual`, {
-      method: "POST",
-      data: reason ? { reason } : undefined,
-    });
+    return fetchClient<ApiResponse<Order>>(
+      `/sales/orders/${orderId}/cancel-manual`,
+      {
+        method: "POST",
+        data: reason ? { reason } : undefined,
+      },
+    );
   },
 
   bulkCancelManualOrder: (orderIds: string[], reason?: string) => {

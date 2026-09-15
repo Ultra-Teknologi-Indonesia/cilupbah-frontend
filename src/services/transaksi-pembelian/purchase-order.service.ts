@@ -26,7 +26,7 @@ const buildListParams = (params: PurchaseOrderListParams) => {
   const sp = new URLSearchParams();
   if (params.search) sp.set("search", params.search);
   if (params.page) sp.set("page", String(params.page));
-    if (params.per_page) sp.set("per_page", String(params.per_page));
+  if (params.per_page) sp.set("per_page", String(params.per_page));
   if (params["filter[status]"])
     sp.set("filter[status]", params["filter[status]"]);
   if (params["filter[contact_id]"])

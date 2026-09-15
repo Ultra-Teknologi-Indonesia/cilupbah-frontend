@@ -363,9 +363,7 @@ export function PenerimaanBarangTab() {
         ),
         enableSorting: true,
         cell: ({ row }) => (
-          <span>
-            {formatInboundExpectedDate(row.original)}
-          </span>
+          <span>{formatInboundExpectedDate(row.original)}</span>
         ),
       },
       {
@@ -415,9 +413,7 @@ export function PenerimaanBarangTab() {
       {
         accessorKey: "created_by",
         header: "Dibuat oleh",
-        cell: ({ row }) => (
-          <span>{row.original.created_by || "—"}</span>
-        ),
+        cell: ({ row }) => <span>{row.original.created_by || "—"}</span>,
       },
       {
         id: "dikerjakan",
@@ -548,7 +544,13 @@ export function PenerimaanBarangTab() {
         },
       },
     ],
-    [canCreatePutaway, canDeleteInbound, canEditInbound, canExportInbound, sourceTab],
+    [
+      canCreatePutaway,
+      canDeleteInbound,
+      canEditInbound,
+      canExportInbound,
+      sourceTab,
+    ],
   );
 
   const items = data?.items ?? [];
@@ -653,49 +655,54 @@ export function PenerimaanBarangTab() {
             onSortingChange={list.setSorting}
             getRowId={(row) => row.id}
             enableRowSelection={(row) =>
-              (canCreatePutaway || canDeleteInbound) && isSelectable(row.original)
+              (canCreatePutaway || canDeleteInbound) &&
+              isSelectable(row.original)
             }
             bulkActions={(selected, table) => {
               const sameLocation =
                 new Set(selected.map((s) => s.location_id)).size <= 1;
               return (
                 <div className="flex items-center gap-2">
-                  {canCreatePutaway && <Button
-                    size="sm"
-                    className="h-8 gap-1.5"
-                    onClick={() => {
-                      if (!sameLocation) {
-                        toast.warning(
-                          "Penerimaan harus dari lokasi/gudang yang sama untuk digabung.",
-                        );
-                        return;
+                  {canCreatePutaway && (
+                    <Button
+                      size="sm"
+                      className="h-8 gap-1.5"
+                      onClick={() => {
+                        if (!sameLocation) {
+                          toast.warning(
+                            "Penerimaan harus dari lokasi/gudang yang sama untuk digabung.",
+                          );
+                          return;
+                        }
+                        resetSelectionRef.current = () =>
+                          table.resetRowSelection();
+                        setPenempatanTargets(selected);
+                      }}
+                      title={
+                        sameLocation
+                          ? undefined
+                          : "Pilih penerimaan dari lokasi yang sama"
                       }
-                      resetSelectionRef.current = () =>
-                        table.resetRowSelection();
-                      setPenempatanTargets(selected);
-                    }}
-                    title={
-                      sameLocation
-                        ? undefined
-                        : "Pilih penerimaan dari lokasi yang sama"
-                    }
-                  >
-                    <LayersIcon className="size-4" />
-                    Buat Penempatan ({selected.length})
-                  </Button>}
-                  {canDeleteInbound && <Button
-                    size="sm"
-                    variant="destructive"
-                    className="h-8 gap-1.5"
-                    onClick={() => {
-                      resetSelectionRef.current = () =>
-                        table.resetRowSelection();
-                      setDeleteTargets(selected);
-                    }}
-                  >
-                    <Trash2Icon className="size-4" />
-                    Hapus ({selected.length})
-                  </Button>}
+                    >
+                      <LayersIcon className="size-4" />
+                      Buat Penempatan ({selected.length})
+                    </Button>
+                  )}
+                  {canDeleteInbound && (
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      className="h-8 gap-1.5"
+                      onClick={() => {
+                        resetSelectionRef.current = () =>
+                          table.resetRowSelection();
+                        setDeleteTargets(selected);
+                      }}
+                    >
+                      <Trash2Icon className="size-4" />
+                      Hapus ({selected.length})
+                    </Button>
+                  )}
                 </div>
               );
             }}
@@ -716,88 +723,94 @@ export function PenerimaanBarangTab() {
         </div>
       </LiquidGlass>
 
-      {canCreatePutaway && <BuatPenempatanManualDialog
-        inbounds={penempatanTargets}
-        open={penempatanTargets.length > 0}
-        onOpenChange={(open) => {
-          if (!open) setPenempatanTargets([]);
-        }}
-        onSuccess={() => {
-          resetSelectionRef.current?.();
-          resetSelectionRef.current = null;
-        }}
-      />}
+      {canCreatePutaway && (
+        <BuatPenempatanManualDialog
+          inbounds={penempatanTargets}
+          open={penempatanTargets.length > 0}
+          onOpenChange={(open) => {
+            if (!open) setPenempatanTargets([]);
+          }}
+          onSuccess={() => {
+            resetSelectionRef.current?.();
+            resetSelectionRef.current = null;
+          }}
+        />
+      )}
 
-      {canEditInbound && <TerimaTransferDialog
-        key={terimaTarget?.id ?? "none"}
-        inbound={terimaTarget}
-        open={!!terimaTarget}
-        onOpenChange={(open) => {
-          if (!open) setTerimaTarget(null);
-        }}
-      />}
+      {canEditInbound && (
+        <TerimaTransferDialog
+          key={terimaTarget?.id ?? "none"}
+          inbound={terimaTarget}
+          open={!!terimaTarget}
+          onOpenChange={(open) => {
+            if (!open) setTerimaTarget(null);
+          }}
+        />
+      )}
 
-      {canDeleteInbound && <ConfirmDialog
-        open={deleteTargets.length > 0}
-        onOpenChange={(open) => {
-          if (!open) setDeleteTargets([]);
-        }}
-        variant="destructive"
-        title={`Hapus ${deleteTargets.length} penerimaan?`}
-        description={(() => {
-          if (deleteTargets.length === 0) return "";
-          const isSingle = deleteTargets.length === 1;
-          const target = deleteTargets[0];
-          const allTransfer = deleteTargets.every(
-            (d) => d.source_type === "transfer",
-          );
-          const allPO = deleteTargets.every(
-            (d) => d.source_type === "purchase_order",
-          );
-          const hasReceived = deleteTargets.some((d) =>
-            [
-              "RECEIVED",
-              "PARTIAL",
-              "PUTAWAY_IN_PROGRESS",
-              "COMPLETED",
-            ].includes(d.status),
-          );
+      {canDeleteInbound && (
+        <ConfirmDialog
+          open={deleteTargets.length > 0}
+          onOpenChange={(open) => {
+            if (!open) setDeleteTargets([]);
+          }}
+          variant="destructive"
+          title={`Hapus ${deleteTargets.length} penerimaan?`}
+          description={(() => {
+            if (deleteTargets.length === 0) return "";
+            const isSingle = deleteTargets.length === 1;
+            const target = deleteTargets[0];
+            const allTransfer = deleteTargets.every(
+              (d) => d.source_type === "transfer",
+            );
+            const allPO = deleteTargets.every(
+              (d) => d.source_type === "purchase_order",
+            );
+            const hasReceived = deleteTargets.some((d) =>
+              [
+                "RECEIVED",
+                "PARTIAL",
+                "PUTAWAY_IN_PROGRESS",
+                "COMPLETED",
+              ].includes(d.status),
+            );
 
-          if (allTransfer && hasReceived) {
-            return isSingle
-              ? `Penerimaan ${target.transaction_number} sudah selesai diterima. Menghapus akan membalik penempatan yang sudah masuk rak dan mengembalikan Transfer Keluar terkait ke Sedang Dijalan. Barang bisa diterima ulang.`
-              : "Sebagian penerimaan sudah selesai diterima. Menghapus akan membalik penempatan yang sudah masuk rak dan mengembalikan Transfer Keluar terkait ke Sedang Dijalan.";
-          }
+            if (allTransfer && hasReceived) {
+              return isSingle
+                ? `Penerimaan ${target.transaction_number} sudah selesai diterima. Menghapus akan membalik penempatan yang sudah masuk rak dan mengembalikan Transfer Keluar terkait ke Sedang Dijalan. Barang bisa diterima ulang.`
+                : "Sebagian penerimaan sudah selesai diterima. Menghapus akan membalik penempatan yang sudah masuk rak dan mengembalikan Transfer Keluar terkait ke Sedang Dijalan.";
+            }
 
-          if (allTransfer) {
-            return isSingle
-              ? `Penerimaan ${target.transaction_number} akan dihapus dan Transfer Keluar terkait dikembalikan ke Sedang Dijalan. Barang bisa diterima ulang.`
-              : "Penerimaan transfer dihapus dan Transfer Keluar terkait dikembalikan ke Sedang Dijalan. Barang bisa diterima ulang.";
-          }
+            if (allTransfer) {
+              return isSingle
+                ? `Penerimaan ${target.transaction_number} akan dihapus dan Transfer Keluar terkait dikembalikan ke Sedang Dijalan. Barang bisa diterima ulang.`
+                : "Penerimaan transfer dihapus dan Transfer Keluar terkait dikembalikan ke Sedang Dijalan. Barang bisa diterima ulang.";
+            }
 
-          if (allPO && hasReceived) {
-            return isSingle
-              ? `Penerimaan ${target.transaction_number} sudah selesai diterima. Menghapus akan membalik penempatan yang sudah masuk rak dan mengembalikan Pesanan Pembelian ke status Belum Diterima agar bisa diterima ulang.`
-              : "Sebagian penerimaan PO sudah selesai diterima. Menghapus akan membalik penempatan yang sudah masuk rak dan mengembalikan Pesanan Pembelian ke Belum Diterima.";
-          }
+            if (allPO && hasReceived) {
+              return isSingle
+                ? `Penerimaan ${target.transaction_number} sudah selesai diterima. Menghapus akan membalik penempatan yang sudah masuk rak dan mengembalikan Pesanan Pembelian ke status Belum Diterima agar bisa diterima ulang.`
+                : "Sebagian penerimaan PO sudah selesai diterima. Menghapus akan membalik penempatan yang sudah masuk rak dan mengembalikan Pesanan Pembelian ke Belum Diterima.";
+            }
 
-          return "Penerimaan dibatalkan dan stok yang belum ditempatkan dikembalikan dari bin inbound. Tindakan ini tidak bisa dibatalkan.";
-        })()}
-        confirmLabel="Hapus"
-        loading={bulkCancel.isPending}
-        onConfirm={() => {
-          bulkCancel.mutate(
-            deleteTargets.map((d) => d.id),
-            {
-              onSuccess: () => {
-                resetSelectionRef.current?.();
-                resetSelectionRef.current = null;
-                setDeleteTargets([]);
+            return "Penerimaan dibatalkan dan stok yang belum ditempatkan dikembalikan dari bin inbound. Tindakan ini tidak bisa dibatalkan.";
+          })()}
+          confirmLabel="Hapus"
+          loading={bulkCancel.isPending}
+          onConfirm={() => {
+            bulkCancel.mutate(
+              deleteTargets.map((d) => d.id),
+              {
+                onSuccess: () => {
+                  resetSelectionRef.current?.();
+                  resetSelectionRef.current = null;
+                  setDeleteTargets([]);
+                },
               },
-            },
-          );
-        }}
-      />}
+            );
+          }}
+        />
+      )}
     </>
   );
 }

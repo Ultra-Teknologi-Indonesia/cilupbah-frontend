@@ -190,14 +190,14 @@ export function PacklistTable() {
       {
         id: "select",
         header: () => (
-            <Checkbox
-              checked={
-                allSelected ? true : someSelected ? "indeterminate" : false
-              }
-              onCheckedChange={toggleAll}
-              aria-label="Pilih semua"
-              disabled={!canExportShipping && !canExportOrder && !canEditOrder}
-            />
+          <Checkbox
+            checked={
+              allSelected ? true : someSelected ? "indeterminate" : false
+            }
+            onCheckedChange={toggleAll}
+            aria-label="Pilih semua"
+            disabled={!canExportShipping && !canExportOrder && !canEditOrder}
+          />
         ),
         cell: ({ row }) => {
           const el = packlistLabelEligible(row.original);

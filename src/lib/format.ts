@@ -95,10 +95,9 @@ export function formatDateTimeWithSeconds(
   if (!date) return "—";
 
   const parts = Object.fromEntries(
-    dateTimeWithSeconds.formatToParts(date).map(({ type, value }) => [
-      type,
-      value,
-    ]),
+    dateTimeWithSeconds
+      .formatToParts(date)
+      .map(({ type, value }) => [type, value]),
   );
 
   return `${parts.day} ${parts.month} ${parts.year}, ${parts.hour}:${parts.minute}:${parts.second}`;

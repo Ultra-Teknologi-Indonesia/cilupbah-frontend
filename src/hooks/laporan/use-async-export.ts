@@ -51,7 +51,9 @@ export function useAsyncExport<TArgs = void>(
         throw new Error("Export memakan waktu terlalu lama. Coba lagi.");
       } catch (error) {
         toast.error(
-          error instanceof Error ? error.message : "Gagal membuat berkas export.",
+          error instanceof Error
+            ? error.message
+            : "Gagal membuat berkas export.",
           { id: toastId },
         );
         apiError(error, "Gagal membuat berkas export");

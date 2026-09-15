@@ -117,7 +117,8 @@ export const useRejectCancelRequest = createMutationHook({
 export const useRetryBuyerCancellationSync = createMutationHook({
   mutationFn: (orderId: string) =>
     OrderService.retryBuyerCancellationSync(orderId),
-  successMessage: "Keputusan pembatalan buyer berhasil dikirim ulang ke channel",
+  successMessage:
+    "Keputusan pembatalan buyer berhasil dikirim ulang ke channel",
   errorMessage: "Gagal mengirim ulang keputusan ke channel",
   invalidateOnError: true,
   invalidates: (orderId) => forOrder(orderId),

@@ -169,55 +169,55 @@ export default function DashboardNavigation({ routes }: { routes: Route[] }) {
                           if (!subAllowed) return null;
 
                           return (
-                          <div key={`${route.id}-${subRoute.title}`}>
-                            <SidebarMenuSubItem className="h-auto">
-                              <SidebarMenuSubButton asChild>
-                                <Link
-                                  href={subRoute.link}
-                                  onClick={handleNavClick}
-                                  className={cn(
-                                    "flex items-center justify-between rounded-md px-4 py-1.5 text-sm",
-                                    linkIsActive(subRoute.link)
-                                      ? "bg-sidebar-accent text-primary font-medium"
-                                      : "text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
-                                  )}
-                                >
-                                  <span>{subRoute.title}</span>
-                                  {subRoute.badge && (
-                                    <span className="flex h-5 items-center justify-center rounded-full bg-primary/10 px-2 text-2xs font-medium text-primary">
-                                      {subRoute.badge}
-                                    </span>
-                                  )}
-                                </Link>
-                              </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
-
-                            {subRoute.subs && subRoute.subs.length > 0 && (
-                              <div className="ml-4 mt-1 border-l border-sidebar-border pl-2 flex flex-col gap-1">
-                                {subRoute.subs.map((nestedSub) => (
-                                  <SidebarMenuSubItem
-                                    key={`${route.id}-${subRoute.title}-${nestedSub.title}`}
-                                    className="h-auto"
+                            <div key={`${route.id}-${subRoute.title}`}>
+                              <SidebarMenuSubItem className="h-auto">
+                                <SidebarMenuSubButton asChild>
+                                  <Link
+                                    href={subRoute.link}
+                                    onClick={handleNavClick}
+                                    className={cn(
+                                      "flex items-center justify-between rounded-md px-4 py-1.5 text-sm",
+                                      linkIsActive(subRoute.link)
+                                        ? "bg-sidebar-accent text-primary font-medium"
+                                        : "text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+                                    )}
                                   >
-                                    <SidebarMenuSubButton asChild>
-                                      <Link
-                                        href={nestedSub.link}
-                                        onClick={handleNavClick}
-                                        className={cn(
-                                          "flex items-center rounded-md px-4 py-1 text-xs",
-                                          linkIsActive(nestedSub.link)
-                                            ? "bg-sidebar-accent text-primary font-medium"
-                                            : "text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
-                                        )}
-                                      >
-                                        <span>{nestedSub.title}</span>
-                                      </Link>
-                                    </SidebarMenuSubButton>
-                                  </SidebarMenuSubItem>
-                                ))}
-                              </div>
-                            )}
-                          </div>
+                                    <span>{subRoute.title}</span>
+                                    {subRoute.badge && (
+                                      <span className="flex h-5 items-center justify-center rounded-full bg-primary/10 px-2 text-2xs font-medium text-primary">
+                                        {subRoute.badge}
+                                      </span>
+                                    )}
+                                  </Link>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+
+                              {subRoute.subs && subRoute.subs.length > 0 && (
+                                <div className="ml-4 mt-1 border-l border-sidebar-border pl-2 flex flex-col gap-1">
+                                  {subRoute.subs.map((nestedSub) => (
+                                    <SidebarMenuSubItem
+                                      key={`${route.id}-${subRoute.title}-${nestedSub.title}`}
+                                      className="h-auto"
+                                    >
+                                      <SidebarMenuSubButton asChild>
+                                        <Link
+                                          href={nestedSub.link}
+                                          onClick={handleNavClick}
+                                          className={cn(
+                                            "flex items-center rounded-md px-4 py-1 text-xs",
+                                            linkIsActive(nestedSub.link)
+                                              ? "bg-sidebar-accent text-primary font-medium"
+                                              : "text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+                                          )}
+                                        >
+                                          <span>{nestedSub.title}</span>
+                                        </Link>
+                                      </SidebarMenuSubButton>
+                                    </SidebarMenuSubItem>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
                           );
                         })}
                       </SidebarMenuSub>

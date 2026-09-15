@@ -173,11 +173,16 @@ export const DOCUMENT_TYPES: Record<DocumentTypeKey, DocumentTypeConfig> = {
     title: "Picklist (Pesanan Terpilih)",
     subtitle: () => "Export sedang diproses",
     fetchPdf: async (id, _query, onProgress) => {
-      const result = await ExportJobService.waitForBlob(id, "application/pdf", onProgress);
+      const result = await ExportJobService.waitForBlob(
+        id,
+        "application/pdf",
+        onProgress,
+      );
       return { blob: result.blob, meta: { file_name: result.fileName } };
     },
     backUrl: () => "/dashboard/proses-pesanan/picking",
-    filename: (_id, meta) => (meta?.file_name as string | undefined) ?? "Picklist-Bulk.pdf",
+    filename: (_id, meta) =>
+      (meta?.file_name as string | undefined) ?? "Picklist-Bulk.pdf",
   },
 
   "invoice-bulk": {
@@ -205,11 +210,16 @@ export const DOCUMENT_TYPES: Record<DocumentTypeKey, DocumentTypeConfig> = {
     title: "Faktur (Pesanan Terpilih)",
     subtitle: () => "Export sedang diproses",
     fetchPdf: async (id, _query, onProgress) => {
-      const result = await ExportJobService.waitForBlob(id, "application/pdf", onProgress);
+      const result = await ExportJobService.waitForBlob(
+        id,
+        "application/pdf",
+        onProgress,
+      );
       return { blob: result.blob, meta: { file_name: result.fileName } };
     },
     backUrl: () => "/dashboard/proses-pesanan/packing",
-    filename: (_id, meta) => (meta?.file_name as string | undefined) ?? "Faktur-Bulk.pdf",
+    filename: (_id, meta) =>
+      (meta?.file_name as string | undefined) ?? "Faktur-Bulk.pdf",
   },
 
   "shipping-label": {
@@ -351,11 +361,16 @@ export const DOCUMENT_TYPES: Record<DocumentTypeKey, DocumentTypeConfig> = {
     title: "Laporan Putaway (Bulk)",
     subtitle: () => "Export sedang diproses",
     fetchPdf: async (id, _query, onProgress) => {
-      const result = await ExportJobService.waitForBlob(id, "application/pdf", onProgress);
+      const result = await ExportJobService.waitForBlob(
+        id,
+        "application/pdf",
+        onProgress,
+      );
       return { blob: result.blob, meta: { file_name: result.fileName } };
     },
     backUrl: () => "/dashboard/barang-masuk/penempatan",
-    filename: (_id, meta) => (meta?.file_name as string | undefined) ?? "Putaway-Bulk.pdf",
+    filename: (_id, meta) =>
+      (meta?.file_name as string | undefined) ?? "Putaway-Bulk.pdf",
   },
 
   "stock-adjustment": {
@@ -398,11 +413,16 @@ export const DOCUMENT_TYPES: Record<DocumentTypeKey, DocumentTypeConfig> = {
     title: "Laporan Penyesuaian (Bulk)",
     subtitle: () => "Export sedang diproses",
     fetchPdf: async (id, _query, onProgress) => {
-      const result = await ExportJobService.waitForBlob(id, "application/pdf", onProgress);
+      const result = await ExportJobService.waitForBlob(
+        id,
+        "application/pdf",
+        onProgress,
+      );
       return { blob: result.blob, meta: { file_name: result.fileName } };
     },
     backUrl: () => "/dashboard/transaksi-stok?tab=penyesuaian",
-    filename: (_id, meta) => (meta?.file_name as string | undefined) ?? "Laporan-Penyesuaian-Bulk.pdf",
+    filename: (_id, meta) =>
+      (meta?.file_name as string | undefined) ?? "Laporan-Penyesuaian-Bulk.pdf",
   },
 
   invoice: {
@@ -470,11 +490,16 @@ export const DOCUMENT_TYPES: Record<DocumentTypeKey, DocumentTypeConfig> = {
     title: "Surat Jalan (Pesanan Terpilih)",
     subtitle: () => "Export sedang diproses",
     fetchPdf: async (id, _query, onProgress) => {
-      const result = await ExportJobService.waitForBlob(id, "application/pdf", onProgress);
+      const result = await ExportJobService.waitForBlob(
+        id,
+        "application/pdf",
+        onProgress,
+      );
       return { blob: result.blob, meta: { file_name: result.fileName } };
     },
     backUrl: () => "/dashboard/proses-pesanan/shipping",
-    filename: (_id, meta) => (meta?.file_name as string | undefined) ?? "Manifest-Bulk.pdf",
+    filename: (_id, meta) =>
+      (meta?.file_name as string | undefined) ?? "Manifest-Bulk.pdf",
   },
 
   "inbound-barcodes": {
@@ -781,9 +806,11 @@ export const DOCUMENT_TYPES: Record<DocumentTypeKey, DocumentTypeConfig> = {
 
   "monitor-stock-export": {
     title: "Export Monitor Stok",
-    subtitle: (_id, meta) => (meta?.file_name as string | undefined) ?? "Monitor Stok",
+    subtitle: (_id, meta) =>
+      (meta?.file_name as string | undefined) ?? "Monitor Stok",
     fetchPdf: async (id, _query, onProgress) => {
-      const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+      const wait = (ms: number) =>
+        new Promise((resolve) => setTimeout(resolve, ms));
 
       for (let attempt = 0; attempt < 240; attempt += 1) {
         const job = await ExportJobService.status(decodeURIComponent(id));
@@ -804,7 +831,8 @@ export const DOCUMENT_TYPES: Record<DocumentTypeKey, DocumentTypeConfig> = {
       throw new Error("Pembuatan PDF terlalu lama. Silakan coba lagi.");
     },
     backUrl: () => "/dashboard/monitor-stok",
-    filename: (_id, meta) => (meta?.file_name as string | undefined) ?? "monitor-stok.pdf",
+    filename: (_id, meta) =>
+      (meta?.file_name as string | undefined) ?? "monitor-stok.pdf",
   },
 };
 

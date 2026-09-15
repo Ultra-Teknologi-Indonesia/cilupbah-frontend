@@ -37,7 +37,9 @@ const VIEWPORT_W = Number(process.env.VIEWPORT_W || 1440);
 const VIEWPORT_H = Number(process.env.VIEWPORT_H || 900);
 
 if (!LOGIN_EMAIL || !LOGIN_PASSWORD) {
-  console.error("[bantuan-screenshot] LOGIN_EMAIL & LOGIN_PASSWORD wajib di env.");
+  console.error(
+    "[bantuan-screenshot] LOGIN_EMAIL & LOGIN_PASSWORD wajib di env.",
+  );
   process.exit(1);
 }
 
@@ -45,13 +47,17 @@ let puppeteer;
 try {
   puppeteer = (await import("puppeteer")).default;
 } catch {
-  console.error("[bantuan-screenshot] puppeteer belum diinstal. Jalankan: pnpm add -D puppeteer");
+  console.error(
+    "[bantuan-screenshot] puppeteer belum diinstal. Jalankan: pnpm add -D puppeteer",
+  );
   process.exit(1);
 }
 
 async function loadTargets() {
   if (!existsSync(TARGETS_FILE)) {
-    console.error(`[bantuan-screenshot] targets file tidak ada: ${TARGETS_FILE}`);
+    console.error(
+      `[bantuan-screenshot] targets file tidak ada: ${TARGETS_FILE}`,
+    );
     process.exit(1);
   }
   const raw = await readFile(TARGETS_FILE, "utf8");
@@ -61,9 +67,14 @@ async function loadTargets() {
 async function login(page) {
   console.log(`[bantuan-screenshot] login sebagai ${LOGIN_EMAIL}`);
   await page.goto(`${BASE_URL}/login`, { waitUntil: "networkidle2" });
-  await page.waitForSelector('input[type="email"], input[name="email"]', { timeout: 10_000 });
+  await page.waitForSelector('input[type="email"], input[name="email"]', {
+    timeout: 10_000,
+  });
   await page.type('input[type="email"], input[name="email"]', LOGIN_EMAIL);
-  await page.type('input[type="password"], input[name="password"]', LOGIN_PASSWORD);
+  await page.type(
+    'input[type="password"], input[name="password"]',
+    LOGIN_PASSWORD,
+  );
   await Promise.all([
     page.waitForNavigation({ waitUntil: "networkidle2", timeout: 15_000 }),
     page.click('button[type="submit"]'),
@@ -80,11 +91,16 @@ async function clickByText(page, text, tag = "*") {
     (t, tg) => {
       const nodes = Array.from(document.querySelectorAll(tg));
       const target = t.trim().toLowerCase();
-      return nodes.find((n) => {
-        if (!(n instanceof HTMLElement) || n.offsetParent === null) return false;
-        const own = (n.textContent ?? "").trim().toLowerCase();
-        return own === target || own.startsWith(target) || own.endsWith(target);
-      }) ?? null;
+      return (
+        nodes.find((n) => {
+          if (!(n instanceof HTMLElement) || n.offsetParent === null)
+            return false;
+          const own = (n.textContent ?? "").trim().toLowerCase();
+          return (
+            own === target || own.startsWith(target) || own.endsWith(target)
+          );
+        }) ?? null
+      );
     },
     text,
     tag,
@@ -129,7 +145,9 @@ async function runStep(page, step) {
 async function injectAnnotations(page, annotations) {
   if (!annotations?.length) return;
   await page.evaluate((anns) => {
-    document.querySelectorAll("[data-bantuan-annot]").forEach((n) => n.remove());
+    document
+      .querySelectorAll("[data-bantuan-annot]")
+      .forEach((n) => n.remove());
     const style = document.createElement("style");
     style.setAttribute("data-bantuan-annot", "style");
     style.textContent = `
@@ -164,11 +182,18 @@ async function injectAnnotations(page, annotations) {
     function resolveEl(sel) {
       if (sel.startsWith("text=")) {
         const target = sel.slice(5).trim().toLowerCase();
-        const nodes = Array.from(document.querySelectorAll("button, a, [role='tab'], h1, h2, h3, label, [data-slot]"));
+        const nodes = Array.from(
+          document.querySelectorAll(
+            "button, a, [role='tab'], h1, h2, h3, label, [data-slot]",
+          ),
+        );
         return nodes.find((n) => {
-          if (!(n instanceof HTMLElement) || n.offsetParent === null) return false;
+          if (!(n instanceof HTMLElement) || n.offsetParent === null)
+            return false;
           const own = (n.textContent ?? "").trim().toLowerCase();
-          return own === target || own.startsWith(target) || own.includes(target);
+          return (
+            own === target || own.startsWith(target) || own.includes(target)
+          );
         });
       }
       return document.querySelector(sel);
@@ -178,7 +203,8 @@ async function injectAnnotations(page, annotations) {
       const el = resolveEl(a.selector);
       if (!(el instanceof HTMLElement)) return;
       const r = el.getBoundingClientRect();
-      const scrollX = window.scrollX, scrollY = window.scrollY;
+      const scrollX = window.scrollX,
+        scrollY = window.scrollY;
 
       const ring = document.createElement("div");
       ring.className = "bantuan-annot-ring";
@@ -197,13 +223,23 @@ async function injectAnnotations(page, annotations) {
       badge.setAttribute("data-num", String(idx + 1));
       badge.textContent = a.label ?? "";
       const pos = a.position ?? "tl";
-      const w = 200, h = 26;
-      let top = r.top + scrollY, left = r.left + scrollX;
+      const w = 200,
+        h = 26;
+      let top = r.top + scrollY,
+        left = r.left + scrollX;
       if (pos === "tr") left = r.right + scrollX - w + 8;
       if (pos === "bl") top = r.bottom + scrollY + 6;
-      if (pos === "br") { top = r.bottom + scrollY + 6; left = r.right + scrollX - w + 8; }
-      if (pos === "tl") { top = top - h - 4; }
-      Object.assign(badge.style, { top: `${top}px`, left: `${Math.max(4, left)}px` });
+      if (pos === "br") {
+        top = r.bottom + scrollY + 6;
+        left = r.right + scrollX - w + 8;
+      }
+      if (pos === "tl") {
+        top = top - h - 4;
+      }
+      Object.assign(badge.style, {
+        top: `${top}px`,
+        left: `${Math.max(4, left)}px`,
+      });
       document.body.appendChild(badge);
     });
   }, annotations);
@@ -217,7 +253,11 @@ async function detectPageIssue(page, expectedPath) {
   if (path.startsWith("/_error") || path.includes("/404")) return "next-error";
   const bodyText = await page.evaluate(() => document.body?.innerText ?? "");
   const first500 = bodyText.slice(0, 500).toLowerCase();
-  if (/404|this page could not be found|not[- ]found|tidak ditemukan/.test(first500)) {
+  if (
+    /404|this page could not be found|not[- ]found|tidak ditemukan/.test(
+      first500,
+    )
+  ) {
     return "page-not-found";
   }
   const expected = expectedPath.split("?")[0].replace(/\/+$/, "");
@@ -241,7 +281,12 @@ async function shoot(page, target, shot, manifestEntries, failed) {
   const issue = await detectPageIssue(page, expectedPath);
   if (issue) {
     console.warn(`    ✗ SKIP: ${issue}`);
-    failed.push({ slug: target.slug, name: shot.name, url: fullUrl, reason: issue });
+    failed.push({
+      slug: target.slug,
+      name: shot.name,
+      url: fullUrl,
+      reason: issue,
+    });
     return;
   }
 
@@ -291,7 +336,9 @@ async function shoot(page, target, shot, manifestEntries, failed) {
 
 async function main() {
   const targets = await loadTargets();
-  console.log(`[bantuan-screenshot] ${targets.length} target, base=${BASE_URL}`);
+  console.log(
+    `[bantuan-screenshot] ${targets.length} target, base=${BASE_URL}`,
+  );
 
   const browser = await puppeteer.launch({
     headless: process.env.HEADFUL ? false : "new",
@@ -312,7 +359,11 @@ async function main() {
           await shoot(page, target, shot, manifestEntries, failed);
         } catch (err) {
           console.error(`    ✗ ${shot.name}: ${err.message}`);
-          failed.push({ slug: target.slug, name: shot.name, reason: `error: ${err.message}` });
+          failed.push({
+            slug: target.slug,
+            name: shot.name,
+            reason: `error: ${err.message}`,
+          });
         }
       }
     }
@@ -330,7 +381,9 @@ async function main() {
       ),
     );
     console.log(`[bantuan-screenshot] selesai. Manifest: ${MANIFEST_FILE}`);
-    console.log(`  ${manifestEntries.length} shot tersimpan, ${failed.length} gagal (lihat manifest.failed).`);
+    console.log(
+      `  ${manifestEntries.length} shot tersimpan, ${failed.length} gagal (lihat manifest.failed).`,
+    );
   } finally {
     await browser.close();
   }

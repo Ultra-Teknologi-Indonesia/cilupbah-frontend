@@ -124,10 +124,15 @@ export function PicklistReportDialog({
       ? Boolean(startDate && endDate) &&
         !invalidRange &&
         !exportPicklist.isPending
-      : Boolean(picklistId) && !exportDetail.isPending && !exportDetailPdf.isPending;
+      : Boolean(picklistId) &&
+        !exportDetail.isPending &&
+        !exportDetailPdf.isPending;
 
   const isExcelOutput = mode === "tanggal" || format === "excel";
-  const busy = exportPicklist.isPending || exportDetail.isPending || exportDetailPdf.isPending;
+  const busy =
+    exportPicklist.isPending ||
+    exportDetail.isPending ||
+    exportDetailPdf.isPending;
 
   async function handleCetak() {
     if (mode === "tanggal") {

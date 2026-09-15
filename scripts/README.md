@@ -55,16 +55,16 @@ target berisi array `shots`:
 
 **Field yang tersedia per shot:**
 
-| Field | Wajib | Deskripsi |
-| ----- | ----- | --------- |
-| `name` | ✓ | Nama file (tanpa ekstensi). Awali dengan angka urut. |
-| `url` | ✓ | Relatif ke `BASE_URL`. |
-| `waitFor` | | CSS selector yang harus muncul sebelum shot diambil. |
-| `steps` | | Array interaksi: `click`, `type`, `waitFor`, `waitTime`. |
-| `settleMs` | | Delay ms sebelum shot (default 400). |
-| `clipSelector` | | Crop shot ke elemen ini (bukan full-page). |
-| `fullPage` | | `true` untuk shot seluruh halaman scroll. |
-| `caption` | | Muncul di manifest.json + jadi caption default di panduan. |
+| Field          | Wajib | Deskripsi                                                  |
+| -------------- | ----- | ---------------------------------------------------------- |
+| `name`         | ✓     | Nama file (tanpa ekstensi). Awali dengan angka urut.       |
+| `url`          | ✓     | Relatif ke `BASE_URL`.                                     |
+| `waitFor`      |       | CSS selector yang harus muncul sebelum shot diambil.       |
+| `steps`        |       | Array interaksi: `click`, `type`, `waitFor`, `waitTime`.   |
+| `settleMs`     |       | Delay ms sebelum shot (default 400).                       |
+| `clipSelector` |       | Crop shot ke elemen ini (bukan full-page).                 |
+| `fullPage`     |       | `true` untuk shot seluruh halaman scroll.                  |
+| `caption`      |       | Muncul di manifest.json + jadi caption default di panduan. |
 
 Setelah shots ter-generate, referensi di panduan lewat `content/manual/*.ts`
 (atau di mana pun MANUAL_ENTRIES dirakit).

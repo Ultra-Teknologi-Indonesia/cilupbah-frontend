@@ -1,1790 +1,1684 @@
 {
-    "slug": "webhook",
-    "name": "Webhook",
-    "description": "Endpoint webhook masuk dari channel.",
-    "endpoints_count": 10,
-    "undocumented": 0,
-    "endpoints": [
-        {
-            "id": "api.webhook.systemsetting.index",
-            "module_slug": "webhook",
-            "module_name": "Webhook",
-            "method": "GET",
-            "path": "/api/v1/systemsetting/webhook",
-            "summary": "Ambil daftar pengaturan sistem",
-            "description": "Ambil daftar pengaturan sistem.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-webhook].",
-            "purpose": "Membutuhkan izin: owner, view-webhook. Mendukung filter, sort, search, dan pagination (Spatie Query Builder — lihat section Filter/Sort/Search).",
-            "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
-            "action": "index",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "view-webhook"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": [
-                    {
-                        "id": "mixed",
-                        "event": "mixed",
-                        "target_url": "mixed",
-                        "is_active": "mixed",
-                        "created_at": "mixed",
-                        "updated_at": "mixed"
-                    }
-                ],
-                "meta": {
-                    "current_page": "integer",
-                    "per_page": "integer",
-                    "total": "integer",
-                    "last_page": "integer"
-                }
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": [
-                    {
-                        "id": "019ea2afad1d733eafb905816d10590e",
-                        "event": "string",
-                        "target_url": "string",
-                        "is_active": "string",
-                        "created_at": "string",
-                        "updated_at": "string"
-                    }
-                ],
-                "meta": {
-                    "current_page": 1,
-                    "per_page": 10,
-                    "total": 1,
-                    "last_page": 1
-                }
-            },
-            "response_resource": "Modules\\Webhook\\Http\\Resources\\WebhookSubscriptionResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [
-                {
-                    "name": "event",
-                    "type": "exact",
-                    "column": null,
-                    "scope": null,
-                    "description": "Field event (tipe filter). Cocok persis. Pemakaian: `?filter[event]=value`.",
-                    "usage_example": "?filter[event]=value"
-                },
-                {
-                    "name": "is_active",
-                    "type": "exact",
-                    "column": null,
-                    "scope": null,
-                    "description": "True bila aktif; false = archived/deactivated. Cocok persis. Pemakaian: `?filter[is_active]=value`.",
-                    "usage_example": "?filter[is_active]=value"
-                }
-            ],
-            "allowed_sorts": [
-                "event",
-                "created_at"
-            ],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": "-created_at",
-            "related_endpoints": [
-                {
-                    "id": "api.webhook.index",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks",
-                    "summary": "Ambil daftar webhook"
-                },
-                {
-                    "id": "api.webhook.show",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ambil detail webhook"
-                },
-                {
-                    "id": "api.webhook.deliveries",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks/{webhook}/deliveries",
-                    "summary": "Ambil detail webhook"
-                },
-                {
-                    "id": "api.webhook.store",
-                    "method": "POST",
-                    "path": "/api/v1/webhooks",
-                    "summary": "Buat webhook"
-                },
-                {
-                    "id": "api.webhook.update",
-                    "method": "PUT",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ubah webhook"
-                },
-                {
-                    "id": "api.webhook.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ubah webhook"
-                },
-                {
-                    "id": "api.webhook.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Hapus webhook"
-                },
-                {
-                    "id": "api.webhook.deliveries.redeliver",
-                    "method": "POST",
-                    "path": "/api/v1/webhook-deliveries/{delivery}/redeliver",
-                    "summary": "Buat delivery webhook"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.webhook.systemsetting.store",
-            "module_slug": "webhook",
-            "module_name": "Webhook",
-            "method": "POST",
-            "path": "/api/v1/systemsetting/webhook",
-            "summary": "Buat pengaturan sistem",
-            "description": "Buat pengaturan sistem.\nResponse: 201 dengan data resource yang baru dibuat. Trigger side-effects sesuai domain (event/job/notifikasi) — lihat section Side Effects.\nOtorisasi: minimal satu izin dari [owner, edit-webhook].",
-            "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-webhook. Membuat resource baru atau memicu aksi domain.",
-            "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
-            "action": "store",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "edit-webhook"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": "Modules\\Webhook\\Http\\Requests\\StoreWebhookSubscriptionRequest",
-            "path_params": [],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": {
-                    "id": "mixed",
-                    "event": "mixed",
-                    "target_url": "mixed",
-                    "is_active": "mixed",
-                    "created_at": "mixed",
-                    "updated_at": "mixed"
-                }
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": {
-                    "id": "019ea2afad1d733eafb905816d10590e",
-                    "event": "string",
-                    "target_url": "string",
-                    "is_active": "string",
-                    "created_at": "string",
-                    "updated_at": "string"
-                }
-            },
-            "response_resource": "Modules\\Webhook\\Http\\Resources\\WebhookSubscriptionResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                201,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.webhook.index",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks",
-                    "summary": "Ambil daftar webhook"
-                },
-                {
-                    "id": "api.webhook.show",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ambil detail webhook"
-                },
-                {
-                    "id": "api.webhook.deliveries",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks/{webhook}/deliveries",
-                    "summary": "Ambil detail webhook"
-                },
-                {
-                    "id": "api.webhook.systemsetting.index",
-                    "method": "GET",
-                    "path": "/api/v1/systemsetting/webhook",
-                    "summary": "Ambil daftar pengaturan sistem"
-                },
-                {
-                    "id": "api.webhook.store",
-                    "method": "POST",
-                    "path": "/api/v1/webhooks",
-                    "summary": "Buat webhook"
-                },
-                {
-                    "id": "api.webhook.update",
-                    "method": "PUT",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ubah webhook"
-                },
-                {
-                    "id": "api.webhook.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ubah webhook"
-                },
-                {
-                    "id": "api.webhook.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Hapus webhook"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.webhook.deliveries.redeliver",
-            "module_slug": "webhook",
-            "module_name": "Webhook",
-            "method": "POST",
-            "path": "/api/v1/webhook-deliveries/{delivery}/redeliver",
-            "summary": "Buat delivery webhook",
-            "description": "Buat delivery webhook.\nResponse: 201 dengan data resource yang baru dibuat. Trigger side-effects sesuai domain (event/job/notifikasi) — lihat section Side Effects.\nOtorisasi: minimal satu izin dari [owner, edit-webhook].",
-            "purpose": "Membutuhkan izin: owner, edit-webhook. Membuat resource baru atau memicu aksi domain.",
-            "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
-            "action": "redeliver",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "edit-webhook"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [
-                {
-                    "name": "delivery",
-                    "type": "string",
-                    "required": true,
-                    "description": "Field delivery (tipe string)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": {
-                    "id": "mixed",
-                    "subscription_id": "mixed",
-                    "event": "mixed",
-                    "event_id": "mixed",
-                    "status": "mixed",
-                    "status_code": "mixed",
-                    "attempts": "mixed",
-                    "last_error": "mixed",
-                    "payload": "mixed",
-                    "delivered_at": "mixed",
-                    "created_at": "mixed"
-                }
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": {
-                    "id": "019ea2afad1d733eafb905816d10590e",
-                    "subscription_id": "019ea2afad1d733eafb905816d10590e",
-                    "event": "string",
-                    "event_id": "019ea2afad1d733eafb905816d10590e",
-                    "status": "string",
-                    "status_code": "string",
-                    "attempts": "string",
-                    "last_error": "string",
-                    "payload": "string",
-                    "delivered_at": "string",
-                    "created_at": "string"
-                }
-            },
-            "response_resource": "Modules\\Webhook\\Http\\Resources\\WebhookDeliveryResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 404,
-                    "reason": "Pengiriman webhook tidak ditemukan",
-                    "body": {
-                        "success": false,
-                        "message": "Pengiriman webhook tidak ditemukan"
-                    }
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                201,
-                401,
-                403,
-                404,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.webhook.index",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks",
-                    "summary": "Ambil daftar webhook"
-                },
-                {
-                    "id": "api.webhook.show",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ambil detail webhook"
-                },
-                {
-                    "id": "api.webhook.deliveries",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks/{webhook}/deliveries",
-                    "summary": "Ambil detail webhook"
-                },
-                {
-                    "id": "api.webhook.systemsetting.index",
-                    "method": "GET",
-                    "path": "/api/v1/systemsetting/webhook",
-                    "summary": "Ambil daftar pengaturan sistem"
-                },
-                {
-                    "id": "api.webhook.store",
-                    "method": "POST",
-                    "path": "/api/v1/webhooks",
-                    "summary": "Buat webhook"
-                },
-                {
-                    "id": "api.webhook.update",
-                    "method": "PUT",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ubah webhook"
-                },
-                {
-                    "id": "api.webhook.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ubah webhook"
-                },
-                {
-                    "id": "api.webhook.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Hapus webhook"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.webhook.index",
-            "module_slug": "webhook",
-            "module_name": "Webhook",
-            "method": "GET",
-            "path": "/api/v1/webhooks",
-            "summary": "Ambil daftar webhook",
-            "description": "Ambil daftar webhook.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-webhook].",
-            "purpose": "Membutuhkan izin: owner, view-webhook. Mendukung filter, sort, search, dan pagination (Spatie Query Builder — lihat section Filter/Sort/Search).",
-            "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
-            "action": "index",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "view-webhook"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": [
-                    {
-                        "id": "mixed",
-                        "event": "mixed",
-                        "target_url": "mixed",
-                        "is_active": "mixed",
-                        "created_at": "mixed",
-                        "updated_at": "mixed"
-                    }
-                ],
-                "meta": {
-                    "current_page": "integer",
-                    "per_page": "integer",
-                    "total": "integer",
-                    "last_page": "integer"
-                }
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": [
-                    {
-                        "id": "019ea2afad1d733eafb905816d10590e",
-                        "event": "string",
-                        "target_url": "string",
-                        "is_active": "string",
-                        "created_at": "string",
-                        "updated_at": "string"
-                    }
-                ],
-                "meta": {
-                    "current_page": 1,
-                    "per_page": 10,
-                    "total": 1,
-                    "last_page": 1
-                }
-            },
-            "response_resource": "Modules\\Webhook\\Http\\Resources\\WebhookSubscriptionResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [
-                {
-                    "name": "event",
-                    "type": "exact",
-                    "column": null,
-                    "scope": null,
-                    "description": "Field event (tipe filter). Cocok persis. Pemakaian: `?filter[event]=value`.",
-                    "usage_example": "?filter[event]=value"
-                },
-                {
-                    "name": "is_active",
-                    "type": "exact",
-                    "column": null,
-                    "scope": null,
-                    "description": "True bila aktif; false = archived/deactivated. Cocok persis. Pemakaian: `?filter[is_active]=value`.",
-                    "usage_example": "?filter[is_active]=value"
-                }
-            ],
-            "allowed_sorts": [
-                "event",
-                "created_at"
-            ],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": "-created_at",
-            "related_endpoints": [
-                {
-                    "id": "api.webhook.show",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ambil detail webhook"
-                },
-                {
-                    "id": "api.webhook.deliveries",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks/{webhook}/deliveries",
-                    "summary": "Ambil detail webhook"
-                },
-                {
-                    "id": "api.webhook.systemsetting.index",
-                    "method": "GET",
-                    "path": "/api/v1/systemsetting/webhook",
-                    "summary": "Ambil daftar pengaturan sistem"
-                },
-                {
-                    "id": "api.webhook.store",
-                    "method": "POST",
-                    "path": "/api/v1/webhooks",
-                    "summary": "Buat webhook"
-                },
-                {
-                    "id": "api.webhook.update",
-                    "method": "PUT",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ubah webhook"
-                },
-                {
-                    "id": "api.webhook.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ubah webhook"
-                },
-                {
-                    "id": "api.webhook.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Hapus webhook"
-                },
-                {
-                    "id": "api.webhook.deliveries.redeliver",
-                    "method": "POST",
-                    "path": "/api/v1/webhook-deliveries/{delivery}/redeliver",
-                    "summary": "Buat delivery webhook"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.webhook.store",
-            "module_slug": "webhook",
-            "module_name": "Webhook",
-            "method": "POST",
-            "path": "/api/v1/webhooks",
-            "summary": "Buat webhook",
-            "description": "Buat webhook.\nResponse: 201 dengan data resource yang baru dibuat. Trigger side-effects sesuai domain (event/job/notifikasi) — lihat section Side Effects.\nOtorisasi: minimal satu izin dari [owner, edit-webhook].",
-            "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-webhook. Membuat resource baru atau memicu aksi domain.",
-            "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
-            "action": "store",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "edit-webhook"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": "Modules\\Webhook\\Http\\Requests\\StoreWebhookSubscriptionRequest",
-            "path_params": [],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": {
-                    "id": "mixed",
-                    "event": "mixed",
-                    "target_url": "mixed",
-                    "is_active": "mixed",
-                    "created_at": "mixed",
-                    "updated_at": "mixed"
-                }
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": {
-                    "id": "019ea2afad1d733eafb905816d10590e",
-                    "event": "string",
-                    "target_url": "string",
-                    "is_active": "string",
-                    "created_at": "string",
-                    "updated_at": "string"
-                }
-            },
-            "response_resource": "Modules\\Webhook\\Http\\Resources\\WebhookSubscriptionResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                201,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.webhook.index",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks",
-                    "summary": "Ambil daftar webhook"
-                },
-                {
-                    "id": "api.webhook.show",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ambil detail webhook"
-                },
-                {
-                    "id": "api.webhook.deliveries",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks/{webhook}/deliveries",
-                    "summary": "Ambil detail webhook"
-                },
-                {
-                    "id": "api.webhook.systemsetting.index",
-                    "method": "GET",
-                    "path": "/api/v1/systemsetting/webhook",
-                    "summary": "Ambil daftar pengaturan sistem"
-                },
-                {
-                    "id": "api.webhook.update",
-                    "method": "PUT",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ubah webhook"
-                },
-                {
-                    "id": "api.webhook.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ubah webhook"
-                },
-                {
-                    "id": "api.webhook.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Hapus webhook"
-                },
-                {
-                    "id": "api.webhook.deliveries.redeliver",
-                    "method": "POST",
-                    "path": "/api/v1/webhook-deliveries/{delivery}/redeliver",
-                    "summary": "Buat delivery webhook"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.webhook.destroy",
-            "module_slug": "webhook",
-            "module_name": "Webhook",
-            "method": "DELETE",
-            "path": "/api/v1/webhooks/{webhook}",
-            "summary": "Hapus webhook",
-            "description": "Hapus webhook.\nResponse: 200/204. Perhatikan aturan revert/soft-delete yang berlaku pada resource ini.\nOtorisasi: minimal satu izin dari [owner, edit-webhook].",
-            "purpose": "Membutuhkan izin: owner, edit-webhook. Menghapus resource. Ikuti aturan revert/soft-delete yang berlaku.",
-            "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
-            "action": "destroy",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "edit-webhook"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [
-                {
-                    "name": "webhook",
-                    "type": "string",
-                    "required": true,
-                    "description": "Field webhook (tipe string)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": "object|null"
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Webhook subscription berhasil dihapus",
-                "data": {}
-            },
-            "response_resource": null,
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 404,
-                    "reason": "Webhook subscription tidak ditemukan",
-                    "body": {
-                        "success": false,
-                        "message": "Webhook subscription tidak ditemukan"
-                    }
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                204,
-                401,
-                403,
-                404,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.webhook.index",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks",
-                    "summary": "Ambil daftar webhook"
-                },
-                {
-                    "id": "api.webhook.show",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ambil detail webhook"
-                },
-                {
-                    "id": "api.webhook.deliveries",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks/{webhook}/deliveries",
-                    "summary": "Ambil detail webhook"
-                },
-                {
-                    "id": "api.webhook.systemsetting.index",
-                    "method": "GET",
-                    "path": "/api/v1/systemsetting/webhook",
-                    "summary": "Ambil daftar pengaturan sistem"
-                },
-                {
-                    "id": "api.webhook.store",
-                    "method": "POST",
-                    "path": "/api/v1/webhooks",
-                    "summary": "Buat webhook"
-                },
-                {
-                    "id": "api.webhook.update",
-                    "method": "PUT",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ubah webhook"
-                },
-                {
-                    "id": "api.webhook.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ubah webhook"
-                },
-                {
-                    "id": "api.webhook.deliveries.redeliver",
-                    "method": "POST",
-                    "path": "/api/v1/webhook-deliveries/{delivery}/redeliver",
-                    "summary": "Buat delivery webhook"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.webhook.show",
-            "module_slug": "webhook",
-            "module_name": "Webhook",
-            "method": "GET",
-            "path": "/api/v1/webhooks/{webhook}",
-            "summary": "Ambil detail webhook",
-            "description": "Ambil detail webhook.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-webhook].",
-            "purpose": "Membutuhkan izin: owner, view-webhook. Mengembalikan data untuk ditampilkan di UI.",
-            "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
-            "action": "show",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "view-webhook"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [
-                {
-                    "name": "webhook",
-                    "type": "string",
-                    "required": true,
-                    "description": "Field webhook (tipe string)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": {
-                    "id": "mixed",
-                    "event": "mixed",
-                    "target_url": "mixed",
-                    "is_active": "mixed",
-                    "created_at": "mixed",
-                    "updated_at": "mixed"
-                }
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": {
-                    "id": "019ea2afad1d733eafb905816d10590e",
-                    "event": "string",
-                    "target_url": "string",
-                    "is_active": "string",
-                    "created_at": "string",
-                    "updated_at": "string"
-                }
-            },
-            "response_resource": "Modules\\Webhook\\Http\\Resources\\WebhookSubscriptionResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 404,
-                    "reason": "Webhook subscription tidak ditemukan",
-                    "body": {
-                        "success": false,
-                        "message": "Webhook subscription tidak ditemukan"
-                    }
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                404,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.webhook.index",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks",
-                    "summary": "Ambil daftar webhook"
-                },
-                {
-                    "id": "api.webhook.deliveries",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks/{webhook}/deliveries",
-                    "summary": "Ambil detail webhook"
-                },
-                {
-                    "id": "api.webhook.systemsetting.index",
-                    "method": "GET",
-                    "path": "/api/v1/systemsetting/webhook",
-                    "summary": "Ambil daftar pengaturan sistem"
-                },
-                {
-                    "id": "api.webhook.store",
-                    "method": "POST",
-                    "path": "/api/v1/webhooks",
-                    "summary": "Buat webhook"
-                },
-                {
-                    "id": "api.webhook.update",
-                    "method": "PUT",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ubah webhook"
-                },
-                {
-                    "id": "api.webhook.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ubah webhook"
-                },
-                {
-                    "id": "api.webhook.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Hapus webhook"
-                },
-                {
-                    "id": "api.webhook.deliveries.redeliver",
-                    "method": "POST",
-                    "path": "/api/v1/webhook-deliveries/{delivery}/redeliver",
-                    "summary": "Buat delivery webhook"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.webhook.update",
-            "module_slug": "webhook",
-            "module_name": "Webhook",
-            "method": "PATCH",
-            "path": "/api/v1/webhooks/{webhook}",
-            "summary": "Ubah webhook",
-            "description": "Ubah webhook.\nResponse: 200 dengan data resource yang sudah diperbarui.\nOtorisasi: minimal satu izin dari [owner, edit-webhook].",
-            "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-webhook. Memperbarui resource yang sudah ada.",
-            "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
-            "action": "update",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "edit-webhook"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": "Modules\\Webhook\\Http\\Requests\\StoreWebhookSubscriptionRequest",
-            "path_params": [
-                {
-                    "name": "webhook",
-                    "type": "string",
-                    "required": true,
-                    "description": "Field webhook (tipe string)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": {
-                    "id": "mixed",
-                    "event": "mixed",
-                    "target_url": "mixed",
-                    "is_active": "mixed",
-                    "created_at": "mixed",
-                    "updated_at": "mixed"
-                }
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": {
-                    "id": "019ea2afad1d733eafb905816d10590e",
-                    "event": "string",
-                    "target_url": "string",
-                    "is_active": "string",
-                    "created_at": "string",
-                    "updated_at": "string"
-                }
-            },
-            "response_resource": "Modules\\Webhook\\Http\\Resources\\WebhookSubscriptionResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 404,
-                    "reason": "Webhook subscription tidak ditemukan",
-                    "body": {
-                        "success": false,
-                        "message": "Webhook subscription tidak ditemukan"
-                    }
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                404,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.webhook.index",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks",
-                    "summary": "Ambil daftar webhook"
-                },
-                {
-                    "id": "api.webhook.show",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ambil detail webhook"
-                },
-                {
-                    "id": "api.webhook.deliveries",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks/{webhook}/deliveries",
-                    "summary": "Ambil detail webhook"
-                },
-                {
-                    "id": "api.webhook.systemsetting.index",
-                    "method": "GET",
-                    "path": "/api/v1/systemsetting/webhook",
-                    "summary": "Ambil daftar pengaturan sistem"
-                },
-                {
-                    "id": "api.webhook.store",
-                    "method": "POST",
-                    "path": "/api/v1/webhooks",
-                    "summary": "Buat webhook"
-                },
-                {
-                    "id": "api.webhook.update",
-                    "method": "PUT",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ubah webhook"
-                },
-                {
-                    "id": "api.webhook.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Hapus webhook"
-                },
-                {
-                    "id": "api.webhook.deliveries.redeliver",
-                    "method": "POST",
-                    "path": "/api/v1/webhook-deliveries/{delivery}/redeliver",
-                    "summary": "Buat delivery webhook"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.webhook.update",
-            "module_slug": "webhook",
-            "module_name": "Webhook",
-            "method": "PUT",
-            "path": "/api/v1/webhooks/{webhook}",
-            "summary": "Ubah webhook",
-            "description": "Ubah webhook.\nResponse: 200 dengan data resource yang sudah diperbarui.\nOtorisasi: minimal satu izin dari [owner, edit-webhook].",
-            "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-webhook. Memperbarui resource yang sudah ada.",
-            "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
-            "action": "update",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "edit-webhook"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": "Modules\\Webhook\\Http\\Requests\\StoreWebhookSubscriptionRequest",
-            "path_params": [
-                {
-                    "name": "webhook",
-                    "type": "string",
-                    "required": true,
-                    "description": "Field webhook (tipe string)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": {
-                    "id": "mixed",
-                    "event": "mixed",
-                    "target_url": "mixed",
-                    "is_active": "mixed",
-                    "created_at": "mixed",
-                    "updated_at": "mixed"
-                }
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": {
-                    "id": "019ea2afad1d733eafb905816d10590e",
-                    "event": "string",
-                    "target_url": "string",
-                    "is_active": "string",
-                    "created_at": "string",
-                    "updated_at": "string"
-                }
-            },
-            "response_resource": "Modules\\Webhook\\Http\\Resources\\WebhookSubscriptionResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 404,
-                    "reason": "Webhook subscription tidak ditemukan",
-                    "body": {
-                        "success": false,
-                        "message": "Webhook subscription tidak ditemukan"
-                    }
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                404,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.webhook.index",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks",
-                    "summary": "Ambil daftar webhook"
-                },
-                {
-                    "id": "api.webhook.show",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ambil detail webhook"
-                },
-                {
-                    "id": "api.webhook.deliveries",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks/{webhook}/deliveries",
-                    "summary": "Ambil detail webhook"
-                },
-                {
-                    "id": "api.webhook.systemsetting.index",
-                    "method": "GET",
-                    "path": "/api/v1/systemsetting/webhook",
-                    "summary": "Ambil daftar pengaturan sistem"
-                },
-                {
-                    "id": "api.webhook.store",
-                    "method": "POST",
-                    "path": "/api/v1/webhooks",
-                    "summary": "Buat webhook"
-                },
-                {
-                    "id": "api.webhook.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ubah webhook"
-                },
-                {
-                    "id": "api.webhook.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Hapus webhook"
-                },
-                {
-                    "id": "api.webhook.deliveries.redeliver",
-                    "method": "POST",
-                    "path": "/api/v1/webhook-deliveries/{delivery}/redeliver",
-                    "summary": "Buat delivery webhook"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.webhook.deliveries",
-            "module_slug": "webhook",
-            "module_name": "Webhook",
-            "method": "GET",
-            "path": "/api/v1/webhooks/{webhook}/deliveries",
-            "summary": "Ambil detail webhook",
-            "description": "Ambil detail webhook.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-webhook].",
-            "purpose": "Membutuhkan izin: owner, view-webhook. Mengembalikan data untuk ditampilkan di UI.",
-            "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
-            "action": "deliveries",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "view-webhook"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [
-                {
-                    "name": "webhook",
-                    "type": "string",
-                    "required": true,
-                    "description": "Field webhook (tipe string)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": [
-                    {
-                        "id": "mixed",
-                        "subscription_id": "mixed",
-                        "event": "mixed",
-                        "event_id": "mixed",
-                        "status": "mixed",
-                        "status_code": "mixed",
-                        "attempts": "mixed",
-                        "last_error": "mixed",
-                        "payload": "mixed",
-                        "delivered_at": "mixed",
-                        "created_at": "mixed"
-                    }
-                ],
-                "meta": {
-                    "current_page": "integer",
-                    "per_page": "integer",
-                    "total": "integer",
-                    "last_page": "integer"
-                }
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": [
-                    {
-                        "id": "019ea2afad1d733eafb905816d10590e",
-                        "subscription_id": "019ea2afad1d733eafb905816d10590e",
-                        "event": "string",
-                        "event_id": "019ea2afad1d733eafb905816d10590e",
-                        "status": "string",
-                        "status_code": "string",
-                        "attempts": "string",
-                        "last_error": "string",
-                        "payload": "string",
-                        "delivered_at": "string",
-                        "created_at": "string"
-                    }
-                ],
-                "meta": {
-                    "current_page": 1,
-                    "per_page": 10,
-                    "total": 1,
-                    "last_page": 1
-                }
-            },
-            "response_resource": "Modules\\Webhook\\Http\\Resources\\WebhookDeliveryResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 404,
-                    "reason": "Webhook subscription tidak ditemukan",
-                    "body": {
-                        "success": false,
-                        "message": "Webhook subscription tidak ditemukan"
-                    }
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                404,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [
-                {
-                    "name": "status",
-                    "type": "exact",
-                    "column": null,
-                    "scope": null,
-                    "description": "Status resource. Nilai valid tergantung modul — lihat enum di kolom rules. Cocok persis. Pemakaian: `?filter[status]=value`.",
-                    "usage_example": "?filter[status]=value"
-                },
-                {
-                    "name": "event",
-                    "type": "exact",
-                    "column": null,
-                    "scope": null,
-                    "description": "Field event (tipe filter). Cocok persis. Pemakaian: `?filter[event]=value`.",
-                    "usage_example": "?filter[event]=value"
-                }
-            ],
-            "allowed_sorts": [
-                "created_at",
-                "delivered_at",
-                "status"
-            ],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": "-created_at",
-            "related_endpoints": [
-                {
-                    "id": "api.webhook.index",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks",
-                    "summary": "Ambil daftar webhook"
-                },
-                {
-                    "id": "api.webhook.show",
-                    "method": "GET",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ambil detail webhook"
-                },
-                {
-                    "id": "api.webhook.systemsetting.index",
-                    "method": "GET",
-                    "path": "/api/v1/systemsetting/webhook",
-                    "summary": "Ambil daftar pengaturan sistem"
-                },
-                {
-                    "id": "api.webhook.store",
-                    "method": "POST",
-                    "path": "/api/v1/webhooks",
-                    "summary": "Buat webhook"
-                },
-                {
-                    "id": "api.webhook.update",
-                    "method": "PUT",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ubah webhook"
-                },
-                {
-                    "id": "api.webhook.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Ubah webhook"
-                },
-                {
-                    "id": "api.webhook.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/webhooks/{webhook}",
-                    "summary": "Hapus webhook"
-                },
-                {
-                    "id": "api.webhook.deliveries.redeliver",
-                    "method": "POST",
-                    "path": "/api/v1/webhook-deliveries/{delivery}/redeliver",
-                    "summary": "Buat delivery webhook"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
+  "slug": "webhook",
+  "name": "Webhook",
+  "description": "Endpoint webhook masuk dari channel.",
+  "endpoints_count": 10,
+  "undocumented": 0,
+  "endpoints": [
+    {
+      "id": "api.webhook.systemsetting.index",
+      "module_slug": "webhook",
+      "module_name": "Webhook",
+      "method": "GET",
+      "path": "/api/v1/systemsetting/webhook",
+      "summary": "Ambil daftar pengaturan sistem",
+      "description": "Ambil daftar pengaturan sistem.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-webhook].",
+      "purpose": "Membutuhkan izin: owner, view-webhook. Mendukung filter, sort, search, dan pagination (Spatie Query Builder — lihat section Filter/Sort/Search).",
+      "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
+      "action": "index",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "view-webhook"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": [
+          {
+            "id": "mixed",
+            "event": "mixed",
+            "target_url": "mixed",
+            "is_active": "mixed",
+            "created_at": "mixed",
+            "updated_at": "mixed"
+          }
+        ],
+        "meta": {
+          "current_page": "integer",
+          "per_page": "integer",
+          "total": "integer",
+          "last_page": "integer"
         }
-    ]
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": [
+          {
+            "id": "019ea2afad1d733eafb905816d10590e",
+            "event": "string",
+            "target_url": "string",
+            "is_active": "string",
+            "created_at": "string",
+            "updated_at": "string"
+          }
+        ],
+        "meta": {
+          "current_page": 1,
+          "per_page": 10,
+          "total": 1,
+          "last_page": 1
+        }
+      },
+      "response_resource": "Modules\\Webhook\\Http\\Resources\\WebhookSubscriptionResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [
+        {
+          "name": "event",
+          "type": "exact",
+          "column": null,
+          "scope": null,
+          "description": "Field event (tipe filter). Cocok persis. Pemakaian: `?filter[event]=value`.",
+          "usage_example": "?filter[event]=value"
+        },
+        {
+          "name": "is_active",
+          "type": "exact",
+          "column": null,
+          "scope": null,
+          "description": "True bila aktif; false = archived/deactivated. Cocok persis. Pemakaian: `?filter[is_active]=value`.",
+          "usage_example": "?filter[is_active]=value"
+        }
+      ],
+      "allowed_sorts": ["event", "created_at"],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": "-created_at",
+      "related_endpoints": [
+        {
+          "id": "api.webhook.index",
+          "method": "GET",
+          "path": "/api/v1/webhooks",
+          "summary": "Ambil daftar webhook"
+        },
+        {
+          "id": "api.webhook.show",
+          "method": "GET",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ambil detail webhook"
+        },
+        {
+          "id": "api.webhook.deliveries",
+          "method": "GET",
+          "path": "/api/v1/webhooks/{webhook}/deliveries",
+          "summary": "Ambil detail webhook"
+        },
+        {
+          "id": "api.webhook.store",
+          "method": "POST",
+          "path": "/api/v1/webhooks",
+          "summary": "Buat webhook"
+        },
+        {
+          "id": "api.webhook.update",
+          "method": "PUT",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ubah webhook"
+        },
+        {
+          "id": "api.webhook.update",
+          "method": "PATCH",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ubah webhook"
+        },
+        {
+          "id": "api.webhook.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Hapus webhook"
+        },
+        {
+          "id": "api.webhook.deliveries.redeliver",
+          "method": "POST",
+          "path": "/api/v1/webhook-deliveries/{delivery}/redeliver",
+          "summary": "Buat delivery webhook"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.webhook.systemsetting.store",
+      "module_slug": "webhook",
+      "module_name": "Webhook",
+      "method": "POST",
+      "path": "/api/v1/systemsetting/webhook",
+      "summary": "Buat pengaturan sistem",
+      "description": "Buat pengaturan sistem.\nResponse: 201 dengan data resource yang baru dibuat. Trigger side-effects sesuai domain (event/job/notifikasi) — lihat section Side Effects.\nOtorisasi: minimal satu izin dari [owner, edit-webhook].",
+      "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-webhook. Membuat resource baru atau memicu aksi domain.",
+      "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
+      "action": "store",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "edit-webhook"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": "Modules\\Webhook\\Http\\Requests\\StoreWebhookSubscriptionRequest",
+      "path_params": [],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": {
+          "id": "mixed",
+          "event": "mixed",
+          "target_url": "mixed",
+          "is_active": "mixed",
+          "created_at": "mixed",
+          "updated_at": "mixed"
+        }
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": {
+          "id": "019ea2afad1d733eafb905816d10590e",
+          "event": "string",
+          "target_url": "string",
+          "is_active": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      },
+      "response_resource": "Modules\\Webhook\\Http\\Resources\\WebhookSubscriptionResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [201, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.webhook.index",
+          "method": "GET",
+          "path": "/api/v1/webhooks",
+          "summary": "Ambil daftar webhook"
+        },
+        {
+          "id": "api.webhook.show",
+          "method": "GET",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ambil detail webhook"
+        },
+        {
+          "id": "api.webhook.deliveries",
+          "method": "GET",
+          "path": "/api/v1/webhooks/{webhook}/deliveries",
+          "summary": "Ambil detail webhook"
+        },
+        {
+          "id": "api.webhook.systemsetting.index",
+          "method": "GET",
+          "path": "/api/v1/systemsetting/webhook",
+          "summary": "Ambil daftar pengaturan sistem"
+        },
+        {
+          "id": "api.webhook.store",
+          "method": "POST",
+          "path": "/api/v1/webhooks",
+          "summary": "Buat webhook"
+        },
+        {
+          "id": "api.webhook.update",
+          "method": "PUT",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ubah webhook"
+        },
+        {
+          "id": "api.webhook.update",
+          "method": "PATCH",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ubah webhook"
+        },
+        {
+          "id": "api.webhook.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Hapus webhook"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.webhook.deliveries.redeliver",
+      "module_slug": "webhook",
+      "module_name": "Webhook",
+      "method": "POST",
+      "path": "/api/v1/webhook-deliveries/{delivery}/redeliver",
+      "summary": "Buat delivery webhook",
+      "description": "Buat delivery webhook.\nResponse: 201 dengan data resource yang baru dibuat. Trigger side-effects sesuai domain (event/job/notifikasi) — lihat section Side Effects.\nOtorisasi: minimal satu izin dari [owner, edit-webhook].",
+      "purpose": "Membutuhkan izin: owner, edit-webhook. Membuat resource baru atau memicu aksi domain.",
+      "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
+      "action": "redeliver",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "edit-webhook"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [
+        {
+          "name": "delivery",
+          "type": "string",
+          "required": true,
+          "description": "Field delivery (tipe string)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": {
+          "id": "mixed",
+          "subscription_id": "mixed",
+          "event": "mixed",
+          "event_id": "mixed",
+          "status": "mixed",
+          "status_code": "mixed",
+          "attempts": "mixed",
+          "last_error": "mixed",
+          "payload": "mixed",
+          "delivered_at": "mixed",
+          "created_at": "mixed"
+        }
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": {
+          "id": "019ea2afad1d733eafb905816d10590e",
+          "subscription_id": "019ea2afad1d733eafb905816d10590e",
+          "event": "string",
+          "event_id": "019ea2afad1d733eafb905816d10590e",
+          "status": "string",
+          "status_code": "string",
+          "attempts": "string",
+          "last_error": "string",
+          "payload": "string",
+          "delivered_at": "string",
+          "created_at": "string"
+        }
+      },
+      "response_resource": "Modules\\Webhook\\Http\\Resources\\WebhookDeliveryResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 404,
+          "reason": "Pengiriman webhook tidak ditemukan",
+          "body": {
+            "success": false,
+            "message": "Pengiriman webhook tidak ditemukan"
+          }
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [201, 401, 403, 404, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.webhook.index",
+          "method": "GET",
+          "path": "/api/v1/webhooks",
+          "summary": "Ambil daftar webhook"
+        },
+        {
+          "id": "api.webhook.show",
+          "method": "GET",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ambil detail webhook"
+        },
+        {
+          "id": "api.webhook.deliveries",
+          "method": "GET",
+          "path": "/api/v1/webhooks/{webhook}/deliveries",
+          "summary": "Ambil detail webhook"
+        },
+        {
+          "id": "api.webhook.systemsetting.index",
+          "method": "GET",
+          "path": "/api/v1/systemsetting/webhook",
+          "summary": "Ambil daftar pengaturan sistem"
+        },
+        {
+          "id": "api.webhook.store",
+          "method": "POST",
+          "path": "/api/v1/webhooks",
+          "summary": "Buat webhook"
+        },
+        {
+          "id": "api.webhook.update",
+          "method": "PUT",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ubah webhook"
+        },
+        {
+          "id": "api.webhook.update",
+          "method": "PATCH",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ubah webhook"
+        },
+        {
+          "id": "api.webhook.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Hapus webhook"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.webhook.index",
+      "module_slug": "webhook",
+      "module_name": "Webhook",
+      "method": "GET",
+      "path": "/api/v1/webhooks",
+      "summary": "Ambil daftar webhook",
+      "description": "Ambil daftar webhook.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-webhook].",
+      "purpose": "Membutuhkan izin: owner, view-webhook. Mendukung filter, sort, search, dan pagination (Spatie Query Builder — lihat section Filter/Sort/Search).",
+      "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
+      "action": "index",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "view-webhook"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": [
+          {
+            "id": "mixed",
+            "event": "mixed",
+            "target_url": "mixed",
+            "is_active": "mixed",
+            "created_at": "mixed",
+            "updated_at": "mixed"
+          }
+        ],
+        "meta": {
+          "current_page": "integer",
+          "per_page": "integer",
+          "total": "integer",
+          "last_page": "integer"
+        }
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": [
+          {
+            "id": "019ea2afad1d733eafb905816d10590e",
+            "event": "string",
+            "target_url": "string",
+            "is_active": "string",
+            "created_at": "string",
+            "updated_at": "string"
+          }
+        ],
+        "meta": {
+          "current_page": 1,
+          "per_page": 10,
+          "total": 1,
+          "last_page": 1
+        }
+      },
+      "response_resource": "Modules\\Webhook\\Http\\Resources\\WebhookSubscriptionResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [
+        {
+          "name": "event",
+          "type": "exact",
+          "column": null,
+          "scope": null,
+          "description": "Field event (tipe filter). Cocok persis. Pemakaian: `?filter[event]=value`.",
+          "usage_example": "?filter[event]=value"
+        },
+        {
+          "name": "is_active",
+          "type": "exact",
+          "column": null,
+          "scope": null,
+          "description": "True bila aktif; false = archived/deactivated. Cocok persis. Pemakaian: `?filter[is_active]=value`.",
+          "usage_example": "?filter[is_active]=value"
+        }
+      ],
+      "allowed_sorts": ["event", "created_at"],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": "-created_at",
+      "related_endpoints": [
+        {
+          "id": "api.webhook.show",
+          "method": "GET",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ambil detail webhook"
+        },
+        {
+          "id": "api.webhook.deliveries",
+          "method": "GET",
+          "path": "/api/v1/webhooks/{webhook}/deliveries",
+          "summary": "Ambil detail webhook"
+        },
+        {
+          "id": "api.webhook.systemsetting.index",
+          "method": "GET",
+          "path": "/api/v1/systemsetting/webhook",
+          "summary": "Ambil daftar pengaturan sistem"
+        },
+        {
+          "id": "api.webhook.store",
+          "method": "POST",
+          "path": "/api/v1/webhooks",
+          "summary": "Buat webhook"
+        },
+        {
+          "id": "api.webhook.update",
+          "method": "PUT",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ubah webhook"
+        },
+        {
+          "id": "api.webhook.update",
+          "method": "PATCH",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ubah webhook"
+        },
+        {
+          "id": "api.webhook.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Hapus webhook"
+        },
+        {
+          "id": "api.webhook.deliveries.redeliver",
+          "method": "POST",
+          "path": "/api/v1/webhook-deliveries/{delivery}/redeliver",
+          "summary": "Buat delivery webhook"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.webhook.store",
+      "module_slug": "webhook",
+      "module_name": "Webhook",
+      "method": "POST",
+      "path": "/api/v1/webhooks",
+      "summary": "Buat webhook",
+      "description": "Buat webhook.\nResponse: 201 dengan data resource yang baru dibuat. Trigger side-effects sesuai domain (event/job/notifikasi) — lihat section Side Effects.\nOtorisasi: minimal satu izin dari [owner, edit-webhook].",
+      "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-webhook. Membuat resource baru atau memicu aksi domain.",
+      "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
+      "action": "store",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "edit-webhook"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": "Modules\\Webhook\\Http\\Requests\\StoreWebhookSubscriptionRequest",
+      "path_params": [],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": {
+          "id": "mixed",
+          "event": "mixed",
+          "target_url": "mixed",
+          "is_active": "mixed",
+          "created_at": "mixed",
+          "updated_at": "mixed"
+        }
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": {
+          "id": "019ea2afad1d733eafb905816d10590e",
+          "event": "string",
+          "target_url": "string",
+          "is_active": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      },
+      "response_resource": "Modules\\Webhook\\Http\\Resources\\WebhookSubscriptionResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [201, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.webhook.index",
+          "method": "GET",
+          "path": "/api/v1/webhooks",
+          "summary": "Ambil daftar webhook"
+        },
+        {
+          "id": "api.webhook.show",
+          "method": "GET",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ambil detail webhook"
+        },
+        {
+          "id": "api.webhook.deliveries",
+          "method": "GET",
+          "path": "/api/v1/webhooks/{webhook}/deliveries",
+          "summary": "Ambil detail webhook"
+        },
+        {
+          "id": "api.webhook.systemsetting.index",
+          "method": "GET",
+          "path": "/api/v1/systemsetting/webhook",
+          "summary": "Ambil daftar pengaturan sistem"
+        },
+        {
+          "id": "api.webhook.update",
+          "method": "PUT",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ubah webhook"
+        },
+        {
+          "id": "api.webhook.update",
+          "method": "PATCH",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ubah webhook"
+        },
+        {
+          "id": "api.webhook.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Hapus webhook"
+        },
+        {
+          "id": "api.webhook.deliveries.redeliver",
+          "method": "POST",
+          "path": "/api/v1/webhook-deliveries/{delivery}/redeliver",
+          "summary": "Buat delivery webhook"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.webhook.destroy",
+      "module_slug": "webhook",
+      "module_name": "Webhook",
+      "method": "DELETE",
+      "path": "/api/v1/webhooks/{webhook}",
+      "summary": "Hapus webhook",
+      "description": "Hapus webhook.\nResponse: 200/204. Perhatikan aturan revert/soft-delete yang berlaku pada resource ini.\nOtorisasi: minimal satu izin dari [owner, edit-webhook].",
+      "purpose": "Membutuhkan izin: owner, edit-webhook. Menghapus resource. Ikuti aturan revert/soft-delete yang berlaku.",
+      "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
+      "action": "destroy",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "edit-webhook"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [
+        {
+          "name": "webhook",
+          "type": "string",
+          "required": true,
+          "description": "Field webhook (tipe string)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": "object|null"
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Webhook subscription berhasil dihapus",
+        "data": {}
+      },
+      "response_resource": null,
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 404,
+          "reason": "Webhook subscription tidak ditemukan",
+          "body": {
+            "success": false,
+            "message": "Webhook subscription tidak ditemukan"
+          }
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [204, 401, 403, 404, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.webhook.index",
+          "method": "GET",
+          "path": "/api/v1/webhooks",
+          "summary": "Ambil daftar webhook"
+        },
+        {
+          "id": "api.webhook.show",
+          "method": "GET",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ambil detail webhook"
+        },
+        {
+          "id": "api.webhook.deliveries",
+          "method": "GET",
+          "path": "/api/v1/webhooks/{webhook}/deliveries",
+          "summary": "Ambil detail webhook"
+        },
+        {
+          "id": "api.webhook.systemsetting.index",
+          "method": "GET",
+          "path": "/api/v1/systemsetting/webhook",
+          "summary": "Ambil daftar pengaturan sistem"
+        },
+        {
+          "id": "api.webhook.store",
+          "method": "POST",
+          "path": "/api/v1/webhooks",
+          "summary": "Buat webhook"
+        },
+        {
+          "id": "api.webhook.update",
+          "method": "PUT",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ubah webhook"
+        },
+        {
+          "id": "api.webhook.update",
+          "method": "PATCH",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ubah webhook"
+        },
+        {
+          "id": "api.webhook.deliveries.redeliver",
+          "method": "POST",
+          "path": "/api/v1/webhook-deliveries/{delivery}/redeliver",
+          "summary": "Buat delivery webhook"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.webhook.show",
+      "module_slug": "webhook",
+      "module_name": "Webhook",
+      "method": "GET",
+      "path": "/api/v1/webhooks/{webhook}",
+      "summary": "Ambil detail webhook",
+      "description": "Ambil detail webhook.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-webhook].",
+      "purpose": "Membutuhkan izin: owner, view-webhook. Mengembalikan data untuk ditampilkan di UI.",
+      "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
+      "action": "show",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "view-webhook"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [
+        {
+          "name": "webhook",
+          "type": "string",
+          "required": true,
+          "description": "Field webhook (tipe string)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": {
+          "id": "mixed",
+          "event": "mixed",
+          "target_url": "mixed",
+          "is_active": "mixed",
+          "created_at": "mixed",
+          "updated_at": "mixed"
+        }
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": {
+          "id": "019ea2afad1d733eafb905816d10590e",
+          "event": "string",
+          "target_url": "string",
+          "is_active": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      },
+      "response_resource": "Modules\\Webhook\\Http\\Resources\\WebhookSubscriptionResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 404,
+          "reason": "Webhook subscription tidak ditemukan",
+          "body": {
+            "success": false,
+            "message": "Webhook subscription tidak ditemukan"
+          }
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 404, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.webhook.index",
+          "method": "GET",
+          "path": "/api/v1/webhooks",
+          "summary": "Ambil daftar webhook"
+        },
+        {
+          "id": "api.webhook.deliveries",
+          "method": "GET",
+          "path": "/api/v1/webhooks/{webhook}/deliveries",
+          "summary": "Ambil detail webhook"
+        },
+        {
+          "id": "api.webhook.systemsetting.index",
+          "method": "GET",
+          "path": "/api/v1/systemsetting/webhook",
+          "summary": "Ambil daftar pengaturan sistem"
+        },
+        {
+          "id": "api.webhook.store",
+          "method": "POST",
+          "path": "/api/v1/webhooks",
+          "summary": "Buat webhook"
+        },
+        {
+          "id": "api.webhook.update",
+          "method": "PUT",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ubah webhook"
+        },
+        {
+          "id": "api.webhook.update",
+          "method": "PATCH",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ubah webhook"
+        },
+        {
+          "id": "api.webhook.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Hapus webhook"
+        },
+        {
+          "id": "api.webhook.deliveries.redeliver",
+          "method": "POST",
+          "path": "/api/v1/webhook-deliveries/{delivery}/redeliver",
+          "summary": "Buat delivery webhook"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.webhook.update",
+      "module_slug": "webhook",
+      "module_name": "Webhook",
+      "method": "PATCH",
+      "path": "/api/v1/webhooks/{webhook}",
+      "summary": "Ubah webhook",
+      "description": "Ubah webhook.\nResponse: 200 dengan data resource yang sudah diperbarui.\nOtorisasi: minimal satu izin dari [owner, edit-webhook].",
+      "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-webhook. Memperbarui resource yang sudah ada.",
+      "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
+      "action": "update",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "edit-webhook"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": "Modules\\Webhook\\Http\\Requests\\StoreWebhookSubscriptionRequest",
+      "path_params": [
+        {
+          "name": "webhook",
+          "type": "string",
+          "required": true,
+          "description": "Field webhook (tipe string)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": {
+          "id": "mixed",
+          "event": "mixed",
+          "target_url": "mixed",
+          "is_active": "mixed",
+          "created_at": "mixed",
+          "updated_at": "mixed"
+        }
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": {
+          "id": "019ea2afad1d733eafb905816d10590e",
+          "event": "string",
+          "target_url": "string",
+          "is_active": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      },
+      "response_resource": "Modules\\Webhook\\Http\\Resources\\WebhookSubscriptionResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 404,
+          "reason": "Webhook subscription tidak ditemukan",
+          "body": {
+            "success": false,
+            "message": "Webhook subscription tidak ditemukan"
+          }
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 404, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.webhook.index",
+          "method": "GET",
+          "path": "/api/v1/webhooks",
+          "summary": "Ambil daftar webhook"
+        },
+        {
+          "id": "api.webhook.show",
+          "method": "GET",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ambil detail webhook"
+        },
+        {
+          "id": "api.webhook.deliveries",
+          "method": "GET",
+          "path": "/api/v1/webhooks/{webhook}/deliveries",
+          "summary": "Ambil detail webhook"
+        },
+        {
+          "id": "api.webhook.systemsetting.index",
+          "method": "GET",
+          "path": "/api/v1/systemsetting/webhook",
+          "summary": "Ambil daftar pengaturan sistem"
+        },
+        {
+          "id": "api.webhook.store",
+          "method": "POST",
+          "path": "/api/v1/webhooks",
+          "summary": "Buat webhook"
+        },
+        {
+          "id": "api.webhook.update",
+          "method": "PUT",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ubah webhook"
+        },
+        {
+          "id": "api.webhook.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Hapus webhook"
+        },
+        {
+          "id": "api.webhook.deliveries.redeliver",
+          "method": "POST",
+          "path": "/api/v1/webhook-deliveries/{delivery}/redeliver",
+          "summary": "Buat delivery webhook"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.webhook.update",
+      "module_slug": "webhook",
+      "module_name": "Webhook",
+      "method": "PUT",
+      "path": "/api/v1/webhooks/{webhook}",
+      "summary": "Ubah webhook",
+      "description": "Ubah webhook.\nResponse: 200 dengan data resource yang sudah diperbarui.\nOtorisasi: minimal satu izin dari [owner, edit-webhook].",
+      "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-webhook. Memperbarui resource yang sudah ada.",
+      "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
+      "action": "update",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "edit-webhook"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": "Modules\\Webhook\\Http\\Requests\\StoreWebhookSubscriptionRequest",
+      "path_params": [
+        {
+          "name": "webhook",
+          "type": "string",
+          "required": true,
+          "description": "Field webhook (tipe string)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": {
+          "id": "mixed",
+          "event": "mixed",
+          "target_url": "mixed",
+          "is_active": "mixed",
+          "created_at": "mixed",
+          "updated_at": "mixed"
+        }
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": {
+          "id": "019ea2afad1d733eafb905816d10590e",
+          "event": "string",
+          "target_url": "string",
+          "is_active": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      },
+      "response_resource": "Modules\\Webhook\\Http\\Resources\\WebhookSubscriptionResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 404,
+          "reason": "Webhook subscription tidak ditemukan",
+          "body": {
+            "success": false,
+            "message": "Webhook subscription tidak ditemukan"
+          }
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 404, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.webhook.index",
+          "method": "GET",
+          "path": "/api/v1/webhooks",
+          "summary": "Ambil daftar webhook"
+        },
+        {
+          "id": "api.webhook.show",
+          "method": "GET",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ambil detail webhook"
+        },
+        {
+          "id": "api.webhook.deliveries",
+          "method": "GET",
+          "path": "/api/v1/webhooks/{webhook}/deliveries",
+          "summary": "Ambil detail webhook"
+        },
+        {
+          "id": "api.webhook.systemsetting.index",
+          "method": "GET",
+          "path": "/api/v1/systemsetting/webhook",
+          "summary": "Ambil daftar pengaturan sistem"
+        },
+        {
+          "id": "api.webhook.store",
+          "method": "POST",
+          "path": "/api/v1/webhooks",
+          "summary": "Buat webhook"
+        },
+        {
+          "id": "api.webhook.update",
+          "method": "PATCH",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ubah webhook"
+        },
+        {
+          "id": "api.webhook.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Hapus webhook"
+        },
+        {
+          "id": "api.webhook.deliveries.redeliver",
+          "method": "POST",
+          "path": "/api/v1/webhook-deliveries/{delivery}/redeliver",
+          "summary": "Buat delivery webhook"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.webhook.deliveries",
+      "module_slug": "webhook",
+      "module_name": "Webhook",
+      "method": "GET",
+      "path": "/api/v1/webhooks/{webhook}/deliveries",
+      "summary": "Ambil detail webhook",
+      "description": "Ambil detail webhook.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-webhook].",
+      "purpose": "Membutuhkan izin: owner, view-webhook. Mengembalikan data untuk ditampilkan di UI.",
+      "controller": "Modules\\Webhook\\Http\\Controllers\\WebhookController",
+      "action": "deliveries",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "view-webhook"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [
+        {
+          "name": "webhook",
+          "type": "string",
+          "required": true,
+          "description": "Field webhook (tipe string)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": [
+          {
+            "id": "mixed",
+            "subscription_id": "mixed",
+            "event": "mixed",
+            "event_id": "mixed",
+            "status": "mixed",
+            "status_code": "mixed",
+            "attempts": "mixed",
+            "last_error": "mixed",
+            "payload": "mixed",
+            "delivered_at": "mixed",
+            "created_at": "mixed"
+          }
+        ],
+        "meta": {
+          "current_page": "integer",
+          "per_page": "integer",
+          "total": "integer",
+          "last_page": "integer"
+        }
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": [
+          {
+            "id": "019ea2afad1d733eafb905816d10590e",
+            "subscription_id": "019ea2afad1d733eafb905816d10590e",
+            "event": "string",
+            "event_id": "019ea2afad1d733eafb905816d10590e",
+            "status": "string",
+            "status_code": "string",
+            "attempts": "string",
+            "last_error": "string",
+            "payload": "string",
+            "delivered_at": "string",
+            "created_at": "string"
+          }
+        ],
+        "meta": {
+          "current_page": 1,
+          "per_page": 10,
+          "total": 1,
+          "last_page": 1
+        }
+      },
+      "response_resource": "Modules\\Webhook\\Http\\Resources\\WebhookDeliveryResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 404,
+          "reason": "Webhook subscription tidak ditemukan",
+          "body": {
+            "success": false,
+            "message": "Webhook subscription tidak ditemukan"
+          }
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 404, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [
+        {
+          "name": "status",
+          "type": "exact",
+          "column": null,
+          "scope": null,
+          "description": "Status resource. Nilai valid tergantung modul — lihat enum di kolom rules. Cocok persis. Pemakaian: `?filter[status]=value`.",
+          "usage_example": "?filter[status]=value"
+        },
+        {
+          "name": "event",
+          "type": "exact",
+          "column": null,
+          "scope": null,
+          "description": "Field event (tipe filter). Cocok persis. Pemakaian: `?filter[event]=value`.",
+          "usage_example": "?filter[event]=value"
+        }
+      ],
+      "allowed_sorts": ["created_at", "delivered_at", "status"],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": "-created_at",
+      "related_endpoints": [
+        {
+          "id": "api.webhook.index",
+          "method": "GET",
+          "path": "/api/v1/webhooks",
+          "summary": "Ambil daftar webhook"
+        },
+        {
+          "id": "api.webhook.show",
+          "method": "GET",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ambil detail webhook"
+        },
+        {
+          "id": "api.webhook.systemsetting.index",
+          "method": "GET",
+          "path": "/api/v1/systemsetting/webhook",
+          "summary": "Ambil daftar pengaturan sistem"
+        },
+        {
+          "id": "api.webhook.store",
+          "method": "POST",
+          "path": "/api/v1/webhooks",
+          "summary": "Buat webhook"
+        },
+        {
+          "id": "api.webhook.update",
+          "method": "PUT",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ubah webhook"
+        },
+        {
+          "id": "api.webhook.update",
+          "method": "PATCH",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Ubah webhook"
+        },
+        {
+          "id": "api.webhook.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/webhooks/{webhook}",
+          "summary": "Hapus webhook"
+        },
+        {
+          "id": "api.webhook.deliveries.redeliver",
+          "method": "POST",
+          "path": "/api/v1/webhook-deliveries/{delivery}/redeliver",
+          "summary": "Buat delivery webhook"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    }
+  ]
 }

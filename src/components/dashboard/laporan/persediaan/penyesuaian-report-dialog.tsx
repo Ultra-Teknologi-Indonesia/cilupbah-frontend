@@ -16,7 +16,10 @@ import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/ui/date-picker";
 import { ProductPickerCombobox } from "@/components/dashboard/laporan/shared/product-picker-combobox";
 import { LocationMultiCombobox } from "@/components/dashboard/laporan/shared/location-multi-combobox";
-import { ReportFormatRadio, type ReportFormat } from "@/components/dashboard/laporan/shared/report-format-radio";
+import {
+  ReportFormatRadio,
+  type ReportFormat,
+} from "@/components/dashboard/laporan/shared/report-format-radio";
 import { useAsyncExport } from "@/hooks/laporan/use-async-export";
 import { ReportService } from "@/services/laporan/report.service";
 
@@ -64,7 +67,8 @@ export function PenyesuaianReportDialog({
   const invalidRange = Boolean(
     startDate && endDate && endDate.getTime() < startDate.getTime(),
   );
-  const canCetak = Boolean(startDate && endDate) && !invalidRange && !exportReport.isPending;
+  const canCetak =
+    Boolean(startDate && endDate) && !invalidRange && !exportReport.isPending;
 
   function handleCetak() {
     if (!startDate || !endDate || invalidRange) return;
@@ -148,8 +152,18 @@ export function PenyesuaianReportDialog({
             Batal
           </Button>
           <Button variant="primary" onClick={handleCetak} disabled={!canCetak}>
-            {exportReport.isPending ? <Loader2 className="size-4 animate-spin" /> : format === "pdf" ? <PrinterIcon className="size-4" /> : <DownloadIcon className="size-4" />}
-            {exportReport.isPending ? "Menyiapkan..." : format === "pdf" ? "Unduh PDF" : "Unduh Excel"}
+            {exportReport.isPending ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : format === "pdf" ? (
+              <PrinterIcon className="size-4" />
+            ) : (
+              <DownloadIcon className="size-4" />
+            )}
+            {exportReport.isPending
+              ? "Menyiapkan..."
+              : format === "pdf"
+                ? "Unduh PDF"
+                : "Unduh Excel"}
           </Button>
         </DialogFooter>
       </DialogContent>

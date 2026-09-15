@@ -17,7 +17,10 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Combobox } from "@/components/ui/combobox";
 import { DatePicker } from "@/components/ui/date-picker";
-import { ReportFormatRadio, type ReportFormat } from "@/components/dashboard/laporan/shared/report-format-radio";
+import {
+  ReportFormatRadio,
+  type ReportFormat,
+} from "@/components/dashboard/laporan/shared/report-format-radio";
 import {
   useExportShipmentList,
   useShipmentFilterOptions,
@@ -170,8 +173,10 @@ export function ShipmentReportDialog({
           <Button variant="primary" onClick={handleCetak} disabled={!canCetak}>
             {exportShipment.isPending ? (
               <Loader2 className="size-4 animate-spin" />
+            ) : format === "excel" ? (
+              <DownloadIcon className="size-4" />
             ) : (
-              format === "excel" ? <DownloadIcon className="size-4" /> : <PrinterIcon className="size-4" />
+              <PrinterIcon className="size-4" />
             )}
             {format === "excel" ? "Unduh Excel" : "Unduh PDF"}
           </Button>

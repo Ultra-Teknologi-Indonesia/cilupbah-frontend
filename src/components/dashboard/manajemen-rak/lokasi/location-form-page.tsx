@@ -136,8 +136,7 @@ export function LocationFormPage({ mode, id }: LocationFormPageProps) {
   }, [mode, detail.data, form]);
 
   const protectedLocation =
-    mode === "edit" &&
-    Boolean(detail.data?.isSystem || detail.data?.isLocked);
+    mode === "edit" && Boolean(detail.data?.isSystem || detail.data?.isLocked);
   const layoutEnabled = layoutSetting.data?.useWarehouseLayout ?? false;
   const saving =
     createLocation.isPending ||
@@ -285,7 +284,8 @@ export function LocationFormPage({ mode, id }: LocationFormPageProps) {
         {protectedLocation && (
           <div className="flex items-center gap-2 rounded-2xl border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
             <LockIcon className="size-4" />
-            Lokasi ini dilindungi: data tetap dapat diedit sesuai permission, tetapi tidak dapat dihapus atau dinonaktifkan.
+            Lokasi ini dilindungi: data tetap dapat diedit sesuai permission,
+            tetapi tidak dapat dihapus atau dinonaktifkan.
           </div>
         )}
 

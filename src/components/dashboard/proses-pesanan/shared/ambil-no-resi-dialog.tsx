@@ -238,7 +238,9 @@ export function AmbilNoResiDialog({
     // reject the tab while the authenticated blob request is in flight.
     const printWindow = window.open("about:blank", "_blank");
     if (!printWindow) {
-      toast.error("Popup diblokir browser. Izinkan popup untuk mencetak label.");
+      toast.error(
+        "Popup diblokir browser. Izinkan popup untuk mencetak label.",
+      );
       return;
     }
 
@@ -246,9 +248,8 @@ export function AmbilNoResiDialog({
     setPrinting(true);
 
     try {
-      const blob = await OutboundService.downloadBulkShippingLabelPdf(
-        activeBatchId,
-      );
+      const blob =
+        await OutboundService.downloadBulkShippingLabelPdf(activeBatchId);
       const objectUrl = URL.createObjectURL(blob);
       printWindow.location.replace(objectUrl);
 
@@ -451,7 +452,9 @@ export function AmbilNoResiDialog({
               ) : (
                 <PrinterIcon className="size-4" />
               )}
-              <span>{printing ? "Menyiapkan label…" : "Cetak Label Pengiriman"}</span>
+              <span>
+                {printing ? "Menyiapkan label…" : "Cetak Label Pengiriman"}
+              </span>
             </Button>
           </div>
         </DialogFooter>

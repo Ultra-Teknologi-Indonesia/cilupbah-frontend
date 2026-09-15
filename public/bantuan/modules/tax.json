@@ -1,924 +1,860 @@
 {
-    "slug": "tax",
-    "name": "Tax",
-    "description": "Master pajak.",
-    "endpoints_count": 6,
-    "undocumented": 0,
-    "endpoints": [
-        {
-            "id": "api.tax.index",
-            "module_slug": "tax",
-            "module_name": "Tax",
-            "method": "GET",
-            "path": "/api/v1/taxes",
-            "summary": "Ambil daftar pajak",
-            "description": "Ambil daftar pajak.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-pajak].",
-            "purpose": "Membutuhkan izin: owner, view-pajak. Mendukung filter, sort, search, dan pagination (Spatie Query Builder — lihat section Filter/Sort/Search).",
-            "controller": "Modules\\Tax\\Http\\Controllers\\TaxController",
-            "action": "index",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "view-pajak"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": [
-                    {
-                        "id": "mixed",
-                        "name": "mixed",
-                        "rate": "mixed",
-                        "is_active": "mixed",
-                        "created_at": "mixed",
-                        "updated_at": "mixed"
-                    }
-                ],
-                "meta": {
-                    "current_page": "integer",
-                    "per_page": "integer",
-                    "total": "integer",
-                    "last_page": "integer"
-                }
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": [
-                    {
-                        "id": "019ea2afad1d733eafb905816d10590e",
-                        "name": "string",
-                        "rate": "string",
-                        "is_active": "string",
-                        "created_at": "string",
-                        "updated_at": "string"
-                    }
-                ],
-                "meta": {
-                    "current_page": 1,
-                    "per_page": 10,
-                    "total": 1,
-                    "last_page": 1
-                }
-            },
-            "response_resource": "Modules\\Tax\\Http\\Resources\\TaxResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [
-                {
-                    "name": "is_active",
-                    "type": "exact",
-                    "column": null,
-                    "scope": null,
-                    "description": "True bila aktif; false = archived/deactivated. Cocok persis. Pemakaian: `?filter[is_active]=value`.",
-                    "usage_example": "?filter[is_active]=value"
-                }
-            ],
-            "allowed_sorts": [
-                "name",
-                "rate",
-                "created_at"
-            ],
-            "allowed_search": [
-                "name"
-            ],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": "name",
-            "related_endpoints": [
-                {
-                    "id": "api.tax.show",
-                    "method": "GET",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Ambil detail pajak"
-                },
-                {
-                    "id": "api.tax.store",
-                    "method": "POST",
-                    "path": "/api/v1/taxes",
-                    "summary": "Buat pajak"
-                },
-                {
-                    "id": "api.tax.update",
-                    "method": "PUT",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Ubah pajak"
-                },
-                {
-                    "id": "api.tax.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Ubah pajak"
-                },
-                {
-                    "id": "api.tax.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Hapus pajak"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.tax.store",
-            "module_slug": "tax",
-            "module_name": "Tax",
-            "method": "POST",
-            "path": "/api/v1/taxes",
-            "summary": "Buat pajak",
-            "description": "Buat pajak.\nResponse: 201 dengan data resource yang baru dibuat. Trigger side-effects sesuai domain (event/job/notifikasi) — lihat section Side Effects.\nOtorisasi: minimal satu izin dari [owner, edit-pajak].",
-            "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-pajak. Membuat resource baru atau memicu aksi domain.",
-            "controller": "Modules\\Tax\\Http\\Controllers\\TaxController",
-            "action": "store",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "edit-pajak"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": "Modules\\Tax\\Http\\Requests\\StoreTaxRequest",
-            "path_params": [],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": {
-                    "id": "mixed",
-                    "name": "mixed",
-                    "rate": "mixed",
-                    "is_active": "mixed",
-                    "created_at": "mixed",
-                    "updated_at": "mixed"
-                }
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": {
-                    "id": "019ea2afad1d733eafb905816d10590e",
-                    "name": "string",
-                    "rate": "string",
-                    "is_active": "string",
-                    "created_at": "string",
-                    "updated_at": "string"
-                }
-            },
-            "response_resource": "Modules\\Tax\\Http\\Resources\\TaxResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                201,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.tax.index",
-                    "method": "GET",
-                    "path": "/api/v1/taxes",
-                    "summary": "Ambil daftar pajak"
-                },
-                {
-                    "id": "api.tax.show",
-                    "method": "GET",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Ambil detail pajak"
-                },
-                {
-                    "id": "api.tax.update",
-                    "method": "PUT",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Ubah pajak"
-                },
-                {
-                    "id": "api.tax.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Ubah pajak"
-                },
-                {
-                    "id": "api.tax.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Hapus pajak"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.tax.destroy",
-            "module_slug": "tax",
-            "module_name": "Tax",
-            "method": "DELETE",
-            "path": "/api/v1/taxes/{tax}",
-            "summary": "Hapus pajak",
-            "description": "Hapus pajak.\nResponse: 200/204. Perhatikan aturan revert/soft-delete yang berlaku pada resource ini.\nOtorisasi: minimal satu izin dari [owner, edit-pajak].",
-            "purpose": "Membutuhkan izin: owner, edit-pajak. Menghapus resource. Ikuti aturan revert/soft-delete yang berlaku.",
-            "controller": "Modules\\Tax\\Http\\Controllers\\TaxController",
-            "action": "destroy",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "edit-pajak"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [
-                {
-                    "name": "tax",
-                    "type": "string",
-                    "required": true,
-                    "description": "Field tax (tipe string)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": "object|null"
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Pajak berhasil dihapus",
-                "data": {}
-            },
-            "response_resource": null,
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 404,
-                    "reason": "Pajak tidak ditemukan",
-                    "body": {
-                        "success": false,
-                        "message": "Pajak tidak ditemukan"
-                    }
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                204,
-                401,
-                403,
-                404,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.tax.index",
-                    "method": "GET",
-                    "path": "/api/v1/taxes",
-                    "summary": "Ambil daftar pajak"
-                },
-                {
-                    "id": "api.tax.show",
-                    "method": "GET",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Ambil detail pajak"
-                },
-                {
-                    "id": "api.tax.store",
-                    "method": "POST",
-                    "path": "/api/v1/taxes",
-                    "summary": "Buat pajak"
-                },
-                {
-                    "id": "api.tax.update",
-                    "method": "PUT",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Ubah pajak"
-                },
-                {
-                    "id": "api.tax.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Ubah pajak"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.tax.show",
-            "module_slug": "tax",
-            "module_name": "Tax",
-            "method": "GET",
-            "path": "/api/v1/taxes/{tax}",
-            "summary": "Ambil detail pajak",
-            "description": "Ambil detail pajak.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-pajak].",
-            "purpose": "Membutuhkan izin: owner, view-pajak. Mengembalikan data untuk ditampilkan di UI.",
-            "controller": "Modules\\Tax\\Http\\Controllers\\TaxController",
-            "action": "show",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "view-pajak"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [
-                {
-                    "name": "tax",
-                    "type": "string",
-                    "required": true,
-                    "description": "Field tax (tipe string)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": {
-                    "id": "mixed",
-                    "name": "mixed",
-                    "rate": "mixed",
-                    "is_active": "mixed",
-                    "created_at": "mixed",
-                    "updated_at": "mixed"
-                }
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": {
-                    "id": "019ea2afad1d733eafb905816d10590e",
-                    "name": "string",
-                    "rate": "string",
-                    "is_active": "string",
-                    "created_at": "string",
-                    "updated_at": "string"
-                }
-            },
-            "response_resource": "Modules\\Tax\\Http\\Resources\\TaxResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 404,
-                    "reason": "Pajak tidak ditemukan",
-                    "body": {
-                        "success": false,
-                        "message": "Pajak tidak ditemukan"
-                    }
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                404,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.tax.index",
-                    "method": "GET",
-                    "path": "/api/v1/taxes",
-                    "summary": "Ambil daftar pajak"
-                },
-                {
-                    "id": "api.tax.store",
-                    "method": "POST",
-                    "path": "/api/v1/taxes",
-                    "summary": "Buat pajak"
-                },
-                {
-                    "id": "api.tax.update",
-                    "method": "PUT",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Ubah pajak"
-                },
-                {
-                    "id": "api.tax.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Ubah pajak"
-                },
-                {
-                    "id": "api.tax.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Hapus pajak"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.tax.update",
-            "module_slug": "tax",
-            "module_name": "Tax",
-            "method": "PATCH",
-            "path": "/api/v1/taxes/{tax}",
-            "summary": "Ubah pajak",
-            "description": "Ubah pajak.\nResponse: 200 dengan data resource yang sudah diperbarui.\nOtorisasi: minimal satu izin dari [owner, edit-pajak].",
-            "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-pajak. Memperbarui resource yang sudah ada.",
-            "controller": "Modules\\Tax\\Http\\Controllers\\TaxController",
-            "action": "update",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "edit-pajak"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": "Modules\\Tax\\Http\\Requests\\StoreTaxRequest",
-            "path_params": [
-                {
-                    "name": "tax",
-                    "type": "string",
-                    "required": true,
-                    "description": "Field tax (tipe string)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": {
-                    "id": "mixed",
-                    "name": "mixed",
-                    "rate": "mixed",
-                    "is_active": "mixed",
-                    "created_at": "mixed",
-                    "updated_at": "mixed"
-                }
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": {
-                    "id": "019ea2afad1d733eafb905816d10590e",
-                    "name": "string",
-                    "rate": "string",
-                    "is_active": "string",
-                    "created_at": "string",
-                    "updated_at": "string"
-                }
-            },
-            "response_resource": "Modules\\Tax\\Http\\Resources\\TaxResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 404,
-                    "reason": "Pajak tidak ditemukan",
-                    "body": {
-                        "success": false,
-                        "message": "Pajak tidak ditemukan"
-                    }
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                404,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.tax.index",
-                    "method": "GET",
-                    "path": "/api/v1/taxes",
-                    "summary": "Ambil daftar pajak"
-                },
-                {
-                    "id": "api.tax.show",
-                    "method": "GET",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Ambil detail pajak"
-                },
-                {
-                    "id": "api.tax.store",
-                    "method": "POST",
-                    "path": "/api/v1/taxes",
-                    "summary": "Buat pajak"
-                },
-                {
-                    "id": "api.tax.update",
-                    "method": "PUT",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Ubah pajak"
-                },
-                {
-                    "id": "api.tax.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Hapus pajak"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.tax.update",
-            "module_slug": "tax",
-            "module_name": "Tax",
-            "method": "PUT",
-            "path": "/api/v1/taxes/{tax}",
-            "summary": "Ubah pajak",
-            "description": "Ubah pajak.\nResponse: 200 dengan data resource yang sudah diperbarui.\nOtorisasi: minimal satu izin dari [owner, edit-pajak].",
-            "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-pajak. Memperbarui resource yang sudah ada.",
-            "controller": "Modules\\Tax\\Http\\Controllers\\TaxController",
-            "action": "update",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "edit-pajak"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": "Modules\\Tax\\Http\\Requests\\StoreTaxRequest",
-            "path_params": [
-                {
-                    "name": "tax",
-                    "type": "string",
-                    "required": true,
-                    "description": "Field tax (tipe string)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": {
-                    "id": "mixed",
-                    "name": "mixed",
-                    "rate": "mixed",
-                    "is_active": "mixed",
-                    "created_at": "mixed",
-                    "updated_at": "mixed"
-                }
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": {
-                    "id": "019ea2afad1d733eafb905816d10590e",
-                    "name": "string",
-                    "rate": "string",
-                    "is_active": "string",
-                    "created_at": "string",
-                    "updated_at": "string"
-                }
-            },
-            "response_resource": "Modules\\Tax\\Http\\Resources\\TaxResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 404,
-                    "reason": "Pajak tidak ditemukan",
-                    "body": {
-                        "success": false,
-                        "message": "Pajak tidak ditemukan"
-                    }
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                404,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.tax.index",
-                    "method": "GET",
-                    "path": "/api/v1/taxes",
-                    "summary": "Ambil daftar pajak"
-                },
-                {
-                    "id": "api.tax.show",
-                    "method": "GET",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Ambil detail pajak"
-                },
-                {
-                    "id": "api.tax.store",
-                    "method": "POST",
-                    "path": "/api/v1/taxes",
-                    "summary": "Buat pajak"
-                },
-                {
-                    "id": "api.tax.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Ubah pajak"
-                },
-                {
-                    "id": "api.tax.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/taxes/{tax}",
-                    "summary": "Hapus pajak"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
+  "slug": "tax",
+  "name": "Tax",
+  "description": "Master pajak.",
+  "endpoints_count": 6,
+  "undocumented": 0,
+  "endpoints": [
+    {
+      "id": "api.tax.index",
+      "module_slug": "tax",
+      "module_name": "Tax",
+      "method": "GET",
+      "path": "/api/v1/taxes",
+      "summary": "Ambil daftar pajak",
+      "description": "Ambil daftar pajak.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-pajak].",
+      "purpose": "Membutuhkan izin: owner, view-pajak. Mendukung filter, sort, search, dan pagination (Spatie Query Builder — lihat section Filter/Sort/Search).",
+      "controller": "Modules\\Tax\\Http\\Controllers\\TaxController",
+      "action": "index",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "view-pajak"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": [
+          {
+            "id": "mixed",
+            "name": "mixed",
+            "rate": "mixed",
+            "is_active": "mixed",
+            "created_at": "mixed",
+            "updated_at": "mixed"
+          }
+        ],
+        "meta": {
+          "current_page": "integer",
+          "per_page": "integer",
+          "total": "integer",
+          "last_page": "integer"
         }
-    ]
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": [
+          {
+            "id": "019ea2afad1d733eafb905816d10590e",
+            "name": "string",
+            "rate": "string",
+            "is_active": "string",
+            "created_at": "string",
+            "updated_at": "string"
+          }
+        ],
+        "meta": {
+          "current_page": 1,
+          "per_page": 10,
+          "total": 1,
+          "last_page": 1
+        }
+      },
+      "response_resource": "Modules\\Tax\\Http\\Resources\\TaxResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [
+        {
+          "name": "is_active",
+          "type": "exact",
+          "column": null,
+          "scope": null,
+          "description": "True bila aktif; false = archived/deactivated. Cocok persis. Pemakaian: `?filter[is_active]=value`.",
+          "usage_example": "?filter[is_active]=value"
+        }
+      ],
+      "allowed_sorts": ["name", "rate", "created_at"],
+      "allowed_search": ["name"],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": "name",
+      "related_endpoints": [
+        {
+          "id": "api.tax.show",
+          "method": "GET",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Ambil detail pajak"
+        },
+        {
+          "id": "api.tax.store",
+          "method": "POST",
+          "path": "/api/v1/taxes",
+          "summary": "Buat pajak"
+        },
+        {
+          "id": "api.tax.update",
+          "method": "PUT",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Ubah pajak"
+        },
+        {
+          "id": "api.tax.update",
+          "method": "PATCH",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Ubah pajak"
+        },
+        {
+          "id": "api.tax.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Hapus pajak"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.tax.store",
+      "module_slug": "tax",
+      "module_name": "Tax",
+      "method": "POST",
+      "path": "/api/v1/taxes",
+      "summary": "Buat pajak",
+      "description": "Buat pajak.\nResponse: 201 dengan data resource yang baru dibuat. Trigger side-effects sesuai domain (event/job/notifikasi) — lihat section Side Effects.\nOtorisasi: minimal satu izin dari [owner, edit-pajak].",
+      "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-pajak. Membuat resource baru atau memicu aksi domain.",
+      "controller": "Modules\\Tax\\Http\\Controllers\\TaxController",
+      "action": "store",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "edit-pajak"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": "Modules\\Tax\\Http\\Requests\\StoreTaxRequest",
+      "path_params": [],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": {
+          "id": "mixed",
+          "name": "mixed",
+          "rate": "mixed",
+          "is_active": "mixed",
+          "created_at": "mixed",
+          "updated_at": "mixed"
+        }
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": {
+          "id": "019ea2afad1d733eafb905816d10590e",
+          "name": "string",
+          "rate": "string",
+          "is_active": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      },
+      "response_resource": "Modules\\Tax\\Http\\Resources\\TaxResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [201, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.tax.index",
+          "method": "GET",
+          "path": "/api/v1/taxes",
+          "summary": "Ambil daftar pajak"
+        },
+        {
+          "id": "api.tax.show",
+          "method": "GET",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Ambil detail pajak"
+        },
+        {
+          "id": "api.tax.update",
+          "method": "PUT",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Ubah pajak"
+        },
+        {
+          "id": "api.tax.update",
+          "method": "PATCH",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Ubah pajak"
+        },
+        {
+          "id": "api.tax.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Hapus pajak"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.tax.destroy",
+      "module_slug": "tax",
+      "module_name": "Tax",
+      "method": "DELETE",
+      "path": "/api/v1/taxes/{tax}",
+      "summary": "Hapus pajak",
+      "description": "Hapus pajak.\nResponse: 200/204. Perhatikan aturan revert/soft-delete yang berlaku pada resource ini.\nOtorisasi: minimal satu izin dari [owner, edit-pajak].",
+      "purpose": "Membutuhkan izin: owner, edit-pajak. Menghapus resource. Ikuti aturan revert/soft-delete yang berlaku.",
+      "controller": "Modules\\Tax\\Http\\Controllers\\TaxController",
+      "action": "destroy",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "edit-pajak"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [
+        {
+          "name": "tax",
+          "type": "string",
+          "required": true,
+          "description": "Field tax (tipe string)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": "object|null"
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Pajak berhasil dihapus",
+        "data": {}
+      },
+      "response_resource": null,
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 404,
+          "reason": "Pajak tidak ditemukan",
+          "body": {
+            "success": false,
+            "message": "Pajak tidak ditemukan"
+          }
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [204, 401, 403, 404, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.tax.index",
+          "method": "GET",
+          "path": "/api/v1/taxes",
+          "summary": "Ambil daftar pajak"
+        },
+        {
+          "id": "api.tax.show",
+          "method": "GET",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Ambil detail pajak"
+        },
+        {
+          "id": "api.tax.store",
+          "method": "POST",
+          "path": "/api/v1/taxes",
+          "summary": "Buat pajak"
+        },
+        {
+          "id": "api.tax.update",
+          "method": "PUT",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Ubah pajak"
+        },
+        {
+          "id": "api.tax.update",
+          "method": "PATCH",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Ubah pajak"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.tax.show",
+      "module_slug": "tax",
+      "module_name": "Tax",
+      "method": "GET",
+      "path": "/api/v1/taxes/{tax}",
+      "summary": "Ambil detail pajak",
+      "description": "Ambil detail pajak.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-pajak].",
+      "purpose": "Membutuhkan izin: owner, view-pajak. Mengembalikan data untuk ditampilkan di UI.",
+      "controller": "Modules\\Tax\\Http\\Controllers\\TaxController",
+      "action": "show",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "view-pajak"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [
+        {
+          "name": "tax",
+          "type": "string",
+          "required": true,
+          "description": "Field tax (tipe string)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": {
+          "id": "mixed",
+          "name": "mixed",
+          "rate": "mixed",
+          "is_active": "mixed",
+          "created_at": "mixed",
+          "updated_at": "mixed"
+        }
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": {
+          "id": "019ea2afad1d733eafb905816d10590e",
+          "name": "string",
+          "rate": "string",
+          "is_active": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      },
+      "response_resource": "Modules\\Tax\\Http\\Resources\\TaxResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 404,
+          "reason": "Pajak tidak ditemukan",
+          "body": {
+            "success": false,
+            "message": "Pajak tidak ditemukan"
+          }
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 404, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.tax.index",
+          "method": "GET",
+          "path": "/api/v1/taxes",
+          "summary": "Ambil daftar pajak"
+        },
+        {
+          "id": "api.tax.store",
+          "method": "POST",
+          "path": "/api/v1/taxes",
+          "summary": "Buat pajak"
+        },
+        {
+          "id": "api.tax.update",
+          "method": "PUT",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Ubah pajak"
+        },
+        {
+          "id": "api.tax.update",
+          "method": "PATCH",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Ubah pajak"
+        },
+        {
+          "id": "api.tax.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Hapus pajak"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.tax.update",
+      "module_slug": "tax",
+      "module_name": "Tax",
+      "method": "PATCH",
+      "path": "/api/v1/taxes/{tax}",
+      "summary": "Ubah pajak",
+      "description": "Ubah pajak.\nResponse: 200 dengan data resource yang sudah diperbarui.\nOtorisasi: minimal satu izin dari [owner, edit-pajak].",
+      "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-pajak. Memperbarui resource yang sudah ada.",
+      "controller": "Modules\\Tax\\Http\\Controllers\\TaxController",
+      "action": "update",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "edit-pajak"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": "Modules\\Tax\\Http\\Requests\\StoreTaxRequest",
+      "path_params": [
+        {
+          "name": "tax",
+          "type": "string",
+          "required": true,
+          "description": "Field tax (tipe string)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": {
+          "id": "mixed",
+          "name": "mixed",
+          "rate": "mixed",
+          "is_active": "mixed",
+          "created_at": "mixed",
+          "updated_at": "mixed"
+        }
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": {
+          "id": "019ea2afad1d733eafb905816d10590e",
+          "name": "string",
+          "rate": "string",
+          "is_active": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      },
+      "response_resource": "Modules\\Tax\\Http\\Resources\\TaxResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 404,
+          "reason": "Pajak tidak ditemukan",
+          "body": {
+            "success": false,
+            "message": "Pajak tidak ditemukan"
+          }
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 404, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.tax.index",
+          "method": "GET",
+          "path": "/api/v1/taxes",
+          "summary": "Ambil daftar pajak"
+        },
+        {
+          "id": "api.tax.show",
+          "method": "GET",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Ambil detail pajak"
+        },
+        {
+          "id": "api.tax.store",
+          "method": "POST",
+          "path": "/api/v1/taxes",
+          "summary": "Buat pajak"
+        },
+        {
+          "id": "api.tax.update",
+          "method": "PUT",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Ubah pajak"
+        },
+        {
+          "id": "api.tax.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Hapus pajak"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.tax.update",
+      "module_slug": "tax",
+      "module_name": "Tax",
+      "method": "PUT",
+      "path": "/api/v1/taxes/{tax}",
+      "summary": "Ubah pajak",
+      "description": "Ubah pajak.\nResponse: 200 dengan data resource yang sudah diperbarui.\nOtorisasi: minimal satu izin dari [owner, edit-pajak].",
+      "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-pajak. Memperbarui resource yang sudah ada.",
+      "controller": "Modules\\Tax\\Http\\Controllers\\TaxController",
+      "action": "update",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "edit-pajak"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": "Modules\\Tax\\Http\\Requests\\StoreTaxRequest",
+      "path_params": [
+        {
+          "name": "tax",
+          "type": "string",
+          "required": true,
+          "description": "Field tax (tipe string)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": {
+          "id": "mixed",
+          "name": "mixed",
+          "rate": "mixed",
+          "is_active": "mixed",
+          "created_at": "mixed",
+          "updated_at": "mixed"
+        }
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": {
+          "id": "019ea2afad1d733eafb905816d10590e",
+          "name": "string",
+          "rate": "string",
+          "is_active": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      },
+      "response_resource": "Modules\\Tax\\Http\\Resources\\TaxResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 404,
+          "reason": "Pajak tidak ditemukan",
+          "body": {
+            "success": false,
+            "message": "Pajak tidak ditemukan"
+          }
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 404, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.tax.index",
+          "method": "GET",
+          "path": "/api/v1/taxes",
+          "summary": "Ambil daftar pajak"
+        },
+        {
+          "id": "api.tax.show",
+          "method": "GET",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Ambil detail pajak"
+        },
+        {
+          "id": "api.tax.store",
+          "method": "POST",
+          "path": "/api/v1/taxes",
+          "summary": "Buat pajak"
+        },
+        {
+          "id": "api.tax.update",
+          "method": "PATCH",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Ubah pajak"
+        },
+        {
+          "id": "api.tax.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/taxes/{tax}",
+          "summary": "Hapus pajak"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    }
+  ]
 }

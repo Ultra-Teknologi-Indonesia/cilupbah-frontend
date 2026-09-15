@@ -71,7 +71,7 @@ interface LineItem {
  */
 function toIsoDateTimeWib(d: Date | undefined): string {
   if (!d) return "";
-  
+
   // Create new date combining selected date with current time
   const now = new Date();
   const combined = new Date(
@@ -80,9 +80,9 @@ function toIsoDateTimeWib(d: Date | undefined): string {
     d.getDate(),
     now.getHours(),
     now.getMinutes(),
-    now.getSeconds()
+    now.getSeconds(),
   );
-  
+
   // Format to ISO 8601 with timezone offset
   // Example: 2026-08-28T14:30:45+07:00
   const year = combined.getFullYear();
@@ -91,7 +91,7 @@ function toIsoDateTimeWib(d: Date | undefined): string {
   const hours = String(combined.getHours()).padStart(2, "0");
   const minutes = String(combined.getMinutes()).padStart(2, "0");
   const seconds = String(combined.getSeconds()).padStart(2, "0");
-  
+
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}+07:00`;
 }
 

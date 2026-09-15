@@ -1,1 +1,415 @@
-{"nodes": [{"id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_planning_design_consistency_md", "label": "PLANNING-DESIGN-CONSISTENCY.md", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L1"}, {"id": "cilupbah_fe_planning_design_consistency_planning_konsistensi_bahasa_visual_anti_ai_slop", "label": "PLANNING: Konsistensi Bahasa Visual \u2014 Anti AI-Slop", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L1"}, {"id": "cilupbah_fe_planning_design_consistency_1_design_read", "label": "1. Design Read", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L11"}, {"id": "cilupbah_fe_planning_design_consistency_identitas_visual_yang_sudah_ada_dan_dikunci_jangan_diubah_tanpa_keputusan_eksplisit", "label": "Identitas visual yang SUDAH ada dan DIKUNCI (jangan diubah tanpa keputusan eksplisit)", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L19"}, {"id": "cilupbah_fe_planning_design_consistency_2_temuan_audit_lapisan_visual_baru", "label": "2. Temuan Audit (lapisan visual, baru)", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L34"}, {"id": "cilupbah_fe_planning_design_consistency_2_1_v1_status_color_satu_status_lima_warna", "label": "2.1 V1 \u2014 Status color: satu status, lima warna", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L53"}, {"id": "cilupbah_fe_planning_design_consistency_2_2_v2_hardcoded_palette_top_10_file", "label": "2.2 V2 \u2014 Hardcoded palette, top-10 file", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L66"}, {"id": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru", "label": "3. Aturan Desain (kunci, berlaku untuk semua kode FE baru)", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L74"}, {"id": "cilupbah_fe_planning_design_consistency_3_1_warna", "label": "3.1 Warna", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L78"}, {"id": "cilupbah_fe_planning_design_consistency_3_2_shape_radius", "label": "3.2 Shape (radius)", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L86"}, {"id": "cilupbah_fe_planning_design_consistency_3_3_tipografi", "label": "3.3 Tipografi", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L98"}, {"id": "cilupbah_fe_planning_design_consistency_3_4_spacing", "label": "3.4 Spacing", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L111"}, {"id": "cilupbah_fe_planning_design_consistency_3_5_ikon", "label": "3.5 Ikon", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L120"}, {"id": "cilupbah_fe_planning_design_consistency_3_6_state_empty_loading", "label": "3.6 State (empty / loading)", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L126"}, {"id": "cilupbah_fe_planning_design_consistency_3_7_motion_glass", "label": "3.7 Motion & glass", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L131"}, {"id": "cilupbah_fe_planning_design_consistency_3_8_copy_ui", "label": "3.8 Copy UI", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L137"}, {"id": "cilupbah_fe_planning_design_consistency_4_roadmap_eksekusi", "label": "4. Roadmap Eksekusi", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L146"}, {"id": "cilupbah_fe_planning_design_consistency_fase_0_kodifikasi_aturan_0_5_hari_tanpa_risiko", "label": "Fase 0 \u2014 Kodifikasi aturan (0.5 hari, tanpa risiko)", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L150"}, {"id": "cilupbah_fe_planning_design_consistency_fase_1_unifikasi_warna_status_v1_1_2_hari_dampak_visual_terbesar", "label": "Fase 1 \u2014 Unifikasi warna status (V1; 1-2 hari) \u2190 dampak visual terbesar", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L156"}, {"id": "cilupbah_fe_planning_design_consistency_fase_2_sapu_warna_semantik_dark_mode_v2_v7_2_3_hari", "label": "Fase 2 \u2014 Sapu warna semantik + dark mode (V2, V7; 2-3 hari)", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L160"}, {"id": "cilupbah_fe_planning_design_consistency_fase_3_tipografi_spacing_v3_v5_v6_2_hari", "label": "Fase 3 \u2014 Tipografi & spacing (V3, V5, V6; 2 hari)", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L165"}, {"id": "cilupbah_fe_planning_design_consistency_fase_4_radius_ikon_v4_v10_1_2_hari_mekanis", "label": "Fase 4 \u2014 Radius & ikon (V4, V10; 1-2 hari, mekanis)", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L170"}, {"id": "cilupbah_fe_planning_design_consistency_fase_5_state_higiene_v8_v9_v11_v12_1_2_hari", "label": "Fase 5 \u2014 State & higiene (V8, V9, V11, V12; 1-2 hari)", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L174"}, {"id": "cilupbah_fe_planning_design_consistency_di_luar_scope_dokumen_ini", "label": "Di luar scope dokumen ini", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L179"}, {"id": "cilupbah_fe_planning_design_consistency_5_guardrail_berkelanjutan", "label": "5. Guardrail Berkelanjutan", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L186"}, {"id": "cilupbah_fe_planning_design_consistency_catatan_eksekusi_2026_07_05", "label": "Catatan Eksekusi (2026-07-05)", "file_type": "document", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L200"}], "edges": [{"source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_planning_design_consistency_md", "target": "cilupbah_fe_planning_design_consistency_planning_konsistensi_bahasa_visual_anti_ai_slop", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L1", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_planning_konsistensi_bahasa_visual_anti_ai_slop", "target": "cilupbah_fe_planning_design_consistency_1_design_read", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L11", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_1_design_read", "target": "cilupbah_fe_planning_design_consistency_identitas_visual_yang_sudah_ada_dan_dikunci_jangan_diubah_tanpa_keputusan_eksplisit", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L19", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_planning_konsistensi_bahasa_visual_anti_ai_slop", "target": "cilupbah_fe_planning_design_consistency_2_temuan_audit_lapisan_visual_baru", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L34", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_2_temuan_audit_lapisan_visual_baru", "target": "cilupbah_fe_planning_design_consistency_2_1_v1_status_color_satu_status_lima_warna", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L53", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_2_temuan_audit_lapisan_visual_baru", "target": "cilupbah_fe_planning_design_consistency_2_2_v2_hardcoded_palette_top_10_file", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L66", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_planning_konsistensi_bahasa_visual_anti_ai_slop", "target": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L74", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru", "target": "cilupbah_fe_planning_design_consistency_3_1_warna", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L78", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru", "target": "cilupbah_fe_planning_design_consistency_3_2_shape_radius", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L86", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru", "target": "cilupbah_fe_planning_design_consistency_3_3_tipografi", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L98", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru", "target": "cilupbah_fe_planning_design_consistency_3_4_spacing", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L111", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru", "target": "cilupbah_fe_planning_design_consistency_3_5_ikon", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L120", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru", "target": "cilupbah_fe_planning_design_consistency_3_6_state_empty_loading", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L126", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru", "target": "cilupbah_fe_planning_design_consistency_3_7_motion_glass", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L131", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru", "target": "cilupbah_fe_planning_design_consistency_3_8_copy_ui", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L137", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_planning_konsistensi_bahasa_visual_anti_ai_slop", "target": "cilupbah_fe_planning_design_consistency_4_roadmap_eksekusi", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L146", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_4_roadmap_eksekusi", "target": "cilupbah_fe_planning_design_consistency_fase_0_kodifikasi_aturan_0_5_hari_tanpa_risiko", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L150", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_4_roadmap_eksekusi", "target": "cilupbah_fe_planning_design_consistency_fase_1_unifikasi_warna_status_v1_1_2_hari_dampak_visual_terbesar", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L156", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_4_roadmap_eksekusi", "target": "cilupbah_fe_planning_design_consistency_fase_2_sapu_warna_semantik_dark_mode_v2_v7_2_3_hari", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L160", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_4_roadmap_eksekusi", "target": "cilupbah_fe_planning_design_consistency_fase_3_tipografi_spacing_v3_v5_v6_2_hari", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L165", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_4_roadmap_eksekusi", "target": "cilupbah_fe_planning_design_consistency_fase_4_radius_ikon_v4_v10_1_2_hari_mekanis", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L170", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_4_roadmap_eksekusi", "target": "cilupbah_fe_planning_design_consistency_fase_5_state_higiene_v8_v9_v11_v12_1_2_hari", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L174", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_4_roadmap_eksekusi", "target": "cilupbah_fe_planning_design_consistency_di_luar_scope_dokumen_ini", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L179", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_planning_konsistensi_bahasa_visual_anti_ai_slop", "target": "cilupbah_fe_planning_design_consistency_5_guardrail_berkelanjutan", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L186", "weight": 1.0}, {"source": "cilupbah_fe_planning_design_consistency_planning_konsistensi_bahasa_visual_anti_ai_slop", "target": "cilupbah_fe_planning_design_consistency_catatan_eksekusi_2026_07_05", "relation": "contains", "confidence": "EXTRACTED", "source_file": "PLANNING-DESIGN-CONSISTENCY.md", "source_location": "L200", "weight": 1.0}], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_planning_design_consistency_md",
+      "label": "PLANNING-DESIGN-CONSISTENCY.md",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_planning_konsistensi_bahasa_visual_anti_ai_slop",
+      "label": "PLANNING: Konsistensi Bahasa Visual \u2014 Anti AI-Slop",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_1_design_read",
+      "label": "1. Design Read",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L11"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_identitas_visual_yang_sudah_ada_dan_dikunci_jangan_diubah_tanpa_keputusan_eksplisit",
+      "label": "Identitas visual yang SUDAH ada dan DIKUNCI (jangan diubah tanpa keputusan eksplisit)",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L19"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_2_temuan_audit_lapisan_visual_baru",
+      "label": "2. Temuan Audit (lapisan visual, baru)",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L34"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_2_1_v1_status_color_satu_status_lima_warna",
+      "label": "2.1 V1 \u2014 Status color: satu status, lima warna",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L53"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_2_2_v2_hardcoded_palette_top_10_file",
+      "label": "2.2 V2 \u2014 Hardcoded palette, top-10 file",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L66"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru",
+      "label": "3. Aturan Desain (kunci, berlaku untuk semua kode FE baru)",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L74"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_3_1_warna",
+      "label": "3.1 Warna",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L78"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_3_2_shape_radius",
+      "label": "3.2 Shape (radius)",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L86"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_3_3_tipografi",
+      "label": "3.3 Tipografi",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L98"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_3_4_spacing",
+      "label": "3.4 Spacing",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L111"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_3_5_ikon",
+      "label": "3.5 Ikon",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L120"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_3_6_state_empty_loading",
+      "label": "3.6 State (empty / loading)",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L126"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_3_7_motion_glass",
+      "label": "3.7 Motion & glass",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L131"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_3_8_copy_ui",
+      "label": "3.8 Copy UI",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L137"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_4_roadmap_eksekusi",
+      "label": "4. Roadmap Eksekusi",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L146"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_fase_0_kodifikasi_aturan_0_5_hari_tanpa_risiko",
+      "label": "Fase 0 \u2014 Kodifikasi aturan (0.5 hari, tanpa risiko)",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L150"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_fase_1_unifikasi_warna_status_v1_1_2_hari_dampak_visual_terbesar",
+      "label": "Fase 1 \u2014 Unifikasi warna status (V1; 1-2 hari) \u2190 dampak visual terbesar",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L156"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_fase_2_sapu_warna_semantik_dark_mode_v2_v7_2_3_hari",
+      "label": "Fase 2 \u2014 Sapu warna semantik + dark mode (V2, V7; 2-3 hari)",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L160"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_fase_3_tipografi_spacing_v3_v5_v6_2_hari",
+      "label": "Fase 3 \u2014 Tipografi & spacing (V3, V5, V6; 2 hari)",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L165"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_fase_4_radius_ikon_v4_v10_1_2_hari_mekanis",
+      "label": "Fase 4 \u2014 Radius & ikon (V4, V10; 1-2 hari, mekanis)",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L170"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_fase_5_state_higiene_v8_v9_v11_v12_1_2_hari",
+      "label": "Fase 5 \u2014 State & higiene (V8, V9, V11, V12; 1-2 hari)",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L174"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_di_luar_scope_dokumen_ini",
+      "label": "Di luar scope dokumen ini",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L179"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_5_guardrail_berkelanjutan",
+      "label": "5. Guardrail Berkelanjutan",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L186"
+    },
+    {
+      "id": "cilupbah_fe_planning_design_consistency_catatan_eksekusi_2026_07_05",
+      "label": "Catatan Eksekusi (2026-07-05)",
+      "file_type": "document",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L200"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_planning_design_consistency_md",
+      "target": "cilupbah_fe_planning_design_consistency_planning_konsistensi_bahasa_visual_anti_ai_slop",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_planning_konsistensi_bahasa_visual_anti_ai_slop",
+      "target": "cilupbah_fe_planning_design_consistency_1_design_read",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_1_design_read",
+      "target": "cilupbah_fe_planning_design_consistency_identitas_visual_yang_sudah_ada_dan_dikunci_jangan_diubah_tanpa_keputusan_eksplisit",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_planning_konsistensi_bahasa_visual_anti_ai_slop",
+      "target": "cilupbah_fe_planning_design_consistency_2_temuan_audit_lapisan_visual_baru",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L34",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_2_temuan_audit_lapisan_visual_baru",
+      "target": "cilupbah_fe_planning_design_consistency_2_1_v1_status_color_satu_status_lima_warna",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_2_temuan_audit_lapisan_visual_baru",
+      "target": "cilupbah_fe_planning_design_consistency_2_2_v2_hardcoded_palette_top_10_file",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L66",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_planning_konsistensi_bahasa_visual_anti_ai_slop",
+      "target": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L74",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru",
+      "target": "cilupbah_fe_planning_design_consistency_3_1_warna",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L78",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru",
+      "target": "cilupbah_fe_planning_design_consistency_3_2_shape_radius",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L86",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru",
+      "target": "cilupbah_fe_planning_design_consistency_3_3_tipografi",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L98",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru",
+      "target": "cilupbah_fe_planning_design_consistency_3_4_spacing",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L111",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru",
+      "target": "cilupbah_fe_planning_design_consistency_3_5_ikon",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L120",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru",
+      "target": "cilupbah_fe_planning_design_consistency_3_6_state_empty_loading",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L126",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru",
+      "target": "cilupbah_fe_planning_design_consistency_3_7_motion_glass",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L131",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_3_aturan_desain_kunci_berlaku_untuk_semua_kode_fe_baru",
+      "target": "cilupbah_fe_planning_design_consistency_3_8_copy_ui",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L137",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_planning_konsistensi_bahasa_visual_anti_ai_slop",
+      "target": "cilupbah_fe_planning_design_consistency_4_roadmap_eksekusi",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L146",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_4_roadmap_eksekusi",
+      "target": "cilupbah_fe_planning_design_consistency_fase_0_kodifikasi_aturan_0_5_hari_tanpa_risiko",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L150",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_4_roadmap_eksekusi",
+      "target": "cilupbah_fe_planning_design_consistency_fase_1_unifikasi_warna_status_v1_1_2_hari_dampak_visual_terbesar",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L156",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_4_roadmap_eksekusi",
+      "target": "cilupbah_fe_planning_design_consistency_fase_2_sapu_warna_semantik_dark_mode_v2_v7_2_3_hari",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L160",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_4_roadmap_eksekusi",
+      "target": "cilupbah_fe_planning_design_consistency_fase_3_tipografi_spacing_v3_v5_v6_2_hari",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L165",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_4_roadmap_eksekusi",
+      "target": "cilupbah_fe_planning_design_consistency_fase_4_radius_ikon_v4_v10_1_2_hari_mekanis",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L170",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_4_roadmap_eksekusi",
+      "target": "cilupbah_fe_planning_design_consistency_fase_5_state_higiene_v8_v9_v11_v12_1_2_hari",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L174",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_4_roadmap_eksekusi",
+      "target": "cilupbah_fe_planning_design_consistency_di_luar_scope_dokumen_ini",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L179",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_planning_konsistensi_bahasa_visual_anti_ai_slop",
+      "target": "cilupbah_fe_planning_design_consistency_5_guardrail_berkelanjutan",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L186",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_planning_design_consistency_planning_konsistensi_bahasa_visual_anti_ai_slop",
+      "target": "cilupbah_fe_planning_design_consistency_catatan_eksekusi_2026_07_05",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PLANNING-DESIGN-CONSISTENCY.md",
+      "source_location": "L200",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

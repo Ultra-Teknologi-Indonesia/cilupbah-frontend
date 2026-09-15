@@ -109,14 +109,17 @@ for (const file of files) {
   try {
     stripped = stripComments(original, file);
   } catch (e) {
-    console.error(`  ! SKIP ${path.relative(process.cwd(), file)} — ${e.message}`);
+    console.error(
+      `  ! SKIP ${path.relative(process.cwd(), file)} — ${e.message}`,
+    );
     continue;
   }
 
   if (original !== stripped) {
     const removed = Math.max(
       0,
-      (original.match(/\n/g) || []).length - (stripped.match(/\n/g) || []).length,
+      (original.match(/\n/g) || []).length -
+        (stripped.match(/\n/g) || []).length,
     );
     const rel = path.relative(process.cwd(), file);
     if (isDryRun) {

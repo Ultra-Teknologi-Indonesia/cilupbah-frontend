@@ -72,8 +72,12 @@ const APPEAL_OPERATOR_LABELS: Record<string, string> = {
 
 const LIST_HREF = "/dashboard/barang-masuk/retur";
 
-function channelCode(ret: { channel?: string | null; source: string }): ChannelCode {
-  return (ret.channel ?? (ret.source === "marketplace" ? "marketplace" : "manual")) as ChannelCode;
+function channelCode(ret: {
+  channel?: string | null;
+  source: string;
+}): ChannelCode {
+  return (ret.channel ??
+    (ret.source === "marketplace" ? "marketplace" : "manual")) as ChannelCode;
 }
 
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
@@ -205,13 +209,15 @@ export function SalesReturnDetailView({ id }: { id: string }) {
                 </Button>
               </>
             )}
-            {canEditReturn && ret.status === "ACCEPTED" && (
-              isCancelledShipped ? (
+            {canEditReturn &&
+              ret.status === "ACCEPTED" &&
+              (isCancelledShipped ? (
                 <Button size="sm" asChild>
                   <Link
                     href={`/dashboard/barang-masuk/penerimaan?penerimaan_search=${encodeURIComponent(ret.return_number)}`}
                   >
-                    <CheckCircleIcon className="mr-1.5 size-4" /> Buka Penerimaan
+                    <CheckCircleIcon className="mr-1.5 size-4" /> Buka
+                    Penerimaan
                   </Link>
                 </Button>
               ) : (
@@ -225,8 +231,7 @@ export function SalesReturnDetailView({ id }: { id: string }) {
                 >
                   <FlagIcon className="mr-1.5 size-4" /> Selesaikan
                 </Button>
-              )
-            )}
+              ))}
             {canEditReturn && ret.status === "COMPLETED" && (
               <Button variant="outline" size="sm" asChild>
                 <Link href={`${LIST_HREF}/${ret.id}/settlement`}>
@@ -266,7 +271,10 @@ export function SalesReturnDetailView({ id }: { id: string }) {
                 <div>
                   <div>{ret.channel_name ?? ret.channel ?? "Manual"}</div>
                   <div className="text-xs font-normal text-muted-foreground">
-                    {ret.channel_shop_name ?? (ret.source === "marketplace" ? "Toko channel" : "Input manual")}
+                    {ret.channel_shop_name ??
+                      (ret.source === "marketplace"
+                        ? "Toko channel"
+                        : "Input manual")}
                   </div>
                 </div>
               </div>
@@ -285,12 +293,17 @@ export function SalesReturnDetailView({ id }: { id: string }) {
             label="Total Qty"
             value={<span className="tabular-nums">{totalQty}</span>}
           />
-          <InfoRow label="Tgl. Dibuat" value={formatDateTimeWib(ret.created_at)} />
+          <InfoRow
+            label="Tgl. Dibuat"
+            value={formatDateTimeWib(ret.created_at)}
+          />
           <InfoRow label="Diproses oleh" value={ret.processed_by ?? "—"} />
           {(ret.reason_display || ret.reason || ret.channel_reason_text) && (
             <InfoRow
               label="Alasan"
-              value={ret.reason_display ?? ret.channel_reason_text ?? ret.reason}
+              value={
+                ret.reason_display ?? ret.channel_reason_text ?? ret.reason
+              }
             />
           )}
           {ret.notes && <InfoRow label="Catatan" value={ret.notes} />}
@@ -305,32 +318,35 @@ export function SalesReturnDetailView({ id }: { id: string }) {
         >
           <div className="flex items-center justify-between gap-2 px-5 pt-5">
             <p className="text-sm font-medium">Keputusan Marketplace</p>
-            {canEditReturn && !isCancelledShipped && isMpDecisionActionable(ret.marketplace_decision) && (
-              <div className="flex items-center gap-2">
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    closeAction();
-                    setAction("channel-accept");
-                  }}
-                  className="bg-success text-white hover:bg-success/90"
-                >
-                  <CheckCircleIcon className="mr-1.5 size-4" /> Setujui di
-                  Marketplace
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    closeAction();
-                    setAction("channel-reject");
-                  }}
-                  className="text-destructive hover:bg-destructive/10"
-                >
-                  <XCircleIcon className="mr-1.5 size-4" /> Tolak di Marketplace
-                </Button>
-              </div>
-            )}
+            {canEditReturn &&
+              !isCancelledShipped &&
+              isMpDecisionActionable(ret.marketplace_decision) && (
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      closeAction();
+                      setAction("channel-accept");
+                    }}
+                    className="bg-success text-white hover:bg-success/90"
+                  >
+                    <CheckCircleIcon className="mr-1.5 size-4" /> Setujui di
+                    Marketplace
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      closeAction();
+                      setAction("channel-reject");
+                    }}
+                    className="text-destructive hover:bg-destructive/10"
+                  >
+                    <XCircleIcon className="mr-1.5 size-4" /> Tolak di
+                    Marketplace
+                  </Button>
+                </div>
+              )}
           </div>
           <div className="grid grid-cols-2 gap-x-8 gap-y-4 px-5 py-5 sm:grid-cols-3 lg:grid-cols-4">
             <InfoRow
@@ -353,7 +369,12 @@ export function SalesReturnDetailView({ id }: { id: string }) {
             />
             <InfoRow
               label="Alasan Channel"
-              value={ret.reason_display ?? ret.channel_reason_text ?? ret.channel_reason_code ?? "—"}
+              value={
+                ret.reason_display ??
+                ret.channel_reason_text ??
+                ret.channel_reason_code ??
+                "—"
+              }
             />
             <InfoRow
               label="Nominal Refund"
@@ -377,7 +398,9 @@ export function SalesReturnDetailView({ id }: { id: string }) {
             <InfoRow
               label="Terakhir Disinkron"
               value={
-                ret.detail_synced_at ? formatDateTimeWib(ret.detail_synced_at) : "—"
+                ret.detail_synced_at
+                  ? formatDateTimeWib(ret.detail_synced_at)
+                  : "—"
               }
             />
           </div>

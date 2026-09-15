@@ -1,1 +1,351 @@
-{"nodes": [{"id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_audit_fe_md", "label": "AUDIT-FE.md", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L1"}, {"id": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe", "label": "Audit Frontend \u2014 cilupbah-fe", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L1"}, {"id": "cilupbah_fe_audit_fe_progress_perbaikan_update_2026_07_02", "label": "Progress Perbaikan (update 2026-07-02)", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L8"}, {"id": "cilupbah_fe_audit_fe_daftar_isi", "label": "Daftar Isi", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L35"}, {"id": "cilupbah_fe_audit_fe_1_kritis_navigasi_lambat_fetch_storm", "label": "1. KRITIS \u2014 Navigasi lambat & fetch storm", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L47"}, {"id": "cilupbah_fe_audit_fe_1_1_src_proxy_ts_validasi_token_blocking_ke_backend_pada_setiap_navigasi_akar_masalah_utama", "label": "1.1 `src/proxy.ts` \u2014 validasi token blocking ke backend pada SETIAP navigasi \u26a0\ufe0f AKAR MASALAH UTAMA", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L49"}, {"id": "cilupbah_fe_audit_fe_1_2_hampir_semua_halaman_client_rendered_waterfall_fetch_di_klien", "label": "1.2 Hampir semua halaman client-rendered \u2192 waterfall fetch di klien", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L71"}, {"id": "cilupbah_fe_audit_fe_1_3_invalidasi_query_terlalu_luas_burst_refetch_setelah_mutasi", "label": "1.3 Invalidasi query terlalu luas \u2192 burst refetch setelah mutasi", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L79"}, {"id": "cilupbah_fe_audit_fe_1_4_search_tanpa_debounce_yang_konsisten", "label": "1.4 Search tanpa debounce yang konsisten", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L85"}, {"id": "cilupbah_fe_audit_fe_1_5_paginasi_tanpa_placeholderdata_refetch_kasar_ui_flash", "label": "1.5 Paginasi tanpa `placeholderData` \u2192 refetch kasar + UI flash", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L92"}, {"id": "cilupbah_fe_audit_fe_1_6_polling_auto_refresh_perlu_diaudit_batasnya", "label": "1.6 Polling & auto-refresh (perlu diaudit batasnya)", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L98"}, {"id": "cilupbah_fe_audit_fe_2_komponen_tidak_bersih_dari_service", "label": "2. Komponen tidak bersih dari service", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L106"}, {"id": "cilupbah_fe_audit_fe_3_komponen_terlalu_besar_perlu_refactor", "label": "3. Komponen terlalu besar / perlu refactor", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L130"}, {"id": "cilupbah_fe_audit_fe_4_kode_redundan", "label": "4. Kode redundan", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L149"}, {"id": "cilupbah_fe_audit_fe_4_1_formatter_diduplikasi_puluhan_kali", "label": "4.1 Formatter diduplikasi puluhan kali", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L151"}, {"id": "cilupbah_fe_audit_fe_4_2_komponen_list_tab_fotokopi_400_baris", "label": "4.2 Komponen \"list tab\" fotokopi \u00b1400 baris", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L158"}, {"id": "cilupbah_fe_audit_fe_4_3_hooks_crud_fotokopi", "label": "4.3 Hooks CRUD fotokopi", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L164"}, {"id": "cilupbah_fe_audit_fe_4_4_kode_mati_duplikat_struktural", "label": "4.4 Kode mati & duplikat struktural", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L168"}, {"id": "cilupbah_fe_audit_fe_4_5_utilitas_kecil_yang_belum_dishare", "label": "4.5 Utilitas kecil yang belum dishare", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L175"}, {"id": "cilupbah_fe_audit_fe_5_inkonsistensi_ui", "label": "5. Inkonsistensi UI", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L183"}, {"id": "cilupbah_fe_audit_fe_6_praktik_next_js_yang_belum_best_practice", "label": "6. Praktik Next.js yang belum best practice", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L200"}, {"id": "cilupbah_fe_audit_fe_7_roadmap_perbaikan_berprioritas", "label": "7. Roadmap perbaikan berprioritas", "file_type": "document", "source_file": "AUDIT-FE.md", "source_location": "L215"}], "edges": [{"source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_audit_fe_md", "target": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L1", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe", "target": "cilupbah_fe_audit_fe_progress_perbaikan_update_2026_07_02", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L8", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe", "target": "cilupbah_fe_audit_fe_daftar_isi", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L35", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe", "target": "cilupbah_fe_audit_fe_1_kritis_navigasi_lambat_fetch_storm", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L47", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_1_kritis_navigasi_lambat_fetch_storm", "target": "cilupbah_fe_audit_fe_1_1_src_proxy_ts_validasi_token_blocking_ke_backend_pada_setiap_navigasi_akar_masalah_utama", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L49", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_1_kritis_navigasi_lambat_fetch_storm", "target": "cilupbah_fe_audit_fe_1_2_hampir_semua_halaman_client_rendered_waterfall_fetch_di_klien", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L71", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_1_kritis_navigasi_lambat_fetch_storm", "target": "cilupbah_fe_audit_fe_1_3_invalidasi_query_terlalu_luas_burst_refetch_setelah_mutasi", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L79", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_1_kritis_navigasi_lambat_fetch_storm", "target": "cilupbah_fe_audit_fe_1_4_search_tanpa_debounce_yang_konsisten", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L85", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_1_kritis_navigasi_lambat_fetch_storm", "target": "cilupbah_fe_audit_fe_1_5_paginasi_tanpa_placeholderdata_refetch_kasar_ui_flash", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L92", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_1_kritis_navigasi_lambat_fetch_storm", "target": "cilupbah_fe_audit_fe_1_6_polling_auto_refresh_perlu_diaudit_batasnya", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L98", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe", "target": "cilupbah_fe_audit_fe_2_komponen_tidak_bersih_dari_service", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L106", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe", "target": "cilupbah_fe_audit_fe_3_komponen_terlalu_besar_perlu_refactor", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L130", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe", "target": "cilupbah_fe_audit_fe_4_kode_redundan", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L149", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_4_kode_redundan", "target": "cilupbah_fe_audit_fe_4_1_formatter_diduplikasi_puluhan_kali", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L151", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_4_kode_redundan", "target": "cilupbah_fe_audit_fe_4_2_komponen_list_tab_fotokopi_400_baris", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L158", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_4_kode_redundan", "target": "cilupbah_fe_audit_fe_4_3_hooks_crud_fotokopi", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L164", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_4_kode_redundan", "target": "cilupbah_fe_audit_fe_4_4_kode_mati_duplikat_struktural", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L168", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_4_kode_redundan", "target": "cilupbah_fe_audit_fe_4_5_utilitas_kecil_yang_belum_dishare", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L175", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe", "target": "cilupbah_fe_audit_fe_5_inkonsistensi_ui", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L183", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe", "target": "cilupbah_fe_audit_fe_6_praktik_next_js_yang_belum_best_practice", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L200", "weight": 1.0}, {"source": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe", "target": "cilupbah_fe_audit_fe_7_roadmap_perbaikan_berprioritas", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-FE.md", "source_location": "L215", "weight": 1.0}], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_audit_fe_md",
+      "label": "AUDIT-FE.md",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe",
+      "label": "Audit Frontend \u2014 cilupbah-fe",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_progress_perbaikan_update_2026_07_02",
+      "label": "Progress Perbaikan (update 2026-07-02)",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L8"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_daftar_isi",
+      "label": "Daftar Isi",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L35"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_1_kritis_navigasi_lambat_fetch_storm",
+      "label": "1. KRITIS \u2014 Navigasi lambat & fetch storm",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L47"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_1_1_src_proxy_ts_validasi_token_blocking_ke_backend_pada_setiap_navigasi_akar_masalah_utama",
+      "label": "1.1 `src/proxy.ts` \u2014 validasi token blocking ke backend pada SETIAP navigasi \u26a0\ufe0f AKAR MASALAH UTAMA",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L49"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_1_2_hampir_semua_halaman_client_rendered_waterfall_fetch_di_klien",
+      "label": "1.2 Hampir semua halaman client-rendered \u2192 waterfall fetch di klien",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L71"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_1_3_invalidasi_query_terlalu_luas_burst_refetch_setelah_mutasi",
+      "label": "1.3 Invalidasi query terlalu luas \u2192 burst refetch setelah mutasi",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L79"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_1_4_search_tanpa_debounce_yang_konsisten",
+      "label": "1.4 Search tanpa debounce yang konsisten",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L85"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_1_5_paginasi_tanpa_placeholderdata_refetch_kasar_ui_flash",
+      "label": "1.5 Paginasi tanpa `placeholderData` \u2192 refetch kasar + UI flash",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L92"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_1_6_polling_auto_refresh_perlu_diaudit_batasnya",
+      "label": "1.6 Polling & auto-refresh (perlu diaudit batasnya)",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L98"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_2_komponen_tidak_bersih_dari_service",
+      "label": "2. Komponen tidak bersih dari service",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L106"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_3_komponen_terlalu_besar_perlu_refactor",
+      "label": "3. Komponen terlalu besar / perlu refactor",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L130"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_4_kode_redundan",
+      "label": "4. Kode redundan",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L149"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_4_1_formatter_diduplikasi_puluhan_kali",
+      "label": "4.1 Formatter diduplikasi puluhan kali",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L151"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_4_2_komponen_list_tab_fotokopi_400_baris",
+      "label": "4.2 Komponen \"list tab\" fotokopi \u00b1400 baris",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L158"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_4_3_hooks_crud_fotokopi",
+      "label": "4.3 Hooks CRUD fotokopi",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L164"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_4_4_kode_mati_duplikat_struktural",
+      "label": "4.4 Kode mati & duplikat struktural",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L168"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_4_5_utilitas_kecil_yang_belum_dishare",
+      "label": "4.5 Utilitas kecil yang belum dishare",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L175"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_5_inkonsistensi_ui",
+      "label": "5. Inkonsistensi UI",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L183"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_6_praktik_next_js_yang_belum_best_practice",
+      "label": "6. Praktik Next.js yang belum best practice",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L200"
+    },
+    {
+      "id": "cilupbah_fe_audit_fe_7_roadmap_perbaikan_berprioritas",
+      "label": "7. Roadmap perbaikan berprioritas",
+      "file_type": "document",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L215"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_audit_fe_md",
+      "target": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe",
+      "target": "cilupbah_fe_audit_fe_progress_perbaikan_update_2026_07_02",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe",
+      "target": "cilupbah_fe_audit_fe_daftar_isi",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L35",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe",
+      "target": "cilupbah_fe_audit_fe_1_kritis_navigasi_lambat_fetch_storm",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L47",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_1_kritis_navigasi_lambat_fetch_storm",
+      "target": "cilupbah_fe_audit_fe_1_1_src_proxy_ts_validasi_token_blocking_ke_backend_pada_setiap_navigasi_akar_masalah_utama",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L49",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_1_kritis_navigasi_lambat_fetch_storm",
+      "target": "cilupbah_fe_audit_fe_1_2_hampir_semua_halaman_client_rendered_waterfall_fetch_di_klien",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L71",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_1_kritis_navigasi_lambat_fetch_storm",
+      "target": "cilupbah_fe_audit_fe_1_3_invalidasi_query_terlalu_luas_burst_refetch_setelah_mutasi",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L79",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_1_kritis_navigasi_lambat_fetch_storm",
+      "target": "cilupbah_fe_audit_fe_1_4_search_tanpa_debounce_yang_konsisten",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L85",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_1_kritis_navigasi_lambat_fetch_storm",
+      "target": "cilupbah_fe_audit_fe_1_5_paginasi_tanpa_placeholderdata_refetch_kasar_ui_flash",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L92",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_1_kritis_navigasi_lambat_fetch_storm",
+      "target": "cilupbah_fe_audit_fe_1_6_polling_auto_refresh_perlu_diaudit_batasnya",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L98",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe",
+      "target": "cilupbah_fe_audit_fe_2_komponen_tidak_bersih_dari_service",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L106",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe",
+      "target": "cilupbah_fe_audit_fe_3_komponen_terlalu_besar_perlu_refactor",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L130",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe",
+      "target": "cilupbah_fe_audit_fe_4_kode_redundan",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L149",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_4_kode_redundan",
+      "target": "cilupbah_fe_audit_fe_4_1_formatter_diduplikasi_puluhan_kali",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L151",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_4_kode_redundan",
+      "target": "cilupbah_fe_audit_fe_4_2_komponen_list_tab_fotokopi_400_baris",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L158",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_4_kode_redundan",
+      "target": "cilupbah_fe_audit_fe_4_3_hooks_crud_fotokopi",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L164",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_4_kode_redundan",
+      "target": "cilupbah_fe_audit_fe_4_4_kode_mati_duplikat_struktural",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L168",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_4_kode_redundan",
+      "target": "cilupbah_fe_audit_fe_4_5_utilitas_kecil_yang_belum_dishare",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L175",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe",
+      "target": "cilupbah_fe_audit_fe_5_inkonsistensi_ui",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L183",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe",
+      "target": "cilupbah_fe_audit_fe_6_praktik_next_js_yang_belum_best_practice",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L200",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_fe_audit_frontend_cilupbah_fe",
+      "target": "cilupbah_fe_audit_fe_7_roadmap_perbaikan_berprioritas",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-FE.md",
+      "source_location": "L215",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

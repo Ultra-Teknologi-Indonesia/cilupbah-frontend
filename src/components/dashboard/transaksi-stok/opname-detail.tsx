@@ -429,7 +429,11 @@ export function OpnameDetail({ id }: { id: string }) {
           <InfoRow label="Difinalisasi Oleh" value={opname.finalized_by} />
           <InfoRow
             label="Tgl. Finalisasi"
-            value={opname.finalized_at ? formatDateTimeWib(opname.finalized_at) : null}
+            value={
+              opname.finalized_at
+                ? formatDateTimeWib(opname.finalized_at)
+                : null
+            }
           />
           <InfoRow label="Catatan" value={opname.notes} />
         </div>

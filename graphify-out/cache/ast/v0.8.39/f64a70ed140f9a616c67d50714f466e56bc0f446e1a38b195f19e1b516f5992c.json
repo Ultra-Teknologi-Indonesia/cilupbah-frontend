@@ -1,1 +1,159 @@
-{"nodes": [{"id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_docs_design_rules_md", "label": "design-rules.md", "file_type": "document", "source_file": "docs/design-rules.md", "source_location": "L1"}, {"id": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop", "label": "Aturan Bahasa Visual \u2014 cilupbah-fe (anti AI-slop)", "file_type": "document", "source_file": "docs/design-rules.md", "source_location": "L1"}, {"id": "docs_design_rules_warna", "label": "Warna", "file_type": "document", "source_file": "docs/design-rules.md", "source_location": "L8"}, {"id": "docs_design_rules_shape_radius_dua_tier_satu_pengecualian", "label": "Shape (radius) \u2014 dua tier + satu pengecualian", "file_type": "document", "source_file": "docs/design-rules.md", "source_location": "L15"}, {"id": "docs_design_rules_tipografi", "label": "Tipografi", "file_type": "document", "source_file": "docs/design-rules.md", "source_location": "L21"}, {"id": "docs_design_rules_spacing", "label": "Spacing", "file_type": "document", "source_file": "docs/design-rules.md", "source_location": "L28"}, {"id": "docs_design_rules_ikon", "label": "Ikon", "file_type": "document", "source_file": "docs/design-rules.md", "source_location": "L34"}, {"id": "docs_design_rules_state", "label": "State", "file_type": "document", "source_file": "docs/design-rules.md", "source_location": "L39"}, {"id": "docs_design_rules_motion_glass", "label": "Motion & glass", "file_type": "document", "source_file": "docs/design-rules.md", "source_location": "L43"}, {"id": "docs_design_rules_copy_ui", "label": "Copy UI", "file_type": "document", "source_file": "docs/design-rules.md", "source_location": "L47"}], "edges": [{"source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_docs_design_rules_md", "target": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/design-rules.md", "source_location": "L1", "weight": 1.0}, {"source": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop", "target": "docs_design_rules_warna", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/design-rules.md", "source_location": "L8", "weight": 1.0}, {"source": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop", "target": "docs_design_rules_shape_radius_dua_tier_satu_pengecualian", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/design-rules.md", "source_location": "L15", "weight": 1.0}, {"source": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop", "target": "docs_design_rules_tipografi", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/design-rules.md", "source_location": "L21", "weight": 1.0}, {"source": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop", "target": "docs_design_rules_spacing", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/design-rules.md", "source_location": "L28", "weight": 1.0}, {"source": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop", "target": "docs_design_rules_ikon", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/design-rules.md", "source_location": "L34", "weight": 1.0}, {"source": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop", "target": "docs_design_rules_state", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/design-rules.md", "source_location": "L39", "weight": 1.0}, {"source": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop", "target": "docs_design_rules_motion_glass", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/design-rules.md", "source_location": "L43", "weight": 1.0}, {"source": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop", "target": "docs_design_rules_copy_ui", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/design-rules.md", "source_location": "L47", "weight": 1.0}], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_docs_design_rules_md",
+      "label": "design-rules.md",
+      "file_type": "document",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop",
+      "label": "Aturan Bahasa Visual \u2014 cilupbah-fe (anti AI-slop)",
+      "file_type": "document",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "docs_design_rules_warna",
+      "label": "Warna",
+      "file_type": "document",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L8"
+    },
+    {
+      "id": "docs_design_rules_shape_radius_dua_tier_satu_pengecualian",
+      "label": "Shape (radius) \u2014 dua tier + satu pengecualian",
+      "file_type": "document",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L15"
+    },
+    {
+      "id": "docs_design_rules_tipografi",
+      "label": "Tipografi",
+      "file_type": "document",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L21"
+    },
+    {
+      "id": "docs_design_rules_spacing",
+      "label": "Spacing",
+      "file_type": "document",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L28"
+    },
+    {
+      "id": "docs_design_rules_ikon",
+      "label": "Ikon",
+      "file_type": "document",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L34"
+    },
+    {
+      "id": "docs_design_rules_state",
+      "label": "State",
+      "file_type": "document",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L39"
+    },
+    {
+      "id": "docs_design_rules_motion_glass",
+      "label": "Motion & glass",
+      "file_type": "document",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L43"
+    },
+    {
+      "id": "docs_design_rules_copy_ui",
+      "label": "Copy UI",
+      "file_type": "document",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L47"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_docs_design_rules_md",
+      "target": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop",
+      "target": "docs_design_rules_warna",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop",
+      "target": "docs_design_rules_shape_radius_dua_tier_satu_pengecualian",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop",
+      "target": "docs_design_rules_tipografi",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop",
+      "target": "docs_design_rules_spacing",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop",
+      "target": "docs_design_rules_ikon",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L34",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop",
+      "target": "docs_design_rules_state",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L39",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop",
+      "target": "docs_design_rules_motion_glass",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L43",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_design_rules_aturan_bahasa_visual_cilupbah_fe_anti_ai_slop",
+      "target": "docs_design_rules_copy_ui",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/design-rules.md",
+      "source_location": "L47",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

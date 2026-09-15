@@ -54,9 +54,7 @@ export function BuatPenempatanManualDialog({
             : item.received_qty || 0;
         const pending = Math.max(
           0,
-          availableQty -
-            (item.putaway_qty || 0) -
-            (item.reserved_qty || 0),
+          availableQty - (item.putaway_qty || 0) - (item.reserved_qty || 0),
         );
         if (pending <= 0) continue;
         skuSet.add(item.item_id);
@@ -67,8 +65,11 @@ export function BuatPenempatanManualDialog({
   }, [inbounds]);
 
   const locationIds = useMemo(
-    () =>
-      [...new Set(inbounds.map((inbound) => inbound.location_id).filter(Boolean))],
+    () => [
+      ...new Set(
+        inbounds.map((inbound) => inbound.location_id).filter(Boolean),
+      ),
+    ],
     [inbounds],
   );
   const assignmentLocationId =

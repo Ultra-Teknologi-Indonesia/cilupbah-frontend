@@ -69,7 +69,10 @@ function buildTargets(entries) {
   const targets = [];
   for (const [route, group] of byRoute) {
     const slug = `routes/${sanitizeRoute(route)}`;
-    const titles = group.map((g) => g.title).slice(0, 3).join(" · ");
+    const titles = group
+      .map((g) => g.title)
+      .slice(0, 3)
+      .join(" · ");
     targets.push({
       slug,
       shots: [
@@ -113,11 +116,15 @@ async function main() {
   await writeFile(ENTRIES_OUT, JSON.stringify(entries, null, 2) + "\n");
 
   console.log(`[bantuan-plan] ${entries.length} entries dibaca`);
-  console.log(`  · ${withRoute.length} punya route → ${targets.length} unique target`);
+  console.log(
+    `  · ${withRoute.length} punya route → ${targets.length} unique target`,
+  );
   console.log(`  · ${withoutRoute.length} tanpa route (SOP/konseptual, skip)`);
   if (extras.length) {
     const extraShots = extras.reduce((sum, e) => sum + e.shots.length, 0);
-    console.log(`  · ${extras.length} extras merged (${extraShots} shot tambahan)`);
+    console.log(
+      `  · ${extras.length} extras merged (${extraShots} shot tambahan)`,
+    );
   }
   console.log(`  → ${TARGETS_OUT}`);
   console.log(`  → ${ENTRIES_OUT}`);

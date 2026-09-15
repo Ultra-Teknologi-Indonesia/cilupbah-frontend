@@ -26,7 +26,7 @@ function buildReturQuery(params: LaporanReturParams): URLSearchParams {
   if (params.marketplace_decision)
     sp.set("marketplace_decision", params.marketplace_decision);
   if (params.page) sp.set("page", String(params.page));
-    if (params.per_page) sp.set("per_page", String(params.per_page));
+  if (params.per_page) sp.set("per_page", String(params.per_page));
   return sp;
 }
 

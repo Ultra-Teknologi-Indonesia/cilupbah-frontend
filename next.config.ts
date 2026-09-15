@@ -10,9 +10,7 @@ const nextConfig: NextConfig = {
     // dari toko WooCommerce ber-domain arbitrer (dikontrol pelanggan), sehingga
     // allowlist host akan memutus gambar yang sah. Membatasi open-image-proxy
     // butuh strategi proxy khusus, bukan sekadar daftar host di sini.
-    remotePatterns: [
-      { protocol: "https", hostname: "**" },
-    ],
+    remotePatterns: [{ protocol: "https", hostname: "**" }],
   },
   compiler: {
     // Buang console.* dari bundle produksi (kecuali console.error) — kurangi

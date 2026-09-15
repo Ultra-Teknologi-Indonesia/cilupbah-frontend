@@ -33,7 +33,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { usePutaways, usePutawayBulkPdfAsync } from "@/hooks/barang-masuk/use-putaway";
+import {
+  usePutaways,
+  usePutawayBulkPdfAsync,
+} from "@/hooks/barang-masuk/use-putaway";
 import {
   useDeletePutaway,
   useBulkDeletePutaway,
@@ -378,7 +381,10 @@ export function PenempatanBarangTab() {
         accessorKey: "notes",
         header: "Keterangan",
         cell: ({ row }) => (
-          <span className="text-muted-foreground truncate max-w-[200px] block" title={row.original.notes ?? ""}>
+          <span
+            className="text-muted-foreground truncate max-w-[200px] block"
+            title={row.original.notes ?? ""}
+          >
             {row.original.notes ?? "—"}
           </span>
         ),
@@ -420,42 +426,44 @@ export function PenempatanBarangTab() {
             >
               {item.status === "COMPLETED" || canEditPutaway ? (
                 <Button asChild variant="outline" size="sm">
-                <Link href={action.href}>{action.label}</Link>
+                  <Link href={action.href}>{action.label}</Link>
                 </Button>
               ) : null}
-              {canExportPutaway && <TooltipProvider delayDuration={200}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      asChild
-                      variant="ghost"
-                      size="icon-sm"
-                      aria-label="Cetak Putaway"
-                    >
-                      <Link
-                        href={`/dashboard/document-preview/putaway/${item.id}`}
+              {canExportPutaway && (
+                <TooltipProvider delayDuration={200}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        asChild
+                        variant="ghost"
+                        size="icon-sm"
+                        aria-label="Cetak Putaway"
                       >
-                        <PrinterIcon className="size-4" />
-                      </Link>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Cetak Laporan Putaway</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      aria-label="Hapus"
-                      className="text-destructive hover:text-destructive"
-                      onClick={() => setDeleteTarget(item)}
-                    >
-                      <Trash2Icon className="size-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Hapus / Reset Penempatan</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>}
+                        <Link
+                          href={`/dashboard/document-preview/putaway/${item.id}`}
+                        >
+                          <PrinterIcon className="size-4" />
+                        </Link>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Cetak Laporan Putaway</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        aria-label="Hapus"
+                        className="text-destructive hover:text-destructive"
+                        onClick={() => setDeleteTarget(item)}
+                      >
+                        <Trash2Icon className="size-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Hapus / Reset Penempatan</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
             </div>
           );
         },
@@ -469,36 +477,46 @@ export function PenempatanBarangTab() {
       const ids = selected.map((r) => r.id);
       return (
         <>
-          {canExportPutaway && <Button
-            size="sm"
-            variant="outline"
-            disabled={bulkPdfMut.isPending || ids.length === 0}
-            onClick={() => {
-              bulkPdfMut.mutate(ids, {
-                onSuccess: ({ export_id }) => router.push(
-                  `/dashboard/document-preview/putaway-bulk-export/${encodeURIComponent(export_id)}`,
-                ),
-                onError: (error) => toast.error(error instanceof Error ? error.message : "Gagal memulai export putaway."),
-              });
-            }}
-            title="Cetak dokumen terpilih"
-          >
-            <PrinterIcon className="mr-1.5 size-4" />
-            Cetak {ids.length}
-          </Button>}
-          {canDeletePutaway && <Button
-            size="sm"
-            variant="destructive"
-            onClick={() =>
-              setBulkDeleteState({
-                ids,
-                onDone: () => table.resetRowSelection(),
-              })
-            }
-          >
-            <Trash2Icon className="mr-1.5 size-4" />
-            Hapus {ids.length}
-          </Button>}
+          {canExportPutaway && (
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={bulkPdfMut.isPending || ids.length === 0}
+              onClick={() => {
+                bulkPdfMut.mutate(ids, {
+                  onSuccess: ({ export_id }) =>
+                    router.push(
+                      `/dashboard/document-preview/putaway-bulk-export/${encodeURIComponent(export_id)}`,
+                    ),
+                  onError: (error) =>
+                    toast.error(
+                      error instanceof Error
+                        ? error.message
+                        : "Gagal memulai export putaway.",
+                    ),
+                });
+              }}
+              title="Cetak dokumen terpilih"
+            >
+              <PrinterIcon className="mr-1.5 size-4" />
+              Cetak {ids.length}
+            </Button>
+          )}
+          {canDeletePutaway && (
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={() =>
+                setBulkDeleteState({
+                  ids,
+                  onDone: () => table.resetRowSelection(),
+                })
+              }
+            >
+              <Trash2Icon className="mr-1.5 size-4" />
+              Hapus {ids.length}
+            </Button>
+          )}
         </>
       );
     },
@@ -603,42 +621,46 @@ export function PenempatanBarangTab() {
         </div>
       </LiquidGlass>
 
-      {canDeletePutaway && <ConfirmDialog
-        open={!!deleteTarget}
-        onOpenChange={(v) => !v && setDeleteTarget(null)}
-        title="Hapus / Reset Penempatan"
-        description={deleteDescription(deleteTarget)}
-        confirmLabel={
-          deleteTarget?.status === "NOT_STARTED" ? "Hapus" : "Reset"
-        }
-        variant="destructive"
-        loading={deleteMut.isPending}
-        onConfirm={() => {
-          if (!deleteTarget) return;
-          deleteMut.mutate(deleteTarget.id, {
-            onSuccess: () => setDeleteTarget(null),
-          });
-        }}
-      />}
+      {canDeletePutaway && (
+        <ConfirmDialog
+          open={!!deleteTarget}
+          onOpenChange={(v) => !v && setDeleteTarget(null)}
+          title="Hapus / Reset Penempatan"
+          description={deleteDescription(deleteTarget)}
+          confirmLabel={
+            deleteTarget?.status === "NOT_STARTED" ? "Hapus" : "Reset"
+          }
+          variant="destructive"
+          loading={deleteMut.isPending}
+          onConfirm={() => {
+            if (!deleteTarget) return;
+            deleteMut.mutate(deleteTarget.id, {
+              onSuccess: () => setDeleteTarget(null),
+            });
+          }}
+        />
+      )}
 
-      {canDeletePutaway && <ConfirmDialog
-        open={!!bulkDeleteState}
-        onOpenChange={(v) => !v && setBulkDeleteState(null)}
-        title="Hapus Penempatan Terpilih"
-        description={`Proses ${bulkDeleteState?.ids.length ?? 0} penempatan terpilih? Tiap dokumen di-revert sesuai statusnya (Belum Mulai dihapus, Sedang Diproses/Selesai direset & stok dikembalikan).`}
-        confirmLabel="Proses"
-        variant="destructive"
-        loading={bulkDeleteMut.isPending}
-        onConfirm={() => {
-          if (!bulkDeleteState) return;
-          bulkDeleteMut.mutate(bulkDeleteState.ids, {
-            onSuccess: () => {
-              bulkDeleteState.onDone();
-              setBulkDeleteState(null);
-            },
-          });
-        }}
-      />}
+      {canDeletePutaway && (
+        <ConfirmDialog
+          open={!!bulkDeleteState}
+          onOpenChange={(v) => !v && setBulkDeleteState(null)}
+          title="Hapus Penempatan Terpilih"
+          description={`Proses ${bulkDeleteState?.ids.length ?? 0} penempatan terpilih? Tiap dokumen di-revert sesuai statusnya (Belum Mulai dihapus, Sedang Diproses/Selesai direset & stok dikembalikan).`}
+          confirmLabel="Proses"
+          variant="destructive"
+          loading={bulkDeleteMut.isPending}
+          onConfirm={() => {
+            if (!bulkDeleteState) return;
+            bulkDeleteMut.mutate(bulkDeleteState.ids, {
+              onSuccess: () => {
+                bulkDeleteState.onDone();
+                setBulkDeleteState(null);
+              },
+            });
+          }}
+        />
+      )}
     </>
   );
 }

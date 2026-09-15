@@ -1,1 +1,287 @@
-{"nodes": [{"id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_detail_produk_plan_md", "label": "DETAIL_PRODUK_PLAN.md", "file_type": "document", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L1"}, {"id": "cilupbah_fe_detail_produk_plan_plan_redesign_halaman_detail_produk_tabbed_paginasi_per_tab", "label": "Plan \u2014 Redesign Halaman Detail Produk (Tabbed + Paginasi Per-Tab)", "file_type": "document", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L1"}, {"id": "cilupbah_fe_detail_produk_plan_tipe_produk_tab_pertama_berbeda", "label": "Tipe produk \u2192 tab pertama berbeda", "file_type": "document", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L8"}, {"id": "cilupbah_fe_detail_produk_plan_0_kondisi_saat_ini_audit", "label": "0. Kondisi saat ini (audit)", "file_type": "document", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L17"}, {"id": "cilupbah_fe_detail_produk_plan_a_be_endpoint_per_tab_berpaginasi_prasyarat_fe", "label": "A. BE \u2014 endpoint per-tab berpaginasi (prasyarat FE)", "file_type": "document", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L31"}, {"id": "cilupbah_fe_detail_produk_plan_b_fe_kerangka_tab_lazy_paginasi", "label": "B. FE \u2014 kerangka tab + lazy paginasi", "file_type": "document", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L62"}, {"id": "cilupbah_fe_detail_produk_plan_b1_shell_header_liquid_glass", "label": "B1. Shell & header (liquid glass)", "file_type": "document", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L64"}, {"id": "cilupbah_fe_detail_produk_plan_b2_pola_data_per_tab_inti_beda_endpoint_paginasi_sendiri", "label": "B2. Pola data per-tab (INTI: beda endpoint + paginasi sendiri)", "file_type": "document", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L76"}, {"id": "cilupbah_fe_detail_produk_plan_b3_komponen_tiap_tab", "label": "B3. Komponen tiap tab", "file_type": "document", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L86"}, {"id": "cilupbah_fe_detail_produk_plan_c_ux_hardening_fokus_utama", "label": "C. UX HARDENING (fokus utama) \ud83c\udfaf", "file_type": "document", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L105"}, {"id": "cilupbah_fe_detail_produk_plan_p1_liquid_glass_tanpa_mengorbankan_keterbacaan_data", "label": "P1 \u2014 Liquid glass tanpa mengorbankan keterbacaan data", "file_type": "document", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L107"}, {"id": "cilupbah_fe_detail_produk_plan_p1_matriks_harga_channel", "label": "P1 \u2014 Matriks Harga Channel", "file_type": "document", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L116"}, {"id": "cilupbah_fe_detail_produk_plan_p2_skala_210_varian_jadikan_wajib_bukan_opsional", "label": "P2 \u2014 Skala 210 varian (jadikan wajib, bukan opsional)", "file_type": "document", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L120"}, {"id": "cilupbah_fe_detail_produk_plan_p2_sentuh_mobile", "label": "P2 \u2014 Sentuh & mobile", "file_type": "document", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L124"}, {"id": "cilupbah_fe_detail_produk_plan_p3_polish", "label": "P3 \u2014 Polish", "file_type": "document", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L128"}, {"id": "cilupbah_fe_detail_produk_plan_aksesibilitas_critical_checklist_sebelum_rilis", "label": "Aksesibilitas (CRITICAL \u2014 checklist sebelum rilis)", "file_type": "document", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L135"}, {"id": "cilupbah_fe_detail_produk_plan_urutan_dependensi", "label": "Urutan & dependensi", "file_type": "document", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L141"}, {"id": "cilupbah_fe_detail_produk_plan_catatan", "label": "Catatan", "file_type": "document", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L151"}], "edges": [{"source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_detail_produk_plan_md", "target": "cilupbah_fe_detail_produk_plan_plan_redesign_halaman_detail_produk_tabbed_paginasi_per_tab", "relation": "contains", "confidence": "EXTRACTED", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L1", "weight": 1.0}, {"source": "cilupbah_fe_detail_produk_plan_plan_redesign_halaman_detail_produk_tabbed_paginasi_per_tab", "target": "cilupbah_fe_detail_produk_plan_tipe_produk_tab_pertama_berbeda", "relation": "contains", "confidence": "EXTRACTED", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L8", "weight": 1.0}, {"source": "cilupbah_fe_detail_produk_plan_plan_redesign_halaman_detail_produk_tabbed_paginasi_per_tab", "target": "cilupbah_fe_detail_produk_plan_0_kondisi_saat_ini_audit", "relation": "contains", "confidence": "EXTRACTED", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L17", "weight": 1.0}, {"source": "cilupbah_fe_detail_produk_plan_plan_redesign_halaman_detail_produk_tabbed_paginasi_per_tab", "target": "cilupbah_fe_detail_produk_plan_a_be_endpoint_per_tab_berpaginasi_prasyarat_fe", "relation": "contains", "confidence": "EXTRACTED", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L31", "weight": 1.0}, {"source": "cilupbah_fe_detail_produk_plan_plan_redesign_halaman_detail_produk_tabbed_paginasi_per_tab", "target": "cilupbah_fe_detail_produk_plan_b_fe_kerangka_tab_lazy_paginasi", "relation": "contains", "confidence": "EXTRACTED", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L62", "weight": 1.0}, {"source": "cilupbah_fe_detail_produk_plan_b_fe_kerangka_tab_lazy_paginasi", "target": "cilupbah_fe_detail_produk_plan_b1_shell_header_liquid_glass", "relation": "contains", "confidence": "EXTRACTED", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L64", "weight": 1.0}, {"source": "cilupbah_fe_detail_produk_plan_b_fe_kerangka_tab_lazy_paginasi", "target": "cilupbah_fe_detail_produk_plan_b2_pola_data_per_tab_inti_beda_endpoint_paginasi_sendiri", "relation": "contains", "confidence": "EXTRACTED", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L76", "weight": 1.0}, {"source": "cilupbah_fe_detail_produk_plan_b_fe_kerangka_tab_lazy_paginasi", "target": "cilupbah_fe_detail_produk_plan_b3_komponen_tiap_tab", "relation": "contains", "confidence": "EXTRACTED", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L86", "weight": 1.0}, {"source": "cilupbah_fe_detail_produk_plan_plan_redesign_halaman_detail_produk_tabbed_paginasi_per_tab", "target": "cilupbah_fe_detail_produk_plan_c_ux_hardening_fokus_utama", "relation": "contains", "confidence": "EXTRACTED", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L105", "weight": 1.0}, {"source": "cilupbah_fe_detail_produk_plan_c_ux_hardening_fokus_utama", "target": "cilupbah_fe_detail_produk_plan_p1_liquid_glass_tanpa_mengorbankan_keterbacaan_data", "relation": "contains", "confidence": "EXTRACTED", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L107", "weight": 1.0}, {"source": "cilupbah_fe_detail_produk_plan_c_ux_hardening_fokus_utama", "target": "cilupbah_fe_detail_produk_plan_p1_matriks_harga_channel", "relation": "contains", "confidence": "EXTRACTED", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L116", "weight": 1.0}, {"source": "cilupbah_fe_detail_produk_plan_c_ux_hardening_fokus_utama", "target": "cilupbah_fe_detail_produk_plan_p2_skala_210_varian_jadikan_wajib_bukan_opsional", "relation": "contains", "confidence": "EXTRACTED", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L120", "weight": 1.0}, {"source": "cilupbah_fe_detail_produk_plan_c_ux_hardening_fokus_utama", "target": "cilupbah_fe_detail_produk_plan_p2_sentuh_mobile", "relation": "contains", "confidence": "EXTRACTED", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L124", "weight": 1.0}, {"source": "cilupbah_fe_detail_produk_plan_c_ux_hardening_fokus_utama", "target": "cilupbah_fe_detail_produk_plan_p3_polish", "relation": "contains", "confidence": "EXTRACTED", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L128", "weight": 1.0}, {"source": "cilupbah_fe_detail_produk_plan_c_ux_hardening_fokus_utama", "target": "cilupbah_fe_detail_produk_plan_aksesibilitas_critical_checklist_sebelum_rilis", "relation": "contains", "confidence": "EXTRACTED", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L135", "weight": 1.0}, {"source": "cilupbah_fe_detail_produk_plan_plan_redesign_halaman_detail_produk_tabbed_paginasi_per_tab", "target": "cilupbah_fe_detail_produk_plan_urutan_dependensi", "relation": "contains", "confidence": "EXTRACTED", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L141", "weight": 1.0}, {"source": "cilupbah_fe_detail_produk_plan_plan_redesign_halaman_detail_produk_tabbed_paginasi_per_tab", "target": "cilupbah_fe_detail_produk_plan_catatan", "relation": "contains", "confidence": "EXTRACTED", "source_file": "DETAIL_PRODUK_PLAN.md", "source_location": "L151", "weight": 1.0}], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_detail_produk_plan_md",
+      "label": "DETAIL_PRODUK_PLAN.md",
+      "file_type": "document",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_detail_produk_plan_plan_redesign_halaman_detail_produk_tabbed_paginasi_per_tab",
+      "label": "Plan \u2014 Redesign Halaman Detail Produk (Tabbed + Paginasi Per-Tab)",
+      "file_type": "document",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_detail_produk_plan_tipe_produk_tab_pertama_berbeda",
+      "label": "Tipe produk \u2192 tab pertama berbeda",
+      "file_type": "document",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L8"
+    },
+    {
+      "id": "cilupbah_fe_detail_produk_plan_0_kondisi_saat_ini_audit",
+      "label": "0. Kondisi saat ini (audit)",
+      "file_type": "document",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L17"
+    },
+    {
+      "id": "cilupbah_fe_detail_produk_plan_a_be_endpoint_per_tab_berpaginasi_prasyarat_fe",
+      "label": "A. BE \u2014 endpoint per-tab berpaginasi (prasyarat FE)",
+      "file_type": "document",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L31"
+    },
+    {
+      "id": "cilupbah_fe_detail_produk_plan_b_fe_kerangka_tab_lazy_paginasi",
+      "label": "B. FE \u2014 kerangka tab + lazy paginasi",
+      "file_type": "document",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L62"
+    },
+    {
+      "id": "cilupbah_fe_detail_produk_plan_b1_shell_header_liquid_glass",
+      "label": "B1. Shell & header (liquid glass)",
+      "file_type": "document",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L64"
+    },
+    {
+      "id": "cilupbah_fe_detail_produk_plan_b2_pola_data_per_tab_inti_beda_endpoint_paginasi_sendiri",
+      "label": "B2. Pola data per-tab (INTI: beda endpoint + paginasi sendiri)",
+      "file_type": "document",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L76"
+    },
+    {
+      "id": "cilupbah_fe_detail_produk_plan_b3_komponen_tiap_tab",
+      "label": "B3. Komponen tiap tab",
+      "file_type": "document",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L86"
+    },
+    {
+      "id": "cilupbah_fe_detail_produk_plan_c_ux_hardening_fokus_utama",
+      "label": "C. UX HARDENING (fokus utama) \ud83c\udfaf",
+      "file_type": "document",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L105"
+    },
+    {
+      "id": "cilupbah_fe_detail_produk_plan_p1_liquid_glass_tanpa_mengorbankan_keterbacaan_data",
+      "label": "P1 \u2014 Liquid glass tanpa mengorbankan keterbacaan data",
+      "file_type": "document",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L107"
+    },
+    {
+      "id": "cilupbah_fe_detail_produk_plan_p1_matriks_harga_channel",
+      "label": "P1 \u2014 Matriks Harga Channel",
+      "file_type": "document",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L116"
+    },
+    {
+      "id": "cilupbah_fe_detail_produk_plan_p2_skala_210_varian_jadikan_wajib_bukan_opsional",
+      "label": "P2 \u2014 Skala 210 varian (jadikan wajib, bukan opsional)",
+      "file_type": "document",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L120"
+    },
+    {
+      "id": "cilupbah_fe_detail_produk_plan_p2_sentuh_mobile",
+      "label": "P2 \u2014 Sentuh & mobile",
+      "file_type": "document",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L124"
+    },
+    {
+      "id": "cilupbah_fe_detail_produk_plan_p3_polish",
+      "label": "P3 \u2014 Polish",
+      "file_type": "document",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L128"
+    },
+    {
+      "id": "cilupbah_fe_detail_produk_plan_aksesibilitas_critical_checklist_sebelum_rilis",
+      "label": "Aksesibilitas (CRITICAL \u2014 checklist sebelum rilis)",
+      "file_type": "document",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L135"
+    },
+    {
+      "id": "cilupbah_fe_detail_produk_plan_urutan_dependensi",
+      "label": "Urutan & dependensi",
+      "file_type": "document",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L141"
+    },
+    {
+      "id": "cilupbah_fe_detail_produk_plan_catatan",
+      "label": "Catatan",
+      "file_type": "document",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L151"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_detail_produk_plan_md",
+      "target": "cilupbah_fe_detail_produk_plan_plan_redesign_halaman_detail_produk_tabbed_paginasi_per_tab",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_detail_produk_plan_plan_redesign_halaman_detail_produk_tabbed_paginasi_per_tab",
+      "target": "cilupbah_fe_detail_produk_plan_tipe_produk_tab_pertama_berbeda",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_detail_produk_plan_plan_redesign_halaman_detail_produk_tabbed_paginasi_per_tab",
+      "target": "cilupbah_fe_detail_produk_plan_0_kondisi_saat_ini_audit",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_detail_produk_plan_plan_redesign_halaman_detail_produk_tabbed_paginasi_per_tab",
+      "target": "cilupbah_fe_detail_produk_plan_a_be_endpoint_per_tab_berpaginasi_prasyarat_fe",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_detail_produk_plan_plan_redesign_halaman_detail_produk_tabbed_paginasi_per_tab",
+      "target": "cilupbah_fe_detail_produk_plan_b_fe_kerangka_tab_lazy_paginasi",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L62",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_detail_produk_plan_b_fe_kerangka_tab_lazy_paginasi",
+      "target": "cilupbah_fe_detail_produk_plan_b1_shell_header_liquid_glass",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L64",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_detail_produk_plan_b_fe_kerangka_tab_lazy_paginasi",
+      "target": "cilupbah_fe_detail_produk_plan_b2_pola_data_per_tab_inti_beda_endpoint_paginasi_sendiri",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L76",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_detail_produk_plan_b_fe_kerangka_tab_lazy_paginasi",
+      "target": "cilupbah_fe_detail_produk_plan_b3_komponen_tiap_tab",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L86",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_detail_produk_plan_plan_redesign_halaman_detail_produk_tabbed_paginasi_per_tab",
+      "target": "cilupbah_fe_detail_produk_plan_c_ux_hardening_fokus_utama",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L105",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_detail_produk_plan_c_ux_hardening_fokus_utama",
+      "target": "cilupbah_fe_detail_produk_plan_p1_liquid_glass_tanpa_mengorbankan_keterbacaan_data",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L107",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_detail_produk_plan_c_ux_hardening_fokus_utama",
+      "target": "cilupbah_fe_detail_produk_plan_p1_matriks_harga_channel",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L116",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_detail_produk_plan_c_ux_hardening_fokus_utama",
+      "target": "cilupbah_fe_detail_produk_plan_p2_skala_210_varian_jadikan_wajib_bukan_opsional",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L120",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_detail_produk_plan_c_ux_hardening_fokus_utama",
+      "target": "cilupbah_fe_detail_produk_plan_p2_sentuh_mobile",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L124",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_detail_produk_plan_c_ux_hardening_fokus_utama",
+      "target": "cilupbah_fe_detail_produk_plan_p3_polish",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L128",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_detail_produk_plan_c_ux_hardening_fokus_utama",
+      "target": "cilupbah_fe_detail_produk_plan_aksesibilitas_critical_checklist_sebelum_rilis",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L135",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_detail_produk_plan_plan_redesign_halaman_detail_produk_tabbed_paginasi_per_tab",
+      "target": "cilupbah_fe_detail_produk_plan_urutan_dependensi",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L141",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_detail_produk_plan_plan_redesign_halaman_detail_produk_tabbed_paginasi_per_tab",
+      "target": "cilupbah_fe_detail_produk_plan_catatan",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DETAIL_PRODUK_PLAN.md",
+      "source_location": "L151",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

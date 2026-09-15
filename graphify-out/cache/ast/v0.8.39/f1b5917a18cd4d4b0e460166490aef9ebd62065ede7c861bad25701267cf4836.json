@@ -1,1 +1,143 @@
-{"nodes": [{"id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_docs_session_handoff_md", "label": "SESSION-HANDOFF.md", "file_type": "document", "source_file": "docs/SESSION-HANDOFF.md", "source_location": "L1"}, {"id": "docs_session_handoff_session_handoff_manajemen_gudang_lokasi", "label": "Session Handoff \u2014 Manajemen Gudang (Lokasi)", "file_type": "document", "source_file": "docs/SESSION-HANDOFF.md", "source_location": "L1"}, {"id": "docs_session_handoff_repo", "label": "Repo", "file_type": "document", "source_file": "docs/SESSION-HANDOFF.md", "source_location": "L6"}, {"id": "docs_session_handoff_yang_sudah_selesai", "label": "Yang sudah selesai", "file_type": "document", "source_file": "docs/SESSION-HANDOFF.md", "source_location": "L12"}, {"id": "docs_session_handoff_a_be_transit_transfer_sesi_sebelumnya_sudah_merged_ke_working_tree", "label": "A. BE \u2014 Transit & transfer (sesi sebelumnya, sudah merged ke working tree)", "file_type": "document", "source_file": "docs/SESSION-HANDOFF.md", "source_location": "L14"}, {"id": "docs_session_handoff_b_be_lokasi_milestone_1", "label": "B. BE \u2014 Lokasi (Milestone 1) \u2705", "file_type": "document", "source_file": "docs/SESSION-HANDOFF.md", "source_location": "L18"}, {"id": "docs_session_handoff_c_fe_lokasi_milestone_2_5_typecheck_0_eslint_clean_belum_diverifikasi_runtime", "label": "C. FE \u2014 Lokasi (Milestone 2\u20135) \u2705 (typecheck 0, eslint clean; BELUM diverifikasi runtime)", "file_type": "document", "source_file": "docs/SESSION-HANDOFF.md", "source_location": "L26"}, {"id": "docs_session_handoff_catatan_penting_follow_up_untuk_sesi_baru", "label": "Catatan penting / follow-up untuk sesi baru", "file_type": "document", "source_file": "docs/SESSION-HANDOFF.md", "source_location": "L34"}, {"id": "docs_session_handoff_cara_lanjut", "label": "Cara lanjut", "file_type": "document", "source_file": "docs/SESSION-HANDOFF.md", "source_location": "L42"}], "edges": [{"source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_docs_session_handoff_md", "target": "docs_session_handoff_session_handoff_manajemen_gudang_lokasi", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/SESSION-HANDOFF.md", "source_location": "L1", "weight": 1.0}, {"source": "docs_session_handoff_session_handoff_manajemen_gudang_lokasi", "target": "docs_session_handoff_repo", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/SESSION-HANDOFF.md", "source_location": "L6", "weight": 1.0}, {"source": "docs_session_handoff_session_handoff_manajemen_gudang_lokasi", "target": "docs_session_handoff_yang_sudah_selesai", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/SESSION-HANDOFF.md", "source_location": "L12", "weight": 1.0}, {"source": "docs_session_handoff_yang_sudah_selesai", "target": "docs_session_handoff_a_be_transit_transfer_sesi_sebelumnya_sudah_merged_ke_working_tree", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/SESSION-HANDOFF.md", "source_location": "L14", "weight": 1.0}, {"source": "docs_session_handoff_yang_sudah_selesai", "target": "docs_session_handoff_b_be_lokasi_milestone_1", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/SESSION-HANDOFF.md", "source_location": "L18", "weight": 1.0}, {"source": "docs_session_handoff_yang_sudah_selesai", "target": "docs_session_handoff_c_fe_lokasi_milestone_2_5_typecheck_0_eslint_clean_belum_diverifikasi_runtime", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/SESSION-HANDOFF.md", "source_location": "L26", "weight": 1.0}, {"source": "docs_session_handoff_session_handoff_manajemen_gudang_lokasi", "target": "docs_session_handoff_catatan_penting_follow_up_untuk_sesi_baru", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/SESSION-HANDOFF.md", "source_location": "L34", "weight": 1.0}, {"source": "docs_session_handoff_session_handoff_manajemen_gudang_lokasi", "target": "docs_session_handoff_cara_lanjut", "relation": "contains", "confidence": "EXTRACTED", "source_file": "docs/SESSION-HANDOFF.md", "source_location": "L42", "weight": 1.0}], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_docs_session_handoff_md",
+      "label": "SESSION-HANDOFF.md",
+      "file_type": "document",
+      "source_file": "docs/SESSION-HANDOFF.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "docs_session_handoff_session_handoff_manajemen_gudang_lokasi",
+      "label": "Session Handoff \u2014 Manajemen Gudang (Lokasi)",
+      "file_type": "document",
+      "source_file": "docs/SESSION-HANDOFF.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "docs_session_handoff_repo",
+      "label": "Repo",
+      "file_type": "document",
+      "source_file": "docs/SESSION-HANDOFF.md",
+      "source_location": "L6"
+    },
+    {
+      "id": "docs_session_handoff_yang_sudah_selesai",
+      "label": "Yang sudah selesai",
+      "file_type": "document",
+      "source_file": "docs/SESSION-HANDOFF.md",
+      "source_location": "L12"
+    },
+    {
+      "id": "docs_session_handoff_a_be_transit_transfer_sesi_sebelumnya_sudah_merged_ke_working_tree",
+      "label": "A. BE \u2014 Transit & transfer (sesi sebelumnya, sudah merged ke working tree)",
+      "file_type": "document",
+      "source_file": "docs/SESSION-HANDOFF.md",
+      "source_location": "L14"
+    },
+    {
+      "id": "docs_session_handoff_b_be_lokasi_milestone_1",
+      "label": "B. BE \u2014 Lokasi (Milestone 1) \u2705",
+      "file_type": "document",
+      "source_file": "docs/SESSION-HANDOFF.md",
+      "source_location": "L18"
+    },
+    {
+      "id": "docs_session_handoff_c_fe_lokasi_milestone_2_5_typecheck_0_eslint_clean_belum_diverifikasi_runtime",
+      "label": "C. FE \u2014 Lokasi (Milestone 2\u20135) \u2705 (typecheck 0, eslint clean; BELUM diverifikasi runtime)",
+      "file_type": "document",
+      "source_file": "docs/SESSION-HANDOFF.md",
+      "source_location": "L26"
+    },
+    {
+      "id": "docs_session_handoff_catatan_penting_follow_up_untuk_sesi_baru",
+      "label": "Catatan penting / follow-up untuk sesi baru",
+      "file_type": "document",
+      "source_file": "docs/SESSION-HANDOFF.md",
+      "source_location": "L34"
+    },
+    {
+      "id": "docs_session_handoff_cara_lanjut",
+      "label": "Cara lanjut",
+      "file_type": "document",
+      "source_file": "docs/SESSION-HANDOFF.md",
+      "source_location": "L42"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_docs_session_handoff_md",
+      "target": "docs_session_handoff_session_handoff_manajemen_gudang_lokasi",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/SESSION-HANDOFF.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_session_handoff_session_handoff_manajemen_gudang_lokasi",
+      "target": "docs_session_handoff_repo",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/SESSION-HANDOFF.md",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_session_handoff_session_handoff_manajemen_gudang_lokasi",
+      "target": "docs_session_handoff_yang_sudah_selesai",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/SESSION-HANDOFF.md",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_session_handoff_yang_sudah_selesai",
+      "target": "docs_session_handoff_a_be_transit_transfer_sesi_sebelumnya_sudah_merged_ke_working_tree",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/SESSION-HANDOFF.md",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_session_handoff_yang_sudah_selesai",
+      "target": "docs_session_handoff_b_be_lokasi_milestone_1",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/SESSION-HANDOFF.md",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_session_handoff_yang_sudah_selesai",
+      "target": "docs_session_handoff_c_fe_lokasi_milestone_2_5_typecheck_0_eslint_clean_belum_diverifikasi_runtime",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/SESSION-HANDOFF.md",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_session_handoff_session_handoff_manajemen_gudang_lokasi",
+      "target": "docs_session_handoff_catatan_penting_follow_up_untuk_sesi_baru",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/SESSION-HANDOFF.md",
+      "source_location": "L34",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_session_handoff_session_handoff_manajemen_gudang_lokasi",
+      "target": "docs_session_handoff_cara_lanjut",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/SESSION-HANDOFF.md",
+      "source_location": "L42",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

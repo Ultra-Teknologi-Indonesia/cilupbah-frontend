@@ -18,7 +18,10 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { DatePicker } from "@/components/ui/date-picker";
 import { LocationMultiCombobox } from "@/components/dashboard/laporan/shared/location-multi-combobox";
-import { ReportFormatRadio, type ReportFormat } from "@/components/dashboard/laporan/shared/report-format-radio";
+import {
+  ReportFormatRadio,
+  type ReportFormat,
+} from "@/components/dashboard/laporan/shared/report-format-radio";
 import { useExportSalesReturn } from "@/hooks/laporan/use-laporan-retur-penjualan";
 
 interface PenjualanReturDialogProps {
@@ -84,7 +87,8 @@ export function PenjualanReturDialog({
           toast.success("Berhasil mengunduh laporan retur penjualan");
           handleOpenChange(false);
         },
-        onError: (error) => apiError(error, "Gagal mengunduh laporan retur penjualan"),
+        onError: (error) =>
+          apiError(error, "Gagal mengunduh laporan retur penjualan"),
       },
     );
   }
@@ -159,8 +163,10 @@ export function PenjualanReturDialog({
           <Button variant="primary" onClick={handleCetak} disabled={!canCetak}>
             {exportXlsx.isPending ? (
               <Loader2 className="size-4 animate-spin" />
+            ) : format === "excel" ? (
+              <DownloadIcon className="size-4" />
             ) : (
-              format === "excel" ? <DownloadIcon className="size-4" /> : <PrinterIcon className="size-4" />
+              <PrinterIcon className="size-4" />
             )}
             {format === "excel" ? "Unduh Excel" : "Unduh PDF"}
           </Button>

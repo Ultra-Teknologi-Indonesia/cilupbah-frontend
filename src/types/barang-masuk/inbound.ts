@@ -10,10 +10,7 @@ export type InboundStatus =
   | "CANCELLED";
 
 export type InboundPlacementStatus =
-  | "NOT_STARTED"
-  | "PARTIAL"
-  | "COMPLETED"
-  | "CANCELLED";
+  "NOT_STARTED" | "PARTIAL" | "COMPLETED" | "CANCELLED";
 
 export interface InboundPlacementSummary {
   received_qty: number;

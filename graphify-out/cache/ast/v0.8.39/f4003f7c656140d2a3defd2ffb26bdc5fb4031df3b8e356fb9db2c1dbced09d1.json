@@ -1,1 +1,79 @@
-{"nodes": [{"id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_ui_conventions_md", "label": "UI-CONVENTIONS.md", "file_type": "document", "source_file": "UI-CONVENTIONS.md", "source_location": "L1"}, {"id": "cilupbah_fe_ui_conventions_konvensi_ui_cilupbah_fe", "label": "Konvensi UI \u2014 cilupbah-fe", "file_type": "document", "source_file": "UI-CONVENTIONS.md", "source_location": "L1"}, {"id": "cilupbah_fe_ui_conventions_komponen_bersama_wajib_dipakai_jangan_bikin_ad_hoc", "label": "Komponen bersama (WAJIB dipakai, jangan bikin ad-hoc)", "file_type": "document", "source_file": "UI-CONVENTIONS.md", "source_location": "L5"}, {"id": "cilupbah_fe_ui_conventions_kamus_istilah_tombol_konsisten", "label": "Kamus istilah tombol (konsisten)", "file_type": "document", "source_file": "UI-CONVENTIONS.md", "source_location": "L17"}, {"id": "cilupbah_fe_ui_conventions_status_warna_terpusat", "label": "Status \u2192 warna (terpusat)", "file_type": "document", "source_file": "UI-CONVENTIONS.md", "source_location": "L32"}], "edges": [{"source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_ui_conventions_md", "target": "cilupbah_fe_ui_conventions_konvensi_ui_cilupbah_fe", "relation": "contains", "confidence": "EXTRACTED", "source_file": "UI-CONVENTIONS.md", "source_location": "L1", "weight": 1.0}, {"source": "cilupbah_fe_ui_conventions_konvensi_ui_cilupbah_fe", "target": "cilupbah_fe_ui_conventions_komponen_bersama_wajib_dipakai_jangan_bikin_ad_hoc", "relation": "contains", "confidence": "EXTRACTED", "source_file": "UI-CONVENTIONS.md", "source_location": "L5", "weight": 1.0}, {"source": "cilupbah_fe_ui_conventions_konvensi_ui_cilupbah_fe", "target": "cilupbah_fe_ui_conventions_kamus_istilah_tombol_konsisten", "relation": "contains", "confidence": "EXTRACTED", "source_file": "UI-CONVENTIONS.md", "source_location": "L17", "weight": 1.0}, {"source": "cilupbah_fe_ui_conventions_konvensi_ui_cilupbah_fe", "target": "cilupbah_fe_ui_conventions_status_warna_terpusat", "relation": "contains", "confidence": "EXTRACTED", "source_file": "UI-CONVENTIONS.md", "source_location": "L32", "weight": 1.0}], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_ui_conventions_md",
+      "label": "UI-CONVENTIONS.md",
+      "file_type": "document",
+      "source_file": "UI-CONVENTIONS.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_ui_conventions_konvensi_ui_cilupbah_fe",
+      "label": "Konvensi UI \u2014 cilupbah-fe",
+      "file_type": "document",
+      "source_file": "UI-CONVENTIONS.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_ui_conventions_komponen_bersama_wajib_dipakai_jangan_bikin_ad_hoc",
+      "label": "Komponen bersama (WAJIB dipakai, jangan bikin ad-hoc)",
+      "file_type": "document",
+      "source_file": "UI-CONVENTIONS.md",
+      "source_location": "L5"
+    },
+    {
+      "id": "cilupbah_fe_ui_conventions_kamus_istilah_tombol_konsisten",
+      "label": "Kamus istilah tombol (konsisten)",
+      "file_type": "document",
+      "source_file": "UI-CONVENTIONS.md",
+      "source_location": "L17"
+    },
+    {
+      "id": "cilupbah_fe_ui_conventions_status_warna_terpusat",
+      "label": "Status \u2192 warna (terpusat)",
+      "file_type": "document",
+      "source_file": "UI-CONVENTIONS.md",
+      "source_location": "L32"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_ui_conventions_md",
+      "target": "cilupbah_fe_ui_conventions_konvensi_ui_cilupbah_fe",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UI-CONVENTIONS.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_ui_conventions_konvensi_ui_cilupbah_fe",
+      "target": "cilupbah_fe_ui_conventions_komponen_bersama_wajib_dipakai_jangan_bikin_ad_hoc",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UI-CONVENTIONS.md",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_ui_conventions_konvensi_ui_cilupbah_fe",
+      "target": "cilupbah_fe_ui_conventions_kamus_istilah_tombol_konsisten",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UI-CONVENTIONS.md",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_ui_conventions_konvensi_ui_cilupbah_fe",
+      "target": "cilupbah_fe_ui_conventions_status_warna_terpusat",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UI-CONVENTIONS.md",
+      "source_location": "L32",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

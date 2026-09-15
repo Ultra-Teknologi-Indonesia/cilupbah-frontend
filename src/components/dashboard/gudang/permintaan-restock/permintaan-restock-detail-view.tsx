@@ -586,7 +586,9 @@ function ReasonSummary({ item }: { item: StockReplenishmentItem }) {
           <strong
             className={cn(
               "font-semibold tabular-nums",
-              detail.available_qty <= 0 ? "text-destructive" : "text-foreground",
+              detail.available_qty <= 0
+                ? "text-destructive"
+                : "text-foreground",
             )}
           >
             {detail.available_qty}

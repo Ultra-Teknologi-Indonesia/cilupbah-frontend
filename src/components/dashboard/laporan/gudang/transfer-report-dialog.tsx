@@ -19,7 +19,10 @@ import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/ui/date-picker";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ProductPickerCombobox } from "@/components/dashboard/laporan/shared/product-picker-combobox";
-import { ReportFormatRadio, type ReportFormat } from "@/components/dashboard/laporan/shared/report-format-radio";
+import {
+  ReportFormatRadio,
+  type ReportFormat,
+} from "@/components/dashboard/laporan/shared/report-format-radio";
 import { useExportTransferReport } from "@/hooks/laporan/use-laporan-gudang";
 import type { TransferReportJenis } from "@/types/laporan/laporan-gudang";
 
@@ -184,8 +187,10 @@ export function TransferReportDialog({
           <Button variant="primary" onClick={handleCetak} disabled={!canCetak}>
             {exportTransfer.isPending ? (
               <Loader2 className="size-4 animate-spin" />
+            ) : format === "excel" ? (
+              <DownloadIcon className="size-4" />
             ) : (
-              format === "excel" ? <DownloadIcon className="size-4" /> : <PrinterIcon className="size-4" />
+              <PrinterIcon className="size-4" />
             )}
             {format === "excel" ? "Unduh Excel" : "Unduh PDF"}
           </Button>

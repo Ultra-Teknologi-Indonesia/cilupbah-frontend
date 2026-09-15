@@ -601,7 +601,10 @@ export function ShipmentDetailView({ id }: { id: string }) {
     isScanningRef.current = true;
 
     try {
-      const result = await scanOrder.mutateAsync({ shipmentId: id, barcode: code });
+      const result = await scanOrder.mutateAsync({
+        shipmentId: id,
+        barcode: code,
+      });
       setLatestScannedOrder(result.shipmentOrder);
       setSearchQuery("");
       setPage(1);

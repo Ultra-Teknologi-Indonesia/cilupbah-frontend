@@ -16,10 +16,7 @@ const ACTION_VIEW_OVERRIDES: Record<string, string> = {
   "auto-merge-product": "view-product-merge",
 };
 
-export type PermissionRequirement =
-  | string
-  | string[]
-  | { all: string[] };
+export type PermissionRequirement = string | string[] | { all: string[] };
 
 export function viewPermissionForAction(
   permission: string,
@@ -46,6 +43,9 @@ export function hasPermission(
   isOwner = false,
 ): boolean {
   return (
-    isOwner || permissionRequirements(permission).every((required) => granted.has(required))
+    isOwner ||
+    permissionRequirements(permission).every((required) =>
+      granted.has(required),
+    )
   );
 }

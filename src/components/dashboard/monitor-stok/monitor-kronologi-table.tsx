@@ -141,7 +141,9 @@ export function MonitorKronologiTable({
       },
       {
         accessorKey: "balance",
-        header: () => <span className="block text-right">Saldo saat kejadian</span>,
+        header: () => (
+          <span className="block text-right">Saldo saat kejadian</span>
+        ),
         cell: ({ row }) => (
           <div className="text-right text-sm tabular-nums">
             {row.original.balance.toLocaleString("id-ID")}

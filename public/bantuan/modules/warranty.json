@@ -1,1025 +1,909 @@
 {
-    "slug": "warranty",
-    "name": "Warranty",
-    "description": "Garansi produk.",
-    "endpoints_count": 6,
-    "undocumented": 0,
-    "endpoints": [
-        {
-            "id": "api.warranties.index",
-            "module_slug": "warranty",
-            "module_name": "Warranty",
-            "method": "GET",
-            "path": "/api/v1/warranties",
-            "summary": "Ambil daftar garansi produk",
-            "description": "Ambil daftar garansi produk.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-garansi].",
-            "purpose": "Membutuhkan izin: owner, view-garansi. Mendukung filter, sort, search, dan pagination (Spatie Query Builder — lihat section Filter/Sort/Search).",
-            "controller": "Modules\\Warranty\\Http\\Controllers\\WarrantyController",
-            "action": "index",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "view-garansi"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": [
-                    []
-                ],
-                "meta": {
-                    "current_page": "integer",
-                    "per_page": "integer",
-                    "total": "integer",
-                    "last_page": "integer"
-                }
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": [
-                    []
-                ],
-                "meta": {
-                    "current_page": 1,
-                    "per_page": 10,
-                    "total": 1,
-                    "last_page": 1
-                }
-            },
-            "response_resource": "Modules\\Warranty\\Http\\Resources\\WarrantyResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [
-                {
-                    "name": "product_variant_id",
-                    "type": "exact",
-                    "column": null,
-                    "scope": null,
-                    "description": "ID product variant (referensi ke resource product variant). Cocok persis. Pemakaian: `?filter[product_variant_id]=value`.",
-                    "usage_example": "?filter[product_variant_id]=value"
-                },
-                {
-                    "name": "order_id",
-                    "type": "exact",
-                    "column": null,
-                    "scope": null,
-                    "description": "ID order (referensi ke resource order). Cocok persis. Pemakaian: `?filter[order_id]=value`.",
-                    "usage_example": "?filter[order_id]=value"
-                },
-                {
-                    "name": "serial_no",
-                    "type": "exact",
-                    "column": null,
-                    "scope": null,
-                    "description": "Field serial no (tipe filter). Cocok persis. Pemakaian: `?filter[serial_no]=value`.",
-                    "usage_example": "?filter[serial_no]=value"
-                }
-            ],
-            "allowed_sorts": [
-                "created_at",
-                "start_date",
-                "end_date"
-            ],
-            "allowed_search": [
-                "serial_no"
-            ],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.warranties.show",
-                    "method": "GET",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Ambil detail garansi produk"
-                },
-                {
-                    "id": "api.warranties.store",
-                    "method": "POST",
-                    "path": "/api/v1/warranties",
-                    "summary": "Buat garansi produk"
-                },
-                {
-                    "id": "api.warranties.update",
-                    "method": "PUT",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Ubah garansi produk"
-                },
-                {
-                    "id": "api.warranties.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Ubah garansi produk"
-                },
-                {
-                    "id": "api.warranties.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Hapus garansi produk"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.warranties.store",
-            "module_slug": "warranty",
-            "module_name": "Warranty",
-            "method": "POST",
-            "path": "/api/v1/warranties",
-            "summary": "Buat garansi produk",
-            "description": "Buat garansi produk.\nResponse: 201 dengan data resource yang baru dibuat. Trigger side-effects sesuai domain (event/job/notifikasi) — lihat section Side Effects.\nOtorisasi: minimal satu izin dari [owner, edit-garansi].",
-            "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-garansi. Membuat resource baru atau memicu aksi domain.",
-            "controller": "Modules\\Warranty\\Http\\Controllers\\WarrantyController",
-            "action": "store",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "edit-garansi"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": "Modules\\Warranty\\Http\\Requests\\StoreWarrantyRequest",
-            "path_params": [],
-            "query_params": [],
-            "body_schema": {
-                "product_variant_id": {
-                    "type": "string",
-                    "required": true,
-                    "rules": [
-                        "required",
-                        "string",
-                        "exists:product_variants,id"
-                    ],
-                    "exists": "product_variants,id",
-                    "description": "ID product variant (referensi ke resource product variant)."
-                },
-                "order_id": {
-                    "type": "string",
-                    "required": false,
-                    "rules": [
-                        "nullable",
-                        "string",
-                        "exists:sales_orders,id"
-                    ],
-                    "exists": "sales_orders,id",
-                    "description": "ID order (referensi ke resource order)."
-                },
-                "serial_no": {
-                    "type": "string",
-                    "required": false,
-                    "rules": [
-                        "nullable",
-                        "string",
-                        "max:255"
-                    ],
-                    "constraints": {
-                        "max": 255
-                    },
-                    "description": "Field serial no (tipe string)."
-                },
-                "duration_months": {
-                    "type": "integer",
-                    "required": true,
-                    "rules": [
-                        "required",
-                        "integer",
-                        "min:1"
-                    ],
-                    "constraints": {
-                        "min": 1
-                    },
-                    "description": "Field duration months (tipe integer)."
-                },
-                "start_date": {
-                    "type": "date",
-                    "required": true,
-                    "rules": [
-                        "required",
-                        "date"
-                    ],
-                    "description": "Field start date (tipe date)."
-                },
-                "end_date": {
-                    "type": "date",
-                    "required": true,
-                    "rules": [
-                        "required",
-                        "date",
-                        "after:start_date"
-                    ],
-                    "description": "Field end date (tipe date)."
-                },
-                "notes": {
-                    "type": "string",
-                    "required": false,
-                    "rules": [
-                        "nullable",
-                        "string"
-                    ],
-                    "description": "Catatan bebas."
-                }
-            },
-            "body_example": {
-                "product_variant_id": 1,
-                "order_id": 1,
-                "serial_no": "string",
-                "duration_months": 1,
-                "start_date": "2026-08-05",
-                "end_date": "2026-08-05",
-                "notes": "string"
-            },
-            "validation": [
-                "product_variant_id: required|string|exists:product_variants,id",
-                "order_id: nullable|string|exists:sales_orders,id",
-                "serial_no: nullable|string|max:255",
-                "duration_months: required|integer|min:1",
-                "start_date: required|date",
-                "end_date: required|date|after:start_date",
-                "notes: nullable|string"
-            ],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": []
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": []
-            },
-            "response_resource": "Modules\\Warranty\\Http\\Resources\\WarrantyResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                201,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.warranties.index",
-                    "method": "GET",
-                    "path": "/api/v1/warranties",
-                    "summary": "Ambil daftar garansi produk"
-                },
-                {
-                    "id": "api.warranties.show",
-                    "method": "GET",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Ambil detail garansi produk"
-                },
-                {
-                    "id": "api.warranties.update",
-                    "method": "PUT",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Ubah garansi produk"
-                },
-                {
-                    "id": "api.warranties.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Ubah garansi produk"
-                },
-                {
-                    "id": "api.warranties.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Hapus garansi produk"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.warranties.destroy",
-            "module_slug": "warranty",
-            "module_name": "Warranty",
-            "method": "DELETE",
-            "path": "/api/v1/warranties/{warranty}",
-            "summary": "Hapus garansi produk",
-            "description": "Hapus garansi produk.\nResponse: 200/204. Perhatikan aturan revert/soft-delete yang berlaku pada resource ini.\nOtorisasi: minimal satu izin dari [owner, edit-garansi].",
-            "purpose": "Membutuhkan izin: owner, edit-garansi. Menghapus resource. Ikuti aturan revert/soft-delete yang berlaku.",
-            "controller": "Modules\\Warranty\\Http\\Controllers\\WarrantyController",
-            "action": "destroy",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "edit-garansi"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [
-                {
-                    "name": "warranty",
-                    "type": "string",
-                    "required": true,
-                    "description": "Field warranty (tipe string)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": "object|null"
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Garansi berhasil dihapus",
-                "data": {}
-            },
-            "response_resource": null,
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 404,
-                    "reason": "Garansi tidak ditemukan",
-                    "body": {
-                        "success": false,
-                        "message": "Garansi tidak ditemukan"
-                    }
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                204,
-                401,
-                403,
-                404,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.warranties.index",
-                    "method": "GET",
-                    "path": "/api/v1/warranties",
-                    "summary": "Ambil daftar garansi produk"
-                },
-                {
-                    "id": "api.warranties.show",
-                    "method": "GET",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Ambil detail garansi produk"
-                },
-                {
-                    "id": "api.warranties.store",
-                    "method": "POST",
-                    "path": "/api/v1/warranties",
-                    "summary": "Buat garansi produk"
-                },
-                {
-                    "id": "api.warranties.update",
-                    "method": "PUT",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Ubah garansi produk"
-                },
-                {
-                    "id": "api.warranties.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Ubah garansi produk"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.warranties.show",
-            "module_slug": "warranty",
-            "module_name": "Warranty",
-            "method": "GET",
-            "path": "/api/v1/warranties/{warranty}",
-            "summary": "Ambil detail garansi produk",
-            "description": "Ambil detail garansi produk.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-garansi].",
-            "purpose": "Membutuhkan izin: owner, view-garansi. Mengembalikan data untuk ditampilkan di UI.",
-            "controller": "Modules\\Warranty\\Http\\Controllers\\WarrantyController",
-            "action": "show",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "view-garansi"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [
-                {
-                    "name": "warranty",
-                    "type": "string",
-                    "required": true,
-                    "description": "Field warranty (tipe string)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": []
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": []
-            },
-            "response_resource": "Modules\\Warranty\\Http\\Resources\\WarrantyResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 404,
-                    "reason": "Garansi tidak ditemukan",
-                    "body": {
-                        "success": false,
-                        "message": "Garansi tidak ditemukan"
-                    }
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                404,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.warranties.index",
-                    "method": "GET",
-                    "path": "/api/v1/warranties",
-                    "summary": "Ambil daftar garansi produk"
-                },
-                {
-                    "id": "api.warranties.store",
-                    "method": "POST",
-                    "path": "/api/v1/warranties",
-                    "summary": "Buat garansi produk"
-                },
-                {
-                    "id": "api.warranties.update",
-                    "method": "PUT",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Ubah garansi produk"
-                },
-                {
-                    "id": "api.warranties.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Ubah garansi produk"
-                },
-                {
-                    "id": "api.warranties.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Hapus garansi produk"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.warranties.update",
-            "module_slug": "warranty",
-            "module_name": "Warranty",
-            "method": "PATCH",
-            "path": "/api/v1/warranties/{warranty}",
-            "summary": "Ubah garansi produk",
-            "description": "Ubah garansi produk.\nResponse: 200 dengan data resource yang sudah diperbarui.\nOtorisasi: minimal satu izin dari [owner, edit-garansi].",
-            "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-garansi. Memperbarui resource yang sudah ada.",
-            "controller": "Modules\\Warranty\\Http\\Controllers\\WarrantyController",
-            "action": "update",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "edit-garansi"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": "Modules\\Warranty\\Http\\Requests\\UpdateWarrantyRequest",
-            "path_params": [
-                {
-                    "name": "warranty",
-                    "type": "string",
-                    "required": true,
-                    "description": "Field warranty (tipe string)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": {
-                "status": {
-                    "type": "string",
-                    "required": false,
-                    "rules": [
-                        "nullable",
-                        "string",
-                        "in:active,expired,void"
-                    ],
-                    "enum": [
-                        "active",
-                        "expired",
-                        "void"
-                    ],
-                    "description": "Status resource. Nilai valid tergantung modul — lihat enum di kolom rules."
-                },
-                "notes": {
-                    "type": "string",
-                    "required": false,
-                    "rules": [
-                        "nullable",
-                        "string"
-                    ],
-                    "description": "Catatan bebas."
-                }
-            },
-            "body_example": {
-                "status": "active",
-                "notes": "string"
-            },
-            "validation": [
-                "status: nullable|string|in:active,expired,void",
-                "notes: nullable|string"
-            ],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": []
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": []
-            },
-            "response_resource": "Modules\\Warranty\\Http\\Resources\\WarrantyResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 404,
-                    "reason": "Garansi tidak ditemukan",
-                    "body": {
-                        "success": false,
-                        "message": "Garansi tidak ditemukan"
-                    }
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                404,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.warranties.index",
-                    "method": "GET",
-                    "path": "/api/v1/warranties",
-                    "summary": "Ambil daftar garansi produk"
-                },
-                {
-                    "id": "api.warranties.show",
-                    "method": "GET",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Ambil detail garansi produk"
-                },
-                {
-                    "id": "api.warranties.store",
-                    "method": "POST",
-                    "path": "/api/v1/warranties",
-                    "summary": "Buat garansi produk"
-                },
-                {
-                    "id": "api.warranties.update",
-                    "method": "PUT",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Ubah garansi produk"
-                },
-                {
-                    "id": "api.warranties.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Hapus garansi produk"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.warranties.update",
-            "module_slug": "warranty",
-            "module_name": "Warranty",
-            "method": "PUT",
-            "path": "/api/v1/warranties/{warranty}",
-            "summary": "Ubah garansi produk",
-            "description": "Ubah garansi produk.\nResponse: 200 dengan data resource yang sudah diperbarui.\nOtorisasi: minimal satu izin dari [owner, edit-garansi].",
-            "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-garansi. Memperbarui resource yang sudah ada.",
-            "controller": "Modules\\Warranty\\Http\\Controllers\\WarrantyController",
-            "action": "update",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "edit-garansi"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": "Modules\\Warranty\\Http\\Requests\\UpdateWarrantyRequest",
-            "path_params": [
-                {
-                    "name": "warranty",
-                    "type": "string",
-                    "required": true,
-                    "description": "Field warranty (tipe string)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": {
-                "status": {
-                    "type": "string",
-                    "required": false,
-                    "rules": [
-                        "nullable",
-                        "string",
-                        "in:active,expired,void"
-                    ],
-                    "enum": [
-                        "active",
-                        "expired",
-                        "void"
-                    ],
-                    "description": "Status resource. Nilai valid tergantung modul — lihat enum di kolom rules."
-                },
-                "notes": {
-                    "type": "string",
-                    "required": false,
-                    "rules": [
-                        "nullable",
-                        "string"
-                    ],
-                    "description": "Catatan bebas."
-                }
-            },
-            "body_example": {
-                "status": "active",
-                "notes": "string"
-            },
-            "validation": [
-                "status: nullable|string|in:active,expired,void",
-                "notes: nullable|string"
-            ],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": []
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": []
-            },
-            "response_resource": "Modules\\Warranty\\Http\\Resources\\WarrantyResource",
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 404,
-                    "reason": "Garansi tidak ditemukan",
-                    "body": {
-                        "success": false,
-                        "message": "Garansi tidak ditemukan"
-                    }
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                404,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.warranties.index",
-                    "method": "GET",
-                    "path": "/api/v1/warranties",
-                    "summary": "Ambil daftar garansi produk"
-                },
-                {
-                    "id": "api.warranties.show",
-                    "method": "GET",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Ambil detail garansi produk"
-                },
-                {
-                    "id": "api.warranties.store",
-                    "method": "POST",
-                    "path": "/api/v1/warranties",
-                    "summary": "Buat garansi produk"
-                },
-                {
-                    "id": "api.warranties.update",
-                    "method": "PATCH",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Ubah garansi produk"
-                },
-                {
-                    "id": "api.warranties.destroy",
-                    "method": "DELETE",
-                    "path": "/api/v1/warranties/{warranty}",
-                    "summary": "Hapus garansi produk"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
+  "slug": "warranty",
+  "name": "Warranty",
+  "description": "Garansi produk.",
+  "endpoints_count": 6,
+  "undocumented": 0,
+  "endpoints": [
+    {
+      "id": "api.warranties.index",
+      "module_slug": "warranty",
+      "module_name": "Warranty",
+      "method": "GET",
+      "path": "/api/v1/warranties",
+      "summary": "Ambil daftar garansi produk",
+      "description": "Ambil daftar garansi produk.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-garansi].",
+      "purpose": "Membutuhkan izin: owner, view-garansi. Mendukung filter, sort, search, dan pagination (Spatie Query Builder — lihat section Filter/Sort/Search).",
+      "controller": "Modules\\Warranty\\Http\\Controllers\\WarrantyController",
+      "action": "index",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "view-garansi"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": [[]],
+        "meta": {
+          "current_page": "integer",
+          "per_page": "integer",
+          "total": "integer",
+          "last_page": "integer"
         }
-    ]
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": [[]],
+        "meta": {
+          "current_page": 1,
+          "per_page": 10,
+          "total": 1,
+          "last_page": 1
+        }
+      },
+      "response_resource": "Modules\\Warranty\\Http\\Resources\\WarrantyResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [
+        {
+          "name": "product_variant_id",
+          "type": "exact",
+          "column": null,
+          "scope": null,
+          "description": "ID product variant (referensi ke resource product variant). Cocok persis. Pemakaian: `?filter[product_variant_id]=value`.",
+          "usage_example": "?filter[product_variant_id]=value"
+        },
+        {
+          "name": "order_id",
+          "type": "exact",
+          "column": null,
+          "scope": null,
+          "description": "ID order (referensi ke resource order). Cocok persis. Pemakaian: `?filter[order_id]=value`.",
+          "usage_example": "?filter[order_id]=value"
+        },
+        {
+          "name": "serial_no",
+          "type": "exact",
+          "column": null,
+          "scope": null,
+          "description": "Field serial no (tipe filter). Cocok persis. Pemakaian: `?filter[serial_no]=value`.",
+          "usage_example": "?filter[serial_no]=value"
+        }
+      ],
+      "allowed_sorts": ["created_at", "start_date", "end_date"],
+      "allowed_search": ["serial_no"],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.warranties.show",
+          "method": "GET",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Ambil detail garansi produk"
+        },
+        {
+          "id": "api.warranties.store",
+          "method": "POST",
+          "path": "/api/v1/warranties",
+          "summary": "Buat garansi produk"
+        },
+        {
+          "id": "api.warranties.update",
+          "method": "PUT",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Ubah garansi produk"
+        },
+        {
+          "id": "api.warranties.update",
+          "method": "PATCH",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Ubah garansi produk"
+        },
+        {
+          "id": "api.warranties.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Hapus garansi produk"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.warranties.store",
+      "module_slug": "warranty",
+      "module_name": "Warranty",
+      "method": "POST",
+      "path": "/api/v1/warranties",
+      "summary": "Buat garansi produk",
+      "description": "Buat garansi produk.\nResponse: 201 dengan data resource yang baru dibuat. Trigger side-effects sesuai domain (event/job/notifikasi) — lihat section Side Effects.\nOtorisasi: minimal satu izin dari [owner, edit-garansi].",
+      "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-garansi. Membuat resource baru atau memicu aksi domain.",
+      "controller": "Modules\\Warranty\\Http\\Controllers\\WarrantyController",
+      "action": "store",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "edit-garansi"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": "Modules\\Warranty\\Http\\Requests\\StoreWarrantyRequest",
+      "path_params": [],
+      "query_params": [],
+      "body_schema": {
+        "product_variant_id": {
+          "type": "string",
+          "required": true,
+          "rules": ["required", "string", "exists:product_variants,id"],
+          "exists": "product_variants,id",
+          "description": "ID product variant (referensi ke resource product variant)."
+        },
+        "order_id": {
+          "type": "string",
+          "required": false,
+          "rules": ["nullable", "string", "exists:sales_orders,id"],
+          "exists": "sales_orders,id",
+          "description": "ID order (referensi ke resource order)."
+        },
+        "serial_no": {
+          "type": "string",
+          "required": false,
+          "rules": ["nullable", "string", "max:255"],
+          "constraints": {
+            "max": 255
+          },
+          "description": "Field serial no (tipe string)."
+        },
+        "duration_months": {
+          "type": "integer",
+          "required": true,
+          "rules": ["required", "integer", "min:1"],
+          "constraints": {
+            "min": 1
+          },
+          "description": "Field duration months (tipe integer)."
+        },
+        "start_date": {
+          "type": "date",
+          "required": true,
+          "rules": ["required", "date"],
+          "description": "Field start date (tipe date)."
+        },
+        "end_date": {
+          "type": "date",
+          "required": true,
+          "rules": ["required", "date", "after:start_date"],
+          "description": "Field end date (tipe date)."
+        },
+        "notes": {
+          "type": "string",
+          "required": false,
+          "rules": ["nullable", "string"],
+          "description": "Catatan bebas."
+        }
+      },
+      "body_example": {
+        "product_variant_id": 1,
+        "order_id": 1,
+        "serial_no": "string",
+        "duration_months": 1,
+        "start_date": "2026-08-05",
+        "end_date": "2026-08-05",
+        "notes": "string"
+      },
+      "validation": [
+        "product_variant_id: required|string|exists:product_variants,id",
+        "order_id: nullable|string|exists:sales_orders,id",
+        "serial_no: nullable|string|max:255",
+        "duration_months: required|integer|min:1",
+        "start_date: required|date",
+        "end_date: required|date|after:start_date",
+        "notes: nullable|string"
+      ],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": []
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": []
+      },
+      "response_resource": "Modules\\Warranty\\Http\\Resources\\WarrantyResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [201, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.warranties.index",
+          "method": "GET",
+          "path": "/api/v1/warranties",
+          "summary": "Ambil daftar garansi produk"
+        },
+        {
+          "id": "api.warranties.show",
+          "method": "GET",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Ambil detail garansi produk"
+        },
+        {
+          "id": "api.warranties.update",
+          "method": "PUT",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Ubah garansi produk"
+        },
+        {
+          "id": "api.warranties.update",
+          "method": "PATCH",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Ubah garansi produk"
+        },
+        {
+          "id": "api.warranties.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Hapus garansi produk"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.warranties.destroy",
+      "module_slug": "warranty",
+      "module_name": "Warranty",
+      "method": "DELETE",
+      "path": "/api/v1/warranties/{warranty}",
+      "summary": "Hapus garansi produk",
+      "description": "Hapus garansi produk.\nResponse: 200/204. Perhatikan aturan revert/soft-delete yang berlaku pada resource ini.\nOtorisasi: minimal satu izin dari [owner, edit-garansi].",
+      "purpose": "Membutuhkan izin: owner, edit-garansi. Menghapus resource. Ikuti aturan revert/soft-delete yang berlaku.",
+      "controller": "Modules\\Warranty\\Http\\Controllers\\WarrantyController",
+      "action": "destroy",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "edit-garansi"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [
+        {
+          "name": "warranty",
+          "type": "string",
+          "required": true,
+          "description": "Field warranty (tipe string)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": "object|null"
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Garansi berhasil dihapus",
+        "data": {}
+      },
+      "response_resource": null,
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 404,
+          "reason": "Garansi tidak ditemukan",
+          "body": {
+            "success": false,
+            "message": "Garansi tidak ditemukan"
+          }
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [204, 401, 403, 404, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.warranties.index",
+          "method": "GET",
+          "path": "/api/v1/warranties",
+          "summary": "Ambil daftar garansi produk"
+        },
+        {
+          "id": "api.warranties.show",
+          "method": "GET",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Ambil detail garansi produk"
+        },
+        {
+          "id": "api.warranties.store",
+          "method": "POST",
+          "path": "/api/v1/warranties",
+          "summary": "Buat garansi produk"
+        },
+        {
+          "id": "api.warranties.update",
+          "method": "PUT",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Ubah garansi produk"
+        },
+        {
+          "id": "api.warranties.update",
+          "method": "PATCH",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Ubah garansi produk"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.warranties.show",
+      "module_slug": "warranty",
+      "module_name": "Warranty",
+      "method": "GET",
+      "path": "/api/v1/warranties/{warranty}",
+      "summary": "Ambil detail garansi produk",
+      "description": "Ambil detail garansi produk.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-garansi].",
+      "purpose": "Membutuhkan izin: owner, view-garansi. Mengembalikan data untuk ditampilkan di UI.",
+      "controller": "Modules\\Warranty\\Http\\Controllers\\WarrantyController",
+      "action": "show",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "view-garansi"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [
+        {
+          "name": "warranty",
+          "type": "string",
+          "required": true,
+          "description": "Field warranty (tipe string)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": []
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": []
+      },
+      "response_resource": "Modules\\Warranty\\Http\\Resources\\WarrantyResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 404,
+          "reason": "Garansi tidak ditemukan",
+          "body": {
+            "success": false,
+            "message": "Garansi tidak ditemukan"
+          }
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 404, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.warranties.index",
+          "method": "GET",
+          "path": "/api/v1/warranties",
+          "summary": "Ambil daftar garansi produk"
+        },
+        {
+          "id": "api.warranties.store",
+          "method": "POST",
+          "path": "/api/v1/warranties",
+          "summary": "Buat garansi produk"
+        },
+        {
+          "id": "api.warranties.update",
+          "method": "PUT",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Ubah garansi produk"
+        },
+        {
+          "id": "api.warranties.update",
+          "method": "PATCH",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Ubah garansi produk"
+        },
+        {
+          "id": "api.warranties.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Hapus garansi produk"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.warranties.update",
+      "module_slug": "warranty",
+      "module_name": "Warranty",
+      "method": "PATCH",
+      "path": "/api/v1/warranties/{warranty}",
+      "summary": "Ubah garansi produk",
+      "description": "Ubah garansi produk.\nResponse: 200 dengan data resource yang sudah diperbarui.\nOtorisasi: minimal satu izin dari [owner, edit-garansi].",
+      "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-garansi. Memperbarui resource yang sudah ada.",
+      "controller": "Modules\\Warranty\\Http\\Controllers\\WarrantyController",
+      "action": "update",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "edit-garansi"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": "Modules\\Warranty\\Http\\Requests\\UpdateWarrantyRequest",
+      "path_params": [
+        {
+          "name": "warranty",
+          "type": "string",
+          "required": true,
+          "description": "Field warranty (tipe string)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": {
+        "status": {
+          "type": "string",
+          "required": false,
+          "rules": ["nullable", "string", "in:active,expired,void"],
+          "enum": ["active", "expired", "void"],
+          "description": "Status resource. Nilai valid tergantung modul — lihat enum di kolom rules."
+        },
+        "notes": {
+          "type": "string",
+          "required": false,
+          "rules": ["nullable", "string"],
+          "description": "Catatan bebas."
+        }
+      },
+      "body_example": {
+        "status": "active",
+        "notes": "string"
+      },
+      "validation": [
+        "status: nullable|string|in:active,expired,void",
+        "notes: nullable|string"
+      ],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": []
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": []
+      },
+      "response_resource": "Modules\\Warranty\\Http\\Resources\\WarrantyResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 404,
+          "reason": "Garansi tidak ditemukan",
+          "body": {
+            "success": false,
+            "message": "Garansi tidak ditemukan"
+          }
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 404, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.warranties.index",
+          "method": "GET",
+          "path": "/api/v1/warranties",
+          "summary": "Ambil daftar garansi produk"
+        },
+        {
+          "id": "api.warranties.show",
+          "method": "GET",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Ambil detail garansi produk"
+        },
+        {
+          "id": "api.warranties.store",
+          "method": "POST",
+          "path": "/api/v1/warranties",
+          "summary": "Buat garansi produk"
+        },
+        {
+          "id": "api.warranties.update",
+          "method": "PUT",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Ubah garansi produk"
+        },
+        {
+          "id": "api.warranties.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Hapus garansi produk"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.warranties.update",
+      "module_slug": "warranty",
+      "module_name": "Warranty",
+      "method": "PUT",
+      "path": "/api/v1/warranties/{warranty}",
+      "summary": "Ubah garansi produk",
+      "description": "Ubah garansi produk.\nResponse: 200 dengan data resource yang sudah diperbarui.\nOtorisasi: minimal satu izin dari [owner, edit-garansi].",
+      "purpose": "Menerima payload yang divalidasi (lihat Body Schema). Membutuhkan izin: owner, edit-garansi. Memperbarui resource yang sudah ada.",
+      "controller": "Modules\\Warranty\\Http\\Controllers\\WarrantyController",
+      "action": "update",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "edit-garansi"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": "Modules\\Warranty\\Http\\Requests\\UpdateWarrantyRequest",
+      "path_params": [
+        {
+          "name": "warranty",
+          "type": "string",
+          "required": true,
+          "description": "Field warranty (tipe string)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": {
+        "status": {
+          "type": "string",
+          "required": false,
+          "rules": ["nullable", "string", "in:active,expired,void"],
+          "enum": ["active", "expired", "void"],
+          "description": "Status resource. Nilai valid tergantung modul — lihat enum di kolom rules."
+        },
+        "notes": {
+          "type": "string",
+          "required": false,
+          "rules": ["nullable", "string"],
+          "description": "Catatan bebas."
+        }
+      },
+      "body_example": {
+        "status": "active",
+        "notes": "string"
+      },
+      "validation": [
+        "status: nullable|string|in:active,expired,void",
+        "notes: nullable|string"
+      ],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": []
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": []
+      },
+      "response_resource": "Modules\\Warranty\\Http\\Resources\\WarrantyResource",
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 404,
+          "reason": "Garansi tidak ditemukan",
+          "body": {
+            "success": false,
+            "message": "Garansi tidak ditemukan"
+          }
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 404, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.warranties.index",
+          "method": "GET",
+          "path": "/api/v1/warranties",
+          "summary": "Ambil daftar garansi produk"
+        },
+        {
+          "id": "api.warranties.show",
+          "method": "GET",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Ambil detail garansi produk"
+        },
+        {
+          "id": "api.warranties.store",
+          "method": "POST",
+          "path": "/api/v1/warranties",
+          "summary": "Buat garansi produk"
+        },
+        {
+          "id": "api.warranties.update",
+          "method": "PATCH",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Ubah garansi produk"
+        },
+        {
+          "id": "api.warranties.destroy",
+          "method": "DELETE",
+          "path": "/api/v1/warranties/{warranty}",
+          "summary": "Hapus garansi produk"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    }
+  ]
 }

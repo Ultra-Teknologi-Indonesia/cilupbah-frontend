@@ -1,1 +1,319 @@
-{"nodes": [{"id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_audit_ui_consistency_md", "label": "AUDIT-UI-CONSISTENCY.md", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L1"}, {"id": "cilupbah_fe_audit_ui_consistency_audit_inkonsistensi_penggunaan_ui_cilupbah_fe", "label": "Audit Inkonsistensi Penggunaan UI \u2014 cilupbah-fe", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L1"}, {"id": "cilupbah_fe_audit_ui_consistency_ringkasan", "label": "Ringkasan", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L7"}, {"id": "cilupbah_fe_audit_ui_consistency_prioritas_tinggi", "label": "Prioritas Tinggi", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L27"}, {"id": "cilupbah_fe_audit_ui_consistency_1_tabel_3_cara_berbeda_dalam_satu_codebase_selesai_2026_07_03", "label": "1. Tabel: 3 cara berbeda dalam satu codebase \u2014 \u2705 SELESAI (2026-07-03)", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L29"}, {"id": "cilupbah_fe_audit_ui_consistency_2_duplikasi_dialog_buat_pengiriman_selesai_2026_07_03", "label": "2. Duplikasi dialog \"Buat Pengiriman\" \u2014 \u2705 SELESAI (2026-07-03)", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L60"}, {"id": "cilupbah_fe_audit_ui_consistency_3_konfirmasi_destruktif_window_confirm_vs_confirmdialog", "label": "3. Konfirmasi destruktif: `window.confirm` vs `ConfirmDialog`", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L73"}, {"id": "cilupbah_fe_audit_ui_consistency_4_search_di_picker_masih_fe_side_filtering", "label": "4. Search di picker masih FE-side filtering", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L83"}, {"id": "cilupbah_fe_audit_ui_consistency_5_form_data_heavy_di_dalam_dialog", "label": "5. Form data-heavy di dalam dialog", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L101"}, {"id": "cilupbah_fe_audit_ui_consistency_prioritas_menengah", "label": "Prioritas Menengah", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L118"}, {"id": "cilupbah_fe_audit_ui_consistency_6_format_tanggal_3_pendekatan_paralel", "label": "6. Format tanggal: 3 pendekatan paralel", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L120"}, {"id": "cilupbah_fe_audit_ui_consistency_7_format_uang_inline", "label": "7. Format uang inline", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L131"}, {"id": "cilupbah_fe_audit_ui_consistency_8_status_pill_ad_hoc_bypass_statusbadge", "label": "8. Status pill ad-hoc bypass `StatusBadge`", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L140"}, {"id": "cilupbah_fe_audit_ui_consistency_9_loading_state_tanpa_standar", "label": "9. Loading state tanpa standar", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L159"}, {"id": "cilupbah_fe_audit_ui_consistency_10_raw_button_dan_input", "label": "10. Raw `<button>` dan `<input>`", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L172"}, {"id": "cilupbah_fe_audit_ui_consistency_prioritas_kecil", "label": "Prioritas Kecil", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L181"}, {"id": "cilupbah_fe_audit_ui_consistency_11_dead_code_usercombobox", "label": "11. Dead code: `UserCombobox`", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L183"}, {"id": "cilupbah_fe_audit_ui_consistency_12_empty_state_wording", "label": "12. Empty state wording", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L187"}, {"id": "cilupbah_fe_audit_ui_consistency_13_adopsi_komponen_shared_timpang", "label": "13. Adopsi komponen shared timpang", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L197"}, {"id": "cilupbah_fe_audit_ui_consistency_urutan_eksekusi_yang_disarankan", "label": "Urutan Eksekusi yang Disarankan", "file_type": "document", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L214"}], "edges": [{"source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_audit_ui_consistency_md", "target": "cilupbah_fe_audit_ui_consistency_audit_inkonsistensi_penggunaan_ui_cilupbah_fe", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L1", "weight": 1.0}, {"source": "cilupbah_fe_audit_ui_consistency_audit_inkonsistensi_penggunaan_ui_cilupbah_fe", "target": "cilupbah_fe_audit_ui_consistency_ringkasan", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L7", "weight": 1.0}, {"source": "cilupbah_fe_audit_ui_consistency_audit_inkonsistensi_penggunaan_ui_cilupbah_fe", "target": "cilupbah_fe_audit_ui_consistency_prioritas_tinggi", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L27", "weight": 1.0}, {"source": "cilupbah_fe_audit_ui_consistency_prioritas_tinggi", "target": "cilupbah_fe_audit_ui_consistency_1_tabel_3_cara_berbeda_dalam_satu_codebase_selesai_2026_07_03", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L29", "weight": 1.0}, {"source": "cilupbah_fe_audit_ui_consistency_prioritas_tinggi", "target": "cilupbah_fe_audit_ui_consistency_2_duplikasi_dialog_buat_pengiriman_selesai_2026_07_03", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L60", "weight": 1.0}, {"source": "cilupbah_fe_audit_ui_consistency_prioritas_tinggi", "target": "cilupbah_fe_audit_ui_consistency_3_konfirmasi_destruktif_window_confirm_vs_confirmdialog", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L73", "weight": 1.0}, {"source": "cilupbah_fe_audit_ui_consistency_prioritas_tinggi", "target": "cilupbah_fe_audit_ui_consistency_4_search_di_picker_masih_fe_side_filtering", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L83", "weight": 1.0}, {"source": "cilupbah_fe_audit_ui_consistency_prioritas_tinggi", "target": "cilupbah_fe_audit_ui_consistency_5_form_data_heavy_di_dalam_dialog", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L101", "weight": 1.0}, {"source": "cilupbah_fe_audit_ui_consistency_audit_inkonsistensi_penggunaan_ui_cilupbah_fe", "target": "cilupbah_fe_audit_ui_consistency_prioritas_menengah", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L118", "weight": 1.0}, {"source": "cilupbah_fe_audit_ui_consistency_prioritas_menengah", "target": "cilupbah_fe_audit_ui_consistency_6_format_tanggal_3_pendekatan_paralel", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L120", "weight": 1.0}, {"source": "cilupbah_fe_audit_ui_consistency_prioritas_menengah", "target": "cilupbah_fe_audit_ui_consistency_7_format_uang_inline", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L131", "weight": 1.0}, {"source": "cilupbah_fe_audit_ui_consistency_prioritas_menengah", "target": "cilupbah_fe_audit_ui_consistency_8_status_pill_ad_hoc_bypass_statusbadge", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L140", "weight": 1.0}, {"source": "cilupbah_fe_audit_ui_consistency_prioritas_menengah", "target": "cilupbah_fe_audit_ui_consistency_9_loading_state_tanpa_standar", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L159", "weight": 1.0}, {"source": "cilupbah_fe_audit_ui_consistency_prioritas_menengah", "target": "cilupbah_fe_audit_ui_consistency_10_raw_button_dan_input", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L172", "weight": 1.0}, {"source": "cilupbah_fe_audit_ui_consistency_audit_inkonsistensi_penggunaan_ui_cilupbah_fe", "target": "cilupbah_fe_audit_ui_consistency_prioritas_kecil", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L181", "weight": 1.0}, {"source": "cilupbah_fe_audit_ui_consistency_prioritas_kecil", "target": "cilupbah_fe_audit_ui_consistency_11_dead_code_usercombobox", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L183", "weight": 1.0}, {"source": "cilupbah_fe_audit_ui_consistency_prioritas_kecil", "target": "cilupbah_fe_audit_ui_consistency_12_empty_state_wording", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L187", "weight": 1.0}, {"source": "cilupbah_fe_audit_ui_consistency_prioritas_kecil", "target": "cilupbah_fe_audit_ui_consistency_13_adopsi_komponen_shared_timpang", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L197", "weight": 1.0}, {"source": "cilupbah_fe_audit_ui_consistency_audit_inkonsistensi_penggunaan_ui_cilupbah_fe", "target": "cilupbah_fe_audit_ui_consistency_urutan_eksekusi_yang_disarankan", "relation": "contains", "confidence": "EXTRACTED", "source_file": "AUDIT-UI-CONSISTENCY.md", "source_location": "L214", "weight": 1.0}], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_audit_ui_consistency_md",
+      "label": "AUDIT-UI-CONSISTENCY.md",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_audit_inkonsistensi_penggunaan_ui_cilupbah_fe",
+      "label": "Audit Inkonsistensi Penggunaan UI \u2014 cilupbah-fe",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_ringkasan",
+      "label": "Ringkasan",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L7"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_prioritas_tinggi",
+      "label": "Prioritas Tinggi",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L27"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_1_tabel_3_cara_berbeda_dalam_satu_codebase_selesai_2026_07_03",
+      "label": "1. Tabel: 3 cara berbeda dalam satu codebase \u2014 \u2705 SELESAI (2026-07-03)",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L29"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_2_duplikasi_dialog_buat_pengiriman_selesai_2026_07_03",
+      "label": "2. Duplikasi dialog \"Buat Pengiriman\" \u2014 \u2705 SELESAI (2026-07-03)",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L60"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_3_konfirmasi_destruktif_window_confirm_vs_confirmdialog",
+      "label": "3. Konfirmasi destruktif: `window.confirm` vs `ConfirmDialog`",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L73"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_4_search_di_picker_masih_fe_side_filtering",
+      "label": "4. Search di picker masih FE-side filtering",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L83"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_5_form_data_heavy_di_dalam_dialog",
+      "label": "5. Form data-heavy di dalam dialog",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L101"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_prioritas_menengah",
+      "label": "Prioritas Menengah",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L118"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_6_format_tanggal_3_pendekatan_paralel",
+      "label": "6. Format tanggal: 3 pendekatan paralel",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L120"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_7_format_uang_inline",
+      "label": "7. Format uang inline",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L131"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_8_status_pill_ad_hoc_bypass_statusbadge",
+      "label": "8. Status pill ad-hoc bypass `StatusBadge`",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L140"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_9_loading_state_tanpa_standar",
+      "label": "9. Loading state tanpa standar",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L159"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_10_raw_button_dan_input",
+      "label": "10. Raw `<button>` dan `<input>`",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L172"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_prioritas_kecil",
+      "label": "Prioritas Kecil",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L181"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_11_dead_code_usercombobox",
+      "label": "11. Dead code: `UserCombobox`",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L183"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_12_empty_state_wording",
+      "label": "12. Empty state wording",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L187"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_13_adopsi_komponen_shared_timpang",
+      "label": "13. Adopsi komponen shared timpang",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L197"
+    },
+    {
+      "id": "cilupbah_fe_audit_ui_consistency_urutan_eksekusi_yang_disarankan",
+      "label": "Urutan Eksekusi yang Disarankan",
+      "file_type": "document",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L214"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_audit_ui_consistency_md",
+      "target": "cilupbah_fe_audit_ui_consistency_audit_inkonsistensi_penggunaan_ui_cilupbah_fe",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_ui_consistency_audit_inkonsistensi_penggunaan_ui_cilupbah_fe",
+      "target": "cilupbah_fe_audit_ui_consistency_ringkasan",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_ui_consistency_audit_inkonsistensi_penggunaan_ui_cilupbah_fe",
+      "target": "cilupbah_fe_audit_ui_consistency_prioritas_tinggi",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_ui_consistency_prioritas_tinggi",
+      "target": "cilupbah_fe_audit_ui_consistency_1_tabel_3_cara_berbeda_dalam_satu_codebase_selesai_2026_07_03",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_ui_consistency_prioritas_tinggi",
+      "target": "cilupbah_fe_audit_ui_consistency_2_duplikasi_dialog_buat_pengiriman_selesai_2026_07_03",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L60",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_ui_consistency_prioritas_tinggi",
+      "target": "cilupbah_fe_audit_ui_consistency_3_konfirmasi_destruktif_window_confirm_vs_confirmdialog",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L73",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_ui_consistency_prioritas_tinggi",
+      "target": "cilupbah_fe_audit_ui_consistency_4_search_di_picker_masih_fe_side_filtering",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L83",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_ui_consistency_prioritas_tinggi",
+      "target": "cilupbah_fe_audit_ui_consistency_5_form_data_heavy_di_dalam_dialog",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L101",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_ui_consistency_audit_inkonsistensi_penggunaan_ui_cilupbah_fe",
+      "target": "cilupbah_fe_audit_ui_consistency_prioritas_menengah",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L118",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_ui_consistency_prioritas_menengah",
+      "target": "cilupbah_fe_audit_ui_consistency_6_format_tanggal_3_pendekatan_paralel",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L120",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_ui_consistency_prioritas_menengah",
+      "target": "cilupbah_fe_audit_ui_consistency_7_format_uang_inline",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L131",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_ui_consistency_prioritas_menengah",
+      "target": "cilupbah_fe_audit_ui_consistency_8_status_pill_ad_hoc_bypass_statusbadge",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L140",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_ui_consistency_prioritas_menengah",
+      "target": "cilupbah_fe_audit_ui_consistency_9_loading_state_tanpa_standar",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L159",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_ui_consistency_prioritas_menengah",
+      "target": "cilupbah_fe_audit_ui_consistency_10_raw_button_dan_input",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L172",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_ui_consistency_audit_inkonsistensi_penggunaan_ui_cilupbah_fe",
+      "target": "cilupbah_fe_audit_ui_consistency_prioritas_kecil",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L181",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_ui_consistency_prioritas_kecil",
+      "target": "cilupbah_fe_audit_ui_consistency_11_dead_code_usercombobox",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L183",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_ui_consistency_prioritas_kecil",
+      "target": "cilupbah_fe_audit_ui_consistency_12_empty_state_wording",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L187",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_ui_consistency_prioritas_kecil",
+      "target": "cilupbah_fe_audit_ui_consistency_13_adopsi_komponen_shared_timpang",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L197",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_audit_ui_consistency_audit_inkonsistensi_penggunaan_ui_cilupbah_fe",
+      "target": "cilupbah_fe_audit_ui_consistency_urutan_eksekusi_yang_disarankan",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUDIT-UI-CONSISTENCY.md",
+      "source_location": "L214",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

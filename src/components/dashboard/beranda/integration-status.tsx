@@ -44,13 +44,14 @@ export function IntegrationStatus({
   const attention = overview?.attention ?? 0;
   const inactive = overview?.inactive ?? 0;
   const stores = overview?.stores ?? [];
-  const summary = total === 0
-    ? "Belum ada toko yang terhubung."
-    : attention > 0
-      ? `${attention} toko perlu diperhatikan.`
-      : inactive > 0
-        ? `${inactive} toko sedang nonaktif.`
-        : "Semua toko terhubung dengan baik.";
+  const summary =
+    total === 0
+      ? "Belum ada toko yang terhubung."
+      : attention > 0
+        ? `${attention} toko perlu diperhatikan.`
+        : inactive > 0
+          ? `${inactive} toko sedang nonaktif.`
+          : "Semua toko terhubung dengan baik.";
 
   return (
     <Card size="sm" className="gap-4">
@@ -110,10 +111,7 @@ export function IntegrationStatus({
                       {relativeTime(store.last_synced_at)}
                     </p>
                   </div>
-                  <Badge
-                    variant={status.variant}
-                    className="shrink-0 text-2xs"
-                  >
+                  <Badge variant={status.variant} className="shrink-0 text-2xs">
                     {status.label}
                   </Badge>
                 </div>

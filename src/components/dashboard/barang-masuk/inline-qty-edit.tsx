@@ -101,9 +101,7 @@ export function InlineQtyEdit({
       {saving ? (
         <Loader2Icon className="size-3 animate-spin text-muted-foreground" />
       ) : (
-        !disabled && (
-          <PencilIcon className="size-3 text-muted-foreground" />
-        )
+        !disabled && <PencilIcon className="size-3 text-muted-foreground" />
       )}
     </button>
   );

@@ -78,15 +78,29 @@ export function PenerimaanTransferDetailView({ id }: { id: string }) {
           <SectionTitle className="mb-4">Informasi Dokumen</SectionTitle>
           <div className="space-y-3">
             <InfoRow label="No. Penerimaan" value={detail.receipt_number} />
-            <InfoRow label="No. Transfer Asal" value={detail.bin_transfer?.transfer_number || "—"} />
+            <InfoRow
+              label="No. Transfer Asal"
+              value={detail.bin_transfer?.transfer_number || "—"}
+            />
             <InfoRow
               label="Tgl Transfer"
-              value={detail.bin_transfer?.transfer_date ? formatDateTimeWib(detail.bin_transfer.transfer_date) : "—"}
+              value={
+                detail.bin_transfer?.transfer_date
+                  ? formatDateTimeWib(detail.bin_transfer.transfer_date)
+                  : "—"
+              }
             />
-            <InfoRow label="Lokasi" value={detail.location?.location_name || "—"} />
+            <InfoRow
+              label="Lokasi"
+              value={detail.location?.location_name || "—"}
+            />
             <InfoRow
               label="Tgl Diterima"
-              value={detail.received_at ? formatDateTimeFull(detail.received_at) : "—"}
+              value={
+                detail.received_at
+                  ? formatDateTimeFull(detail.received_at)
+                  : "—"
+              }
             />
             <InfoRow label="Diterima Oleh" value={detail.received_by || "—"} />
             <InfoRow label="Keterangan" value={detail.notes || "—"} />
@@ -133,7 +147,8 @@ export function PenerimaanTransferDetailView({ id }: { id: string }) {
                 const name = prod?.product?.name || sku;
                 const src = prod?.thumbnail_url || "/placeholder.jpg";
                 const vlabel = prod?.variant_label;
-                const sourceBin = row.transfer_item?.source_bin?.bin_final_code || "—";
+                const sourceBin =
+                  row.transfer_item?.source_bin?.bin_final_code || "—";
                 const destBin = row.destination_bin?.bin_final_code || "—";
 
                 return (

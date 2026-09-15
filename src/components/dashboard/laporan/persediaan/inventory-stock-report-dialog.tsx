@@ -1,7 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { DownloadIcon, Loader2Icon, PrinterIcon, WarehouseIcon } from "lucide-react";
+import {
+  DownloadIcon,
+  Loader2Icon,
+  PrinterIcon,
+  WarehouseIcon,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -26,7 +31,10 @@ import {
 import { LocationCombobox } from "@/components/dashboard/laporan/shared/location-combobox";
 import { LocationMultiCombobox } from "@/components/dashboard/laporan/shared/location-multi-combobox";
 import { SkuMultiComboboxLazy } from "@/components/dashboard/laporan/shared/sku-multi-combobox-lazy";
-import { ReportFormatRadio, type ReportFormat } from "@/components/dashboard/laporan/shared/report-format-radio";
+import {
+  ReportFormatRadio,
+  type ReportFormat,
+} from "@/components/dashboard/laporan/shared/report-format-radio";
 import { useAsyncExport } from "@/hooks/laporan/use-async-export";
 import { InventoryStockService } from "@/services/persediaan/inventory.service";
 
@@ -64,8 +72,9 @@ export function InventoryStockReportDialog({
   const [onlyNotRestocked, setOnlyNotRestocked] = React.useState(false);
   const [format, setFormat] = React.useState<ReportFormat>("excel");
 
-  const exportXlsx = useAsyncExport((params: Parameters<typeof InventoryStockService.exportReport>[0]) =>
-    InventoryStockService.exportReport(params),
+  const exportXlsx = useAsyncExport(
+    (params: Parameters<typeof InventoryStockService.exportReport>[0]) =>
+      InventoryStockService.exportReport(params),
   );
 
   function reset(): void {
@@ -93,7 +102,10 @@ export function InventoryStockReportDialog({
         report_type: reportType,
         item_ids: itemIds.length ? itemIds : undefined,
         location_ids: locationIds.length ? locationIds : undefined,
-        as_of_date: reportType === "as_of_date" && asOfDate ? formatDateISO(asOfDate) : undefined,
+        as_of_date:
+          reportType === "as_of_date" && asOfDate
+            ? formatDateISO(asOfDate)
+            : undefined,
         stock_filter: stockFilter,
         only_not_restocked: onlyNotRestocked,
         format,
@@ -108,14 +120,17 @@ export function InventoryStockReportDialog({
         <DialogHeader>
           <DialogTitle>Export Persediaan Barang</DialogTitle>
           <DialogDescription>
-            Buat laporan berdasarkan lokasi saat ini atau posisi stok sampai tanggal tertentu.
+            Buat laporan berdasarkan lokasi saat ini atau posisi stok sampai
+            tanggal tertentu.
           </DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col gap-5">
           <ReportFormatRadio value={format} onChange={setFormat} />
           <div className="flex flex-col gap-2">
-            <Label className="text-xs text-muted-foreground">Cetak berdasarkan</Label>
+            <Label className="text-xs text-muted-foreground">
+              Cetak berdasarkan
+            </Label>
             <RadioGroup
               value={reportType}
               onValueChange={(value) => setReportType(value as StockReportType)}
@@ -134,47 +149,98 @@ export function InventoryStockReportDialog({
 
           {reportType === "as_of_date" && (
             <div className="flex flex-col gap-2">
-              <Label className="text-xs text-muted-foreground">Sampai tanggal <span className="text-destructive">*</span></Label>
-              <DatePicker value={asOfDate} onChange={setAsOfDate} placeholder="Pilih tanggal" />
-              <p className="text-xs text-muted-foreground">Stok dihitung dari kronologi sampai akhir tanggal yang dipilih.</p>
+              <Label className="text-xs text-muted-foreground">
+                Sampai tanggal <span className="text-destructive">*</span>
+              </Label>
+              <DatePicker
+                value={asOfDate}
+                onChange={setAsOfDate}
+                placeholder="Pilih tanggal"
+              />
+              <p className="text-xs text-muted-foreground">
+                Stok dihitung dari kronologi sampai akhir tanggal yang dipilih.
+              </p>
             </div>
           )}
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-2">
-              <Label className="text-xs text-muted-foreground">SKU / Produk</Label>
+              <Label className="text-xs text-muted-foreground">
+                SKU / Produk
+              </Label>
               <SkuMultiComboboxLazy value={itemIds} onChange={setItemIds} />
             </div>
             <div className="flex flex-col gap-2">
               <Label className="text-xs text-muted-foreground">Lokasi</Label>
-              <LocationMultiCombobox value={locationIds} onChange={setLocationIds} />
+              <LocationMultiCombobox
+                value={locationIds}
+                onChange={setLocationIds}
+              />
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
             <Label className="text-xs text-muted-foreground">Filter stok</Label>
-            <Select value={stockFilter} onValueChange={(value) => setStockFilter(value as StockFilter)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+            <Select
+              value={stockFilter}
+              onValueChange={(value) => setStockFilter(value as StockFilter)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
-                {stockOptions.map((option) => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}
+                {stockOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
 
           <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-dashed px-4 py-3 text-sm">
-            <Checkbox checked={onlyNotRestocked} onCheckedChange={(checked) => setOnlyNotRestocked(checked === true)} />
+            <Checkbox
+              checked={onlyNotRestocked}
+              onCheckedChange={(checked) =>
+                setOnlyNotRestocked(checked === true)
+              }
+            />
             <span>
-              <span className="block font-medium">Hanya tampilkan produk yang tidak perlu direstok</span>
-              <span className="block text-xs text-muted-foreground">Mengikuti batas stok minimum pada SKU.</span>
+              <span className="block font-medium">
+                Hanya tampilkan produk yang tidak perlu direstok
+              </span>
+              <span className="block text-xs text-muted-foreground">
+                Mengikuti batas stok minimum pada SKU.
+              </span>
             </span>
           </label>
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => handleOpenChange(false)} disabled={exportXlsx.isPending}>Batal</Button>
-          <Button variant="primary" onClick={handleExport} disabled={!canExport || exportXlsx.isPending}>
-            {exportXlsx.isPending ? <Loader2Icon className="size-4 animate-spin" /> : format === "excel" ? <DownloadIcon className="size-4" /> : <PrinterIcon className="size-4" />}
-            {exportXlsx.isPending ? "Menyiapkan..." : format === "excel" ? "Unduh Excel" : "Unduh PDF"}
+          <Button
+            variant="outline"
+            onClick={() => handleOpenChange(false)}
+            disabled={exportXlsx.isPending}
+          >
+            Batal
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleExport}
+            disabled={!canExport || exportXlsx.isPending}
+          >
+            {exportXlsx.isPending ? (
+              <Loader2Icon className="size-4 animate-spin" />
+            ) : format === "excel" ? (
+              <DownloadIcon className="size-4" />
+            ) : (
+              <PrinterIcon className="size-4" />
+            )}
+            {exportXlsx.isPending
+              ? "Menyiapkan..."
+              : format === "excel"
+                ? "Unduh Excel"
+                : "Unduh PDF"}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -191,8 +257,9 @@ export function InventoryRackReportDialog({
   const [onlyWithStock, setOnlyWithStock] = React.useState(false);
   const [format, setFormat] = React.useState<ReportFormat>("excel");
 
-  const exportXlsx = useAsyncExport((params: Parameters<typeof InventoryStockService.exportReport>[0]) =>
-    InventoryStockService.exportReport(params),
+  const exportXlsx = useAsyncExport(
+    (params: Parameters<typeof InventoryStockService.exportReport>[0]) =>
+      InventoryStockService.exportReport(params),
   );
 
   function handleOpenChange(next: boolean): void {
@@ -224,10 +291,14 @@ export function InventoryRackReportDialog({
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
         <DialogHeader>
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><WarehouseIcon className="size-5" /></div>
+            <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <WarehouseIcon className="size-5" />
+            </div>
             <div>
               <DialogTitle>Export Persediaan Per Rak</DialogTitle>
-              <DialogDescription>Pilih satu gudang untuk melihat stok pada setiap rak.</DialogDescription>
+              <DialogDescription>
+                Pilih satu gudang untuk melihat stok pada setiap rak.
+              </DialogDescription>
             </div>
           </div>
         </DialogHeader>
@@ -235,25 +306,58 @@ export function InventoryRackReportDialog({
         <div className="flex flex-col gap-5">
           <ReportFormatRadio value={format} onChange={setFormat} />
           <div className="flex flex-col gap-2">
-            <Label className="text-xs text-muted-foreground">Gudang <span className="text-destructive">*</span></Label>
-            <LocationCombobox value={locationId} onChange={setLocationId} placeholder="Pilih gudang" />
-            <p className="text-xs text-muted-foreground">Transit tidak dapat dipilih untuk laporan per rak.</p>
+            <Label className="text-xs text-muted-foreground">
+              Gudang <span className="text-destructive">*</span>
+            </Label>
+            <LocationCombobox
+              value={locationId}
+              onChange={setLocationId}
+              placeholder="Pilih gudang"
+            />
+            <p className="text-xs text-muted-foreground">
+              Transit tidak dapat dipilih untuk laporan per rak.
+            </p>
           </div>
           <div className="flex flex-col gap-2">
-            <Label className="text-xs text-muted-foreground">SKU / Produk</Label>
+            <Label className="text-xs text-muted-foreground">
+              SKU / Produk
+            </Label>
             <SkuMultiComboboxLazy value={itemIds} onChange={setItemIds} />
           </div>
           <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed px-4 py-3 text-sm">
-            <Checkbox checked={onlyWithStock} onCheckedChange={(checked) => setOnlyWithStock(checked === true)} />
+            <Checkbox
+              checked={onlyWithStock}
+              onCheckedChange={(checked) => setOnlyWithStock(checked === true)}
+            />
             Tampilkan hanya rak yang memiliki stok
           </label>
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => handleOpenChange(false)} disabled={exportXlsx.isPending}>Batal</Button>
-          <Button variant="primary" onClick={handleExport} disabled={!locationId || exportXlsx.isPending}>
-            {exportXlsx.isPending ? <Loader2Icon className="size-4 animate-spin" /> : format === "excel" ? <DownloadIcon className="size-4" /> : <PrinterIcon className="size-4" />}
-            {exportXlsx.isPending ? "Menyiapkan..." : format === "excel" ? "Unduh Excel" : "Unduh PDF"}
+          <Button
+            variant="outline"
+            onClick={() => handleOpenChange(false)}
+            disabled={exportXlsx.isPending}
+          >
+            Batal
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleExport}
+            disabled={!locationId || exportXlsx.isPending}
+          >
+            {exportXlsx.isPending ? (
+              <Loader2Icon className="size-4 animate-spin" />
+            ) : format === "excel" ? (
+              <DownloadIcon className="size-4" />
+            ) : (
+              <PrinterIcon className="size-4" />
+            )}
+            {exportXlsx.isPending
+              ? "Menyiapkan..."
+              : format === "excel"
+                ? "Unduh Excel"
+                : "Unduh PDF"}
           </Button>
         </DialogFooter>
       </DialogContent>

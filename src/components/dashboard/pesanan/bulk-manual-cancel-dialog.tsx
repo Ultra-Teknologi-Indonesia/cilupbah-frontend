@@ -15,7 +15,11 @@ interface BulkManualCancelDialogProps {
 }
 
 export function isManualOrder(order: Order): boolean {
-  return !order.source || order.source.toLowerCase() === "manual" || order.source.toLowerCase() === "offline";
+  return (
+    !order.source ||
+    order.source.toLowerCase() === "manual" ||
+    order.source.toLowerCase() === "offline"
+  );
 }
 
 export function BulkManualCancelDialog({
@@ -26,10 +30,7 @@ export function BulkManualCancelDialog({
 }: BulkManualCancelDialogProps) {
   const [reason, setReason] = React.useState<string>("");
 
-  const eligible = React.useMemo(
-    () => orders.filter(isManualOrder),
-    [orders],
-  );
+  const eligible = React.useMemo(() => orders.filter(isManualOrder), [orders]);
 
   const bulkCancel = useBulkCancelManualOrder();
 
@@ -73,7 +74,8 @@ export function BulkManualCancelDialog({
         <div className="space-y-4 py-2">
           {eligible.length < orders.length && (
             <p className="text-xs text-muted-foreground">
-              {orders.length - eligible.length} pesanan dilewati (bukan pesanan manual).
+              {orders.length - eligible.length} pesanan dilewati (bukan pesanan
+              manual).
             </p>
           )}
           <div className="space-y-2">

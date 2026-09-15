@@ -1,547 +1,500 @@
 {
-    "slug": "region",
-    "name": "Region",
-    "description": "Master wilayah (provinsi, kota, kecamatan, kelurahan).",
-    "endpoints_count": 5,
-    "undocumented": 0,
-    "endpoints": [
+  "slug": "region",
+  "name": "Region",
+  "description": "Master wilayah (provinsi, kota, kecamatan, kelurahan).",
+  "endpoints_count": 5,
+  "undocumented": 0,
+  "endpoints": [
+    {
+      "id": "api.api.v1.regions.cities",
+      "module_slug": "region",
+      "module_name": "Region",
+      "method": "GET",
+      "path": "/api/v1/regions/cities/{province_id}",
+      "summary": "Ambil detail kota",
+      "description": "Ambil detail kota.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: default policy modul.",
+      "purpose": "Mengembalikan data untuk ditampilkan di UI.",
+      "controller": "Modules\\Region\\Http\\Controllers\\RegionController",
+      "action": "cities",
+      "auth": "none",
+      "roles": [],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [
         {
-            "id": "api.api.v1.regions.cities",
-            "module_slug": "region",
-            "module_name": "Region",
-            "method": "GET",
-            "path": "/api/v1/regions/cities/{province_id}",
-            "summary": "Ambil detail kota",
-            "description": "Ambil detail kota.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: default policy modul.",
-            "purpose": "Mengembalikan data untuk ditampilkan di UI.",
-            "controller": "Modules\\Region\\Http\\Controllers\\RegionController",
-            "action": "cities",
-            "auth": "none",
-            "roles": [],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [
-                {
-                    "name": "province_id",
-                    "type": "string",
-                    "required": true,
-                    "description": "ID province (referensi ke resource province)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": "object|null"
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "success",
-                "data": {}
-            },
-            "response_resource": null,
-            "response_errors": [
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [
-                "id",
-                "nama",
-                "province_id"
-            ],
-            "allowed_search": [
-                "nama"
-            ],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": "id",
-            "related_endpoints": [
-                {
-                    "id": "api.api.v1.regions.countries",
-                    "method": "GET",
-                    "path": "/api/v1/regions/countries",
-                    "summary": "Ambil daftar wilayah"
-                },
-                {
-                    "id": "api.api.v1.regions.provinces",
-                    "method": "GET",
-                    "path": "/api/v1/regions/provinces",
-                    "summary": "Ambil daftar provinsi"
-                },
-                {
-                    "id": "api.api.v1.regions.districts",
-                    "method": "GET",
-                    "path": "/api/v1/regions/districts/{city_id}",
-                    "summary": "Ambil detail kecamatan"
-                },
-                {
-                    "id": "api.api.v1.regions.villages",
-                    "method": "GET",
-                    "path": "/api/v1/regions/villages/{district_id}",
-                    "summary": "Ambil detail kelurahan"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.api.v1.regions.countries",
-            "module_slug": "region",
-            "module_name": "Region",
-            "method": "GET",
-            "path": "/api/v1/regions/countries",
-            "summary": "Ambil daftar wilayah",
-            "description": "Ambil daftar wilayah.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: default policy modul.",
-            "purpose": "Mengembalikan data untuk ditampilkan di UI.",
-            "controller": "Modules\\Region\\Http\\Controllers\\RegionController",
-            "action": "countries",
-            "auth": "none",
-            "roles": [],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": "object|null"
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "success",
-                "data": {}
-            },
-            "response_resource": null,
-            "response_errors": [
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [
-                "name",
-                "alpha2",
-                "alpha3"
-            ],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.api.v1.regions.provinces",
-                    "method": "GET",
-                    "path": "/api/v1/regions/provinces",
-                    "summary": "Ambil daftar provinsi"
-                },
-                {
-                    "id": "api.api.v1.regions.cities",
-                    "method": "GET",
-                    "path": "/api/v1/regions/cities/{province_id}",
-                    "summary": "Ambil detail kota"
-                },
-                {
-                    "id": "api.api.v1.regions.districts",
-                    "method": "GET",
-                    "path": "/api/v1/regions/districts/{city_id}",
-                    "summary": "Ambil detail kecamatan"
-                },
-                {
-                    "id": "api.api.v1.regions.villages",
-                    "method": "GET",
-                    "path": "/api/v1/regions/villages/{district_id}",
-                    "summary": "Ambil detail kelurahan"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.api.v1.regions.districts",
-            "module_slug": "region",
-            "module_name": "Region",
-            "method": "GET",
-            "path": "/api/v1/regions/districts/{city_id}",
-            "summary": "Ambil detail kecamatan",
-            "description": "Ambil detail kecamatan.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: default policy modul.",
-            "purpose": "Mengembalikan data untuk ditampilkan di UI.",
-            "controller": "Modules\\Region\\Http\\Controllers\\RegionController",
-            "action": "districts",
-            "auth": "none",
-            "roles": [],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [
-                {
-                    "name": "city_id",
-                    "type": "string",
-                    "required": true,
-                    "description": "ID city (referensi ke resource city)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": "object|null"
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "success",
-                "data": {}
-            },
-            "response_resource": null,
-            "response_errors": [
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [
-                "id",
-                "nama",
-                "city_id"
-            ],
-            "allowed_search": [
-                "nama"
-            ],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": "id",
-            "related_endpoints": [
-                {
-                    "id": "api.api.v1.regions.countries",
-                    "method": "GET",
-                    "path": "/api/v1/regions/countries",
-                    "summary": "Ambil daftar wilayah"
-                },
-                {
-                    "id": "api.api.v1.regions.provinces",
-                    "method": "GET",
-                    "path": "/api/v1/regions/provinces",
-                    "summary": "Ambil daftar provinsi"
-                },
-                {
-                    "id": "api.api.v1.regions.cities",
-                    "method": "GET",
-                    "path": "/api/v1/regions/cities/{province_id}",
-                    "summary": "Ambil detail kota"
-                },
-                {
-                    "id": "api.api.v1.regions.villages",
-                    "method": "GET",
-                    "path": "/api/v1/regions/villages/{district_id}",
-                    "summary": "Ambil detail kelurahan"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.api.v1.regions.provinces",
-            "module_slug": "region",
-            "module_name": "Region",
-            "method": "GET",
-            "path": "/api/v1/regions/provinces",
-            "summary": "Ambil daftar provinsi",
-            "description": "Ambil daftar provinsi.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: default policy modul.",
-            "purpose": "Mengembalikan data untuk ditampilkan di UI.",
-            "controller": "Modules\\Region\\Http\\Controllers\\RegionController",
-            "action": "provinces",
-            "auth": "none",
-            "roles": [],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": "object|null"
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "success",
-                "data": {}
-            },
-            "response_resource": null,
-            "response_errors": [
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [
-                "id",
-                "nama"
-            ],
-            "allowed_search": [
-                "nama"
-            ],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": "id",
-            "related_endpoints": [
-                {
-                    "id": "api.api.v1.regions.countries",
-                    "method": "GET",
-                    "path": "/api/v1/regions/countries",
-                    "summary": "Ambil daftar wilayah"
-                },
-                {
-                    "id": "api.api.v1.regions.cities",
-                    "method": "GET",
-                    "path": "/api/v1/regions/cities/{province_id}",
-                    "summary": "Ambil detail kota"
-                },
-                {
-                    "id": "api.api.v1.regions.districts",
-                    "method": "GET",
-                    "path": "/api/v1/regions/districts/{city_id}",
-                    "summary": "Ambil detail kecamatan"
-                },
-                {
-                    "id": "api.api.v1.regions.villages",
-                    "method": "GET",
-                    "path": "/api/v1/regions/villages/{district_id}",
-                    "summary": "Ambil detail kelurahan"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
-        },
-        {
-            "id": "api.api.v1.regions.villages",
-            "module_slug": "region",
-            "module_name": "Region",
-            "method": "GET",
-            "path": "/api/v1/regions/villages/{district_id}",
-            "summary": "Ambil detail kelurahan",
-            "description": "Ambil detail kelurahan.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: default policy modul.",
-            "purpose": "Mengembalikan data untuk ditampilkan di UI.",
-            "controller": "Modules\\Region\\Http\\Controllers\\RegionController",
-            "action": "villages",
-            "auth": "none",
-            "roles": [],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [
-                {
-                    "name": "district_id",
-                    "type": "string",
-                    "required": true,
-                    "description": "ID district (referensi ke resource district)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": "object|null"
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "success",
-                "data": {}
-            },
-            "response_resource": null,
-            "response_errors": [
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [
-                "id",
-                "nama",
-                "district_id"
-            ],
-            "allowed_search": [
-                "nama"
-            ],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": "id",
-            "related_endpoints": [
-                {
-                    "id": "api.api.v1.regions.countries",
-                    "method": "GET",
-                    "path": "/api/v1/regions/countries",
-                    "summary": "Ambil daftar wilayah"
-                },
-                {
-                    "id": "api.api.v1.regions.provinces",
-                    "method": "GET",
-                    "path": "/api/v1/regions/provinces",
-                    "summary": "Ambil daftar provinsi"
-                },
-                {
-                    "id": "api.api.v1.regions.cities",
-                    "method": "GET",
-                    "path": "/api/v1/regions/cities/{province_id}",
-                    "summary": "Ambil detail kota"
-                },
-                {
-                    "id": "api.api.v1.regions.districts",
-                    "method": "GET",
-                    "path": "/api/v1/regions/districts/{city_id}",
-                    "summary": "Ambil detail kecamatan"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
+          "name": "province_id",
+          "type": "string",
+          "required": true,
+          "description": "ID province (referensi ke resource province)."
         }
-    ]
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": "object|null"
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "success",
+        "data": {}
+      },
+      "response_resource": null,
+      "response_errors": [
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": ["id", "nama", "province_id"],
+      "allowed_search": ["nama"],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": "id",
+      "related_endpoints": [
+        {
+          "id": "api.api.v1.regions.countries",
+          "method": "GET",
+          "path": "/api/v1/regions/countries",
+          "summary": "Ambil daftar wilayah"
+        },
+        {
+          "id": "api.api.v1.regions.provinces",
+          "method": "GET",
+          "path": "/api/v1/regions/provinces",
+          "summary": "Ambil daftar provinsi"
+        },
+        {
+          "id": "api.api.v1.regions.districts",
+          "method": "GET",
+          "path": "/api/v1/regions/districts/{city_id}",
+          "summary": "Ambil detail kecamatan"
+        },
+        {
+          "id": "api.api.v1.regions.villages",
+          "method": "GET",
+          "path": "/api/v1/regions/villages/{district_id}",
+          "summary": "Ambil detail kelurahan"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.api.v1.regions.countries",
+      "module_slug": "region",
+      "module_name": "Region",
+      "method": "GET",
+      "path": "/api/v1/regions/countries",
+      "summary": "Ambil daftar wilayah",
+      "description": "Ambil daftar wilayah.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: default policy modul.",
+      "purpose": "Mengembalikan data untuk ditampilkan di UI.",
+      "controller": "Modules\\Region\\Http\\Controllers\\RegionController",
+      "action": "countries",
+      "auth": "none",
+      "roles": [],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": "object|null"
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "success",
+        "data": {}
+      },
+      "response_resource": null,
+      "response_errors": [
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": ["name", "alpha2", "alpha3"],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.api.v1.regions.provinces",
+          "method": "GET",
+          "path": "/api/v1/regions/provinces",
+          "summary": "Ambil daftar provinsi"
+        },
+        {
+          "id": "api.api.v1.regions.cities",
+          "method": "GET",
+          "path": "/api/v1/regions/cities/{province_id}",
+          "summary": "Ambil detail kota"
+        },
+        {
+          "id": "api.api.v1.regions.districts",
+          "method": "GET",
+          "path": "/api/v1/regions/districts/{city_id}",
+          "summary": "Ambil detail kecamatan"
+        },
+        {
+          "id": "api.api.v1.regions.villages",
+          "method": "GET",
+          "path": "/api/v1/regions/villages/{district_id}",
+          "summary": "Ambil detail kelurahan"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.api.v1.regions.districts",
+      "module_slug": "region",
+      "module_name": "Region",
+      "method": "GET",
+      "path": "/api/v1/regions/districts/{city_id}",
+      "summary": "Ambil detail kecamatan",
+      "description": "Ambil detail kecamatan.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: default policy modul.",
+      "purpose": "Mengembalikan data untuk ditampilkan di UI.",
+      "controller": "Modules\\Region\\Http\\Controllers\\RegionController",
+      "action": "districts",
+      "auth": "none",
+      "roles": [],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [
+        {
+          "name": "city_id",
+          "type": "string",
+          "required": true,
+          "description": "ID city (referensi ke resource city)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": "object|null"
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "success",
+        "data": {}
+      },
+      "response_resource": null,
+      "response_errors": [
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": ["id", "nama", "city_id"],
+      "allowed_search": ["nama"],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": "id",
+      "related_endpoints": [
+        {
+          "id": "api.api.v1.regions.countries",
+          "method": "GET",
+          "path": "/api/v1/regions/countries",
+          "summary": "Ambil daftar wilayah"
+        },
+        {
+          "id": "api.api.v1.regions.provinces",
+          "method": "GET",
+          "path": "/api/v1/regions/provinces",
+          "summary": "Ambil daftar provinsi"
+        },
+        {
+          "id": "api.api.v1.regions.cities",
+          "method": "GET",
+          "path": "/api/v1/regions/cities/{province_id}",
+          "summary": "Ambil detail kota"
+        },
+        {
+          "id": "api.api.v1.regions.villages",
+          "method": "GET",
+          "path": "/api/v1/regions/villages/{district_id}",
+          "summary": "Ambil detail kelurahan"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.api.v1.regions.provinces",
+      "module_slug": "region",
+      "module_name": "Region",
+      "method": "GET",
+      "path": "/api/v1/regions/provinces",
+      "summary": "Ambil daftar provinsi",
+      "description": "Ambil daftar provinsi.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: default policy modul.",
+      "purpose": "Mengembalikan data untuk ditampilkan di UI.",
+      "controller": "Modules\\Region\\Http\\Controllers\\RegionController",
+      "action": "provinces",
+      "auth": "none",
+      "roles": [],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": "object|null"
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "success",
+        "data": {}
+      },
+      "response_resource": null,
+      "response_errors": [
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": ["id", "nama"],
+      "allowed_search": ["nama"],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": "id",
+      "related_endpoints": [
+        {
+          "id": "api.api.v1.regions.countries",
+          "method": "GET",
+          "path": "/api/v1/regions/countries",
+          "summary": "Ambil daftar wilayah"
+        },
+        {
+          "id": "api.api.v1.regions.cities",
+          "method": "GET",
+          "path": "/api/v1/regions/cities/{province_id}",
+          "summary": "Ambil detail kota"
+        },
+        {
+          "id": "api.api.v1.regions.districts",
+          "method": "GET",
+          "path": "/api/v1/regions/districts/{city_id}",
+          "summary": "Ambil detail kecamatan"
+        },
+        {
+          "id": "api.api.v1.regions.villages",
+          "method": "GET",
+          "path": "/api/v1/regions/villages/{district_id}",
+          "summary": "Ambil detail kelurahan"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.api.v1.regions.villages",
+      "module_slug": "region",
+      "module_name": "Region",
+      "method": "GET",
+      "path": "/api/v1/regions/villages/{district_id}",
+      "summary": "Ambil detail kelurahan",
+      "description": "Ambil detail kelurahan.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: default policy modul.",
+      "purpose": "Mengembalikan data untuk ditampilkan di UI.",
+      "controller": "Modules\\Region\\Http\\Controllers\\RegionController",
+      "action": "villages",
+      "auth": "none",
+      "roles": [],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [
+        {
+          "name": "district_id",
+          "type": "string",
+          "required": true,
+          "description": "ID district (referensi ke resource district)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": "object|null"
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "success",
+        "data": {}
+      },
+      "response_resource": null,
+      "response_errors": [
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": ["id", "nama", "district_id"],
+      "allowed_search": ["nama"],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": "id",
+      "related_endpoints": [
+        {
+          "id": "api.api.v1.regions.countries",
+          "method": "GET",
+          "path": "/api/v1/regions/countries",
+          "summary": "Ambil daftar wilayah"
+        },
+        {
+          "id": "api.api.v1.regions.provinces",
+          "method": "GET",
+          "path": "/api/v1/regions/provinces",
+          "summary": "Ambil daftar provinsi"
+        },
+        {
+          "id": "api.api.v1.regions.cities",
+          "method": "GET",
+          "path": "/api/v1/regions/cities/{province_id}",
+          "summary": "Ambil detail kota"
+        },
+        {
+          "id": "api.api.v1.regions.districts",
+          "method": "GET",
+          "path": "/api/v1/regions/districts/{city_id}",
+          "summary": "Ambil detail kecamatan"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    }
+  ]
 }

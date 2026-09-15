@@ -21,7 +21,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { SimplePagination, TABLE_PAGE_SIZES } from "@/components/ui/simple-pagination";
+import {
+  SimplePagination,
+  TABLE_PAGE_SIZES,
+} from "@/components/ui/simple-pagination";
 import {
   Table,
   TableBody,
@@ -157,7 +160,9 @@ export function ImportPenyesuaianDialog({
       >
         <DialogHeader className="shrink-0 border-b px-6 py-4">
           <DialogTitle>
-            {preview ? "Periksa Import Penyesuaian Stok" : "Import Penyesuaian Stok"}
+            {preview
+              ? "Periksa Import Penyesuaian Stok"
+              : "Import Penyesuaian Stok"}
           </DialogTitle>
           {preview && (
             <p className="text-xs text-muted-foreground">
@@ -361,9 +366,7 @@ function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
   const s = preview.summary;
   const [showDetails, setShowDetails] = useState(false);
   const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(
-    preview.pagination?.per_page ?? 25,
-  );
+  const [perPage, setPerPage] = useState(preview.pagination?.per_page ?? 25);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("row_no");
   const debouncedSearch = useDebouncedValue(search, 300);
@@ -479,110 +482,114 @@ function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
             </label>
           </div>
           <div className="min-h-0 min-w-0 flex-1 overflow-auto">
-          <Table
-            scrollContainer={false}
-            className={cn(
-              "w-full table-fixed",
-              showDetails ? "min-w-[980px]" : "min-w-[760px]",
-            )}
-          >
-            <TableHeader className="bg-muted/40 text-xs uppercase tracking-wider text-muted-foreground">
-              <TableRow>
-                <TableHead className="w-12 px-3 py-2.5 text-muted-foreground">
-                  #
-                </TableHead>
-                <TableHead
-                  className={cn(
-                    "px-3 py-2.5 text-muted-foreground",
-                    showDetails ? "w-[38%]" : "w-[52%]",
-                  )}
-                >
-                  SKU / Produk
-                </TableHead>
-                <TableHead className="w-32 px-3 py-2.5 text-muted-foreground">
-                  Rak
-                </TableHead>
-                <TableHead className="w-24 px-3 py-2.5 text-muted-foreground">
-                  Mode
-                </TableHead>
-                <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
-                  Input
-                </TableHead>
-                {showDetails && (
-                  <>
-                    <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
-                      On Hand
-                    </TableHead>
-                    <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
-                      Qty Akhir
-                    </TableHead>
-                    <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
-                      Selisih
-                    </TableHead>
-                  </>
-                )}
-              </TableRow>
-            </TableHeader>
-            <TableBody className="divide-y divide-border">
-              {pageData.items.map((it) => (
-                <TableRow key={it.row_no} className="bg-background/50">
-                  <TableCell className="w-12 px-3 py-2 font-mono text-xs text-muted-foreground">
-                    {it.row_no}
-                  </TableCell>
-                  <TableCell
+            <Table
+              scrollContainer={false}
+              className={cn(
+                "w-full table-fixed",
+                showDetails ? "min-w-[980px]" : "min-w-[760px]",
+              )}
+            >
+              <TableHeader className="bg-muted/40 text-xs uppercase tracking-wider text-muted-foreground">
+                <TableRow>
+                  <TableHead className="w-12 px-3 py-2.5 text-muted-foreground">
+                    #
+                  </TableHead>
+                  <TableHead
                     className={cn(
-                      "max-w-0 whitespace-normal px-3 py-2 align-top",
+                      "px-3 py-2.5 text-muted-foreground",
                       showDetails ? "w-[38%]" : "w-[52%]",
                     )}
                   >
-                    <p className="break-words whitespace-normal font-medium leading-5">
-                      {it.product_name || it.sku}
-                    </p>
-                    <p className="break-all whitespace-normal font-mono text-2xs text-muted-foreground">
-                      {it.sku}
-                    </p>
-                  </TableCell>
-                  <TableCell className="w-32 px-3 py-2 font-mono text-xs">
-                    {it.bin_code}
-                  </TableCell>
-                  <TableCell className="w-24 px-3 py-2">
-                    <span
-                      className={cn(
-                        "inline-flex items-center rounded px-2 py-0.5 text-2xs font-medium",
-                        it.mode === "DELTA"
-                          ? "bg-blue-500/10 text-blue-700 dark:text-blue-400"
-                          : "bg-purple-500/10 text-purple-700 dark:text-purple-400",
-                      )}
-                    >
-                      {it.mode}
-                    </span>
-                  </TableCell>
-                  <TableCell className="w-24 px-3 py-2 text-right font-mono tabular-nums">
-                    {it.input_value > 0 ? `+${it.input_value}` : it.input_value}
-                  </TableCell>
+                    SKU / Produk
+                  </TableHead>
+                  <TableHead className="w-32 px-3 py-2.5 text-muted-foreground">
+                    Rak
+                  </TableHead>
+                  <TableHead className="w-24 px-3 py-2.5 text-muted-foreground">
+                    Mode
+                  </TableHead>
+                  <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
+                    Input
+                  </TableHead>
                   {showDetails && (
                     <>
-                      <TableCell className="w-24 px-3 py-2 text-right font-mono tabular-nums text-muted-foreground">
-                        {it.system_qty}
-                      </TableCell>
-                      <TableCell className="w-24 px-3 py-2 text-right font-mono font-semibold tabular-nums">
-                        {it.actual_qty}
-                      </TableCell>
-                      <TableCell
-                        className={cn(
-                          "w-24 px-3 py-2 text-right font-mono tabular-nums",
-                          it.difference > 0 && "text-success",
-                          it.difference < 0 && "text-destructive",
-                        )}
-                      >
-                        {it.difference > 0 ? `+${it.difference}` : it.difference}
-                      </TableCell>
+                      <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
+                        On Hand
+                      </TableHead>
+                      <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
+                        Qty Akhir
+                      </TableHead>
+                      <TableHead className="w-24 px-3 py-2.5 text-right text-muted-foreground">
+                        Selisih
+                      </TableHead>
                     </>
                   )}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody className="divide-y divide-border">
+                {pageData.items.map((it) => (
+                  <TableRow key={it.row_no} className="bg-background/50">
+                    <TableCell className="w-12 px-3 py-2 font-mono text-xs text-muted-foreground">
+                      {it.row_no}
+                    </TableCell>
+                    <TableCell
+                      className={cn(
+                        "max-w-0 whitespace-normal px-3 py-2 align-top",
+                        showDetails ? "w-[38%]" : "w-[52%]",
+                      )}
+                    >
+                      <p className="break-words whitespace-normal font-medium leading-5">
+                        {it.product_name || it.sku}
+                      </p>
+                      <p className="break-all whitespace-normal font-mono text-2xs text-muted-foreground">
+                        {it.sku}
+                      </p>
+                    </TableCell>
+                    <TableCell className="w-32 px-3 py-2 font-mono text-xs">
+                      {it.bin_code}
+                    </TableCell>
+                    <TableCell className="w-24 px-3 py-2">
+                      <span
+                        className={cn(
+                          "inline-flex items-center rounded px-2 py-0.5 text-2xs font-medium",
+                          it.mode === "DELTA"
+                            ? "bg-blue-500/10 text-blue-700 dark:text-blue-400"
+                            : "bg-purple-500/10 text-purple-700 dark:text-purple-400",
+                        )}
+                      >
+                        {it.mode}
+                      </span>
+                    </TableCell>
+                    <TableCell className="w-24 px-3 py-2 text-right font-mono tabular-nums">
+                      {it.input_value > 0
+                        ? `+${it.input_value}`
+                        : it.input_value}
+                    </TableCell>
+                    {showDetails && (
+                      <>
+                        <TableCell className="w-24 px-3 py-2 text-right font-mono tabular-nums text-muted-foreground">
+                          {it.system_qty}
+                        </TableCell>
+                        <TableCell className="w-24 px-3 py-2 text-right font-mono font-semibold tabular-nums">
+                          {it.actual_qty}
+                        </TableCell>
+                        <TableCell
+                          className={cn(
+                            "w-24 px-3 py-2 text-right font-mono tabular-nums",
+                            it.difference > 0 && "text-success",
+                            it.difference < 0 && "text-destructive",
+                          )}
+                        >
+                          {it.difference > 0
+                            ? `+${it.difference}`
+                            : it.difference}
+                        </TableCell>
+                      </>
+                    )}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
           <div className="shrink-0 bg-background px-3 pb-3">
             <SimplePagination

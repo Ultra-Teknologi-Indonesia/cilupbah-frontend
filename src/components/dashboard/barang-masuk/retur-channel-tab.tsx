@@ -123,11 +123,19 @@ const REASON_LABELS: Record<string, string> = {
 };
 
 function humanize(value: string): string {
-  return value.replace(/[_-]+/g, " ").toLowerCase().replace(/^./, (c) => c.toUpperCase());
+  return value
+    .replace(/[_-]+/g, " ")
+    .toLowerCase()
+    .replace(/^./, (c) => c.toUpperCase());
 }
 
 function getReasonLabel(item: SalesReturn): string {
-  const candidates = [item.reason_display, item.channel_reason_text, item.channel_reason_code, item.reason];
+  const candidates = [
+    item.reason_display,
+    item.channel_reason_text,
+    item.channel_reason_code,
+    item.reason,
+  ];
   for (const value of candidates) {
     if (!value) continue;
     const label = REASON_LABELS[value] ?? REASON_LABELS[value.toLowerCase()];
@@ -139,7 +147,8 @@ function getReasonLabel(item: SalesReturn): string {
 function getChannelCode(item: SalesReturn): ChannelCode {
   if (item.channel) return item.channel as ChannelCode;
   const prefix = item.channel_return_id?.split(":", 1)[0];
-  return (prefix || (item.source === "marketplace" ? "marketplace" : "manual")) as ChannelCode;
+  return (prefix ||
+    (item.source === "marketplace" ? "marketplace" : "manual")) as ChannelCode;
 }
 
 export function ReturChannelTab() {
@@ -269,14 +278,25 @@ export function ReturChannelTab() {
         cell: ({ row }) => {
           const item = row.original;
           const code = getChannelCode(item);
-          const channelName = item.channel_name ?? (code === "manual" ? "Manual" : humanize(code));
+          const channelName =
+            item.channel_name ??
+            (code === "manual" ? "Manual" : humanize(code));
           return (
             <div className="flex min-w-[150px] items-center gap-2">
-              <ChannelLogo code={code} name={channelName} className="size-7 rounded-lg" />
+              <ChannelLogo
+                code={code}
+                name={channelName}
+                className="size-7 rounded-lg"
+              />
               <div className="min-w-0">
-                <div className="truncate font-medium text-foreground">{channelName}</div>
+                <div className="truncate font-medium text-foreground">
+                  {channelName}
+                </div>
                 <div className="truncate text-xs text-muted-foreground">
-                  {item.channel_shop_name ?? (item.source === "marketplace" ? "Toko channel" : "Input manual")}
+                  {item.channel_shop_name ??
+                    (item.source === "marketplace"
+                      ? "Toko channel"
+                      : "Input manual")}
                 </div>
               </div>
             </div>
@@ -346,22 +366,30 @@ export function ReturChannelTab() {
                   status={item.marketplace_decision}
                 />
                 {rawStatus && (
-                  <div className="mt-1 text-xs text-muted-foreground" title={rawStatus}>
-                    Channel: {item.marketplace_raw_status_label ?? RAW_STATUS_LABELS[rawStatus] ?? humanize(rawStatus)}
+                  <div
+                    className="mt-1 text-xs text-muted-foreground"
+                    title={rawStatus}
+                  >
+                    Channel:{" "}
+                    {item.marketplace_raw_status_label ??
+                      RAW_STATUS_LABELS[rawStatus] ??
+                      humanize(rawStatus)}
                   </div>
                 )}
               </div>
-              {canEditReturn && <button
-                type="button"
-                title="Sinkron keputusan marketplace"
-                disabled={isSyncing}
-                onClick={() => syncDetailMutation.mutate(item.id)}
-                className="inline-flex size-6 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:opacity-50"
-              >
-                <RefreshCwIcon
-                  className={cn("size-3.5", isSyncing && "animate-spin")}
-                />
-              </button>}
+              {canEditReturn && (
+                <button
+                  type="button"
+                  title="Sinkron keputusan marketplace"
+                  disabled={isSyncing}
+                  onClick={() => syncDetailMutation.mutate(item.id)}
+                  className="inline-flex size-6 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:opacity-50"
+                >
+                  <RefreshCwIcon
+                    className={cn("size-3.5", isSyncing && "animate-spin")}
+                  />
+                </button>
+              )}
             </div>
           );
         },
@@ -395,11 +423,19 @@ export function ReturChannelTab() {
         ),
         enableSorting: true,
         cell: ({ row }) => (
-          <div className="max-w-[180px]" title="Nama ditampilkan persis seperti yang diterima dari channel">
-            <span className="text-foreground">{row.original.customer_name ?? "—"}</span>
-            {row.original.customer_name && row.original.source === "marketplace" && (
-              <div className="text-[11px] text-muted-foreground">Nama dari channel</div>
-            )}
+          <div
+            className="max-w-[180px]"
+            title="Nama ditampilkan persis seperti yang diterima dari channel"
+          >
+            <span className="text-foreground">
+              {row.original.customer_name ?? "—"}
+            </span>
+            {row.original.customer_name &&
+              row.original.source === "marketplace" && (
+                <div className="text-[11px] text-muted-foreground">
+                  Nama dari channel
+                </div>
+              )}
           </div>
         ),
       },
@@ -538,7 +574,13 @@ export function ReturChannelTab() {
     }
 
     return cols;
-  }, [isUnprocessed, subTab, syncTrackingMutation, syncDetailMutation, canEditReturn]);
+  }, [
+    isUnprocessed,
+    subTab,
+    syncTrackingMutation,
+    syncDetailMutation,
+    canEditReturn,
+  ]);
 
   const items = data?.items ?? [];
   const meta = data?.meta ?? {
@@ -605,21 +647,25 @@ export function ReturChannelTab() {
             </TabsList>
           </Tabs>
           <div className="flex items-center gap-2">
-            {canExportReturn && <Button
-              size="sm"
-              variant="outline"
-              className="gap-1.5"
-              onClick={() => setExportModalOpen(true)}
-            >
-              <DownloadIcon className="size-4" />
-              Unduh Excel
-            </Button>}
-            {canCreateReturn && <Button size="sm" asChild className="gap-1.5">
-              <Link href="/dashboard/barang-masuk/retur/buat">
-                <PlusIcon className="size-4" />
-                Buat Retur
-              </Link>
-            </Button>}
+            {canExportReturn && (
+              <Button
+                size="sm"
+                variant="outline"
+                className="gap-1.5"
+                onClick={() => setExportModalOpen(true)}
+              >
+                <DownloadIcon className="size-4" />
+                Unduh Excel
+              </Button>
+            )}
+            {canCreateReturn && (
+              <Button size="sm" asChild className="gap-1.5">
+                <Link href="/dashboard/barang-masuk/retur/buat">
+                  <PlusIcon className="size-4" />
+                  Buat Retur
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
 
@@ -668,7 +714,6 @@ export function ReturChannelTab() {
             searchPlaceholder="Cari alasan"
             className="h-9 bg-background"
           />
-
         </FilterToolbar>
 
         <div className="px-5 py-5 sm:px-6">
@@ -747,7 +792,9 @@ export function ReturChannelTab() {
           {acceptTarget && acceptTarget.items.length > 0 && (
             <div>
               <Label className="text-sm font-medium">
-                {acceptTarget?.reason_category === "CANCEL_SHIPPED" ? "Qty paket diterima" : "Qty disetujui"}
+                {acceptTarget?.reason_category === "CANCEL_SHIPPED"
+                  ? "Qty paket diterima"
+                  : "Qty disetujui"}
               </Label>
               <div className="mt-1.5 space-y-2">
                 {acceptTarget.items.map((it) => {

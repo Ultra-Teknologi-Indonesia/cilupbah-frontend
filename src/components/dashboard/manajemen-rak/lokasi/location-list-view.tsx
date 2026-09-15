@@ -118,7 +118,9 @@ export function LocationListView() {
               <Switch
                 checked={setting.data?.useWarehouseLayout ?? false}
                 disabled={
-                  !canEditSystemSettings || setting.isLoading || saveSetting.isPending
+                  !canEditSystemSettings ||
+                  setting.isLoading ||
+                  saveSetting.isPending
                 }
                 onCheckedChange={handleToggleLayout}
                 aria-label="Gunakan layout gudang"

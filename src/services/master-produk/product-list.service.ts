@@ -94,7 +94,9 @@ export const ProductListService = {
           max_price: params.maxPrice,
           channel: params.channel || undefined,
           sort: params.sort || undefined,
-          product_ids: params.productIds?.length ? params.productIds : undefined,
+          product_ids: params.productIds?.length
+            ? params.productIds
+            : undefined,
         },
       },
     );

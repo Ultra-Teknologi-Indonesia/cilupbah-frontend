@@ -106,7 +106,8 @@ export function LocationDetailView({ id }: { id: string }) {
       {protectedLocation && (
         <div className="flex items-center gap-2 rounded-2xl border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
           <LockIcon className="size-4" />
-          Lokasi ini dilindungi: tetap dapat diedit sesuai permission, tetapi tidak dapat dihapus atau dinonaktifkan.
+          Lokasi ini dilindungi: tetap dapat diedit sesuai permission, tetapi
+          tidak dapat dihapus atau dinonaktifkan.
         </div>
       )}
 
@@ -129,10 +130,22 @@ export function LocationDetailView({ id }: { id: string }) {
           </div>
 
           <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-3">
-            <InfoItem label="Nama lokasi" value={valueOrDash(location.locationName)} />
-            <InfoItem label="Kode lokasi" value={valueOrDash(location.locationCode)} />
-            <InfoItem label="Tipe lokasi" value={formatType(location.locationType)} />
-            <InfoItem label="Gudang" value={location.isWarehouse ? "Ya" : "Tidak"} />
+            <InfoItem
+              label="Nama lokasi"
+              value={valueOrDash(location.locationName)}
+            />
+            <InfoItem
+              label="Kode lokasi"
+              value={valueOrDash(location.locationCode)}
+            />
+            <InfoItem
+              label="Tipe lokasi"
+              value={formatType(location.locationType)}
+            />
+            <InfoItem
+              label="Gudang"
+              value={location.isWarehouse ? "Ya" : "Tidak"}
+            />
             <InfoItem label="POS" value={location.isPos ? "Ya" : "Tidak"} />
             <InfoItem
               label="Multi-origin"
@@ -169,7 +182,10 @@ export function LocationDetailView({ id }: { id: string }) {
             </div>
             <div className="flex min-w-0 items-start gap-2 sm:col-span-2">
               <MapPinIcon className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
-              <InfoItem label="Koordinat" value={valueOrDash(location.coordinate)} />
+              <InfoItem
+                label="Koordinat"
+                value={valueOrDash(location.coordinate)}
+              />
             </div>
           </div>
         </div>

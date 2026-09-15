@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  keepPreviousData,
-  useInfiniteQuery,
-} from "@tanstack/react-query";
+import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 
 import { useAsyncExport } from "@/hooks/laporan/use-async-export";
 import { LaporanProdukService } from "@/services/laporan/laporan-produk.service";

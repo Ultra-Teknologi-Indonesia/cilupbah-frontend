@@ -416,7 +416,9 @@ export function PenerimaanTransferView() {
                             }
                             disabled={!canReceiveTransfer || !locationId}
                             allocatedBinId={it.destination_bin?.id ?? null}
-                            allocatedBinCode={it.destination_bin?.bin_final_code ?? null}
+                            allocatedBinCode={
+                              it.destination_bin?.bin_final_code ?? null
+                            }
                           />
                         </TableCell>
                         <TableCell className="px-3 py-2.5 text-right">

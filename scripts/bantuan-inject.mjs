@@ -47,12 +47,14 @@ async function loadContentFiles() {
 }
 
 function injectImage(src, exportName, imgMd) {
-  if (src.includes(imgMd)) return { src, changed: false, reason: "already present" };
+  if (src.includes(imgMd))
+    return { src, changed: false, reason: "already present" };
   const re = new RegExp(
     `(export\\s+const\\s+${exportName}\\s*=\\s*\`)(##[^\\n]*\\n)`,
   );
   const match = re.exec(src);
-  if (!match) return { src, changed: false, reason: "H1 anchor tidak ditemukan" };
+  if (!match)
+    return { src, changed: false, reason: "H1 anchor tidak ditemukan" };
   const before = src.slice(0, match.index);
   const [full, prefix, h1line] = match;
   const after = src.slice(match.index + full.length);
@@ -72,7 +74,9 @@ async function main() {
   }
 
   const contentFiles = await loadContentFiles();
-  console.log(`[bantuan-inject] ${contentFiles.size} export const ditemukan di content/manual`);
+  console.log(
+    `[bantuan-inject] ${contentFiles.size} export const ditemukan di content/manual`,
+  );
   console.log(`[bantuan-inject] ${shotBySlug.size} shot sukses di manifest`);
 
   const changes = new Map(); // file path → new src
@@ -92,14 +96,20 @@ async function main() {
     const cf = contentFiles.get(entry.exportName);
     if (!cf) {
       stats.missingExport++;
-      console.warn(`  · export tidak ketemu: ${entry.exportName} (slug ${entry.slug})`);
+      console.warn(
+        `  · export tidak ketemu: ${entry.exportName} (slug ${entry.slug})`,
+      );
       continue;
     }
     const currentSrc = changes.get(cf.file) ?? cf.src;
     const alt = entry.title;
     const caption = entry.title;
     const imgMd = `![${alt}](${shot.path} "${caption}")`;
-    const { src: nextSrc, changed, reason } = injectImage(currentSrc, entry.exportName, imgMd);
+    const {
+      src: nextSrc,
+      changed,
+      reason,
+    } = injectImage(currentSrc, entry.exportName, imgMd);
     if (changed) {
       changes.set(cf.file, nextSrc);
       stats.injected++;
@@ -117,7 +127,9 @@ async function main() {
   }
 
   console.log(`[bantuan-inject] selesai.`);
-  console.log(`  injected: ${stats.injected}, skipped: ${stats.skipped}, missingShot: ${stats.missingShot}, missingExport: ${stats.missingExport}`);
+  console.log(
+    `  injected: ${stats.injected}, skipped: ${stats.skipped}, missingShot: ${stats.missingShot}, missingExport: ${stats.missingExport}`,
+  );
   console.log(`  files edited: ${changes.size}`);
 }
 

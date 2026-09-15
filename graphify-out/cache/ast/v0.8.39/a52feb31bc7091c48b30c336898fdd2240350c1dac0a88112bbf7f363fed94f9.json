@@ -1,1 +1,207 @@
-{"nodes": [{"id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_ux_audit_md", "label": "UX-AUDIT.md", "file_type": "document", "source_file": "UX-AUDIT.md", "source_location": "L1"}, {"id": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be", "label": "Audit UX \u2014 cilupbah (FE + BE)", "file_type": "document", "source_file": "UX-AUDIT.md", "source_location": "L1"}, {"id": "cilupbah_fe_ux_audit_ringkasan_prioritas", "label": "Ringkasan prioritas", "file_type": "document", "source_file": "UX-AUDIT.md", "source_location": "L18"}, {"id": "cilupbah_fe_ux_audit_p0_ketik_nama_sendiri_di_mana_mana_akar_friksi_terbesar", "label": "P0 \u2014 \"Ketik nama sendiri\" di mana-mana (akar friksi terbesar)", "file_type": "document", "source_file": "UX-AUDIT.md", "source_location": "L34"}, {"id": "cilupbah_fe_ux_audit_p0_alur_multi_langkah_yang_bisa_dipangkas", "label": "P0 \u2014 Alur multi-langkah yang bisa dipangkas", "file_type": "document", "source_file": "UX-AUDIT.md", "source_location": "L59"}, {"id": "cilupbah_fe_ux_audit_p1_picking_kode_rak_harus_diketik_sebelum_scan", "label": "P1 \u2014 Picking: kode rak harus diketik sebelum scan", "file_type": "document", "source_file": "UX-AUDIT.md", "source_location": "L75"}, {"id": "cilupbah_fe_ux_audit_p1_state_kerja_hilang_saat_back_refresh", "label": "P1 \u2014 State kerja hilang saat back/refresh", "file_type": "document", "source_file": "UX-AUDIT.md", "source_location": "L92"}, {"id": "cilupbah_fe_ux_audit_p1_nilai_yang_bisa_didefault_masih_diketik", "label": "P1 \u2014 Nilai yang bisa didefault masih diketik", "file_type": "document", "source_file": "UX-AUDIT.md", "source_location": "L101"}, {"id": "cilupbah_fe_ux_audit_p2_konsistensi_supaya_gampang_diingat", "label": "P2 \u2014 Konsistensi (supaya gampang diingat)", "file_type": "document", "source_file": "UX-AUDIT.md", "source_location": "L112"}, {"id": "cilupbah_fe_ux_audit_p2_feedback_kurang_jelas", "label": "P2 \u2014 Feedback kurang jelas", "file_type": "document", "source_file": "UX-AUDIT.md", "source_location": "L131"}, {"id": "cilupbah_fe_ux_audit_p3_navigasi_ia", "label": "P3 \u2014 Navigasi & IA", "file_type": "document", "source_file": "UX-AUDIT.md", "source_location": "L140"}, {"id": "cilupbah_fe_ux_audit_p3_ergonomi_tablet_scanner_aplikasi_gudang", "label": "P3 \u2014 Ergonomi tablet/scanner (aplikasi gudang)", "file_type": "document", "source_file": "UX-AUDIT.md", "source_location": "L148"}, {"id": "cilupbah_fe_ux_audit_rekomendasi_urutan_eksekusi", "label": "Rekomendasi urutan eksekusi", "file_type": "document", "source_file": "UX-AUDIT.md", "source_location": "L157"}], "edges": [{"source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_ux_audit_md", "target": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be", "relation": "contains", "confidence": "EXTRACTED", "source_file": "UX-AUDIT.md", "source_location": "L1", "weight": 1.0}, {"source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be", "target": "cilupbah_fe_ux_audit_ringkasan_prioritas", "relation": "contains", "confidence": "EXTRACTED", "source_file": "UX-AUDIT.md", "source_location": "L18", "weight": 1.0}, {"source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be", "target": "cilupbah_fe_ux_audit_p0_ketik_nama_sendiri_di_mana_mana_akar_friksi_terbesar", "relation": "contains", "confidence": "EXTRACTED", "source_file": "UX-AUDIT.md", "source_location": "L34", "weight": 1.0}, {"source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be", "target": "cilupbah_fe_ux_audit_p0_alur_multi_langkah_yang_bisa_dipangkas", "relation": "contains", "confidence": "EXTRACTED", "source_file": "UX-AUDIT.md", "source_location": "L59", "weight": 1.0}, {"source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be", "target": "cilupbah_fe_ux_audit_p1_picking_kode_rak_harus_diketik_sebelum_scan", "relation": "contains", "confidence": "EXTRACTED", "source_file": "UX-AUDIT.md", "source_location": "L75", "weight": 1.0}, {"source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be", "target": "cilupbah_fe_ux_audit_p1_state_kerja_hilang_saat_back_refresh", "relation": "contains", "confidence": "EXTRACTED", "source_file": "UX-AUDIT.md", "source_location": "L92", "weight": 1.0}, {"source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be", "target": "cilupbah_fe_ux_audit_p1_nilai_yang_bisa_didefault_masih_diketik", "relation": "contains", "confidence": "EXTRACTED", "source_file": "UX-AUDIT.md", "source_location": "L101", "weight": 1.0}, {"source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be", "target": "cilupbah_fe_ux_audit_p2_konsistensi_supaya_gampang_diingat", "relation": "contains", "confidence": "EXTRACTED", "source_file": "UX-AUDIT.md", "source_location": "L112", "weight": 1.0}, {"source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be", "target": "cilupbah_fe_ux_audit_p2_feedback_kurang_jelas", "relation": "contains", "confidence": "EXTRACTED", "source_file": "UX-AUDIT.md", "source_location": "L131", "weight": 1.0}, {"source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be", "target": "cilupbah_fe_ux_audit_p3_navigasi_ia", "relation": "contains", "confidence": "EXTRACTED", "source_file": "UX-AUDIT.md", "source_location": "L140", "weight": 1.0}, {"source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be", "target": "cilupbah_fe_ux_audit_p3_ergonomi_tablet_scanner_aplikasi_gudang", "relation": "contains", "confidence": "EXTRACTED", "source_file": "UX-AUDIT.md", "source_location": "L148", "weight": 1.0}, {"source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be", "target": "cilupbah_fe_ux_audit_rekomendasi_urutan_eksekusi", "relation": "contains", "confidence": "EXTRACTED", "source_file": "UX-AUDIT.md", "source_location": "L157", "weight": 1.0}], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_ux_audit_md",
+      "label": "UX-AUDIT.md",
+      "file_type": "document",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be",
+      "label": "Audit UX \u2014 cilupbah (FE + BE)",
+      "file_type": "document",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_ux_audit_ringkasan_prioritas",
+      "label": "Ringkasan prioritas",
+      "file_type": "document",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L18"
+    },
+    {
+      "id": "cilupbah_fe_ux_audit_p0_ketik_nama_sendiri_di_mana_mana_akar_friksi_terbesar",
+      "label": "P0 \u2014 \"Ketik nama sendiri\" di mana-mana (akar friksi terbesar)",
+      "file_type": "document",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L34"
+    },
+    {
+      "id": "cilupbah_fe_ux_audit_p0_alur_multi_langkah_yang_bisa_dipangkas",
+      "label": "P0 \u2014 Alur multi-langkah yang bisa dipangkas",
+      "file_type": "document",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L59"
+    },
+    {
+      "id": "cilupbah_fe_ux_audit_p1_picking_kode_rak_harus_diketik_sebelum_scan",
+      "label": "P1 \u2014 Picking: kode rak harus diketik sebelum scan",
+      "file_type": "document",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L75"
+    },
+    {
+      "id": "cilupbah_fe_ux_audit_p1_state_kerja_hilang_saat_back_refresh",
+      "label": "P1 \u2014 State kerja hilang saat back/refresh",
+      "file_type": "document",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L92"
+    },
+    {
+      "id": "cilupbah_fe_ux_audit_p1_nilai_yang_bisa_didefault_masih_diketik",
+      "label": "P1 \u2014 Nilai yang bisa didefault masih diketik",
+      "file_type": "document",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L101"
+    },
+    {
+      "id": "cilupbah_fe_ux_audit_p2_konsistensi_supaya_gampang_diingat",
+      "label": "P2 \u2014 Konsistensi (supaya gampang diingat)",
+      "file_type": "document",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L112"
+    },
+    {
+      "id": "cilupbah_fe_ux_audit_p2_feedback_kurang_jelas",
+      "label": "P2 \u2014 Feedback kurang jelas",
+      "file_type": "document",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L131"
+    },
+    {
+      "id": "cilupbah_fe_ux_audit_p3_navigasi_ia",
+      "label": "P3 \u2014 Navigasi & IA",
+      "file_type": "document",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L140"
+    },
+    {
+      "id": "cilupbah_fe_ux_audit_p3_ergonomi_tablet_scanner_aplikasi_gudang",
+      "label": "P3 \u2014 Ergonomi tablet/scanner (aplikasi gudang)",
+      "file_type": "document",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L148"
+    },
+    {
+      "id": "cilupbah_fe_ux_audit_rekomendasi_urutan_eksekusi",
+      "label": "Rekomendasi urutan eksekusi",
+      "file_type": "document",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L157"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_ux_audit_md",
+      "target": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be",
+      "target": "cilupbah_fe_ux_audit_ringkasan_prioritas",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be",
+      "target": "cilupbah_fe_ux_audit_p0_ketik_nama_sendiri_di_mana_mana_akar_friksi_terbesar",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L34",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be",
+      "target": "cilupbah_fe_ux_audit_p0_alur_multi_langkah_yang_bisa_dipangkas",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L59",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be",
+      "target": "cilupbah_fe_ux_audit_p1_picking_kode_rak_harus_diketik_sebelum_scan",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L75",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be",
+      "target": "cilupbah_fe_ux_audit_p1_state_kerja_hilang_saat_back_refresh",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L92",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be",
+      "target": "cilupbah_fe_ux_audit_p1_nilai_yang_bisa_didefault_masih_diketik",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L101",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be",
+      "target": "cilupbah_fe_ux_audit_p2_konsistensi_supaya_gampang_diingat",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L112",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be",
+      "target": "cilupbah_fe_ux_audit_p2_feedback_kurang_jelas",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L131",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be",
+      "target": "cilupbah_fe_ux_audit_p3_navigasi_ia",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L140",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be",
+      "target": "cilupbah_fe_ux_audit_p3_ergonomi_tablet_scanner_aplikasi_gudang",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L148",
+      "weight": 1.0
+    },
+    {
+      "source": "cilupbah_fe_ux_audit_audit_ux_cilupbah_fe_be",
+      "target": "cilupbah_fe_ux_audit_rekomendasi_urutan_eksekusi",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UX-AUDIT.md",
+      "source_location": "L157",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

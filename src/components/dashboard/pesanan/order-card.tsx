@@ -255,7 +255,8 @@ export function OrderActions({
   const acceptReturn = useAcceptReturn();
   const rejectReturn = useRejectReturn();
 
-  const isMarketplace = !!order.source && order.source !== "manual" && order.source !== "offline";
+  const isMarketplace =
+    !!order.source && order.source !== "manual" && order.source !== "offline";
   const canManualCancel = !isMarketplace;
   const { can, canAny } = usePermissions();
   const canEditOrder = can("edit-pesanan");
@@ -313,15 +314,17 @@ export function OrderActions({
   if (tab === "ready-to-process") {
     return (
       <>
-        {canEditOrder && <Button
-          variant="outline"
-          size="sm"
-          className="h-8 gap-1.5 text-xs"
-          onClick={() => setRelocateOpen(true)}
-        >
-          <WarehouseIcon className="size-3.5" />
-          Edit Gudang
-        </Button>}
+        {canEditOrder && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 gap-1.5 text-xs"
+            onClick={() => setRelocateOpen(true)}
+          >
+            <WarehouseIcon className="size-3.5" />
+            Edit Gudang
+          </Button>
+        )}
         {canEditOrder && !order.shipping?.tracking_number && (
           <Button
             variant="outline"
@@ -346,35 +349,43 @@ export function OrderActions({
             Cetak Label
           </Button>
         )}
-        {canEditOrder && <Button
-          variant="outline"
-          size="sm"
-          className="h-8 gap-1.5 text-xs"
-          disabled={busy}
-          onClick={() => setCompleteOpen(true)}
-        >
-          <CheckCircleIcon className="size-3.5" />
-          Selesaikan
-        </Button>}
-        {canEditOrder && <Button
-          size="sm"
-          className="h-8 gap-1.5 text-xs"
-          disabled={busy}
-          onClick={() => moveToReady.mutate([order.id])}
-        >
-          <ArrowRightIcon className="size-3.5" />
-          {moveToReady.isPending ? "Memproses..." : "Proses Pesanan"}
-        </Button>}
-        {canEditOrder && <DirectCompletionDialog
-          open={completeOpen}
-          onOpenChange={setCompleteOpen}
-          orderIds={[order.id]}
-        />}
-        {canEditOrder && <RelocateDialog
-          order={order}
-          open={relocateOpen}
-          onOpenChange={setRelocateOpen}
-        />}
+        {canEditOrder && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 gap-1.5 text-xs"
+            disabled={busy}
+            onClick={() => setCompleteOpen(true)}
+          >
+            <CheckCircleIcon className="size-3.5" />
+            Selesaikan
+          </Button>
+        )}
+        {canEditOrder && (
+          <Button
+            size="sm"
+            className="h-8 gap-1.5 text-xs"
+            disabled={busy}
+            onClick={() => moveToReady.mutate([order.id])}
+          >
+            <ArrowRightIcon className="size-3.5" />
+            {moveToReady.isPending ? "Memproses..." : "Proses Pesanan"}
+          </Button>
+        )}
+        {canEditOrder && (
+          <DirectCompletionDialog
+            open={completeOpen}
+            onOpenChange={setCompleteOpen}
+            orderIds={[order.id]}
+          />
+        )}
+        {canEditOrder && (
+          <RelocateDialog
+            order={order}
+            open={relocateOpen}
+            onOpenChange={setRelocateOpen}
+          />
+        )}
         <OrderCancelMenu order={order} />
       </>
     );
@@ -383,24 +394,28 @@ export function OrderActions({
   if (tab === "in-transit") {
     return (
       <>
-        {canViewOrder && <Button
-          variant="outline"
-          size="sm"
-          className="h-8 gap-1.5 text-xs"
-          onClick={handlePrintInvoice}
-        >
-          <FileTextIcon className="size-3.5" />
-          Cetak Faktur
-        </Button>}
-        {canEditOrder && <Button
-          size="sm"
-          className="h-8 gap-1.5 text-xs"
-          disabled={busy}
-          onClick={() => setCompleteOpen(true)}
-        >
-          <CheckCircleIcon className="size-3.5" />
-          {markComplete.isPending ? "Memproses..." : "Selesaikan"}
-        </Button>}
+        {canViewOrder && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 gap-1.5 text-xs"
+            onClick={handlePrintInvoice}
+          >
+            <FileTextIcon className="size-3.5" />
+            Cetak Faktur
+          </Button>
+        )}
+        {canEditOrder && (
+          <Button
+            size="sm"
+            className="h-8 gap-1.5 text-xs"
+            disabled={busy}
+            onClick={() => setCompleteOpen(true)}
+          >
+            <CheckCircleIcon className="size-3.5" />
+            {markComplete.isPending ? "Memproses..." : "Selesaikan"}
+          </Button>
+        )}
         <ConfirmDialog
           open={completeOpen}
           onOpenChange={setCompleteOpen}
@@ -420,15 +435,17 @@ export function OrderActions({
   if (tab === "completed") {
     return (
       <>
-        {canViewOrder && <Button
-          variant="outline"
-          size="sm"
-          className="h-8 gap-1.5 text-xs"
-          onClick={handlePrintInvoice}
-        >
-          <FileTextIcon className="size-3.5" />
-          Cetak Faktur
-        </Button>}
+        {canViewOrder && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 gap-1.5 text-xs"
+            onClick={handlePrintInvoice}
+          >
+            <FileTextIcon className="size-3.5" />
+            Cetak Faktur
+          </Button>
+        )}
       </>
     );
   }
@@ -462,17 +479,19 @@ export function OrderActions({
           </Button>
         )}
 
-        {canEditOrder && <Button
-          size="sm"
-          className="h-8 gap-1.5 text-xs"
-          disabled={busy}
-          onClick={() => moveToReady.mutate([order.id])}
-        >
-          <ArrowRightIcon className="size-3.5" />
-          {moveToReady.isPending
-            ? "Memindahkan..."
-            : "Pindahkan ke Siap Proses"}
-        </Button>}
+        {canEditOrder && (
+          <Button
+            size="sm"
+            className="h-8 gap-1.5 text-xs"
+            disabled={busy}
+            onClick={() => moveToReady.mutate([order.id])}
+          >
+            <ArrowRightIcon className="size-3.5" />
+            {moveToReady.isPending
+              ? "Memindahkan..."
+              : "Pindahkan ke Siap Proses"}
+          </Button>
+        )}
         {tab === "empty-stock" && canEditOrder && (
           <ContactBuyerDialog
             open={contactOpen}
@@ -547,18 +566,20 @@ export function OrderActions({
             Dibatalkan di marketplace
           </span>
         )}
-        {canEditOrder && (st === "pending" || st === "failed") && !order.is_canceled && (
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8 gap-1.5 text-xs"
-            disabled={releaseCancel.isPending}
-            onClick={() => releaseCancel.mutate(order.id)}
-          >
-            <ArrowRightIcon className="size-3.5" />
-            {releaseCancel.isPending ? "Memproses..." : "Lanjutkan Proses"}
-          </Button>
-        )}
+        {canEditOrder &&
+          (st === "pending" || st === "failed") &&
+          !order.is_canceled && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 gap-1.5 text-xs"
+              disabled={releaseCancel.isPending}
+              onClick={() => releaseCancel.mutate(order.id)}
+            >
+              <ArrowRightIcon className="size-3.5" />
+              {releaseCancel.isPending ? "Memproses..." : "Lanjutkan Proses"}
+            </Button>
+          )}
       </>
     );
   }
@@ -581,34 +602,40 @@ export function OrderActions({
 
     return (
       <>
-        {canEditReturn && <Button
-          size="sm"
-          className="h-8 gap-1.5 text-xs"
-          disabled={busy}
-          onClick={() => acceptReturn.mutate(order.id)}
-        >
-          <CheckIcon className="size-3.5" />
-          {acceptReturn.isPending ? "Memproses..." : "Terima"}
-        </Button>}
-        {canEditReturn && <Button
-          variant="outline"
-          size="sm"
-          className="h-8 gap-1.5 text-xs"
-          disabled={busy}
-          onClick={() => rejectReturn.mutate({ returnId: order.id })}
-        >
-          <XIcon className="size-3.5" />
-          {rejectReturn.isPending ? "Memproses..." : "Tolak"}
-        </Button>}
-        {canViewOrder && <Button
-          variant="outline"
-          size="sm"
-          className="h-8 gap-1.5 text-xs"
-          onClick={handlePrintInvoice}
-        >
-          <FileTextIcon className="size-3.5" />
-          Cetak Faktur
-        </Button>}
+        {canEditReturn && (
+          <Button
+            size="sm"
+            className="h-8 gap-1.5 text-xs"
+            disabled={busy}
+            onClick={() => acceptReturn.mutate(order.id)}
+          >
+            <CheckIcon className="size-3.5" />
+            {acceptReturn.isPending ? "Memproses..." : "Terima"}
+          </Button>
+        )}
+        {canEditReturn && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 gap-1.5 text-xs"
+            disabled={busy}
+            onClick={() => rejectReturn.mutate({ returnId: order.id })}
+          >
+            <XIcon className="size-3.5" />
+            {rejectReturn.isPending ? "Memproses..." : "Tolak"}
+          </Button>
+        )}
+        {canViewOrder && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 gap-1.5 text-xs"
+            onClick={handlePrintInvoice}
+          >
+            <FileTextIcon className="size-3.5" />
+            Cetak Faktur
+          </Button>
+        )}
       </>
     );
   }
@@ -679,7 +706,11 @@ export function OrderActions({
           {requestAwb.isPending ? "Memproses..." : "Kirim"}
         </Button>
       );
-    } else if (canEditOrder && order.status === "reserved" && !order.is_canceled) {
+    } else if (
+      canEditOrder &&
+      order.status === "reserved" &&
+      !order.is_canceled
+    ) {
       primaryAction = (
         <Button
           key="process"
@@ -702,61 +733,76 @@ export function OrderActions({
           ((canRequestCancel && canEditOrder) ||
             (canManualCancel && canEditOrder) ||
             canDeleteOrder) && (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon-sm" aria-label="Aksi lainnya">
-                <MoreHorizontalIcon className="size-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="min-w-44">
-              {canRequestCancel && canEditOrder && (
-                <DropdownMenuItem onSelect={() => setRequestCancelOpen(true)}>
-                  <BanIcon className="size-4 mr-2" />
-                  Ajukan Pembatalan
-                </DropdownMenuItem>
-              )}
-              {canManualCancel && canEditOrder && (
-                <DropdownMenuItem variant="destructive" onSelect={() => setManualCancelOpen(true)}>
-                  <BanIcon className="size-4 mr-2" />
-                  Batalkan Pesanan
-                </DropdownMenuItem>
-              )}
-              {canDeleteOrder && (
-                <DropdownMenuItem
-                  variant="destructive"
-                  onSelect={() => setDeleteOpen(true)}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label="Aksi lainnya"
                 >
-                  <Trash2Icon className="size-4 mr-2" />
-                  Hapus Pesanan
-                </DropdownMenuItem>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                  <MoreHorizontalIcon className="size-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="min-w-44">
+                {canRequestCancel && canEditOrder && (
+                  <DropdownMenuItem onSelect={() => setRequestCancelOpen(true)}>
+                    <BanIcon className="size-4 mr-2" />
+                    Ajukan Pembatalan
+                  </DropdownMenuItem>
+                )}
+                {canManualCancel && canEditOrder && (
+                  <DropdownMenuItem
+                    variant="destructive"
+                    onSelect={() => setManualCancelOpen(true)}
+                  >
+                    <BanIcon className="size-4 mr-2" />
+                    Batalkan Pesanan
+                  </DropdownMenuItem>
+                )}
+                {canDeleteOrder && (
+                  <DropdownMenuItem
+                    variant="destructive"
+                    onSelect={() => setDeleteOpen(true)}
+                  >
+                    <Trash2Icon className="size-4 mr-2" />
+                    Hapus Pesanan
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+        {canEditOrder && (
+          <BuatPengirimanDialog
+            open={pengirimanOpen}
+            onOpenChange={setPengirimanOpen}
+            orderIds={[order.id]}
+            locationId={order.location_id}
+            locationName={order.location_name}
+            marketplaceSource={order.source ?? undefined}
+            shippingProvider={order.shipping?.provider ?? undefined}
+          />
         )}
-        {canEditOrder && <BuatPengirimanDialog
-          open={pengirimanOpen}
-          onOpenChange={setPengirimanOpen}
-          orderIds={[order.id]}
-          locationId={order.location_id}
-          locationName={order.location_name}
-          marketplaceSource={order.source ?? undefined}
-          shippingProvider={order.shipping?.provider ?? undefined}
-        />}
-        {canDeleteOrder && <DeleteOrderDialog
-          open={deleteOpen}
-          onOpenChange={setDeleteOpen}
-          orders={[{ id: order.id, no: order.salesorder_no }]}
-        />}
-        {canRequestCancel && canEditOrder && <RequestCancelDialog
-          open={requestCancelOpen}
-          onOpenChange={setRequestCancelOpen}
-          order={order}
-        />}
-        {canManualCancel && canEditOrder && <ManualCancelDialog
-          open={manualCancelOpen}
-          onOpenChange={setManualCancelOpen}
-          order={order}
-        />}
+        {canDeleteOrder && (
+          <DeleteOrderDialog
+            open={deleteOpen}
+            onOpenChange={setDeleteOpen}
+            orders={[{ id: order.id, no: order.salesorder_no }]}
+          />
+        )}
+        {canRequestCancel && canEditOrder && (
+          <RequestCancelDialog
+            open={requestCancelOpen}
+            onOpenChange={setRequestCancelOpen}
+            order={order}
+          />
+        )}
+        {canManualCancel && canEditOrder && (
+          <ManualCancelDialog
+            open={manualCancelOpen}
+            onOpenChange={setManualCancelOpen}
+            order={order}
+          />
+        )}
       </>
     );
   }

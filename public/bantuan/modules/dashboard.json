@@ -1,320 +1,302 @@
 {
-    "slug": "dashboard",
-    "name": "Dashboard",
-    "description": "KPI, ringkasan, antrian pekerjaan.",
-    "endpoints_count": 2,
-    "undocumented": 0,
-    "endpoints": [
+  "slug": "dashboard",
+  "name": "Dashboard",
+  "description": "KPI, ringkasan, antrian pekerjaan.",
+  "endpoints_count": 2,
+  "undocumented": 0,
+  "endpoints": [
+    {
+      "id": "api.dashboard.queue",
+      "module_slug": "dashboard",
+      "module_name": "Dashboard",
+      "method": "GET",
+      "path": "/api/v1/dashboard/queues/{queue}",
+      "summary": "Ambil detail queues",
+      "description": "Ambil detail queues.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-dashboard].",
+      "purpose": "Membutuhkan izin: owner, view-dashboard. Mengembalikan data untuk ditampilkan di UI.",
+      "controller": "Modules\\Dashboard\\Http\\Controllers\\DashboardController",
+      "action": "queue",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "view-dashboard"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [
         {
-            "id": "api.dashboard.queue",
-            "module_slug": "dashboard",
-            "module_name": "Dashboard",
-            "method": "GET",
-            "path": "/api/v1/dashboard/queues/{queue}",
-            "summary": "Ambil detail queues",
-            "description": "Ambil detail queues.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-dashboard].",
-            "purpose": "Membutuhkan izin: owner, view-dashboard. Mengembalikan data untuk ditampilkan di UI.",
-            "controller": "Modules\\Dashboard\\Http\\Controllers\\DashboardController",
-            "action": "queue",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "view-dashboard"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [
-                {
-                    "name": "queue",
-                    "type": "string",
-                    "required": true,
-                    "description": "Field queue (tipe string)."
-                }
-            ],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": "mixed"
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Berhasil.",
-                "data": {}
-            },
-            "response_resource": null,
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [
-                {
-                    "name": "source",
-                    "type": "exact",
-                    "column": null,
-                    "scope": null,
-                    "description": "Field source (tipe filter). Cocok persis. Pemakaian: `?filter[source]=value`.",
-                    "usage_example": "?filter[source]=value"
-                },
-                {
-                    "name": "location_id",
-                    "type": "exact",
-                    "column": null,
-                    "scope": null,
-                    "description": "ID lokasi/gudang — referensi ke tabel locations. Cocok persis. Pemakaian: `?filter[location_id]=value`.",
-                    "usage_example": "?filter[location_id]=value"
-                },
-                {
-                    "name": "shipping_provider",
-                    "type": "exact",
-                    "column": null,
-                    "scope": null,
-                    "description": "Nama kurir (mis. JNE, JNT, SiCepat). Wajib bila delivery_method = COURIER. Cocok persis. Pemakaian: `?filter[shipping_provider]=value`.",
-                    "usage_example": "?filter[shipping_provider]=value"
-                },
-                {
-                    "name": "channel_shop_id",
-                    "type": "exact",
-                    "column": null,
-                    "scope": null,
-                    "description": "ID channel shop (referensi ke resource channel shop). Cocok persis. Pemakaian: `?filter[channel_shop_id]=value`.",
-                    "usage_example": "?filter[channel_shop_id]=value"
-                },
-                {
-                    "name": "channel_status",
-                    "type": "callback",
-                    "column": null,
-                    "scope": null,
-                    "description": "Field channel status (tipe filter). Diproses via callback custom di Repository. Nilai valid tergantung logika — lihat kolom enum bila ada.",
-                    "usage_example": "?filter[channel_status]=value"
-                },
-                {
-                    "name": "payment",
-                    "type": "callback",
-                    "column": null,
-                    "scope": null,
-                    "description": "Field payment (tipe filter). Diproses via callback custom di Repository. Nilai valid tergantung logika — lihat kolom enum bila ada.",
-                    "usage_example": "?filter[payment]=value"
-                },
-                {
-                    "name": "courier_type",
-                    "type": "callback",
-                    "column": null,
-                    "scope": null,
-                    "description": "Field courier type (tipe filter). Diproses via callback custom di Repository. Nilai valid tergantung logika — lihat kolom enum bila ada.",
-                    "usage_example": "?filter[courier_type]=value"
-                },
-                {
-                    "name": "label_printed",
-                    "type": "callback",
-                    "column": null,
-                    "scope": null,
-                    "description": "Field label printed (tipe filter). Diproses via callback custom di Repository. Nilai valid tergantung logika — lihat kolom enum bila ada.",
-                    "usage_example": "?filter[label_printed]=value"
-                },
-                {
-                    "name": "date_from",
-                    "type": "callback",
-                    "column": null,
-                    "scope": null,
-                    "description": "Field date from (tipe filter). Diproses via callback custom di Repository. Nilai valid tergantung logika — lihat kolom enum bila ada.",
-                    "usage_example": "?filter[date_from]=value"
-                },
-                {
-                    "name": "date_to",
-                    "type": "callback",
-                    "column": null,
-                    "scope": null,
-                    "description": "Field date to (tipe filter). Diproses via callback custom di Repository. Nilai valid tergantung logika — lihat kolom enum bila ada.",
-                    "usage_example": "?filter[date_to]=value"
-                },
-                {
-                    "name": "exclude_transit",
-                    "type": "callback",
-                    "column": null,
-                    "scope": null,
-                    "description": "Field exclude transit (tipe filter). Diproses via callback custom di Repository. Nilai valid tergantung logika — lihat kolom enum bila ada.",
-                    "usage_example": "?filter[exclude_transit]=value"
-                }
-            ],
-            "allowed_sorts": [
-                "transaction_date",
-                "created_at",
-                "grand_total",
-                "salesorder_no",
-                "status"
-            ],
-            "allowed_search": [
-                "salesorder_no",
-                "channel_order_no",
-                "tracking_number",
-                "shipping_provider",
-                "shipping_type",
-                "completedPicklists.picklist_no"
-            ],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": "-created_at",
-            "related_endpoints": [
-                {
-                    "id": "api.dashboard.summary",
-                    "method": "GET",
-                    "path": "/api/v1/dashboard/summary",
-                    "summary": "Ringkasan summary"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
+          "name": "queue",
+          "type": "string",
+          "required": true,
+          "description": "Field queue (tipe string)."
+        }
+      ],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": "mixed"
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Berhasil.",
+        "data": {}
+      },
+      "response_resource": null,
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
         },
         {
-            "id": "api.dashboard.summary",
-            "module_slug": "dashboard",
-            "module_name": "Dashboard",
-            "method": "GET",
-            "path": "/api/v1/dashboard/summary",
-            "summary": "Ringkasan summary",
-            "description": "Ringkasan summary.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-dashboard].",
-            "purpose": "Membutuhkan izin: owner, view-dashboard. Mengembalikan data untuk ditampilkan di UI.",
-            "controller": "Modules\\Dashboard\\Http\\Controllers\\DashboardController",
-            "action": "summary",
-            "auth": "auth:sanctum",
-            "roles": [
-                "owner",
-                "view-dashboard"
-            ],
-            "rate_limit": null,
-            "deprecated": false,
-            "since_version": null,
-            "form_request": null,
-            "path_params": [],
-            "query_params": [],
-            "body_schema": [],
-            "body_example": [],
-            "validation": [],
-            "response_success_schema": {
-                "success": "boolean",
-                "message": "string",
-                "data": "object|null"
-            },
-            "response_success_example": {
-                "success": true,
-                "message": "Ringkasan dashboard berhasil diambil.",
-                "data": {}
-            },
-            "response_resource": null,
-            "response_errors": [
-                {
-                    "status": 401,
-                    "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
-                    "body": {
-                        "message": "Unauthenticated."
-                    },
-                    "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
-                },
-                {
-                    "status": 403,
-                    "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
-                    "body": {
-                        "message": "This action is unauthorized."
-                    },
-                    "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
-                },
-                {
-                    "status": 422,
-                    "reason": "Validasi payload gagal (aturan FormRequest / validate())",
-                    "body": {
-                        "message": "The given data was invalid.",
-                        "errors": {
-                            "nama_field": [
-                                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
-                            ]
-                        }
-                    },
-                    "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
-                },
-                {
-                    "status": 500,
-                    "reason": "Kesalahan server (exception tak tertangani)",
-                    "body": {
-                        "message": "Server Error"
-                    },
-                    "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
-                }
-            ],
-            "status_codes": [
-                200,
-                401,
-                403,
-                422,
-                500
-            ],
-            "side_effects": [],
-            "allowed_filters": [],
-            "allowed_sorts": [],
-            "allowed_search": [],
-            "allowed_includes": [],
-            "allowed_fields": [],
-            "default_sort": null,
-            "related_endpoints": [
-                {
-                    "id": "api.dashboard.queue",
-                    "method": "GET",
-                    "path": "/api/v1/dashboard/queues/{queue}",
-                    "summary": "Ambil detail queues"
-                }
-            ],
-            "related_page": null,
-            "related_manual": null,
-            "needs_doc": false
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
         }
-    ]
+      ],
+      "status_codes": [200, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [
+        {
+          "name": "source",
+          "type": "exact",
+          "column": null,
+          "scope": null,
+          "description": "Field source (tipe filter). Cocok persis. Pemakaian: `?filter[source]=value`.",
+          "usage_example": "?filter[source]=value"
+        },
+        {
+          "name": "location_id",
+          "type": "exact",
+          "column": null,
+          "scope": null,
+          "description": "ID lokasi/gudang — referensi ke tabel locations. Cocok persis. Pemakaian: `?filter[location_id]=value`.",
+          "usage_example": "?filter[location_id]=value"
+        },
+        {
+          "name": "shipping_provider",
+          "type": "exact",
+          "column": null,
+          "scope": null,
+          "description": "Nama kurir (mis. JNE, JNT, SiCepat). Wajib bila delivery_method = COURIER. Cocok persis. Pemakaian: `?filter[shipping_provider]=value`.",
+          "usage_example": "?filter[shipping_provider]=value"
+        },
+        {
+          "name": "channel_shop_id",
+          "type": "exact",
+          "column": null,
+          "scope": null,
+          "description": "ID channel shop (referensi ke resource channel shop). Cocok persis. Pemakaian: `?filter[channel_shop_id]=value`.",
+          "usage_example": "?filter[channel_shop_id]=value"
+        },
+        {
+          "name": "channel_status",
+          "type": "callback",
+          "column": null,
+          "scope": null,
+          "description": "Field channel status (tipe filter). Diproses via callback custom di Repository. Nilai valid tergantung logika — lihat kolom enum bila ada.",
+          "usage_example": "?filter[channel_status]=value"
+        },
+        {
+          "name": "payment",
+          "type": "callback",
+          "column": null,
+          "scope": null,
+          "description": "Field payment (tipe filter). Diproses via callback custom di Repository. Nilai valid tergantung logika — lihat kolom enum bila ada.",
+          "usage_example": "?filter[payment]=value"
+        },
+        {
+          "name": "courier_type",
+          "type": "callback",
+          "column": null,
+          "scope": null,
+          "description": "Field courier type (tipe filter). Diproses via callback custom di Repository. Nilai valid tergantung logika — lihat kolom enum bila ada.",
+          "usage_example": "?filter[courier_type]=value"
+        },
+        {
+          "name": "label_printed",
+          "type": "callback",
+          "column": null,
+          "scope": null,
+          "description": "Field label printed (tipe filter). Diproses via callback custom di Repository. Nilai valid tergantung logika — lihat kolom enum bila ada.",
+          "usage_example": "?filter[label_printed]=value"
+        },
+        {
+          "name": "date_from",
+          "type": "callback",
+          "column": null,
+          "scope": null,
+          "description": "Field date from (tipe filter). Diproses via callback custom di Repository. Nilai valid tergantung logika — lihat kolom enum bila ada.",
+          "usage_example": "?filter[date_from]=value"
+        },
+        {
+          "name": "date_to",
+          "type": "callback",
+          "column": null,
+          "scope": null,
+          "description": "Field date to (tipe filter). Diproses via callback custom di Repository. Nilai valid tergantung logika — lihat kolom enum bila ada.",
+          "usage_example": "?filter[date_to]=value"
+        },
+        {
+          "name": "exclude_transit",
+          "type": "callback",
+          "column": null,
+          "scope": null,
+          "description": "Field exclude transit (tipe filter). Diproses via callback custom di Repository. Nilai valid tergantung logika — lihat kolom enum bila ada.",
+          "usage_example": "?filter[exclude_transit]=value"
+        }
+      ],
+      "allowed_sorts": [
+        "transaction_date",
+        "created_at",
+        "grand_total",
+        "salesorder_no",
+        "status"
+      ],
+      "allowed_search": [
+        "salesorder_no",
+        "channel_order_no",
+        "tracking_number",
+        "shipping_provider",
+        "shipping_type",
+        "completedPicklists.picklist_no"
+      ],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": "-created_at",
+      "related_endpoints": [
+        {
+          "id": "api.dashboard.summary",
+          "method": "GET",
+          "path": "/api/v1/dashboard/summary",
+          "summary": "Ringkasan summary"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    },
+    {
+      "id": "api.dashboard.summary",
+      "module_slug": "dashboard",
+      "module_name": "Dashboard",
+      "method": "GET",
+      "path": "/api/v1/dashboard/summary",
+      "summary": "Ringkasan summary",
+      "description": "Ringkasan summary.\nResponse: envelope ApiResponse `{success, message, data}` (jika daftar: dengan meta pagination).\nOtorisasi: minimal satu izin dari [owner, view-dashboard].",
+      "purpose": "Membutuhkan izin: owner, view-dashboard. Mengembalikan data untuk ditampilkan di UI.",
+      "controller": "Modules\\Dashboard\\Http\\Controllers\\DashboardController",
+      "action": "summary",
+      "auth": "auth:sanctum",
+      "roles": ["owner", "view-dashboard"],
+      "rate_limit": null,
+      "deprecated": false,
+      "since_version": null,
+      "form_request": null,
+      "path_params": [],
+      "query_params": [],
+      "body_schema": [],
+      "body_example": [],
+      "validation": [],
+      "response_success_schema": {
+        "success": "boolean",
+        "message": "string",
+        "data": "object|null"
+      },
+      "response_success_example": {
+        "success": true,
+        "message": "Ringkasan dashboard berhasil diambil.",
+        "data": {}
+      },
+      "response_resource": null,
+      "response_errors": [
+        {
+          "status": 401,
+          "reason": "Belum terautentikasi (token tidak ada / kedaluwarsa)",
+          "body": {
+            "message": "Unauthenticated."
+          },
+          "terjemahan": "Sesi Anda sudah berakhir. Silakan login ulang."
+        },
+        {
+          "status": 403,
+          "reason": "Hak akses ditolak (permission Spatie tidak terpenuhi)",
+          "body": {
+            "message": "This action is unauthorized."
+          },
+          "terjemahan": "Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi Admin untuk penambahan izin."
+        },
+        {
+          "status": 422,
+          "reason": "Validasi payload gagal (aturan FormRequest / validate())",
+          "body": {
+            "message": "The given data was invalid.",
+            "errors": {
+              "nama_field": [
+                "Pesan validasi per-field (dari FormRequest::messages() atau default Laravel)."
+              ]
+            }
+          },
+          "terjemahan": "Data yang dikirim tidak lolos validasi. Cek key `errors` untuk detail per-field."
+        },
+        {
+          "status": 500,
+          "reason": "Kesalahan server (exception tak tertangani)",
+          "body": {
+            "message": "Server Error"
+          },
+          "terjemahan": "Terjadi kesalahan tak terduga di server. Cek log Laravel & Sentry untuk trace."
+        }
+      ],
+      "status_codes": [200, 401, 403, 422, 500],
+      "side_effects": [],
+      "allowed_filters": [],
+      "allowed_sorts": [],
+      "allowed_search": [],
+      "allowed_includes": [],
+      "allowed_fields": [],
+      "default_sort": null,
+      "related_endpoints": [
+        {
+          "id": "api.dashboard.queue",
+          "method": "GET",
+          "path": "/api/v1/dashboard/queues/{queue}",
+          "summary": "Ambil detail queues"
+        }
+      ],
+      "related_page": null,
+      "related_manual": null,
+      "needs_doc": false
+    }
+  ]
 }

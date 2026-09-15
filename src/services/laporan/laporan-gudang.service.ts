@@ -1,4 +1,9 @@
-import { fetchBlob, fetchBlobPost, fetchBlobRaw, fetchClient } from "@/lib/api-client";
+import {
+  fetchBlob,
+  fetchBlobPost,
+  fetchBlobRaw,
+  fetchClient,
+} from "@/lib/api-client";
 import type { ApiResponse } from "@/types/api.types";
 import type {
   PicklistDetailPdfParams,

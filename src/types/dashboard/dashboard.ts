@@ -15,10 +15,7 @@ export interface DashboardSummary {
 }
 
 export type DashboardIntegrationStatus =
-  | "normal"
-  | "warning"
-  | "error"
-  | "inactive";
+  "normal" | "warning" | "error" | "inactive";
 
 export interface DashboardIntegrationStore {
   id: string;

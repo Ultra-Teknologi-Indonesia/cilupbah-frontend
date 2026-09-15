@@ -443,11 +443,11 @@ export const DownloadService = {
     const res = await fetchClient<ApiResponse<RawDownloadTransaction>>(
       `/${params.channel}/download-product`,
       {
-      method: "POST",
-      data: {
-        shop_id: params.shopId,
-        external_product_id: params.externalProductId,
-      },
+        method: "POST",
+        data: {
+          shop_id: params.shopId,
+          external_product_id: params.externalProductId,
+        },
       },
     );
 

@@ -299,10 +299,12 @@ export function PenyesuaianTab() {
                 disabled={bulkPdfMut.isPending || ids.length === 0}
                 onClick={() => {
                   bulkPdfMut.mutate(ids, {
-                    onSuccess: ({ export_id }) => router.push(
-                      `/dashboard/document-preview/stock-adjustment-bulk-export/${encodeURIComponent(export_id)}`,
-                    ),
-                    onError: (error) => apiError(error, "Gagal memulai export penyesuaian."),
+                    onSuccess: ({ export_id }) =>
+                      router.push(
+                        `/dashboard/document-preview/stock-adjustment-bulk-export/${encodeURIComponent(export_id)}`,
+                      ),
+                    onError: (error) =>
+                      apiError(error, "Gagal memulai export penyesuaian."),
                   });
                 }}
                 title="Cetak dokumen terpilih"

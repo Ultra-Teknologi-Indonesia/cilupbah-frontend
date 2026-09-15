@@ -46,10 +46,7 @@ export function Beranda() {
         title="Dashboard"
         description="Pantau pesanan dan pekerjaan gudang yang perlu ditindak."
         actions={
-          <DashboardControls
-            period={period}
-            onPeriodChange={setPeriod}
-          />
+          <DashboardControls period={period} onPeriodChange={setPeriod} />
         }
       />
 
@@ -59,7 +56,10 @@ export function Beranda() {
         periodLabel={periodLabel}
       />
 
-      <IntegrationStatus overview={summary?.integration} isLoading={isLoading} />
+      <IntegrationStatus
+        overview={summary?.integration}
+        isLoading={isLoading}
+      />
 
       <section className="flex flex-col gap-4">
         <div>

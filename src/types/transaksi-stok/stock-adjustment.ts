@@ -88,9 +88,7 @@ export interface StockAdjustmentPatchData {
   notes?: string | null;
   changes?: {
     create?: StockAdjustmentItemInput[];
-    update?: Array<
-      Omit<StockAdjustmentItemInput, "item_id"> & { id: string }
-    >;
+    update?: Array<Omit<StockAdjustmentItemInput, "item_id"> & { id: string }>;
     delete_ids?: string[];
   };
 }

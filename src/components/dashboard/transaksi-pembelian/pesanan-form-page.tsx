@@ -143,7 +143,9 @@ export function PesananFormPage({ mode, id }: Props) {
   const [items, setItems] = useState<EditablePurchaseOrderItem[]>([]);
   const [pickerOpen, setPickerOpen] = useState(false);
   const initialRef = useRef<{
-    headers: Omit<PurchaseOrderFormData, "items"> & { po_number?: string | null };
+    headers: Omit<PurchaseOrderFormData, "items"> & {
+      po_number?: string | null;
+    };
     items: Map<string, ReturnType<typeof toPatchItem>>;
   } | null>(null);
 
@@ -169,27 +171,29 @@ export function PesananFormPage({ mode, id }: Props) {
     setRefNo(existingPO.ref_no ?? "");
     setPaymentTerm(existingPO.payment_term?.toString() ?? "0");
     setNotes(existingPO.notes ?? "");
-    const hydratedItems: EditablePurchaseOrderItem[] = (existingPO.items ?? []).map((it) => ({
-        id: it.id,
-        received_qty: Number(it.received_qty ?? 0),
-        item_id: it.item_id,
-        product_name: it.product?.name ?? "",
-        product_sku: it.product?.sku ?? "",
-        description: it.description ?? "",
-        unit: it.unit ?? "",
-        qty: it.qty,
-        unit_price: Number(it.unit_price),
-        disc: Number(it.disc),
-        disc_amount: Number(it.disc_amount ?? 0),
-        shipping_cost: Number(it.shipping_cost ?? 0),
-        thumbnail:
-          it.variant?.media?.[0]?.url ??
-          (it.variant as { thumbnail?: string | null })?.thumbnail ??
-          it.product?.media?.[0]?.url ??
-          it.product?.image_url ??
-          null,
-        variant_label: it.variant?.options?.map((o) => o.value).join(", "),
-      }));
+    const hydratedItems: EditablePurchaseOrderItem[] = (
+      existingPO.items ?? []
+    ).map((it) => ({
+      id: it.id,
+      received_qty: Number(it.received_qty ?? 0),
+      item_id: it.item_id,
+      product_name: it.product?.name ?? "",
+      product_sku: it.product?.sku ?? "",
+      description: it.description ?? "",
+      unit: it.unit ?? "",
+      qty: it.qty,
+      unit_price: Number(it.unit_price),
+      disc: Number(it.disc),
+      disc_amount: Number(it.disc_amount ?? 0),
+      shipping_cost: Number(it.shipping_cost ?? 0),
+      thumbnail:
+        it.variant?.media?.[0]?.url ??
+        (it.variant as { thumbnail?: string | null })?.thumbnail ??
+        it.product?.media?.[0]?.url ??
+        it.product?.image_url ??
+        null,
+      variant_label: it.variant?.options?.map((o) => o.value).join(", "),
+    }));
     setItems(hydratedItems);
     initialRef.current = {
       headers: {
@@ -358,21 +362,22 @@ export function PesananFormPage({ mode, id }: Props) {
       };
       const headerChanges: Omit<PurchaseOrderPatchData, "changes"> = {};
       for (const [key, value] of Object.entries(currentHeaders)) {
-        const initialValue = initial.headers[key as keyof typeof initial.headers] ?? null;
+        const initialValue =
+          initial.headers[key as keyof typeof initial.headers] ?? null;
         if (value !== initialValue) {
           Object.assign(headerChanges, { [key]: value });
         }
       }
 
       const currentExistingIds = new Set(
-        validItems.map((item) => item.id).filter((itemId): itemId is string => Boolean(itemId)),
+        validItems
+          .map((item) => item.id)
+          .filter((itemId): itemId is string => Boolean(itemId)),
       );
       const deleteIds = Array.from(initial.items.keys()).filter(
         (itemId) => !currentExistingIds.has(itemId),
       );
-      const creates = validItems
-        .filter((item) => !item.id)
-        .map(toPatchItem);
+      const creates = validItems.filter((item) => !item.id).map(toPatchItem);
       const updates: PurchaseOrderPatchUpdate[] = validItems.flatMap((item) => {
         if (!item.id) return [];
         const previous = initial.items.get(item.id);

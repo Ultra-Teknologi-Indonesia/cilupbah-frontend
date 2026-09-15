@@ -311,7 +311,9 @@ export function StockedProductPickerDialog({
                               </span>
                             </div>
                             <span className="shrink-0 text-xs text-muted-foreground">
-                              {g.isBundle ? "Bundle" : `${g.variants.length} varian`}
+                              {g.isBundle
+                                ? "Bundle"
+                                : `${g.variants.length} varian`}
                             </span>
                           </div>
                         </TableCell>
@@ -350,7 +352,9 @@ export function StockedProductPickerDialog({
                                   )}
                                 </div>
                                 <span className="text-sm font-medium">
-                                  {v.is_bundle ? "Bundle" : v.variant_label || "Default"}
+                                  {v.is_bundle
+                                    ? "Bundle"
+                                    : v.variant_label || "Default"}
                                 </span>
                               </div>
                             </TableCell>

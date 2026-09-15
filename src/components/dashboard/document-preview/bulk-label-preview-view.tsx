@@ -319,11 +319,7 @@ export function BulkLabelPreviewView({ batchId }: { batchId: string }) {
                 variant="outline"
                 className="rounded-full"
               >
-                <a
-                  href={pdfUrl!}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href={pdfUrl!} target="_blank" rel="noopener noreferrer">
                   <ExternalLinkIcon className="size-4" />
                   Buka
                 </a>

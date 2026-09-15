@@ -170,16 +170,18 @@ function TabBulkActions({
   if (tab === "in-transit") {
     return (
       <>
-        {canExportShipping && <Button
-          variant="outline"
-          size="sm"
-          className="h-8 gap-1.5 text-xs"
-          disabled={selectedLabelInputs.length === 0}
-          onClick={() => DocActions.shippingLabel(selectedLabelInputs)}
-        >
-          <PrinterIcon className="size-3.5" />
-          Cetak Resi
-        </Button>}
+        {canExportShipping && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 gap-1.5 text-xs"
+            disabled={selectedLabelInputs.length === 0}
+            onClick={() => DocActions.shippingLabel(selectedLabelInputs)}
+          >
+            <PrinterIcon className="size-3.5" />
+            Cetak Resi
+          </Button>
+        )}
         {canEdit && (
           <Button
             size="sm"

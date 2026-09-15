@@ -145,18 +145,19 @@ export function PreManifestCancelTable() {
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title="No. Pesanan" />
         ),
-        cell: ({ row }) => canEditShipping ? (
-          <div className="flex flex-col gap-0.5">
-            <span className="font-medium text-foreground">
-              {row.original.salesorderNo}
-            </span>
-            {row.original.channelOrderNo && (
-              <span className="text-2xs text-muted-foreground">
-                {row.original.channelOrderNo}
+        cell: ({ row }) =>
+          canEditShipping ? (
+            <div className="flex flex-col gap-0.5">
+              <span className="font-medium text-foreground">
+                {row.original.salesorderNo}
               </span>
-            )}
-          </div>
-        ) : null,
+              {row.original.channelOrderNo && (
+                <span className="text-2xs text-muted-foreground">
+                  {row.original.channelOrderNo}
+                </span>
+              )}
+            </div>
+          ) : null,
       },
       {
         id: "source",
@@ -345,31 +346,35 @@ export function PreManifestCancelTable() {
         />
       </div>
 
-      {canEditShipping && <ConfirmDialog
-        open={!!dismissTarget}
-        onOpenChange={(o) => {
-          if (!o) setDismissTarget(null);
-        }}
-        title="Konfirmasi Pemisahan"
-        description={`Paket ${dismissTarget?.salesorderNo ?? ""} sudah dipisahkan dari tumpukan dan tidak akan terkirim ke kurir?`}
-        confirmLabel="Ya, Sudah Dipisahkan"
-        variant="default"
-        loading={dismiss.isPending}
-        onConfirm={handleDismissConfirm}
-      />}
+      {canEditShipping && (
+        <ConfirmDialog
+          open={!!dismissTarget}
+          onOpenChange={(o) => {
+            if (!o) setDismissTarget(null);
+          }}
+          title="Konfirmasi Pemisahan"
+          description={`Paket ${dismissTarget?.salesorderNo ?? ""} sudah dipisahkan dari tumpukan dan tidak akan terkirim ke kurir?`}
+          confirmLabel="Ya, Sudah Dipisahkan"
+          variant="default"
+          loading={dismiss.isPending}
+          onConfirm={handleDismissConfirm}
+        />
+      )}
 
-      {canEditShipping && <ConfirmDialog
-        open={!!undismissTarget}
-        onOpenChange={(o) => {
-          if (!o) setUndismissTarget(null);
-        }}
-        title="Batalkan Pemisahan"
-        description={`Kembalikan ${undismissTarget?.salesorderNo ?? ""} ke daftar pesanan yang perlu dipisahkan?`}
-        confirmLabel="Kembalikan"
-        variant="destructive"
-        loading={undismiss.isPending}
-        onConfirm={handleUndismissConfirm}
-      />}
+      {canEditShipping && (
+        <ConfirmDialog
+          open={!!undismissTarget}
+          onOpenChange={(o) => {
+            if (!o) setUndismissTarget(null);
+          }}
+          title="Batalkan Pemisahan"
+          description={`Kembalikan ${undismissTarget?.salesorderNo ?? ""} ke daftar pesanan yang perlu dipisahkan?`}
+          confirmLabel="Kembalikan"
+          variant="destructive"
+          loading={undismiss.isPending}
+          onConfirm={handleUndismissConfirm}
+        />
+      )}
     </div>
   );
 }

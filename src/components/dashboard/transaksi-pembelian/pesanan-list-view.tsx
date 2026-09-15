@@ -118,9 +118,7 @@ export function PesananListView() {
       page,
       per_page: perPage,
       "filter[location_id]": filters.location_id || undefined,
-      sort: sort
-        ? `${sort.desc ? "-" : ""}${sort.id}`
-        : undefined,
+      sort: sort ? `${sort.desc ? "-" : ""}${sort.id}` : undefined,
     };
 
     if (filters.date_from) p["filter[date_from]"] = filters.date_from;
@@ -195,7 +193,10 @@ export function PesananListView() {
       {
         accessorKey: "order_date",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Tgl. Pesanan / Dibuat" />
+          <DataTableColumnHeader
+            column={column}
+            title="Tgl. Pesanan / Dibuat"
+          />
         ),
         enableSorting: true,
         cell: ({ row }) => (

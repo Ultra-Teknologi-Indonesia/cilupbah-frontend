@@ -41,9 +41,7 @@ export interface StockItem {
   stock_this: boolean;
   average_cost: string | number;
   average_cost_source:
-    | "purchase_weighted_average"
-    | "positive_inventory_fallback"
-    | "unavailable";
+    "purchase_weighted_average" | "positive_inventory_fallback" | "unavailable";
   location_stocks: LocationStock[];
   total_stocks: TotalStocks;
   thumbnail: string | null;

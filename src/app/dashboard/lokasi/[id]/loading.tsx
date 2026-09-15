@@ -1,6 +1,9 @@
 "use client";
 
-import { DetailSkeleton, PageHeaderSkeleton } from "@/components/ui/page-skeleton";
+import {
+  DetailSkeleton,
+  PageHeaderSkeleton,
+} from "@/components/ui/page-skeleton";
 
 export default function Loading() {
   return (

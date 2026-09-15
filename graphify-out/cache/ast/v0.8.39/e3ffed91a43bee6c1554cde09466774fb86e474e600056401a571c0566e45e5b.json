@@ -1,1 +1,31 @@
-{"nodes": [{"id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_claude_md", "label": "CLAUDE.md", "file_type": "document", "source_file": "CLAUDE.md", "source_location": "L1"}, {"id": "cilupbah_fe_claude_bahasa_visual_wajib_untuk_kode_ui", "label": "Bahasa visual (wajib untuk kode UI)", "file_type": "document", "source_file": "CLAUDE.md", "source_location": "L3"}], "edges": [{"source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_claude_md", "target": "cilupbah_fe_claude_bahasa_visual_wajib_untuk_kode_ui", "relation": "contains", "confidence": "EXTRACTED", "source_file": "CLAUDE.md", "source_location": "L3", "weight": 1.0}], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_claude_md",
+      "label": "CLAUDE.md",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "cilupbah_fe_claude_bahasa_visual_wajib_untuk_kode_ui",
+      "label": "Bahasa visual (wajib untuk kode UI)",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L3"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_darrielmarkerizal_coding_cilupbah_superapp_cilupbah_fe_claude_md",
+      "target": "cilupbah_fe_claude_bahasa_visual_wajib_untuk_kode_ui",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}
