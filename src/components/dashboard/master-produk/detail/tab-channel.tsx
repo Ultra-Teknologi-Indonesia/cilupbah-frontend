@@ -620,154 +620,186 @@ export function TabChannel({ productId }: { productId: string }) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {tableRows.map((item, idx) => (
-                  <TableRow
-                    key={item.listing.variantChannelMappingId ?? idx}
-                    className="hover:bg-muted/30 transition-colors"
-                  >
-                    <TableCell className="text-center">
-                      <Checkbox
-                        checked={
-                          item.listing.variantChannelMappingId
-                            ? selectedMappingIds.includes(
-                                item.listing.variantChannelMappingId,
-                              )
-                            : false
-                        }
-                        onCheckedChange={() =>
-                          item.listing.variantChannelMappingId &&
-                          handleToggleSelectRow(
-                            item.listing.variantChannelMappingId,
-                          )
-                        }
-                        disabled={!item.listing.variantChannelMappingId}
-                      />
-                    </TableCell>
-                    {/* SKU & Options */}
-                    <TableCell>
-                      <div className="flex flex-col">
-                        <span className="font-mono text-xs font-semibold text-primary">
-                          {item.sku}
-                        </span>
-                        {item.options.length > 0 && (
-                          <span className="text-2xs text-muted-foreground">
-                            {item.options.map((o) => o.value).join(" / ")}
-                          </span>
-                        )}
-                      </div>
-                    </TableCell>
+                {rows
+                  .filter((row) => row.listings.length > 0)
+                  .map((row, rowIdx) => {
+                    const rowIds = row.listings
+                      .map((l) => l.variantChannelMappingId)
+                      .filter(Boolean) as string[];
+                    const allSelected =
+                      rowIds.length > 0 &&
+                      rowIds.every((id) => selectedMappingIds.includes(id));
+                    const someSelected =
+                      rowIds.some((id) => selectedMappingIds.includes(id)) &&
+                      !allSelected;
 
-                    {/* Channel & Shop Name */}
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <ChannelLogo
-                          code={item.listing.channelCode as ChannelCode}
-                          name={
-                            item.listing.channelName ??
-                            item.listing.channelCode ??
-                            "Channel"
-                          }
-                          className="size-5 shrink-0 text-2xs"
-                        />
-                        <div className="flex flex-col min-w-0">
-                          <span
-                            className="truncate text-xs font-medium text-foreground"
-                            title={item.listing.shopName ?? undefined}
+                    return (
+                      <React.Fragment key={row.variantId ?? rowIdx}>
+                        {row.listings.map((listing, lIdx) => (
+                          <TableRow
+                            key={listing.variantChannelMappingId ?? lIdx}
+                            className="hover:bg-muted/30 transition-colors"
                           >
-                            {item.listing.shopName ?? "Toko Marketplace"}
-                          </span>
-                          <span className="text-2xs text-muted-foreground capitalize">
-                            {item.listing.channelName ??
-                              item.listing.channelCode}
-                          </span>
-                        </div>
-                      </div>
-                    </TableCell>
+                            {lIdx === 0 && (
+                              <>
+                                <TableCell
+                                  rowSpan={row.listings.length}
+                                  className="text-center align-top pt-4 border-r border-border/40"
+                                >
+                                  <Checkbox
+                                    checked={
+                                      allSelected
+                                        ? true
+                                        : someSelected
+                                          ? "indeterminate"
+                                          : false
+                                    }
+                                    onCheckedChange={() => {
+                                      if (allSelected) {
+                                        setSelectedMappingIds((prev) =>
+                                          prev.filter((id) => !rowIds.includes(id)),
+                                        );
+                                      } else {
+                                        setSelectedMappingIds((prev) =>
+                                          Array.from(new Set([...prev, ...rowIds])),
+                                        );
+                                      }
+                                    }}
+                                    disabled={rowIds.length === 0}
+                                  />
+                                </TableCell>
+                                {/* SKU & Options */}
+                                <TableCell
+                                  rowSpan={row.listings.length}
+                                  className="align-top pt-4 border-r border-border/40"
+                                >
+                                  <div className="flex flex-col">
+                                    <span className="font-mono text-xs font-semibold text-primary">
+                                      {row.sku}
+                                    </span>
+                                    {row.options.length > 0 && (
+                                      <span className="text-2xs text-muted-foreground mt-1">
+                                        {row.options.map((o) => o.value).join(" / ")}
+                                      </span>
+                                    )}
+                                  </div>
+                                </TableCell>
+                              </>
+                            )}
 
-                    {/* ID Marketplace */}
-                    <TableCell>
-                      {item.listing.externalProductId ? (
-                        <CopyableId
-                          value={item.listing.externalProductId}
-                          label="ID Marketplace"
-                        />
-                      ) : (
-                        <span className="text-2xs text-muted-foreground">
-                          —
-                        </span>
-                      )}
-                    </TableCell>
+                            {/* Channel & Shop Name */}
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                <ChannelLogo
+                                  code={listing.channelCode as ChannelCode}
+                                  name={
+                                    listing.channelName ??
+                                    listing.channelCode ??
+                                    "Channel"
+                                  }
+                                  className="size-5 shrink-0 text-2xs"
+                                />
+                                <div className="flex flex-col min-w-0">
+                                  <span
+                                    className="truncate text-xs font-medium text-foreground"
+                                    title={listing.shopName ?? undefined}
+                                  >
+                                    {listing.shopName ?? "Toko tidak diketahui"}
+                                  </span>
+                                  <span className="text-2xs text-muted-foreground capitalize">
+                                    {listing.channelName ?? listing.channelCode}
+                                  </span>
+                                </div>
+                              </div>
+                            </TableCell>
 
-                    {/* Direct URL */}
-                    <TableCell>
-                      {item.listing.channelUrl ? (
-                        <Button
-                          asChild
-                          variant="outline"
-                          size="xs"
-                          className="h-7 text-xs font-normal gap-1.5 text-primary border-primary/20 hover:bg-primary/5"
-                        >
-                          <a
-                            href={item.listing.channelUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title={item.listing.channelUrl ?? undefined}
-                          >
-                            <span>Buka Toko</span>
-                            <ExternalLinkIcon className="size-3" />
-                          </a>
-                        </Button>
-                      ) : (
-                        <span className="text-2xs text-muted-foreground font-mono">
-                          —
-                        </span>
-                      )}
-                    </TableCell>
+                            {/* ID Marketplace */}
+                            <TableCell>
+                              {listing.externalProductId ? (
+                                <CopyableId
+                                  value={listing.externalProductId}
+                                  label="ID Marketplace"
+                                />
+                              ) : (
+                                <span className="text-2xs text-muted-foreground">
+                                  —
+                                </span>
+                              )}
+                            </TableCell>
 
-                    {/* Status Badge */}
-                    <TableCell>
-                      <SyncStatusBadge
-                        status={item.listing.syncStatus}
-                        reason={item.listing.errorMessage}
-                      />
-                    </TableCell>
+                            {/* Direct URL */}
+                            <TableCell>
+                              {listing.channelUrl ? (
+                                <Button
+                                  asChild
+                                  variant="outline"
+                                  size="xs"
+                                  className="h-7 text-xs font-normal gap-1.5 text-primary border-primary/20 hover:bg-primary/5"
+                                >
+                                  <a
+                                    href={listing.channelUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    title={listing.channelUrl ?? undefined}
+                                  >
+                                    <span>Buka Toko</span>
+                                    <ExternalLinkIcon className="size-3" />
+                                  </a>
+                                </Button>
+                              ) : (
+                                <span className="text-2xs text-muted-foreground font-mono">
+                                  —
+                                </span>
+                              )}
+                            </TableCell>
 
-                    {/* Actions: Re-sync & Unlink */}
-                    <TableCell className="text-right">
-                      <div className="inline-flex items-center justify-end gap-1">
-                        {item.listing.productChannelMappingId && (
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
+                            {/* Status Badge */}
+                            <TableCell>
+                              <SyncStatusBadge
+                                status={listing.syncStatus}
+                                reason={listing.errorMessage}
+                              />
+                            </TableCell>
+
+                            {/* Actions: Re-sync & Unlink */}
+                            <TableCell className="text-right">
+                              <div className="inline-flex items-center justify-end gap-1">
+                                {listing.productChannelMappingId && (
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <Button
+                                          variant="ghost"
+                                          size="icon-xs"
+                                          className="text-muted-foreground hover:text-primary"
+                                          onClick={() => handleResync(listing)}
+                                        >
+                                          <RefreshCwIcon className="size-3.5" />
+                                        </Button>
+                                      </TooltipTrigger>
+                                      <TooltipContent>Sinkronkan Ulang</TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
+                                )}
+
                                 <Button
                                   variant="ghost"
-                                  size="icon-xs"
-                                  className="text-muted-foreground hover:text-primary"
-                                  onClick={() => handleResync(item.listing)}
+                                  size="xs"
+                                  className="h-7 px-2 text-destructive hover:bg-destructive/10 hover:text-destructive gap-1 text-2xs font-medium"
+                                  onClick={() =>
+                                    handleOpenUnlink(listing, row.sku)
+                                  }
                                 >
-                                  <RefreshCwIcon className="size-3.5" />
+                                  <Trash2Icon className="size-3" />
+                                  <span>Hapus Link</span>
                                 </Button>
-                              </TooltipTrigger>
-                              <TooltipContent>Sinkronkan Ulang</TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        )}
-
-                        <Button
-                          variant="ghost"
-                          size="xs"
-                          className="h-7 px-2 text-destructive hover:bg-destructive/10 hover:text-destructive gap-1 text-2xs font-medium"
-                          onClick={() =>
-                            handleOpenUnlink(item.listing, item.sku)
-                          }
-                        >
-                          <Trash2Icon className="size-3" />
-                          <span>Hapus Link</span>
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </React.Fragment>
+                    );
+                  })}
               </TableBody>
             </Table>
           </div>
