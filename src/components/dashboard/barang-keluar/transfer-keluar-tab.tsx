@@ -797,9 +797,9 @@ export function TransferKeluarTab() {
         onOpenChange={(open) => {
           if (!open) setDeleteTarget(null);
         }}
-        title="Hapus Transfer"
-        description={`Hapus transfer ${deleteTarget?.transfer_number ?? ""}? Aktivitas stok yang dibuat oleh transfer ini akan dibersihkan dan saldo dikembalikan ke kondisi sebelum transfer. Aksi ini tidak bisa dibatalkan.`}
-        confirmLabel="Hapus"
+        title="Batalkan Transfer"
+        description={`Batalkan transfer ${deleteTarget?.transfer_number ?? ""}? Aktivitas stok akan dibersihkan, saldo dikembalikan ke kondisi awal, dan dokumen di-reset ke status Draft.`}
+        confirmLabel="Batalkan & Reset"
         variant="destructive"
         loading={deleteMutation.isPending}
         onConfirm={() => {
@@ -813,9 +813,9 @@ export function TransferKeluarTab() {
       <ConfirmDialog
         open={!!bulkDeleteState}
         onOpenChange={(v) => !v && setBulkDeleteState(null)}
-        title="Hapus Transfer Terpilih"
-        description={`Hapus ${bulkDeleteState?.ids.length ?? 0} transfer? Aktivitas stok yang dibuat oleh transfer ini akan dibersihkan dan saldo dikembalikan ke kondisi sebelum transfer. Aksi ini tidak bisa dibatalkan.`}
-        confirmLabel="Hapus"
+        title="Batalkan Transfer Terpilih"
+        description={`Batalkan ${bulkDeleteState?.ids.length ?? 0} transfer? Aktivitas stok akan dibersihkan, saldo dikembalikan ke kondisi awal, dan dokumen di-reset ke status Draft.`}
+        confirmLabel="Batalkan & Reset"
         variant="destructive"
         loading={bulkDeleteMutation.isPending}
         onConfirm={() => {

@@ -328,9 +328,9 @@ export function TransferOutDetailView({ transferId }: { transferId: string }) {
       <ConfirmDialog
         open={deleteOpen}
         onOpenChange={setDeleteOpen}
-        title="Hapus Transfer"
-        description={`Hapus transfer ${transfer.transfer_number}? Aktivitas stok yang dibuat oleh transfer ini akan dibersihkan dan saldo dikembalikan ke kondisi sebelum transfer. Aksi ini tidak bisa dibatalkan.`}
-        confirmLabel="Hapus"
+        title="Batalkan Transfer"
+        description={`Batalkan transfer ${transfer.transfer_number}? Aktivitas stok akan dibersihkan, saldo dikembalikan ke kondisi awal, dan dokumen di-reset ke status Draft.`}
+        confirmLabel="Batalkan & Reset"
         variant="destructive"
         loading={deleteMutation.isPending}
         onConfirm={() => {

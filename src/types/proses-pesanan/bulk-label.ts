@@ -1,5 +1,11 @@
 export type BulkLabelBatchStatus = "processing" | "ready" | "failed";
 
+export type BulkLabelArchiveStatus =
+  | "pending"
+  | "processing"
+  | "archived"
+  | "failed";
+
 export type BulkLabelItemStatus =
   | "pending"
   | "downloading"
@@ -42,6 +48,9 @@ export interface BulkLabelBatch {
   retryable_count?: number;
   started_at: string | null;
   finished_at: string | null;
+  /** Local print spool is served immediately; archive runs asynchronously. */
+  archive_status?: BulkLabelArchiveStatus | null;
+  archived_at?: string | null;
   items: BulkLabelBatchItem[];
   pdf_url: string | null;
 }
