@@ -623,8 +623,8 @@ export function TransferKeluarTab() {
           variant="ghost"
           size="icon-sm"
           onClick={() => setDeleteTarget(item)}
-          aria-label="Hapus transfer & kembalikan stok ke gudang asal"
-          title="Hapus transfer & kembalikan stok ke gudang asal"
+          aria-label="Batalkan & reset ke draft (kembalikan stok ke gudang asal)"
+          title="Batalkan & reset ke draft (kembalikan stok ke gudang asal)"
           className="text-destructive hover:bg-destructive/10 hover:text-destructive"
         >
           <Trash2Icon className="size-3.5" />
