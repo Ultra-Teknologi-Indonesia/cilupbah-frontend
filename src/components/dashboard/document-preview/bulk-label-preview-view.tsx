@@ -185,11 +185,11 @@ export function BulkLabelPreviewView({ batchId }: { batchId: string }) {
         return;
       }
 
-      const res = await OutboundService.retryFailedBulkShippingLabels(batchId);
-      toast.success("Berhasil membuat batch retry untuk item gagal.");
-      router.replace(
-        `/dashboard/document-preview/shipping-label-bulk-async/${res.batch_id}`,
-      );
+      await OutboundService.retryFailedBulkShippingLabels(batchId);
+      toast.success("Mencoba ulang pesanan yang gagal...");
+      setPdfUrl(null);
+      setPdfError(null);
+      await refetch();
     } catch (err) {
       apiError(err, "Gagal mencoba ulang.");
     } finally {

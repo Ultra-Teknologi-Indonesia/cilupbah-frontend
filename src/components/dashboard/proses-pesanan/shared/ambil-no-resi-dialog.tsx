@@ -222,10 +222,9 @@ export function AmbilNoResiDialog({
         return;
       }
 
-      const res =
-        await OutboundService.retryFailedBulkShippingLabels(activeBatchId);
-      toast.success("Berhasil membuat batch coba lagi.");
-      setActiveBatchId(res.batch_id);
+      await OutboundService.retryFailedBulkShippingLabels(activeBatchId);
+      toast.success("Mencoba ulang pesanan yang gagal...");
+      await refetch();
     } catch (err) {
       apiError(err, "Gagal mencoba ulang penarikan resi.");
     } finally {
