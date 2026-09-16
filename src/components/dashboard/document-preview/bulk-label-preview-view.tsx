@@ -106,8 +106,8 @@ function ItemRow({ item }: { item: BulkLabelBatchItem }) {
             <Loader2 className="size-3 animate-spin" />
             <span>
               {item.status === "waiting_awb"
-                ? "Menarik dari marketplace…"
-                : "Mengambil…"}
+                ? "Menunggu resi dari marketplace…"
+                : "Menunggu pembuatan label…"}
             </span>
           </div>
         ) : (

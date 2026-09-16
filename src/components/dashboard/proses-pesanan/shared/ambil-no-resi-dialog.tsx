@@ -110,7 +110,9 @@ function ItemRow({ item }: { item: BulkLabelBatchItem }) {
           <div className="flex items-center gap-1.5 text-xs text-primary">
             <Loader2 className="size-3.5 animate-spin" />
             <span className="text-[11px] font-medium">
-              {item.status === "waiting_awb" ? "Menarik resi…" : "Mengambil…"}
+              {item.status === "waiting_awb"
+                ? "Menunggu resi dari marketplace…"
+                : "Menunggu pembuatan label…"}
             </span>
           </div>
         ) : (
