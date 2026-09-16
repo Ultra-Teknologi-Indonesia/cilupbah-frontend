@@ -267,7 +267,7 @@ export function PermintaanRestockView() {
         </div>
       </LiquidGlass>
 
-      {data && data.meta.total > 0 && (
+      {data?.meta && data.meta.total > 0 && (
         <SimplePagination
           page={data.meta.current_page}
           lastPage={data.meta.last_page}

@@ -22,15 +22,25 @@ interface ListResponse {
 }
 
 export const StockReplenishmentService = {
-  list: async (params: StockReplenishmentListParams = {}) => {
-    const res = await fetchClient<ApiResponse<ListResponse>>(
+  list: async (
+    params: StockReplenishmentListParams = {},
+  ): Promise<ListResponse> => {
+    const res = await fetchClient<ApiPaginated<StockReplenishment>>(
       "/inventory/stock-replenishment",
       {
         method: "GET",
         params: params as Record<string, string | number | undefined>,
       },
     );
-    return res.data;
+    return {
+      items: res.data ?? [],
+      meta: res.meta ?? {
+        current_page: 1,
+        last_page: 1,
+        per_page: 20,
+        total: 0,
+      },
+    };
   },
 
   detail: async (id: string) => {

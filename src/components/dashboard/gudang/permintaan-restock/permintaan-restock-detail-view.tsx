@@ -449,7 +449,7 @@ export function PermintaanRestockDetailView({ id }: Props) {
             </TableBody>
           </Table>
         </div>
-        {itemData && itemData.meta.total > 0 && (
+        {itemData?.meta && itemData.meta.total > 0 && (
           <div className="px-5 pb-4">
             <SimplePagination
               page={itemData.meta.current_page}
