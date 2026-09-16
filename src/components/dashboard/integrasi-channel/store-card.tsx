@@ -11,17 +11,9 @@ import type { ConnectedStore } from "@/types/channel";
 import { ChannelLogo } from "./channel-logo";
 import { StoreRowActions } from "./store-row-actions";
 
-const NOTE_STYLE: Record<string, string> = {
-  normal: "text-muted-foreground",
-  pending: "text-warning",
-  problem: "text-destructive",
-  nonaktif: "text-muted-foreground",
-};
-
 export function StoreCard({
   store,
   onToggleActive,
-  onToggleShadow,
   onOpenSync,
   onRefresh,
   onReauth,
@@ -29,7 +21,6 @@ export function StoreCard({
 }: {
   store: ConnectedStore;
   onToggleActive: (id: string, value: boolean) => void;
-  onToggleShadow: (id: string, value: boolean) => void;
   onOpenSync: (store: ConnectedStore) => void;
   onRefresh: (store: ConnectedStore) => void;
   onReauth: (store: ConnectedStore) => void;
@@ -42,6 +33,7 @@ export function StoreCard({
     store.catalogPullEnabled,
     store.catalogPushEnabled,
     store.stockPushEnabled,
+    store.pricePushEnabled,
   ].filter(Boolean).length;
   const status = store.orderSync.status;
   const needsReauth =
@@ -158,21 +150,8 @@ export function StoreCard({
           >
             <SlidersHorizontal className="size-3.5" />
             Sinkronisasi
-            <span className="text-foreground">{activeAxes}/4</span>
+            <span className="text-foreground">{activeAxes}/5</span>
           </Button>
-          <div className="flex items-center gap-2">
-            <Switch
-              checked={store.isShadowMode}
-              onCheckedChange={(v) => onToggleShadow(store.id, v)}
-              aria-label={`Shadow mode ${store.shopName}`}
-            />
-            <span
-              className="text-xs text-muted-foreground"
-              title="Mode simulasi: tarik order tanpa potong stok"
-            >
-              Shadow Mode
-            </span>
-          </div>
         </div>
       )}
     </div>

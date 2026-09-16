@@ -38,6 +38,7 @@ export interface ConnectedStore {
   catalogPullEnabled: boolean;
   catalogPushEnabled: boolean;
   stockPushEnabled: boolean;
+  pricePushEnabled: boolean;
   fulfillmentPushEnabled: boolean;
   handoverMethod: HandoverMethod;
   integration: StoreIntegration;
@@ -55,6 +56,7 @@ export interface StoreFlags {
   catalog_pull_enabled?: boolean;
   catalog_push_enabled?: boolean;
   stock_push_enabled?: boolean;
+  price_push_enabled?: boolean;
   fulfillment_push_enabled?: boolean;
   handover_method?: HandoverMethod;
   stock_source_mode?: StockSourceMode;
@@ -87,6 +89,7 @@ export interface RawConnectedStore {
   shadow_started_at: string | null;
   shadow_last_pulled_at: string | null;
   stock_push_enabled: boolean;
+  price_push_enabled: boolean;
   stock_push_buffer: number;
   stock_handover_at: string | null;
   fulfillment_push_enabled: boolean;

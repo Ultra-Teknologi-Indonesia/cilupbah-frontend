@@ -36,9 +36,15 @@ const AXES: {
   },
   {
     key: "stock_push_enabled",
-    label: "Kirim stok & harga",
-    hint: "Menimpa stok dan harga yang tayang di marketplace.",
+    label: "Kirim stok",
+    hint: "Memperbarui jumlah stok yang tayang di marketplace.",
     value: (s) => s.stockPushEnabled,
+  },
+  {
+    key: "price_push_enabled",
+    label: "Kirim harga",
+    hint: "Memperbarui harga yang tayang di marketplace.",
+    value: (s) => s.pricePushEnabled,
   },
   {
     key: "fulfillment_push_enabled",
@@ -96,13 +102,6 @@ export function StoreSyncDialog({
           ))}
         </div>
 
-        {store.isShadowMode && (
-          <p className="text-xs text-warning">
-            Toko ini sedang Shadow Mode. Selama itu aktif, kirim katalog dan
-            kirim stok tetap dipaksa mati supaya sistem ini tidak menulis apa
-            pun ke marketplace.
-          </p>
-        )}
       </DialogContent>
     </Dialog>
   );

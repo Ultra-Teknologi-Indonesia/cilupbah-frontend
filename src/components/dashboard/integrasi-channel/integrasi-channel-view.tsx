@@ -82,8 +82,6 @@ export function IntegrasiChannelView() {
 
   const onToggleActive = (id: string, value: boolean) =>
     toggle.mutate({ id, flags: { is_active: value } });
-  const onToggleShadow = (id: string, value: boolean) =>
-    toggle.mutate({ id, flags: { is_shadow_mode: value } });
   const onSyncFlagsChange = (id: string, flags: StoreFlags) =>
     toggle.mutate({ id, flags });
   const onOpenSync = (store: ConnectedStore) => setSyncStore(store);
@@ -139,7 +137,6 @@ export function IntegrasiChannelView() {
           onAdd={onAdd}
           onToggleActive={onToggleActive}
           onOpenSync={onOpenSync}
-          onToggleShadow={onToggleShadow}
           onRefresh={onRefresh}
           onReauth={onReauth}
           onDisconnect={onDisconnect}
