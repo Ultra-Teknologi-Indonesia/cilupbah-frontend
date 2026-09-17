@@ -849,8 +849,12 @@ function isBarcodePaper(
   value: string | null | undefined,
 ): value is BarcodePaper {
   return (
+    value === "thermal_50x50" ||
+    value === "thermal_30x40" ||
     value === "thermal_50x40" ||
     value === "thermal_80x40" ||
+    value === "thermal_40x30" ||
+    value === "thermal_30x20" ||
     value === "a4_single" ||
     value === "a4_multi"
   );

@@ -88,7 +88,8 @@ export function BarcodeReportDialog({
         <DialogHeader>
           <DialogTitle>Cetak Barcode Barang</DialogTitle>
           <DialogDescription>
-            Pilih produk dan format harga, lalu cetak label QR.
+            Pilih SKU dan format label. Alokasi rak Gudang Kecil akan dicetak
+            otomatis jika SKU sudah memiliki rak.
           </DialogDescription>
         </DialogHeader>
 
