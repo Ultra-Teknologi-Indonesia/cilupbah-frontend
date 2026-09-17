@@ -28,7 +28,7 @@ export const PasswordInput = React.forwardRef<
         ref={ref}
         type={visible ? "text" : "password"}
         className={cn(
-          "h-11 border-white/20 bg-background/40 backdrop-blur-md",
+          "h-11 border-input bg-background",
           showIcon ? "px-10" : "pr-10",
           className,
         )}

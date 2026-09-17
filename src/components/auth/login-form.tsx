@@ -103,7 +103,7 @@ export function LoginForm({ className }: { className?: string }) {
                     type="email"
                     autoComplete="email"
                     placeholder="nama@email.com"
-                    className="h-11 border-white/20 bg-background/40 pl-10 backdrop-blur-md"
+                    className="h-11 border-input bg-background pl-10"
                     {...field}
                   />
                 </div>

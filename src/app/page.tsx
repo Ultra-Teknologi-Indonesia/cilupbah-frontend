@@ -18,28 +18,16 @@ export default function Home() {
   };
 
   const item: Variants = {
-    hidden: reduce
-      ? { opacity: 0 }
-      : { opacity: 0, y: 24, filter: "blur(6px)" },
+    hidden: { opacity: 0, y: 12 },
     show: {
       opacity: 1,
       y: 0,
-      filter: "blur(0px)",
-      transition: { duration: 0.8, ease: EASE },
+      transition: { duration: 0.4, ease: EASE },
     },
   };
 
   return (
     <main className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-background font-sans">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-40 left-1/2 size-[42rem] -translate-x-1/2 rounded-full bg-primary/10 blur-[140px]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-52 -left-32 size-[32rem] rounded-full bg-primary/[0.05] blur-[130px]"
-      />
-
       <div className="relative z-10 mx-auto flex w-full max-w-7xl items-center gap-2.5 px-6 pt-8 sm:px-10">
         <Image
           src="/logo-mark.png"
@@ -47,7 +35,7 @@ export default function Home() {
           width={32}
           height={32}
           priority
-          className="liquid-glass-glow size-8 rounded-xl shadow-sm"
+          className="size-8 rounded-xl shadow-xs"
         />
         <span className="text-[15px] font-semibold tracking-tight text-foreground">
           Cilupbah Superapp
@@ -63,7 +51,7 @@ export default function Home() {
         >
           <motion.span
             variants={item}
-            className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-2xs font-medium uppercase tracking-[0.12em] text-muted-foreground backdrop-blur-sm sm:tracking-[0.2em]"
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-2xs font-medium uppercase tracking-[0.12em] text-muted-foreground sm:tracking-[0.2em]"
           >
             Sistem Manajemen Gudang Omnichannel
           </motion.span>

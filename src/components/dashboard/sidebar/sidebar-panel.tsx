@@ -7,8 +7,8 @@ import DashboardNavigation from "./nav-main";
 import type { NavGroup } from "./nav-data";
 
 const PANEL_WIDTH = 264;
-const PANEL_TRANSITION = { duration: 0.18, ease: [0.4, 0, 0.2, 1] as const };
-const CONTENT_TRANSITION = { duration: 0.16, ease: [0.4, 0, 0.2, 1] as const };
+const PANEL_TRANSITION = { duration: 0 };
+const CONTENT_TRANSITION = { duration: 0 };
 
 export function SidebarPanel({
   group,

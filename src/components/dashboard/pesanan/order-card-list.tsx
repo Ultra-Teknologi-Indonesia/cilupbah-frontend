@@ -168,8 +168,8 @@ export function OrderCardList({
       {/* Cards List with smooth opacity fade during background fetch */}
       <div
         className={cn(
-          "flex flex-col gap-3 transition-all duration-200",
-          isFetching && "opacity-60 pointer-events-none filter blur-[0.2px]",
+          "flex flex-col gap-3",
+          isFetching && "opacity-60 pointer-events-none",
         )}
       >
         {visibleOrders.map((order) => (
