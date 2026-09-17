@@ -392,7 +392,7 @@ export function PicklistTable() {
         statusOptions={STATUS_OPTIONS}
         search={list.search}
         onSearchChange={list.setSearch}
-        searchPlaceholder="Cari no. picklist…"
+        searchPlaceholder="Cari no. picklist, pesanan, picker…"
       />
       <div className="flex flex-wrap items-center justify-end gap-3 border-b border-border/40 px-4 py-2 text-sm text-muted-foreground sm:px-5">
         <button
