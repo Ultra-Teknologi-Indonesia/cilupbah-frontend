@@ -65,9 +65,15 @@ export const MonitorStockService = {
   onOrder: (params: MonitorListParams = {}) =>
     listFrom(`/inventory/monitor/on-order?${toQuery(params)}`),
 
-  summary: async (params: MonitorListParams = {}): Promise<MonitorSummary> => {
+  summary: async (
+    params: MonitorListParams = {},
+    mode?: OutOfStockMode,
+  ): Promise<MonitorSummary> => {
     const res = await fetchClient<ApiResponse<MonitorSummary>>(
-      `/inventory/monitor/summary?${toQuery(params)}`,
+      `/inventory/monitor/summary?${toQuery(
+        params,
+        mode ? { mode } : {},
+      )}`,
     );
     return res.data;
   },

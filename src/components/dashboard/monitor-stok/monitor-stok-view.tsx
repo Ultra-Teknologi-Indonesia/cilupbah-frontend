@@ -266,7 +266,7 @@ export function MonitorStokView() {
   const failedSyncQuery = useFailedSync(tab, syncParams);
   const kronologiQuery = useKronologi(tab, kronologiParams);
   const { data: movementFilters } = useMovementFilters(isKronologiTab(tab));
-  const { data: summary } = useMonitorSummary(baseFilters);
+  const { data: summary } = useMonitorSummary(baseFilters, subMode);
   const { data: locData } = useLocations({ perPage: 100 });
   const { data: categoryTree } = useEnabledCategories();
   const queueMutation = useQueueFromMonitor();

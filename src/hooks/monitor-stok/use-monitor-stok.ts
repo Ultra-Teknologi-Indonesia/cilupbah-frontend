@@ -108,10 +108,13 @@ export function useMonitorAnalytics(
   });
 }
 
-export function useMonitorSummary(params: MonitorListParams) {
+export function useMonitorSummary(
+  params: MonitorListParams,
+  mode?: OutOfStockMode,
+) {
   return useQuery({
-    queryKey: ["monitor-stok", "summary", params],
-    queryFn: () => MonitorStockService.summary(params),
+    queryKey: ["monitor-stok", "summary", params, mode],
+    queryFn: () => MonitorStockService.summary(params, mode),
     ...liveQueryOptions,
   });
 }
