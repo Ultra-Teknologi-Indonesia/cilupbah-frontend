@@ -44,11 +44,40 @@ import type {
   PacklistDetail,
   PacklistItem,
 } from "@/types/proses-pesanan/fulfillment";
-import { playScanFeedback, primeScanAudio } from "@/lib/scan-feedback";
+import {
+  playScanFeedback,
+  primeScanAudio,
+  scanFeedbackFromErrorCode,
+} from "@/lib/scan-feedback";
 import { apiError } from "@/lib/toast";
 import { usePermissions } from "@/hooks/auth/use-permissions";
 
 const LIST_HREF = "/dashboard/proses-pesanan/packing";
+
+function isOrderCanceledError(err: unknown): boolean {
+  if (!err || typeof err !== "object") return false;
+  const body = err as {
+    code?: string;
+    errors?: { code?: string };
+    status?: number;
+    title?: unknown;
+    message?: unknown;
+  };
+  const code = body.errors?.code ?? body.code;
+  if (code === "order_canceled") return true;
+
+  const text = [body.title, body.message]
+    .filter((value): value is string => typeof value === "string")
+    .join(" ")
+    .toLowerCase();
+
+  return (
+    text.includes("dibatalkan") ||
+    text.includes("batal") ||
+    text.includes("canceled") ||
+    text.includes("cancelled")
+  );
+}
 
 function isAlreadyPackedError(err: unknown): boolean {
   if (!err || typeof err !== "object") return false;
@@ -433,7 +462,18 @@ export function PackingProsesView() {
       }
       refocusScan();
     } catch (err) {
-      if (isAlreadyPackedError(err)) {
+      if (
+        isOrderCanceledError(err) ||
+        scanFeedbackFromErrorCode(err) === "order_canceled"
+      ) {
+        playScanFeedback("order_canceled");
+        toast.error("Pesanan Sudah Dibatalkan", {
+          description: `No. pesanan "${code}" sudah dibatalkan — tidak bisa dipacking.`,
+        });
+      } else if (
+        isAlreadyPackedError(err) ||
+        scanFeedbackFromErrorCode(err) === "order_already_packed"
+      ) {
         playScanFeedback("order_already_packed");
         toast.error("Pesanan Sudah Pernah Dipacking");
       } else {
