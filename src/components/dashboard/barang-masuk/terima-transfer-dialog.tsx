@@ -50,13 +50,16 @@ export function TerimaTransferDialog({
     [detail.data, inbound],
   );
 
+  const getItemKey = (i: (typeof items)[0], idx: number) =>
+    i.id ? i.id : `${i.item_id}-${idx}`;
+
   const [qtyMap, setQtyMap] = useState<Record<string, number>>(() =>
-    Object.fromEntries(items.map((i) => [i.item_id, i.expected_qty])),
+    Object.fromEntries(items.map((i, idx) => [getItemKey(i, idx), i.expected_qty])),
   );
 
-  const setQty = (itemId: string, expected: number, raw: string) => {
+  const setQty = (key: string, expected: number, raw: string) => {
     const n = Math.max(0, Math.min(expected, Number(raw) || 0));
-    setQtyMap((prev) => ({ ...prev, [itemId]: n }));
+    setQtyMap((prev) => ({ ...prev, [key]: n }));
   };
 
   const isAlreadyReceived =
@@ -72,10 +75,13 @@ export function TerimaTransferDialog({
       {
         id: inbound.source_id,
         data: {
-          items: items.map((i) => ({
-            item_id: i.item_id,
-            received_qty: qtyMap[i.item_id] ?? i.expected_qty,
-          })),
+          items: items.map((i, idx) => {
+            const key = getItemKey(i, idx);
+            return {
+              item_id: i.item_id,
+              received_qty: qtyMap[key] ?? i.expected_qty,
+            };
+          }),
         },
       },
       {
@@ -112,7 +118,8 @@ export function TerimaTransferDialog({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {items.map((i) => {
+                {items.map((i, idx) => {
+                  const rowKey = getItemKey(i, idx);
                   const productName =
                     i.variant?.product?.name ??
                     i.variant?.item_name ??
@@ -126,7 +133,7 @@ export function TerimaTransferDialog({
                     i.variant?.media?.[0]?.url ??
                     i.variant?.product?.media?.[0]?.url;
                   return (
-                    <TableRow key={i.item_id}>
+                    <TableRow key={rowKey}>
                       <TableCell className="px-3 py-2.5">
                         <div className="flex items-start gap-3">
                           <div className="size-10 shrink-0 overflow-hidden rounded-xl border bg-muted/50">
@@ -169,9 +176,9 @@ export function TerimaTransferDialog({
                           type="number"
                           min={0}
                           max={i.expected_qty}
-                          value={qtyMap[i.item_id] ?? i.expected_qty}
+                          value={qtyMap[rowKey] ?? i.expected_qty}
                           onChange={(e) =>
-                            setQty(i.item_id, i.expected_qty, e.target.value)
+                            setQty(rowKey, i.expected_qty, e.target.value)
                           }
                           className="h-8 text-right"
                         />
