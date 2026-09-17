@@ -59,7 +59,6 @@ import { CHANNEL_MAP, STATUS_LABELS } from "@/types/pesanan/order";
 import type { Order } from "@/types/pesanan/order";
 import {
   formatCurrency,
-  formatDate,
   formatDateTimeWib,
   formatTime,
   formatDateTime,
@@ -534,18 +533,18 @@ type MovementDayGroup = {
 };
 
 function groupMovementsByDay(movements: StockMovement[]): MovementDayGroup[] {
-  const groupMap = new Map<string, MovementDayGroup>();
+  const groups: MovementDayGroup[] = [];
+  let current: MovementDayGroup | null = null;
   for (const m of movements) {
-    const label = formatDate(m.transaction_date);
-    let group = groupMap.get(label);
-    if (!group) {
-      group = { key: `${label}-${m.id}`, label, items: [], netQty: 0 };
-      groupMap.set(label, group);
+    const label = formatDateTimeWib(m.transaction_date);
+    if (!current || current.label !== label) {
+      current = { key: m.id, label, items: [], netQty: 0 };
+      groups.push(current);
     }
-    group.items.push(m);
-    group.netQty += m.qty;
+    current.items.push(m);
+    current.netQty += m.qty;
   }
-  return Array.from(groupMap.values());
+  return groups;
 }
 
 function DayNetBadge({ net }: { net: number }) {
@@ -990,10 +989,13 @@ function MovementsSection({ itemId }: { itemId: string }) {
                     {m.placed_balance ?? m.balance}
                   </TableCell>
                   <TableCell className="w-[24rem] min-w-[18rem] px-3 py-2.5 align-top text-xs text-muted-foreground">
-                    {m.note ? (
-                      <MovementNote note={m.note} />
-                    ) : m.stock_effect ? (
-                      <MovementEffectNote effect={m.stock_effect} />
+                    {m.note || m.stock_effect ? (
+                      <div className="space-y-2">
+                        {m.note && <MovementNote note={m.note} />}
+                        {m.stock_effect && (
+                          <MovementEffectNote effect={m.stock_effect} />
+                        )}
+                      </div>
                     ) : (
                       <span className="text-muted-foreground">—</span>
                     )}
