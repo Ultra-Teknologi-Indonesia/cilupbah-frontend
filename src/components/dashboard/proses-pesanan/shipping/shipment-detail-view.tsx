@@ -620,8 +620,7 @@ export function ShipmentDetailView({ id }: { id: string }) {
       );
       setBarcode("");
     } catch (err) {
-      const code = (err as { errors?: { code?: string } })?.errors?.code;
-      playScanFeedback(scanFeedbackFromErrorCode(code));
+      playScanFeedback(scanFeedbackFromErrorCode(err));
       apiError(err, "Gagal menambahkan pesanan.");
       setBarcode("");
     } finally {

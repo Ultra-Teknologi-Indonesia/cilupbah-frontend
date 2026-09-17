@@ -130,8 +130,7 @@ export function MasukkanKePengirimanView() {
       );
       setBarcode("");
     } catch (err) {
-      const code = (err as { errors?: { code?: string } })?.errors?.code;
-      playScanFeedback(scanFeedbackFromErrorCode(code));
+      playScanFeedback(scanFeedbackFromErrorCode(err));
       apiError(err, "Gagal menambahkan pesanan ke pengiriman.");
       setBarcode("");
     } finally {

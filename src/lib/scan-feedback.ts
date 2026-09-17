@@ -258,7 +258,7 @@ const SFX_COURIER_MISMATCH = [
 
 const VOICE_SRC: Partial<Record<ScanFeedbackKind, string>> = {
   sku_mismatch: "/audio/sku-yang-discan-tidak-sesuai.mp3",
-  courier_mismatch: "/audio/kurir-yang-discan-tidak-sesuai.mp3",
+  courier_mismatch: "/audio/paket-yang-discan-tidak-sesuai.mp3",
   order_cancel_requested: "/audio/sedang-request-cancel.mp3",
   order_canceled: "/audio/paket-cancel.mp3",
   order_already_packed: "/audio/pesanan-sudah-pernah-dipacking.mp3",
@@ -341,27 +341,91 @@ export function primeScanAudio(): void {
 }
 
 export function scanFeedbackFromErrorCode(
-  code: string | null | undefined,
+  errOrCode: unknown,
 ): ScanFeedbackKind {
-  switch (code) {
-    case "order_canceled":
-      return "order_canceled";
-    case "order_cancel_requested":
-      return "order_cancel_requested";
-    case "courier_mismatch":
-      return "courier_mismatch";
-    case "sku_mismatch":
-      return "sku_mismatch";
-    case "order_already_packed":
-      return "order_already_packed";
-    case "order_already_scanned":
-    case "package_already_scanned":
-    case "already_scanned":
-    case "already_added":
-      return "package_already_scanned";
-    default:
-      return "error";
+  let code: string | null | undefined = null;
+  let message: string | null | undefined = null;
+
+  if (typeof errOrCode === "string") {
+    code = errOrCode;
+  } else if (errOrCode && typeof errOrCode === "object") {
+    const obj = errOrCode as {
+      code?: string;
+      errors?: { code?: string };
+      message?: string;
+      title?: string;
+    };
+    code = obj.errors?.code ?? obj.code;
+    message = obj.message ?? obj.title;
   }
+
+  if (code) {
+    switch (code) {
+      case "order_canceled":
+        return "order_canceled";
+      case "order_cancel_requested":
+        return "order_cancel_requested";
+      case "courier_mismatch":
+      case "shipment_type_mismatch":
+      case "location_mismatch":
+        return "courier_mismatch";
+      case "sku_mismatch":
+        return "sku_mismatch";
+      case "order_already_packed":
+        return "order_already_packed";
+      case "order_already_scanned":
+      case "package_already_scanned":
+      case "already_scanned":
+      case "already_added":
+        return "package_already_scanned";
+    }
+  }
+
+  if (message) {
+    const lower = message.toLowerCase();
+    if (
+      lower.includes("kurir tidak sesuai") ||
+      lower.includes("courier_mismatch") ||
+      lower.includes("kurir instan") ||
+      lower.includes("kurir reguler") ||
+      lower.includes("tidak bisa masuk manifest") ||
+      lower.includes("lokasi berbeda")
+    ) {
+      return "courier_mismatch";
+    }
+    if (
+      lower.includes("minta batal") ||
+      lower.includes("request cancel") ||
+      lower.includes("cancel_requested")
+    ) {
+      return "order_cancel_requested";
+    }
+    if (
+      lower.includes("sudah batal") ||
+      lower.includes("batal") ||
+      lower.includes("cancelled")
+    ) {
+      return "order_canceled";
+    }
+    if (
+      lower.includes("sudah ada") ||
+      lower.includes("sudah pernah discan") ||
+      lower.includes("already")
+    ) {
+      return "package_already_scanned";
+    }
+    if (
+      lower.includes("sudah pernah dipacking") ||
+      lower.includes("already packed")
+    ) {
+      return "order_already_packed";
+    }
+    if (lower.includes("sku tidak sesuai") || lower.includes("sku_mismatch")) {
+      return "sku_mismatch";
+    }
+  }
+
+  return "error";
 }
 
 function speakFallbackText(text: string): void {
@@ -381,16 +445,22 @@ function speakFallbackText(text: string): void {
 function voiceFallbackTone(kind: ScanFeedbackKind): void {
   switch (kind) {
     case "courier_mismatch":
-      zzfx(...SFX_COURIER_MISMATCH);
+      speakFallbackText("Paket yang discan tidak sesuai");
       break;
     case "order_cancel_requested":
-      zzfx(...SFX_CANCEL_REQUESTED);
+      speakFallbackText("Sedang request cancel");
       break;
     case "order_canceled":
-      zzfx(...SFX_CANCELED);
+      speakFallbackText("Paket cancel");
       break;
     case "package_already_scanned":
       speakFallbackText("Paket sudah pernah discan");
+      break;
+    case "sku_mismatch":
+      speakFallbackText("SKU yang discan tidak sesuai");
+      break;
+    case "order_already_packed":
+      speakFallbackText("Pesanan sudah pernah dipacking");
       break;
     default:
       zzfx(...SFX_ERROR);
