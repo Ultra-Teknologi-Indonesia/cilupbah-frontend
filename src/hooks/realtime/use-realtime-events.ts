@@ -30,6 +30,7 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions): void {
       bulkLabelBatchId: options.bulkLabelBatchId,
       exportId: options.exportId,
       enabled: options.enabled,
+      closeOnTerminal: options.closeOnTerminal,
       onEvent: (event) => onEventRef.current?.(event),
       onError: (error) => onErrorRef.current?.(error),
     });

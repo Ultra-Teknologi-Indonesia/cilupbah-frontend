@@ -13,6 +13,8 @@ export type RealtimeSubscriptionOptions = {
   bulkLabelBatchId?: string;
   exportId?: string;
   enabled?: boolean;
+  /** Close this subscription once its resource reaches a terminal state. */
+  closeOnTerminal?: boolean;
   onEvent: (event: RealtimeEvent) => void;
   onError?: (error: Error) => void;
 };

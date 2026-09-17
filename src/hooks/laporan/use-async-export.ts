@@ -38,35 +38,51 @@ async function waitForExportBySse(exportId: string): Promise<ExportJobStatus> {
       finish(() => reject(new Error("SSE export timeout.")));
     }, SSE_MAX_WAIT_MS);
 
-    unsubscribe = subscribeRealtime({
-      exportId,
-      onEvent: (event) => {
-        if (event.type !== "export.progress") return;
+    const subscribe = () => {
+      unsubscribe = subscribeRealtime({
+        exportId,
+        closeOnTerminal: true,
+        onEvent: (event) => {
+          if (event.type !== "export.progress") return;
 
-        const status = event.data.status;
-        if (status !== "ready" && status !== "failed") return;
+          const status = event.data.status;
+          if (status !== "ready" && status !== "failed") return;
 
-        handleStatus({
-          id: exportId,
-          type: String(event.data.type ?? ""),
-          status,
-          file_name:
-            typeof event.data.file_name === "string"
-              ? event.data.file_name
-              : null,
-          error:
-            typeof event.data.error === "string" ? event.data.error : null,
-          download_url: null,
-        });
-      },
-      onError: (error) => finish(() => reject(error)),
-    });
+          handleStatus({
+            id: exportId,
+            type: String(event.data.type ?? ""),
+            status,
+            file_name:
+              typeof event.data.file_name === "string"
+                ? event.data.file_name
+                : null,
+            error:
+              typeof event.data.error === "string" ? event.data.error : null,
+            download_url: null,
+          });
+        },
+        onError: (error) => finish(() => reject(error)),
+      });
 
-    // Close the race between creating the export and opening SSE. REST is only
-    // used as an initial/terminal snapshot, not as a polling loop.
-    void ExportJobService.status(exportId).then(handleStatus).catch((error) => {
-      finish(() => reject(error));
-    });
+      // Close the race between the first snapshot and opening SSE. This is a
+      // one-time consistency check, not a polling loop.
+      void ExportJobService.status(exportId)
+        .then(handleStatus)
+        .catch((error) => finish(() => reject(error)));
+    };
+
+    // Avoid opening a long-lived SSE connection for a job that already
+    // finished before the browser reached this code path.
+    void ExportJobService.status(exportId)
+      .then((job) => {
+        if (job.status === "ready" || job.status === "failed") {
+          handleStatus(job);
+          return;
+        }
+
+        subscribe();
+      })
+      .catch((error) => finish(() => reject(error)));
   });
 }
 

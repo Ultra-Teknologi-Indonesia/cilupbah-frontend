@@ -4,6 +4,7 @@ import type {
 } from "@/types/realtime/events";
 
 const STREAM_PATH = "/api/app/realtime/stream";
+const TERMINAL_STATUSES = new Set(["ready", "failed"]);
 
 type Listener = {
   id: number;
@@ -61,9 +62,44 @@ function matches(listener: Listener, event: RealtimeEvent): boolean {
   return false;
 }
 
+function isTerminalEvent(event: RealtimeEvent): boolean {
+  return (
+    (event.type === "bulk-label.progress" || event.type === "export.progress") &&
+    typeof event.data.status === "string" &&
+    TERMINAL_STATUSES.has(event.data.status)
+  );
+}
+
 function notify(event: RealtimeEvent): void {
+  const terminalListenerIds: number[] = [];
+
   for (const listener of listeners.values()) {
-    if (matches(listener, event)) listener.options.onEvent(event);
+    if (!matches(listener, event)) continue;
+
+    listener.options.onEvent(event);
+    if (listener.options.closeOnTerminal !== false && isTerminalEvent(event)) {
+      terminalListenerIds.push(listener.id);
+    }
+  }
+
+  if (terminalListenerIds.length === 0) return;
+
+  for (const listenerId of terminalListenerIds) {
+    listeners.delete(listenerId);
+  }
+
+  // The current EventSource URL may still contain a terminal resource. Let
+  // connect() rebuild it from the remaining active listeners. If there are no
+  // listeners, close immediately and cancel the browser's auto-reconnect.
+  if (listeners.size === 0) {
+    source?.close();
+    source = null;
+    if (reconnectTimer !== undefined) {
+      window.clearTimeout(reconnectTimer);
+      reconnectTimer = undefined;
+    }
+  } else {
+    scheduleReconnect();
   }
 }
 
