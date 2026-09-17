@@ -167,13 +167,10 @@ export const useRejectReturn = createMutationHook({
   invalidates: forBulk,
 });
 
-const settleBulk = async (tasks: Promise<unknown>[]) => {
-  const results = await Promise.allSettled(tasks);
-  return {
-    ok: results.filter((r) => r.status === "fulfilled").length,
-    failed: results.filter((r) => r.status === "rejected").length,
-  };
-};
+const bulkResult = (res: { data?: { succeeded?: number; failed?: unknown[] } }) => ({
+  ok: res.data?.succeeded ?? 0,
+  failed: res.data?.failed?.length ?? 0,
+});
 
 const bulkMessage = (verb: string) => (res: { ok: number; failed: number }) =>
   res.failed > 0
@@ -182,7 +179,7 @@ const bulkMessage = (verb: string) => (res: { ok: number; failed: number }) =>
 
 export const useBulkAcceptCancelRequest = createMutationHook({
   mutationFn: (orderIds: string[]) =>
-    settleBulk(orderIds.map((id) => OrderService.acceptCancelRequest(id))),
+    OrderService.bulkAcceptCancelRequest(orderIds).then(bulkResult),
   successMessage: bulkMessage("pembatalannya diterima"),
   errorMessage: "Gagal menerima pembatalan",
   invalidates: forBulk,
@@ -206,7 +203,7 @@ export const useBulkCancelManualOrder = createMutationHook({
 
 export const useBulkRejectCancelRequest = createMutationHook({
   mutationFn: (orderIds: string[]) =>
-    settleBulk(orderIds.map((id) => OrderService.rejectCancelRequest(id))),
+    OrderService.bulkRejectCancelRequest(orderIds).then(bulkResult),
   successMessage: bulkMessage("pembatalannya ditolak"),
   errorMessage: "Gagal menolak pembatalan",
   invalidates: forBulk,
@@ -214,11 +211,7 @@ export const useBulkRejectCancelRequest = createMutationHook({
 
 export const useBulkRequestChannelCancel = createMutationHook({
   mutationFn: (data: { orderIds: string[]; reason: string }) =>
-    settleBulk(
-      data.orderIds.map((id) =>
-        OrderService.requestChannelCancel(id, data.reason),
-      ),
-    ),
+    OrderService.bulkRequestChannelCancel(data.orderIds, data.reason).then(bulkResult),
   successMessage: bulkMessage("diajukan pembatalannya"),
   errorMessage: "Gagal mengajukan pembatalan",
   invalidates: forBulk,
@@ -226,7 +219,7 @@ export const useBulkRequestChannelCancel = createMutationHook({
 
 export const useBulkAcceptReturn = createMutationHook({
   mutationFn: (returnIds: string[]) =>
-    settleBulk(returnIds.map((id) => OrderService.acceptReturn(id))),
+    OrderService.bulkAcceptReturn(returnIds).then(bulkResult),
   successMessage: bulkMessage("returnya diterima"),
   errorMessage: "Gagal menerima retur",
   invalidates: forBulk,
@@ -234,7 +227,7 @@ export const useBulkAcceptReturn = createMutationHook({
 
 export const useBulkRejectReturn = createMutationHook({
   mutationFn: (returnIds: string[]) =>
-    settleBulk(returnIds.map((id) => OrderService.rejectReturn(id))),
+    OrderService.bulkRejectReturn(returnIds).then(bulkResult),
   successMessage: bulkMessage("returnya ditolak"),
   errorMessage: "Gagal menolak retur",
   invalidates: forBulk,

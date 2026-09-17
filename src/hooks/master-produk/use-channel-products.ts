@@ -65,19 +65,11 @@ export function useBulkUnlinkListing() {
   const invalidate = useInvalidateChannelProducts();
   return useMutation({
     mutationFn: async (items: UnlinkInput[]) => {
-      const results = await Promise.allSettled(
-        items.map((i) =>
-          ChannelProductService.unlink(
-            i.channel,
-            i.externalProductId,
-            i.shopId,
-          ),
-        ),
-      );
-      return results.filter((r) => r.status === "rejected").length;
+      return ChannelProductService.bulkUnlink(items);
     },
-    onSuccess: (failed, items) => {
-      const ok = items.length - failed;
+    onSuccess: (result) => {
+      const ok = result?.succeeded ?? 0;
+      const failed = result?.failed?.length ?? 0;
       if (ok > 0) toast.success(`${ok} koneksi diputus`);
       if (failed > 0) toast.error(`${failed} koneksi gagal diputus`);
       invalidate();

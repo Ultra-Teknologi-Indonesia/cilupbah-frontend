@@ -264,25 +264,16 @@ export function useSetReceivedQtyBatch(inboundId: string) {
       items: Array<{ itemId: string; qty: number }>;
       expectedUpdatedAt?: string | null;
     }): Promise<Array<{ itemId: string; ok: boolean; error?: string }>> => {
-      const results = await Promise.allSettled(
-        items.map((it) =>
-          InboundService.setReceivedQty(
-            inboundId,
-            it.itemId,
-            it.qty,
-            expectedUpdatedAt,
-          ),
-        ),
+      const result = await InboundService.setReceivedQtyBatch(
+        inboundId,
+        items.map((it) => ({ item_id: it.itemId, qty: it.qty })),
+        expectedUpdatedAt,
       );
-      return items.map((it, idx) => {
-        const r = results[idx];
-        if (r.status === "fulfilled") return { itemId: it.itemId, ok: true };
-        return {
-          itemId: it.itemId,
-          ok: false,
-          error: (r.reason as { message?: string })?.message,
-        };
-      });
+      return result.results.map((item) => ({
+        itemId: item.item_id,
+        ok: item.status === "success",
+        ...(item.status === "failed" ? { error: item.message } : {}),
+      }));
     },
     onSettled: () => {
       qc.invalidateQueries({ queryKey: ["inbound", "detail", inboundId] });

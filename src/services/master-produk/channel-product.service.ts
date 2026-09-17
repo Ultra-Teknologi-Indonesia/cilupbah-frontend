@@ -146,6 +146,27 @@ export const ChannelProductService = {
     });
   },
 
+  bulkUnlink: async (items: UnlinkInput[]) => {
+    const res = await fetchClient<
+      ApiResponse<{
+        processed: number;
+        succeeded: number;
+        failed: Array<{ external_product_id: string; message: string }>;
+        results: Array<{ external_product_id: string; status: "success" | "failed"; message?: string }>;
+      }>
+    >("/products/channel-products/bulk-unlink", {
+      method: "POST",
+      data: {
+        items: items.map((item) => ({
+          channel: item.channel,
+          external_product_id: item.externalProductId,
+          shop_id: item.shopId,
+        })),
+      },
+    });
+    return res.data;
+  },
+
   activate: async (
     channel: string,
     externalProductId: string,

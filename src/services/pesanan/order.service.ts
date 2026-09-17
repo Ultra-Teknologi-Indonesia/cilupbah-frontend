@@ -22,6 +22,13 @@ export interface UpdateOrderItemData {
   tax_amount?: number;
 }
 
+export interface BulkActionResult {
+  processed: number;
+  succeeded: number;
+  failed: Array<{ id: string; status: "failed"; message: string }>;
+  results: Array<{ id: string; status: "success" | "failed"; message?: string }>;
+}
+
 export const OrderService = {
   list: (params: OrderListParams) => {
     const sp = new URLSearchParams();
@@ -180,10 +187,24 @@ export const OrderService = {
     });
   },
 
+  bulkAcceptCancelRequest: (orderIds: string[], reason?: string) => {
+    return fetchClient<ApiResponse<BulkActionResult>>("/sales/orders/bulk-accept-cancel", {
+      method: "POST",
+      data: { order_ids: orderIds, ...(reason ? { reason } : {}) },
+    });
+  },
+
   rejectCancelRequest: (orderId: string, reason?: string) => {
     return fetchClient<ApiResponse>(`/sales/orders/${orderId}/reject-cancel`, {
       method: "POST",
       data: reason ? { reason } : undefined,
+    });
+  },
+
+  bulkRejectCancelRequest: (orderIds: string[], reason?: string) => {
+    return fetchClient<ApiResponse<BulkActionResult>>("/sales/orders/bulk-reject-cancel", {
+      method: "POST",
+      data: { order_ids: orderIds, ...(reason ? { reason } : {}) },
     });
   },
 
@@ -225,6 +246,13 @@ export const OrderService = {
         data: { reason },
       },
     );
+  },
+
+  bulkRequestChannelCancel: (orderIds: string[], reason: string) => {
+    return fetchClient<ApiResponse<BulkActionResult>>("/sales/orders/bulk-request-cancel", {
+      method: "POST",
+      data: { order_ids: orderIds, reason },
+    });
   },
 
   releaseChannelCancel: (orderId: string) => {
@@ -296,10 +324,28 @@ export const OrderService = {
     });
   },
 
+  bulkAcceptReturn: (returnIds: string[], processedBy?: string) => {
+    return fetchClient<ApiResponse<BulkActionResult>>("/sales/returns/bulk-accept", {
+      method: "POST",
+      data: { return_ids: returnIds, ...(processedBy ? { processed_by: processedBy } : {}) },
+    });
+  },
+
   rejectReturn: (returnId: string, reason?: string) => {
     return fetchClient<ApiResponse>(`/sales/returns/${returnId}/reject`, {
       method: "POST",
       data: { reason },
+    });
+  },
+
+  bulkRejectReturn: (returnIds: string[], reason?: string, processedBy?: string) => {
+    return fetchClient<ApiResponse<BulkActionResult>>("/sales/returns/bulk-reject", {
+      method: "POST",
+      data: {
+        return_ids: returnIds,
+        ...(reason ? { reason } : {}),
+        ...(processedBy ? { processed_by: processedBy } : {}),
+      },
     });
   },
 

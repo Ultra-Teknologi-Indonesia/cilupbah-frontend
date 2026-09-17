@@ -169,6 +169,28 @@ export const InboundService = {
     return res.data;
   },
 
+  setReceivedQtyBatch: async (
+    inboundId: string,
+    items: Array<{ item_id: string; qty: number; reason_note?: string | null }>,
+    expectedUpdatedAt?: string | null,
+  ) => {
+    const res = await fetchClient<
+      ApiResponse<{
+        processed: number;
+        succeeded: number;
+        failed: Array<{ item_id: string; status: "failed"; message: string }>;
+        results: Array<{ item_id: string; status: "success" | "failed"; message?: string }>;
+      }>
+    >(`/inbounds/${inboundId}/received-qty`, {
+      method: "PATCH",
+      data: {
+        items,
+        ...(expectedUpdatedAt ? { _expected_updated_at: expectedUpdatedAt } : {}),
+      },
+    });
+    return res.data;
+  },
+
   setDiscrepancyNote: async (
     inboundId: string,
     itemId: string,
