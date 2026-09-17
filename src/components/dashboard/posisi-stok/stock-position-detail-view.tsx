@@ -59,6 +59,7 @@ import { CHANNEL_MAP, STATUS_LABELS } from "@/types/pesanan/order";
 import type { Order } from "@/types/pesanan/order";
 import {
   formatCurrency,
+  formatDate,
   formatDateTimeWib,
   formatTime,
   formatDateTime,
@@ -533,18 +534,18 @@ type MovementDayGroup = {
 };
 
 function groupMovementsByDay(movements: StockMovement[]): MovementDayGroup[] {
-  const groups: MovementDayGroup[] = [];
-  let current: MovementDayGroup | null = null;
+  const groupMap = new Map<string, MovementDayGroup>();
   for (const m of movements) {
-    const label = formatDateTimeWib(m.transaction_date);
-    if (!current || current.label !== label) {
-      current = { key: m.id, label, items: [], netQty: 0 };
-      groups.push(current);
+    const label = formatDate(m.transaction_date);
+    let group = groupMap.get(label);
+    if (!group) {
+      group = { key: `${label}-${m.id}`, label, items: [], netQty: 0 };
+      groupMap.set(label, group);
     }
-    current.items.push(m);
-    current.netQty += m.qty;
+    group.items.push(m);
+    group.netQty += m.qty;
   }
-  return groups;
+  return Array.from(groupMap.values());
 }
 
 function DayNetBadge({ net }: { net: number }) {
