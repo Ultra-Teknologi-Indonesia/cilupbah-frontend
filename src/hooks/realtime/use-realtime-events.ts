@@ -34,5 +34,10 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions): void {
       onEvent: (event) => onEventRef.current?.(event),
       onError: (error) => onErrorRef.current?.(error),
     });
-  }, [options.bulkLabelBatchId, options.exportId, options.enabled]);
+  }, [
+    options.bulkLabelBatchId,
+    options.exportId,
+    options.enabled,
+    options.closeOnTerminal,
+  ]);
 }
