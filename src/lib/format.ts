@@ -142,15 +142,15 @@ export function getInitials(name: string | null | undefined): string {
 }
 
 export function formatPickingDuration(
-  assignedAt: string | null | undefined,
+  startedAt: string | null | undefined,
   completedAt: string | null | undefined,
   status: string | null | undefined,
   now: Date | number = new Date(),
 ): string {
-  if (status === "FAILED" || status === "CANCELLED") {
+  if (status === "DRAFT" || status === "FAILED" || status === "CANCELLED") {
     return "—";
   }
-  const start = toDate(assignedAt);
+  const start = toDate(startedAt);
   const end = completedAt ? toDate(completedAt) : toDate(now);
   if (!start || !end) return "—";
 

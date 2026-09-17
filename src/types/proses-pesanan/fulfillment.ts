@@ -326,6 +326,7 @@ export interface Picklist {
   pickerName: string | null;
   assignedBy: string | null;
   assignedAt: string | null;
+  createdAt: string | null;
   status: PicklistStatus;
   startedAt: string | null;
   completedAt: string | null;

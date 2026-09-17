@@ -190,6 +190,7 @@ function mapPicklist(raw: RawPicklist): Picklist {
     pickerName: raw.picker?.name ?? null,
     assignedBy: raw.assigned_by ?? null,
     assignedAt: raw.assigned_at ?? null,
+    createdAt: raw.created_at ?? null,
     status,
     startedAt: raw.started_at ?? null,
     completedAt: raw.completed_at ?? null,

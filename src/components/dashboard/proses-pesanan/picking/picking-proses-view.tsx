@@ -128,23 +128,23 @@ function isFailedStatus(s: string | null | undefined) {
 }
 
 function PickingDurationLive({
-  assignedAt,
+  startedAt,
   completedAt,
   status,
 }: {
-  assignedAt: string | null;
+  startedAt: string | null;
   completedAt: string | null;
   status: string;
 }) {
   const [, forceTick] = React.useReducer((c: number) => c + 1, 0);
 
   React.useEffect(() => {
-    if (!assignedAt || completedAt || status === "FAILED" || status === "CANCELLED") return;
+    if (status !== "IN_PROGRESS" || completedAt) return;
     const t = setInterval(forceTick, 60_000);
     return () => clearInterval(t);
-  }, [assignedAt, status, completedAt]);
+  }, [status, completedAt]);
 
-  return <>{formatPickingDuration(assignedAt, completedAt, status)}</>;
+  return <>{formatPickingDuration(startedAt, completedAt, status)}</>;
 }
 
 export function PickingProsesView({ id }: { id: string }) {
@@ -765,7 +765,7 @@ export function PickingProsesView({ id }: { id: string }) {
                 <span>Durasi Picking</span>
                 <span className="font-medium tabular-nums text-foreground">
                   <PickingDurationLive
-                    assignedAt={pl.assignedAt}
+                    startedAt={pl.startedAt}
                     completedAt={pl.completedAt}
                     status={pl.status}
                   />
