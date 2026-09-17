@@ -1,6 +1,12 @@
 "use client";
 
-import { PlusIcon, PrinterIcon, Trash2Icon, TruckIcon } from "lucide-react";
+import {
+  PlusIcon,
+  PrinterIcon,
+  Trash2Icon,
+  TruckIcon,
+  XIcon,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -12,6 +18,7 @@ interface FulfillmentBulkActionBarProps {
   onPrintLabel?: () => void;
   onPrintInvoice?: () => void;
   onPrintInvoiceAndLabel?: () => void;
+  onDelete?: () => void;
   readyToShipDisabled?: string;
   createShipmentDisabled?: string;
   printLabelDisabled?: string;
@@ -26,6 +33,7 @@ export function FulfillmentBulkActionBar({
   onPrintLabel,
   onPrintInvoice,
   onPrintInvoiceAndLabel,
+  onDelete,
   readyToShipDisabled,
   createShipmentDisabled,
   printLabelDisabled,
@@ -39,9 +47,10 @@ export function FulfillmentBulkActionBar({
         type="button"
         onClick={onReset}
         className="inline-flex size-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-        aria-label="Reset pilihan"
+        aria-label="Batalkan pilihan"
+        title="Batalkan pilihan"
       >
-        <Trash2Icon className="size-4" />
+        <XIcon className="size-4" />
       </button>
 
       <span className="text-sm font-medium text-foreground">
@@ -111,6 +120,18 @@ export function FulfillmentBulkActionBar({
             className="rounded-full"
           >
             Faktur & Label
+          </Button>
+        )}
+
+        {onDelete && (
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={onDelete}
+            className="rounded-full border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive"
+          >
+            <Trash2Icon className="size-4" />
+            Hapus Pesanan
           </Button>
         )}
       </div>

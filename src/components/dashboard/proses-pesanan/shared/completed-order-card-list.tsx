@@ -29,6 +29,7 @@ import { useListState } from "@/hooks/use-list-state";
 import { fulfillmentToOrder } from "@/lib/proses-pesanan/order-card-mapper";
 import { cn } from "@/lib/utils";
 import { usePermissions } from "@/hooks/auth/use-permissions";
+import { DeleteOrderDialog } from "@/components/dashboard/proses-pesanan/shared/delete-order-dialog";
 
 function shippingLabelSelectability(order: Order): RowSelectability {
   if (!order.shipping_label_supported) {
@@ -211,6 +212,7 @@ export function FulfillmentCardList({
   const [ambilResiOpen, setAmbilResiOpen] = React.useState(false);
   const [resiOrderIds, setResiOrderIds] = React.useState<string[]>([]);
   const [pengirimanOpen, setPengirimanOpen] = React.useState(false);
+  const [bulkDeleteOpen, setBulkDeleteOpen] = React.useState(false);
 
   const shipmentCreationEnabled =
     allowShipmentCreation &&
@@ -243,6 +245,8 @@ export function FulfillmentCardList({
     () => selectedOrders.map((m) => m.raw.id),
     [selectedOrders],
   );
+
+  const canBulkDelete = can("delete-pesanan") && stage !== "shipped";
 
   const selectedLabelOrderIds = React.useMemo(
     () =>
@@ -471,6 +475,9 @@ export function FulfillmentCardList({
                 }
                 onPrintLabel={handlePrintLabel}
                 onPrintInvoice={handlePrintInvoice}
+                onDelete={
+                  canBulkDelete ? () => setBulkDeleteOpen(true) : undefined
+                }
                 readyToShipDisabled={readyToShipDisabled}
                 createShipmentDisabled={createShipmentDisabled}
                 printLabelDisabled={
@@ -552,6 +559,21 @@ export function FulfillmentCardList({
           })()}
           shippingProvider={
             shipmentProviderKeys.size === 1 ? selectedShipmentProvider : null
+          }
+        />
+      )}
+
+      {canBulkDelete && (
+        <DeleteOrderDialog
+          open={bulkDeleteOpen}
+          onOpenChange={setBulkDeleteOpen}
+          orders={selectedOrders.map((m) => ({
+            id: m.raw.id,
+            no: m.raw.salesorderNo,
+          }))}
+          onDeleted={() => setSelectedIds(new Set())}
+          bulkSuccessMessage={(successfulCount) =>
+            `${successfulCount} pesanan berhasil dikembalikan ke tahap sebelumnya.`
           }
         />
       )}
