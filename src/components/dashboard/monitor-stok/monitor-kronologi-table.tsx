@@ -10,6 +10,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table/data-table";
 import type { KronologiRow } from "@/types/monitor-stok/monitor";
+import { MONITOR_PAGE_SIZE_OPTIONS } from "./monitor-table-config";
 
 interface PageMeta {
   current_page: number;
@@ -22,6 +23,7 @@ interface MonitorKronologiTableProps {
   rows: KronologiRow[];
   meta: PageMeta;
   isLoading: boolean;
+  isFetching: boolean;
   onPageChange: (page: number) => void;
   onPerPageChange: (size: number) => void;
   emptyText?: string;
@@ -65,6 +67,7 @@ export function MonitorKronologiTable({
   rows,
   meta,
   isLoading,
+  isFetching,
   onPageChange,
   onPerPageChange,
   emptyText,
@@ -189,6 +192,8 @@ export function MonitorKronologiTable({
       columns={columns}
       data={rows}
       isLoading={isLoading}
+      isFetching={isFetching}
+      pageSizeOptions={[...MONITOR_PAGE_SIZE_OPTIONS]}
       hideToolbar
       manualPagination
       pagination={{
@@ -198,7 +203,7 @@ export function MonitorKronologiTable({
       rowCount={meta.total}
       onPaginationChange={(p) => {
         onPageChange(p.pageIndex + 1);
-        onPerPageChange(p.pageSize);
+        if (p.pageSize !== meta.per_page) onPerPageChange(p.pageSize);
       }}
       tableContainerClassName="border-0 bg-transparent backdrop-blur-none [&_[data-slot=table-header]]:bg-transparent"
       emptyState={

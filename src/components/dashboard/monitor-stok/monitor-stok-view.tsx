@@ -18,6 +18,7 @@ import { MonitorSyncFailedTable } from "@/components/dashboard/monitor-stok/moni
 import { MonitorKronologiTable } from "@/components/dashboard/monitor-stok/monitor-kronologi-table";
 import { MonitorStockExportMenu } from "@/components/dashboard/monitor-stok/monitor-stock-export-menu";
 import { DateRangePicker } from "@/components/ui/date-picker";
+import { Loader2Icon } from "lucide-react";
 import { useLocations } from "@/hooks/manajemen-rak/use-locations";
 import { useEnabledCategories } from "@/hooks/kategori-merek/use-kategori";
 import { useQueueFromMonitor } from "@/hooks/gudang/use-stock-replenishment";
@@ -266,7 +267,8 @@ export function MonitorStokView() {
   const failedSyncQuery = useFailedSync(tab, syncParams);
   const kronologiQuery = useKronologi(tab, kronologiParams);
   const { data: movementFilters } = useMovementFilters(isKronologiTab(tab));
-  const { data: summary } = useMonitorSummary(baseFilters, subMode);
+  const summaryQuery = useMonitorSummary(baseFilters, subMode);
+  const summary = summaryQuery.data;
   const { data: locData } = useLocations({ perPage: 100 });
   const { data: categoryTree } = useEnabledCategories();
   const queueMutation = useQueueFromMonitor();
@@ -278,7 +280,8 @@ export function MonitorStokView() {
       : isAnalyticsTab(tab)
         ? analyticsQuery
         : listQuery;
-  const meta = active.data?.meta ?? EMPTY_META;
+  const activeIsSwitching = active.isPending || active.isPlaceholderData;
+  const meta = activeIsSwitching ? EMPTY_META : (active.data?.meta ?? EMPTY_META);
 
   const locationOptions = useMemo(
     () => [
@@ -345,6 +348,10 @@ export function MonitorStokView() {
   };
 
   const totalBadge = tab === "stok-kosong" ? subTotal(subMode) : meta.total;
+  const totalIsLoading =
+    tab === "stok-kosong"
+      ? summaryQuery.isPending || summaryQuery.isPlaceholderData
+      : activeIsSwitching;
 
   const exportMenu = (
     <MonitorStockExportMenu
@@ -440,7 +447,11 @@ export function MonitorStokView() {
           <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
             Total{" "}
             <Badge variant="secondary" className="tabular-nums">
-              {totalBadge ?? meta.total}
+              {totalIsLoading ? (
+                <Loader2Icon className="size-3.5 animate-spin" aria-label="Memuat total" />
+              ) : (
+                (totalBadge ?? 0)
+              )}
             </Badge>
           </div>
         </div>
@@ -464,12 +475,10 @@ export function MonitorStokView() {
 
             <div className="px-4 py-3 sm:px-5">
               <MonitorSyncFailedTable
-                rows={failedSyncQuery.data?.items ?? []}
-                meta={failedSyncQuery.data?.meta ?? EMPTY_META}
-                isLoading={failedSyncQuery.isLoading}
-                isFetching={
-                  failedSyncQuery.isFetching && !failedSyncQuery.isLoading
-                }
+                rows={activeIsSwitching ? [] : (failedSyncQuery.data?.items ?? [])}
+                meta={meta}
+                isLoading={activeIsSwitching}
+                isFetching={failedSyncQuery.isFetching}
                 onPageChange={setPage}
                 onPerPageChange={(s) => {
                   setPerPage(s);
@@ -574,9 +583,10 @@ export function MonitorStokView() {
 
             <div className="px-4 py-3 sm:px-5">
               <MonitorKronologiTable
-                rows={kronologiQuery.data?.items ?? []}
-                meta={kronologiQuery.data?.meta ?? EMPTY_META}
-                isLoading={kronologiQuery.isLoading}
+                rows={activeIsSwitching ? [] : (kronologiQuery.data?.items ?? [])}
+                meta={meta}
+                isLoading={activeIsSwitching}
+                isFetching={kronologiQuery.isFetching}
                 onPageChange={setPage}
                 onPerPageChange={(s) => {
                   setPerPage(s);
@@ -635,10 +645,10 @@ export function MonitorStokView() {
             <div className="px-4 py-3 sm:px-5">
               {isStockTab(tab) ? (
                 <MonitorStockTable
-                  rows={listQuery.data?.items ?? []}
-                  meta={listQuery.data?.meta ?? EMPTY_META}
-                  isLoading={listQuery.isLoading}
-                  isFetching={listQuery.isFetching && !listQuery.isLoading}
+                  rows={activeIsSwitching ? [] : (listQuery.data?.items ?? [])}
+                  meta={meta}
+                  isLoading={activeIsSwitching}
+                  isFetching={listQuery.isFetching}
                   locationLabel={locationLabel}
                   showRestock={tab === "menipis"}
                   enableQueueAction={
@@ -670,12 +680,10 @@ export function MonitorStokView() {
               ) : (
                 <MonitorAnalyticsTable
                   kind={tab as AnalyticsKind}
-                  rows={analyticsQuery.data?.items ?? []}
-                  meta={analyticsQuery.data?.meta ?? EMPTY_META}
-                  isLoading={analyticsQuery.isLoading}
-                  isFetching={
-                    analyticsQuery.isFetching && !analyticsQuery.isLoading
-                  }
+                  rows={activeIsSwitching ? [] : (analyticsQuery.data?.items ?? [])}
+                  meta={meta}
+                  isLoading={activeIsSwitching}
+                  isFetching={analyticsQuery.isFetching}
                   emptyText={
                     tab === "tidak-laku"
                       ? "Tidak ada produk tidak laku pada periode ini."

@@ -119,7 +119,7 @@ export function DashboardSidebar() {
   return (
     <div
       ref={containerRef}
-      className="relative z-10 hidden h-dvh shrink-0 md:flex md:p-3 md:pr-0"
+      className="relative z-40 hidden h-dvh shrink-0 md:flex md:p-3 md:pr-0"
     >
       {panelOpen && (
         <button

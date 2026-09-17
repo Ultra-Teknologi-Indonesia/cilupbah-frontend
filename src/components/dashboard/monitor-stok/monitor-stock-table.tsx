@@ -18,6 +18,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import type { MonitorStockRow } from "@/types/monitor-stok/monitor";
+import { MONITOR_PAGE_SIZE_OPTIONS } from "./monitor-table-config";
 
 interface PageMeta {
   current_page: number;
@@ -150,7 +151,7 @@ export function MonitorStockTable({
   rows,
   meta,
   isLoading,
-  isFetching: _isFetching,
+  isFetching,
   locationLabel,
   showRestock = false,
   emptyText = "Tidak ada produk pada kategori ini.",
@@ -383,6 +384,8 @@ export function MonitorStockTable({
           : undefined
       }
       isLoading={isLoading}
+      isFetching={isFetching}
+      pageSizeOptions={[...MONITOR_PAGE_SIZE_OPTIONS]}
       hideToolbar
       manualPagination
       pagination={{
@@ -392,7 +395,7 @@ export function MonitorStockTable({
       rowCount={meta.total}
       onPaginationChange={(p) => {
         onPageChange(p.pageIndex + 1);
-        onPerPageChange(p.pageSize);
+        if (p.pageSize !== meta.per_page) onPerPageChange(p.pageSize);
       }}
       tableContainerClassName="border-0 bg-transparent backdrop-blur-none [&_[data-slot=table-header]]:bg-transparent"
       emptyState={

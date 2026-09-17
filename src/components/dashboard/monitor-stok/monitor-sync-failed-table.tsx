@@ -15,6 +15,7 @@ import {
   useRetryBulkSync,
 } from "@/hooks/monitor-stok/use-monitor-stok";
 import type { MonitorSyncFailedRow } from "@/types/monitor-stok/monitor";
+import { MONITOR_PAGE_SIZE_OPTIONS } from "./monitor-table-config";
 
 interface PageMeta {
   current_page: number;
@@ -55,7 +56,7 @@ export function MonitorSyncFailedTable({
   rows,
   meta,
   isLoading,
-  isFetching: _isFetching,
+  isFetching,
   onPageChange,
   onPerPageChange,
 }: MonitorSyncFailedTableProps) {
@@ -228,6 +229,8 @@ export function MonitorSyncFailedTable({
         columns={columns}
         data={rows}
         isLoading={isLoading}
+        isFetching={isFetching}
+        pageSizeOptions={[...MONITOR_PAGE_SIZE_OPTIONS]}
         hideToolbar
         manualPagination
         pagination={{
@@ -237,7 +240,7 @@ export function MonitorSyncFailedTable({
         rowCount={meta.total}
         onPaginationChange={(p) => {
           onPageChange(p.pageIndex + 1);
-          onPerPageChange(p.pageSize);
+          if (p.pageSize !== meta.per_page) onPerPageChange(p.pageSize);
         }}
         tableContainerClassName="border-0 bg-transparent backdrop-blur-none [&_[data-slot=table-header]]:bg-transparent"
         emptyState={
