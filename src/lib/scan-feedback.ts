@@ -5,7 +5,8 @@ export type ScanFeedbackKind =
   | "order_canceled"
   | "order_cancel_requested"
   | "courier_mismatch"
-  | "order_already_packed";
+  | "order_already_packed"
+  | "package_already_scanned";
 
 let zzfxCtx: AudioContext | null = null;
 
@@ -261,6 +262,7 @@ const VOICE_SRC: Partial<Record<ScanFeedbackKind, string>> = {
   order_cancel_requested: "/audio/sedang-request-cancel.mp3",
   order_canceled: "/audio/paket-cancel.mp3",
   order_already_packed: "/audio/pesanan-sudah-pernah-dipacking.mp3",
+  package_already_scanned: "/audio/paket-sudah-pernah-discan.mp3",
 };
 
 const voiceBuffers = new Map<string, AudioBuffer>();
@@ -352,9 +354,28 @@ export function scanFeedbackFromErrorCode(
       return "sku_mismatch";
     case "order_already_packed":
       return "order_already_packed";
+    case "order_already_scanned":
+    case "package_already_scanned":
+    case "already_scanned":
+    case "already_added":
+      return "package_already_scanned";
     default:
       return "error";
   }
+}
+
+function speakFallbackText(text: string): void {
+  if (typeof window !== "undefined" && "speechSynthesis" in window) {
+    try {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "id-ID";
+      utterance.rate = 1.0;
+      window.speechSynthesis.speak(utterance);
+      return;
+    } catch {}
+  }
+  zzfx(...SFX_ERROR);
 }
 
 function voiceFallbackTone(kind: ScanFeedbackKind): void {
@@ -367,6 +388,9 @@ function voiceFallbackTone(kind: ScanFeedbackKind): void {
       break;
     case "order_canceled":
       zzfx(...SFX_CANCELED);
+      break;
+    case "package_already_scanned":
+      speakFallbackText("Paket sudah pernah discan");
       break;
     default:
       zzfx(...SFX_ERROR);

@@ -118,7 +118,11 @@ export function MasukkanKePengirimanView() {
         barcode: value,
       });
       setLatestScannedOrder(result.shipmentOrder);
-      playScanFeedback("ok");
+      if (result.status === "already_added") {
+        playScanFeedback("package_already_scanned");
+      } else {
+        playScanFeedback("ok");
+      }
       toast.success(
         result.status === "already_added"
           ? `Resi ${result.shipmentOrder.trackingNumber ?? value} sudah ada di daftar pesanan.`

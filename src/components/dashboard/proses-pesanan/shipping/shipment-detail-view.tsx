@@ -608,7 +608,11 @@ export function ShipmentDetailView({ id }: { id: string }) {
       setLatestScannedOrder(result.shipmentOrder);
       setSearchQuery("");
       setPage(1);
-      playScanFeedback("ok");
+      if (result.status === "already_added") {
+        playScanFeedback("package_already_scanned");
+      } else {
+        playScanFeedback("ok");
+      }
       toast.success(
         result.status === "already_added"
           ? `Resi ${result.shipmentOrder.trackingNumber ?? code} sudah ada di daftar pesanan.`
