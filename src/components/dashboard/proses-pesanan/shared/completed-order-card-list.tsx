@@ -146,6 +146,7 @@ export function FulfillmentCardList({
     perPage: 20,
     debounceMs: 350,
     namespace: stage.replace(/[^a-z0-9]+/gi, "_"),
+    persistPerPage: true,
   });
 
   const params = React.useMemo(

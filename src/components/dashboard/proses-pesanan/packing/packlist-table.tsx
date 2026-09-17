@@ -78,6 +78,7 @@ export function PacklistTable() {
     perPage: 20,
     debounceMs: 350,
     namespace: "packlist",
+    persistPerPage: true,
   });
   const [editPacker, setEditPacker] = React.useState<Packlist | null>(null);
   const [deleteTarget, setDeleteTarget] = React.useState<Packlist | null>(null);

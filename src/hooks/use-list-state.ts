@@ -14,10 +14,12 @@ export function useListState<F extends object>(
     urlSync?: boolean;
     namespace?: string;
     filterUrlSync?: boolean;
+    persistPerPage?: boolean;
   },
 ) {
   const urlSync = opts?.urlSync ?? true;
   const filterUrlSync = opts?.filterUrlSync ?? urlSync;
+  const persistPerPage = opts?.persistPerPage ?? false;
   const ns = opts?.namespace ? `${opts.namespace}_` : "";
   const defaultPerPage = opts?.perPage ?? 20;
 
@@ -38,6 +40,40 @@ export function useListState<F extends object>(
   const perPageKey = `${ns}per_page`;
   const searchKey = `${ns}search`;
   const filterKeyFor = useCallback((k: string) => `${ns}filter_${k}`, [ns]);
+  const perPageStorageKey = persistPerPage
+    ? `cilupbah:list-state:${pathname}:${perPageKey}`
+    : null;
+
+  const readPersistedPerPage = useCallback(
+    (fallback: number) => {
+      if (!perPageStorageKey || typeof window === "undefined") {
+        return fallback;
+      }
+
+      try {
+        const raw = window.localStorage.getItem(perPageStorageKey);
+        const n = raw ? Number.parseInt(raw, 10) : NaN;
+        return Number.isFinite(n) && n > 0 ? n : fallback;
+      } catch {
+        return fallback;
+      }
+    },
+    [perPageStorageKey],
+  );
+
+  const persistPerPageValue = useCallback(
+    (value: number) => {
+      if (!perPageStorageKey || typeof window === "undefined") return;
+      if (!Number.isFinite(value) || value <= 0) return;
+
+      try {
+        window.localStorage.setItem(perPageStorageKey, String(value));
+      } catch {
+        // Ignore unavailable storage; URL state still keeps the current page size.
+      }
+    },
+    [perPageStorageKey],
+  );
 
   const readNumber = useCallback(
     (key: string, fallback: number) => {
@@ -48,6 +84,10 @@ export function useListState<F extends object>(
     },
     [urlSync, searchParams],
   );
+  const readPerPage = useCallback(() => {
+    const fallback = readPersistedPerPage(defaultPerPage);
+    return readNumber(perPageKey, fallback);
+  }, [defaultPerPage, perPageKey, readNumber, readPersistedPerPage]);
   const readSearch = useCallback(
     () => (urlSync ? (searchParams.get(searchKey) ?? "") : ""),
     [urlSync, searchParams, searchKey],
@@ -76,7 +116,7 @@ export function useListState<F extends object>(
   );
   const [page, setPageRaw] = useState<number>(() => readNumber(pageKey, 1));
   const [perPage, setPerPageRaw] = useState<number>(() =>
-    readNumber(perPageKey, defaultPerPage),
+    readPerPage(),
   );
   const [filters, setFiltersRaw] = useState<F>(() => readFilters());
 
@@ -95,7 +135,7 @@ export function useListState<F extends object>(
   useEffect(() => {
     if (!urlSync) return;
     const nextPage = readNumber(pageKey, 1);
-    const nextPerPage = readNumber(perPageKey, defaultPerPage);
+    const nextPerPage = readPerPage();
     const nextSearch = readSearch();
     const nextFilters = readFilters();
     const nextSortBy = searchParams.get(sortByRawKey);
@@ -104,6 +144,7 @@ export function useListState<F extends object>(
     /* eslint-disable react-hooks/set-state-in-effect */
     setPageRaw((prev) => (prev === nextPage ? prev : nextPage));
     setPerPageRaw((prev) => (prev === nextPerPage ? prev : nextPerPage));
+    persistPerPageValue(nextPerPage);
 
     const nextTrimmed = nextSearch.trim();
     if (nextTrimmed !== lastPushedSearchRef.current) {
@@ -133,7 +174,7 @@ export function useListState<F extends object>(
     /* eslint-enable react-hooks/set-state-in-effect */
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [urlSync, searchParams]);
+  }, [urlSync, searchParams, readPerPage, persistPerPageValue]);
 
   const writeUrl = useCallback(
     (updates: Record<string, string | number | boolean | null | undefined>) => {
@@ -172,9 +213,10 @@ export function useListState<F extends object>(
   const setPerPage = useCallback(
     (pp: number) => {
       setPerPageRaw(pp);
+      persistPerPageValue(pp);
       writeUrl({ [perPageKey]: pp });
     },
-    [writeUrl, perPageKey],
+    [writeUrl, perPageKey, persistPerPageValue],
   );
 
   const setSearch = useCallback((s: string) => {
@@ -338,9 +380,10 @@ export function useListState<F extends object>(
       const nextPerPage = p.pageSize;
       setPageRaw(nextPage);
       setPerPageRaw(nextPerPage);
+      persistPerPageValue(nextPerPage);
       writeUrl({ [pageKey]: nextPage, [perPageKey]: nextPerPage });
     },
-    [writeUrl, pageKey, perPageKey],
+    [writeUrl, pageKey, perPageKey, persistPerPageValue],
   );
 
   return {
