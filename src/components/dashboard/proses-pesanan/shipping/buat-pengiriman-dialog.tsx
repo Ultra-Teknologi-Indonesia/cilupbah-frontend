@@ -22,6 +22,7 @@ import {
   useCreateShipment,
 } from "@/hooks/proses-pesanan/use-fulfillment";
 import { guessShipmentTypeFromCourierName } from "@/lib/proses-pesanan/shipment-type";
+import { withShipmentServiceOptions } from "@/lib/proses-pesanan/shipment-courier-options";
 
 interface BuatPengirimanDialogProps {
   open: boolean;
@@ -109,9 +110,13 @@ function PengirimanForm({
 
   const couriers = useCouriers(!isMarketplace);
   const createShipment = useCreateShipment();
+  const courierOptions = React.useMemo(
+    () => withShipmentServiceOptions(couriers.data ?? []),
+    [couriers.data],
+  );
 
   const selectedCourier =
-    couriers.data?.find((c) => c.id === courierId) ?? null;
+    courierOptions.find((c) => c.id === courierId) ?? null;
 
   const handleCourierChange = (id: string | null) => {
     setCourierId(id ?? "");
@@ -241,7 +246,7 @@ function PengirimanForm({
               value={courierId || null}
               onChange={handleCourierChange}
               options={
-                couriers.data?.map((c) => ({
+                courierOptions.map((c) => ({
                   value: c.id,
                   label: c.name,
                 })) ?? []
