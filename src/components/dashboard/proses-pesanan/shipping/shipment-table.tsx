@@ -11,7 +11,6 @@ import {
   ZapIcon,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
 import {
   Tooltip,
   TooltipContent,
@@ -32,7 +31,6 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table/data-table";
 import { DataTableColumnHeader } from "@/components/ui/data-table/data-table-column-header";
 import {
-  fulfillmentKeys,
   useCancelShipment,
   useHandOverShipment,
   useShipments,
@@ -40,7 +38,6 @@ import {
 import { usePermissions } from "@/hooks/auth/use-permissions";
 import type {
   Shipment,
-  ShipmentDetail,
 } from "@/types/proses-pesanan/fulfillment";
 
 // eslint-disable-next-line no-restricted-imports
@@ -93,7 +90,6 @@ const SHIPMENT_STATUS_OPTIONS = [
 ];
 
 export function ShipmentTable() {
-  const qc = useQueryClient();
   const list = useListState<PageFilterState>(EMPTY_FILTERS, {
     perPage: 20,
     debounceMs: 350,
@@ -112,23 +108,16 @@ export function ShipmentTable() {
       setPrintLabelPending(true);
       const loadingId = toast.loading("Mengumpulkan pesanan dari pengiriman…");
       try {
-        const details = await Promise.all(
-          selectedShipments.map((s) =>
-            qc.fetchQuery<ShipmentDetail>({
-              queryKey: fulfillmentKeys.shipmentDetail(s.id),
-              queryFn: () => OutboundService.shipmentDetail(s.id),
-            }),
-          ),
+        const shipmentOrders = await OutboundService.shipmentOrdersBulk(
+          selectedShipments.map((shipment) => shipment.id),
         );
         const seen = new Set<string>();
         const orderInputs: { id: string; source: string | null }[] = [];
-        for (const d of details) {
-          for (const o of d.orders ?? []) {
-            if (!o.orderId || seen.has(o.orderId)) continue;
-            if ((o.source ?? "").toLowerCase() === "woocommerce") continue;
-            seen.add(o.orderId);
-            orderInputs.push({ id: o.orderId, source: o.source ?? null });
-          }
+        for (const order of shipmentOrders) {
+          if (seen.has(order.order_id)) continue;
+          if ((order.source ?? "").toLowerCase() === "woocommerce") continue;
+          seen.add(order.order_id);
+          orderInputs.push({ id: order.order_id, source: order.source ?? null });
         }
         toast.dismiss(loadingId);
         if (orderInputs.length === 0) {
@@ -145,7 +134,7 @@ export function ShipmentTable() {
         setPrintLabelPending(false);
       }
     },
-    [qc],
+    [],
   );
 
   const params = React.useMemo(

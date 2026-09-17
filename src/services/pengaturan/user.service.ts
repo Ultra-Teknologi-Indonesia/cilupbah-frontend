@@ -172,26 +172,22 @@ export const UserService = {
     deleted: string[];
     failed: { id: string; message: string }[];
   }> => {
-    const results = await Promise.allSettled(
-      ids.map((id) => UserService.delete(id)),
-    );
-    const deleted: string[] = [];
-    const failed: { id: string; message: string }[] = [];
-    results.forEach((r, i) => {
-      if (r.status === "fulfilled") {
-        deleted.push(ids[i]);
-      } else {
-        const reason = r.reason as { message?: unknown } | undefined;
-        failed.push({
-          id: ids[i],
-          message:
-            typeof reason?.message === "string"
-              ? reason.message
-              : "Gagal menghapus pengguna.",
-        });
-      }
+    const res = await fetchClient<
+      ApiResponse<{
+        succeeded: number;
+        failed: Array<{ id: string; message: string }>;
+        results: Array<{ id: string; status: "success" | "failed"; message?: string }>;
+      }>
+    >("/users/bulk-delete", {
+      method: "POST",
+      data: { user_ids: ids },
     });
-    return { deleted, failed };
+    return {
+      deleted: (res.data?.results ?? [])
+        .filter((result) => result.status === "success")
+        .map((result) => result.id),
+      failed: res.data?.failed ?? [],
+    };
   },
 
   syncPermissions: async (id: string, permissions: string[]) => {

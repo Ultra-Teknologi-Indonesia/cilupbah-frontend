@@ -171,4 +171,33 @@ export const InventoryStockService = {
       }>
     >(`/inventory/stock/by-sku/${encodeURIComponent(sku)}${qs}`);
   },
+
+  bulkBySku: async (
+    skus: string[],
+    locationId?: string,
+    opts?: { requireStock?: boolean; strategy?: "default" | "fifo" },
+  ) => {
+    const res = await fetchClient<
+      ApiResponse<{
+        processed: number;
+        succeeded: number;
+        failed: Array<{ sku: string; status: "failed"; message: string }>;
+        results: Array<{
+          sku: string;
+          status: "success" | "failed";
+          data?: Awaited<ReturnType<typeof InventoryStockService.bySku>>["data"];
+          message?: string;
+        }>;
+      }>
+    >("/inventory/stock/by-sku-bulk", {
+      method: "POST",
+      data: {
+        skus,
+        ...(locationId ? { location_id: locationId } : {}),
+        ...(opts?.strategy ? { strategy: opts.strategy } : {}),
+        ...(opts?.requireStock ? { require_stock: true } : {}),
+      },
+    });
+    return res.data;
+  },
 };

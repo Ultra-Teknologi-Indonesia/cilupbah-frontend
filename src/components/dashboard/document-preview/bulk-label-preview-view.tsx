@@ -1,8 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   AlertTriangleIcon,
   CheckCircle2Icon,
@@ -32,10 +31,10 @@ import type {
   BulkLabelBatch,
   BulkLabelBatchItem,
 } from "@/types/proses-pesanan/bulk-label";
-import { bulkLabelRefetchInterval } from "@/lib/proses-pesanan/bulk-label-polling";
 import { apiError } from "@/lib/toast";
 import { notifyShippingLabelPrinted } from "@/lib/pesanan/shipping-label-audit-event";
 import { cn } from "@/lib/utils";
+import { useRealtimeEvents } from "@/hooks/realtime/use-realtime-events";
 
 const CHANNEL_LABEL: Record<string, string> = {
   shopee: "Shopee",
@@ -129,7 +128,7 @@ function ItemRow({ item }: { item: BulkLabelBatchItem }) {
 }
 
 export function BulkLabelPreviewView({ batchId }: { batchId: string }) {
-  const router = useRouter();
+  const queryClient = useQueryClient();
   const [retrying, setRetrying] = React.useState(false);
   const [pdfUrl, setPdfUrl] = React.useState<string | null>(null);
   const [pdfError, setPdfError] = React.useState<unknown>(null);
@@ -137,11 +136,18 @@ export function BulkLabelPreviewView({ batchId }: { batchId: string }) {
   const { data, error, isLoading, refetch } = useQuery<BulkLabelBatch>({
     queryKey: ["bulk-label-batch", batchId],
     queryFn: () => OutboundService.getBulkShippingLabelBatch(batchId),
-    refetchInterval: (query) =>
-      bulkLabelRefetchInterval(query.state.data?.status),
-    refetchIntervalInBackground: true,
     refetchOnWindowFocus: true,
     retry: 2,
+  });
+
+  useRealtimeEvents({
+    bulkLabelBatchId: batchId,
+    onEvent: (event) => {
+      if (event.type !== "bulk-label.progress") return;
+      void queryClient.invalidateQueries({
+        queryKey: ["bulk-label-batch", batchId],
+      });
+    },
   });
 
   const isReady = data?.status === "ready";

@@ -177,18 +177,16 @@ export function TransferKeluarFormPage({
           string,
           { available_bins: { id: string; code: string; on_hand: number }[] }
         >();
-        await Promise.allSettled(
-          uniqueSkus.map(async (sku) => {
-            try {
-              const r = await InventoryStockService.bySku(sku, srcLoc, {
-                strategy: "fifo",
-              });
-              stockBySku.set(sku, {
-                available_bins: r.data.available_bins ?? [],
-              });
-            } catch {}
-          }),
-        );
+        const bulkStock = await InventoryStockService.bulkBySku(uniqueSkus, srcLoc, {
+          strategy: "fifo",
+        });
+        bulkStock.results.forEach((result) => {
+          if (result.status === "success") {
+            stockBySku.set(result.sku, {
+              available_bins: result.data?.available_bins ?? [],
+            });
+          }
+        });
 
         const builtLines: LineDraft[] = detail.items.map((it) => {
           const sku = it.product?.sku ?? "";
@@ -369,19 +367,17 @@ export function TransferKeluarFormPage({
     const fresh = products.filter((p) => !existing.has(p.itemId));
     if (fresh.length === 0) return;
 
-    const results = await Promise.allSettled(
-      fresh.map((p) =>
-        InventoryStockService.bySku(p.sku, sourceLocationId, {
-          strategy: "fifo",
-        }),
-      ),
+    const bulk = await InventoryStockService.bulkBySku(
+      fresh.map((product) => product.sku),
+      sourceLocationId,
+      { strategy: "fifo" },
     );
 
     const newLines: LineDraft[] = [];
     let skippedNoStock = 0;
-    results.forEach((r, i) => {
-      if (r.status !== "fulfilled") return;
-      const stock = r.value.data;
+    bulk.results.forEach((result, i) => {
+      if (result.status !== "success" || !result.data) return;
+      const stock = result.data;
       if (!stock.available_bins || stock.available_bins.length === 0) {
         skippedNoStock += 1;
         return;

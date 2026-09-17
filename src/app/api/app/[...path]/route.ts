@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { getValidAccessToken, refreshSession } from "@/lib/auth/token-refresh";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 const BACKEND_URL =
   process.env.API_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
@@ -47,11 +50,15 @@ async function proxyRequest(
   const url = new URL(request.url);
   const targetPath = url.pathname.replace(/^\/api\/app\//, "/api/v1/");
   const targetUrl = `${BACKEND_URL}${targetPath}${url.search}`;
+  const isEventStream = targetPath === "/api/v1/realtime/stream";
 
   const headers = new Headers();
   const incomingAccept = request.headers.get("accept");
   headers.set("accept", incomingAccept || "application/json");
   headers.set("x-client-type", "web");
+
+  const lastEventId = request.headers.get("last-event-id");
+  if (lastEventId) headers.set("last-event-id", lastEventId);
 
   const contentType = request.headers.get("content-type");
   if (contentType) {
@@ -90,7 +97,9 @@ async function proxyRequest(
   const body = hasBody ? await request.arrayBuffer() : undefined;
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), PROXY_TIMEOUT_MS);
+  const timeoutId = isEventStream
+    ? undefined
+    : setTimeout(() => controller.abort(), PROXY_TIMEOUT_MS);
 
   try {
     let response = await fetch(targetUrl, {
@@ -124,7 +133,7 @@ async function proxyRequest(
       }
     }
 
-    clearTimeout(timeoutId);
+    if (timeoutId) clearTimeout(timeoutId);
 
     const passthroughHeaders = new Headers();
     for (const header of [
@@ -132,6 +141,8 @@ async function proxyRequest(
       "content-disposition",
       "cache-control",
       "content-length",
+      "x-accel-buffering",
+      "retry-after",
     ]) {
       const value = response.headers.get(header);
       if (value) passthroughHeaders.set(header, value);
@@ -146,9 +157,9 @@ async function proxyRequest(
       headers: passthroughHeaders,
     });
   } catch (error) {
-    clearTimeout(timeoutId);
+    if (timeoutId) clearTimeout(timeoutId);
 
-    if (controller.signal.aborted) {
+    if (controller.signal.aborted && !isEventStream) {
       console.error("API Proxy Timeout:", targetUrl);
       return gatewayTimeoutResponse();
     }

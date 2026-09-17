@@ -488,11 +488,14 @@ export function PenyesuaianFormPage({
     if (!Array.isArray(entries) || entries.length === 0) return;
 
     (async () => {
-      const results = await Promise.all(
-        entries.map((e) =>
-          InventoryStockService.bySku(e.sku, locParam).catch(() => null),
-        ),
+      const bulk = await InventoryStockService.bulkBySku(
+        entries.map((entry) => entry.sku),
+        locParam,
       );
+      const results = entries.map((entry) => {
+        const result = bulk.results.find((item) => item.sku === entry.sku);
+        return result?.status === "success" ? { data: result.data } : null;
+      });
 
       setLines((prev) => {
         const existing = new Set(prev.map((l) => `${l.itemId}|${l.binId}`));

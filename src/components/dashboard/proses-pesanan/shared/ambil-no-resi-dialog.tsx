@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   AlertTriangleIcon,
   CheckCircle2Icon,
@@ -39,6 +39,7 @@ import type {
 import { apiError } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { notifyShippingLabelPrinted } from "@/lib/pesanan/shipping-label-audit-event";
+import { useRealtimeEvents } from "@/hooks/realtime/use-realtime-events";
 
 const CHANNEL_LABEL: Record<string, string> = {
   shopee: "Shopee",
@@ -150,6 +151,7 @@ export function AmbilNoResiDialog({
   initialBatchId = null,
   documentSize = "thermal_100x120",
 }: AmbilNoResiDialogProps) {
+  const queryClient = useQueryClient();
   const [activeBatchId, setActiveBatchId] = React.useState<string | null>(
     initialBatchId,
   );
@@ -209,8 +211,17 @@ export function AmbilNoResiDialog({
     queryKey: ["bulk-label-batch", activeBatchId],
     queryFn: () => OutboundService.getBulkShippingLabelBatch(activeBatchId!),
     enabled: open && !isInitializing && !!activeBatchId,
-    refetchInterval: (query) =>
-      query.state.data?.status === "processing" ? 2000 : false,
+  });
+
+  useRealtimeEvents({
+    bulkLabelBatchId: activeBatchId ?? undefined,
+    enabled: open && !isInitializing && !!activeBatchId,
+    onEvent: (event) => {
+      if (!activeBatchId || event.type !== "bulk-label.progress") return;
+      void queryClient.invalidateQueries({
+        queryKey: ["bulk-label-batch", activeBatchId],
+      });
+    },
   });
 
   const handleRetry = async (hasRetryable: boolean) => {

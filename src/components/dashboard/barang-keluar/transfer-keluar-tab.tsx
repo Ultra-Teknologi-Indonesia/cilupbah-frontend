@@ -39,6 +39,7 @@ import {
   useOutboundFinished,
   useShipTransfer,
   useSubmitDraft,
+  usePrepareBulkTransferPrint,
   useDeleteTransfer,
   useBulkDeleteTransfer,
   useBulkPdfTransferAsync,
@@ -298,6 +299,7 @@ export function TransferKeluarTab() {
   });
 
   const shipMutation = useShipTransfer();
+  const prepareBulkPrintMutation = usePrepareBulkTransferPrint();
 
   const [deleteTarget, setDeleteTarget] = useState<InventoryTransfer | null>(
     null,
@@ -399,27 +401,12 @@ export function TransferKeluarTab() {
         const blockedByBin = items.filter(hasMissingBin).length;
         const printable = items.filter((item) => !hasMissingBin(item));
 
-        const results = await Promise.allSettled(
-          printable.map(async (item) => {
-            if (item.status === "DRAFT") {
-              await submitMutation.mutateAsync(item.id);
-            } else if (item.status === "APPROVED") {
-              await shipMutation.mutateAsync({
-                id: item.id,
-                data: { shipped_by: meName },
-              });
-            }
-            return item.id;
-          }),
-        );
-
-        const succeeded = results
-          .filter(
-            (r): r is PromiseFulfilledResult<string> =>
-              r.status === "fulfilled",
-          )
-          .map((r) => r.value);
-        const failedCount = results.length - succeeded.length;
+        const prepared = await prepareBulkPrintMutation.mutateAsync({
+          ids: printable.map((item) => item.id),
+          shippedBy: meName,
+        });
+        const succeeded = prepared.printable_ids;
+        const failedCount = prepared.failed.length;
 
         if (blockedByBin > 0) {
           toast.error(
@@ -439,7 +426,7 @@ export function TransferKeluarTab() {
         setBulkPrinting(false);
       }
     },
-    [bulkPrinting, submitMutation, shipMutation, meName, openBulkTransferPdf],
+    [bulkPrinting, prepareBulkPrintMutation, meName, openBulkTransferPdf],
   );
 
   const handleSubTabChange = useCallback(

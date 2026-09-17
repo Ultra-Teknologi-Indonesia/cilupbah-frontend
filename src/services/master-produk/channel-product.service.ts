@@ -146,7 +146,13 @@ export const ChannelProductService = {
     });
   },
 
-  bulkUnlink: async (items: UnlinkInput[]) => {
+  bulkUnlink: async (
+    items: Array<{
+      channel: string;
+      externalProductId: string;
+      shopId: string;
+    }>,
+  ) => {
     const res = await fetchClient<
       ApiResponse<{
         processed: number;

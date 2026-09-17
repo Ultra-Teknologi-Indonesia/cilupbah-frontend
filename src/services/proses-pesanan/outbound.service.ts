@@ -1454,6 +1454,16 @@ export const OutboundService = {
     return mapShipmentDetail(res.data);
   },
 
+  shipmentOrdersBulk: async (shipmentIds: string[]) => {
+    const res = await fetchClient<
+      ApiResponse<Array<{ shipment_id: string; order_id: string; source: string | null }>>
+    >("/outbound/shipments/bulk-orders", {
+      method: "POST",
+      data: { shipment_ids: shipmentIds },
+    });
+    return res.data ?? [];
+  },
+
   shipmentOrdersPaginated: async (
     id: string,
     params: FulfillmentListParams,

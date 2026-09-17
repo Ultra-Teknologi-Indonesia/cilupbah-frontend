@@ -20,6 +20,14 @@ export interface BulkTransferDeleteResult {
   failed: Array<{ id: string; reason: string }>;
 }
 
+export interface BulkTransferPrintResult {
+  processed: number;
+  succeeded: number;
+  failed: Array<{ id: string; message: string }>;
+  printable_ids: string[];
+  results: Array<{ id: string; status: "success" | "failed"; message?: string }>;
+}
+
 export interface CreateTransferDraftPayload {
   source_location_id: string;
   destination_location_id: string;
@@ -156,6 +164,17 @@ export const OutboundTransferService = {
       `/inventory/transfers/${id}/submit`,
       {
         method: "POST",
+      },
+    );
+    return res.data;
+  },
+
+  prepareBulkForPrint: async (ids: string[], shippedBy: string) => {
+    const res = await fetchClient<ApiResponse<BulkTransferPrintResult>>(
+      "/inventory/transfers/bulk/prepare-print",
+      {
+        method: "POST",
+        data: { ids, shipped_by: shippedBy },
       },
     );
     return res.data;

@@ -365,6 +365,27 @@ export const UploadService = {
     return res.data;
   },
 
+  createDrafts: async (
+    productId: string,
+    shopIds: string[],
+    attributeMapping?: Record<string, string> | null,
+  ): Promise<{ draft_ids: string[] }> => {
+    const res = await fetchClient<ApiResponse<{ draft_ids: string[] }>>(
+      `/products/${productId}/channel-drafts/bulk-create`,
+      {
+        method: "POST",
+        data: {
+          shop_ids: shopIds,
+          status: "ready",
+          ...(attributeMapping && Object.keys(attributeMapping).length > 0
+            ? { attribute_mapping: attributeMapping }
+            : {}),
+        },
+      },
+    );
+    return res.data;
+  },
+
   bulkUpload: async (draftIds: string[]): Promise<BulkUploadResult> => {
     const res = await fetchClient<ApiResponse<BulkUploadResult>>(
       `/products/channel-drafts/bulk-upload`,
@@ -377,10 +398,8 @@ export const UploadService = {
     productId: string,
     shopIds: string[],
   ): Promise<BulkUploadResult> => {
-    const drafts = await Promise.all(
-      shopIds.map((shopId) => UploadService.createDraft(productId, shopId)),
-    );
-    return UploadService.bulkUpload(drafts.map((d) => d.id));
+    const drafts = await UploadService.createDrafts(productId, shopIds);
+    return UploadService.bulkUpload(drafts.draft_ids);
   },
 
   fetchRequiredAttributes: async (
@@ -456,16 +475,12 @@ export const UploadService = {
     shopIds: string[],
     attributeMapping: Record<string, string> | null,
   ): Promise<BulkUploadResult> => {
-    const drafts = await Promise.all(
-      shopIds.map((shopId) =>
-        UploadService.createDraftWithAttributes(
-          productId,
-          shopId,
-          attributeMapping,
-        ),
-      ),
+    const drafts = await UploadService.createDrafts(
+      productId,
+      shopIds,
+      attributeMapping,
     );
-    return UploadService.bulkUpload(drafts.map((d) => d.id));
+    return UploadService.bulkUpload(drafts.draft_ids);
   },
 
   drafts: async (

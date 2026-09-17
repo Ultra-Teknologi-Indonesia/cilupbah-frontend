@@ -176,6 +176,18 @@ export function useShipTransfer() {
   });
 }
 
+export function usePrepareBulkTransferPrint() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ ids, shippedBy }: { ids: string[]; shippedBy: string }) =>
+      OutboundTransferService.prepareBulkForPrint(ids, shippedBy),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["outbound-transfer"] });
+      invalidateStockViews(qc);
+    },
+  });
+}
+
 export function useCancelTransfer() {
   const qc = useQueryClient();
   return useMutation({
