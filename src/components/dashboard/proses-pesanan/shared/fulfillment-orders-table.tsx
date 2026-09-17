@@ -707,7 +707,7 @@ function OrderCard({
 export function FulfillmentOrdersTable({
   stage,
   actions,
-  searchPlaceholder = "Cari no. pesanan…",
+  searchPlaceholder = "Cari no. pesanan, resi, SKU…",
   filterFields,
   channelStatusOptions,
   excludeTransit,

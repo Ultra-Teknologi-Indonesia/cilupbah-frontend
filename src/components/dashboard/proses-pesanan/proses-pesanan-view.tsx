@@ -114,7 +114,7 @@ function FulfillmentBoard({ stage }: { stage: FulfillmentStage }) {
           tab="all"
           emptyTitle="Belum ada pesanan selesai pick"
           emptyDescription="Pesanan yang sudah selesai dipick akan muncul di sini."
-          searchPlaceholder="Cari no. pesanan, resi, picklist, ekspedisi…"
+          searchPlaceholder="Cari no. pesanan, resi, SKU, picklist, ekspedisi…"
           filterFields={[
             "courier",
             "location",
@@ -164,7 +164,7 @@ function FulfillmentBoard({ stage }: { stage: FulfillmentStage }) {
             tab="all"
             emptyTitle="Belum ada pesanan siap packing"
             emptyDescription="Pesanan yang sudah selesai dipick akan muncul di sini."
-            searchPlaceholder="Cari no. pesanan, resi, picklist, ekspedisi…"
+            searchPlaceholder="Cari no. pesanan, resi, SKU, picklist, ekspedisi…"
             filterFields={["courier", "date", "label_printed"]}
             extraColumns={[
               {
@@ -194,6 +194,7 @@ function FulfillmentBoard({ stage }: { stage: FulfillmentStage }) {
           tab="all"
           emptyTitle="Belum ada pesanan selesai packing"
           emptyDescription="Pesanan yang sudah selesai dipacking akan muncul di sini."
+          searchPlaceholder="Cari no. pesanan, resi, SKU, ekspedisi…"
           filterFields={["courier", "date", "label_printed"]}
           extraColumns={[
             {
@@ -227,6 +228,7 @@ function FulfillmentBoard({ stage }: { stage: FulfillmentStage }) {
           tab="all"
           emptyTitle="Belum ada pesanan siap kirim"
           emptyDescription="Pesanan yang sudah dipacking akan muncul di sini."
+          searchPlaceholder="Cari no. pesanan, resi, SKU, ekspedisi…"
           filterFields={[
             "courier",
             "location",
@@ -247,6 +249,7 @@ function FulfillmentBoard({ stage }: { stage: FulfillmentStage }) {
           tab="completed"
           emptyTitle="Belum ada pesanan selesai"
           emptyDescription="Pesanan yang sudah terkirim akan muncul di sini."
+          searchPlaceholder="Cari no. pesanan, resi, SKU, ekspedisi…"
           filterFields={["courier", "status", "date"]}
           channelStatusOptions={[
             { value: "COMPLETED", label: "Selesai" },

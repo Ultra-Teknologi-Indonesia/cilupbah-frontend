@@ -239,7 +239,7 @@ export function ReadyToProcessCardList() {
         excludeTransit
         search={list.search}
         onSearchChange={list.setSearch}
-        searchPlaceholder="Cari no. pesanan…"
+        searchPlaceholder="Cari no. pesanan, resi, SKU, ekspedisi…"
       />
 
       <div className="flex flex-wrap items-center gap-4 border-b border-border/40 px-4 py-2 sm:px-5">

@@ -123,7 +123,7 @@ export function FulfillmentCardList({
   courierMode,
   excludeTransit,
   extraColumns,
-  searchPlaceholder = "Cari no. pesanan…",
+  searchPlaceholder = "Cari no. pesanan, resi, SKU…",
   baseParams,
   allowShipmentCreation = false,
 }: {
