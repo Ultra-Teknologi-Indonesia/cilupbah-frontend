@@ -77,32 +77,32 @@ const STATUS_OPTIONS = [
 ];
 
 function DurationCell({
-  startedAt,
+  assignedAt,
   completedAt,
   status,
 }: {
-  startedAt: string | null;
+  assignedAt: string | null;
   completedAt: string | null;
   status: Picklist["status"];
 }) {
   const [, forceTick] = React.useReducer((c: number) => c + 1, 0);
 
   React.useEffect(() => {
-    if (status !== "IN_PROGRESS" || completedAt) return;
+    if (!assignedAt || completedAt || status === "FAILED" || status === "CANCELLED") return;
     const t = setInterval(forceTick, 60_000);
     return () => clearInterval(t);
-  }, [status, completedAt]);
+  }, [assignedAt, status, completedAt]);
 
   return (
     <TooltipProvider delayDuration={200}>
       <Tooltip>
         <TooltipTrigger asChild>
           <span className="tabular-nums text-foreground">
-            {formatPickingDuration(startedAt, completedAt, status)}
+            {formatPickingDuration(assignedAt, completedAt, status)}
           </span>
         </TooltipTrigger>
         <TooltipContent>
-          Mulai: {formatDateTime(startedAt)}
+          Diserahkan: {formatDateTime(assignedAt)}
           <br />
           Selesai:{" "}
           {completedAt ? formatDateTime(completedAt) : "Sedang berjalan"}
@@ -269,7 +269,7 @@ export function PicklistTable() {
         header: "Durasi",
         cell: ({ row }) => (
           <DurationCell
-            startedAt={row.original.startedAt}
+            assignedAt={row.original.assignedAt}
             completedAt={row.original.completedAt}
             status={row.original.status}
           />

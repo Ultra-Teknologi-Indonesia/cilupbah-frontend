@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 import { useListState } from "@/hooks/use-list-state";
 import { useUrlTab } from "@/hooks/use-url-tab";
@@ -142,6 +142,8 @@ const KRON_VIEW_VALUES: readonly KronologiView[] = [
   "all",
 ];
 
+const MAX_MONITOR_PAGE_SIZE = 200;
+
 export function MonitorStokView() {
   const list = useListState<MonitorFilters>(EMPTY_FILTERS, {
     perPage: 20,
@@ -158,6 +160,15 @@ export function MonitorStokView() {
     setFilters,
     resetPage,
   } = list;
+  const setPage = list.setPage;
+  const setPerPage = list.setPerPage;
+  const effectivePerPage = Math.min(perPage, MAX_MONITOR_PAGE_SIZE);
+
+  useEffect(() => {
+    if (perPage > MAX_MONITOR_PAGE_SIZE) {
+      setPerPage(MAX_MONITOR_PAGE_SIZE);
+    }
+  }, [perPage, setPerPage]);
   const locationId = filters.location_id;
   const categoryId = filters.category_id;
   const period = filters.period;
@@ -205,9 +216,6 @@ export function MonitorStokView() {
       setFilters({ ...filters, date_from: from, date_to: to }),
     [filters, setFilters],
   );
-  const setPage = list.setPage;
-  const setPerPage = list.setPerPage;
-
   const baseFilters = useMemo(
     () => ({
       search: debouncedSearch || undefined,
@@ -218,20 +226,24 @@ export function MonitorStokView() {
   );
 
   const listParams = useMemo(
-    () => ({ ...baseFilters, page, per_page: perPage }),
-    [baseFilters, page, perPage],
+    () => ({ ...baseFilters, page, per_page: effectivePerPage }),
+    [baseFilters, page, effectivePerPage],
   );
 
   const analyticsParams = useMemo(() => {
-    const base = { ...baseFilters, page, per_page: perPage };
+    const base = { ...baseFilters, page, per_page: effectivePerPage };
     if (tab === "perkiraan-habis")
       return { ...base, window: 30, threshold: period };
     return { ...base, days: period };
-  }, [baseFilters, page, perPage, tab, period]);
+  }, [baseFilters, page, effectivePerPage, tab, period]);
 
   const syncParams = useMemo(
-    () => ({ search: debouncedSearch || undefined, page, per_page: perPage }),
-    [debouncedSearch, page, perPage],
+    () => ({
+      search: debouncedSearch || undefined,
+      page,
+      per_page: effectivePerPage,
+    }),
+    [debouncedSearch, page, effectivePerPage],
   );
 
   const kronologiParams = useMemo(
@@ -247,7 +259,7 @@ export function MonitorStokView() {
       date_from: kronologiDateFrom || undefined,
       date_to: kronologiDateTo || undefined,
       page,
-      per_page: perPage,
+      per_page: effectivePerPage,
     }),
     [
       kronologiView,
@@ -258,7 +270,7 @@ export function MonitorStokView() {
       kronologiDateFrom,
       kronologiDateTo,
       page,
-      perPage,
+      effectivePerPage,
     ],
   );
 
@@ -404,11 +416,13 @@ export function MonitorStokView() {
                 {SUB_TABS.map(({ key, label }) => (
                   <TabsTrigger key={key} value={key}>
                     {label}
-                    {subTotal(key) !== undefined && (
+                    {summaryQuery.isPending || summaryQuery.isPlaceholderData ? (
+                      <Loader2Icon className="ml-1 size-3 animate-spin text-muted-foreground" aria-label="Memuat total" />
+                    ) : subTotal(key) !== undefined ? (
                       <span className="ml-0.5 rounded-full bg-muted px-1.5 text-2xs tabular-nums">
                         {subTotal(key)}
                       </span>
-                    )}
+                    ) : null}
                   </TabsTrigger>
                 ))}
               </TabsList>
