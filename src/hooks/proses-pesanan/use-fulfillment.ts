@@ -477,6 +477,18 @@ export function useRevertPicklist() {
   });
 }
 
+export function useRevertPacklists() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (packlistIds: string[]) =>
+      OutboundService.revertPacklists(packlistIds),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: fulfillmentKeys.all });
+      invalidateStockViews(qc);
+    },
+  });
+}
+
 export function useFailPickItem() {
   const qc = useQueryClient();
   return useMutation({

@@ -23,6 +23,7 @@ import { DataTableColumnHeader } from "@/components/ui/data-table/data-table-col
 import {
   usePacklists,
   usePrefetchPacklistDetail,
+  useRevertPacklists,
 } from "@/hooks/proses-pesanan/use-fulfillment";
 import { type Packlist } from "@/types/proses-pesanan/fulfillment";
 import { StatusBadge } from "@/components/dashboard/shared/status-badge";
@@ -36,6 +37,9 @@ import { AmbilNoResiDialog } from "../shared/ambil-no-resi-dialog";
 import { DocActions } from "@/hooks/proses-pesanan/use-doc-actions";
 import { Checkbox } from "@/components/ui/checkbox";
 import { usePermissions } from "@/hooks/auth/use-permissions";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { apiError } from "@/lib/toast";
+import { toast } from "@/components/ui/sonner";
 
 const PACKLIST_LABEL_CHANNELS = new Set(["shopee", "tiktok", "lazada"]);
 
@@ -83,8 +87,10 @@ export function PacklistTable() {
   const [editPacker, setEditPacker] = React.useState<Packlist | null>(null);
   const [deleteTarget, setDeleteTarget] = React.useState<Packlist | null>(null);
   const [selectedIds, setSelectedIds] = React.useState<Set<string>>(new Set());
+  const [revertConfirmOpen, setRevertConfirmOpen] = React.useState(false);
   const [ambilResiOpen, setAmbilResiOpen] = React.useState(false);
   const [resiOrderIds, setResiOrderIds] = React.useState<string[]>([]);
+  const revertPacklists = useRevertPacklists();
 
   const params = React.useMemo(
     () => ({
@@ -133,6 +139,24 @@ export function PacklistTable() {
     return ids;
   }, [packlists]);
 
+  const selectableOrderIds = React.useMemo(
+    () =>
+      canEditPacking
+        ? packlists
+            .filter((p) => p.orderId)
+            .map((p) => p.orderId as string)
+        : eligibleOrderIds,
+    [canEditPacking, eligibleOrderIds, packlists],
+  );
+
+  const selectedPacklistIds = React.useMemo(
+    () =>
+      packlists
+        .filter((p) => p.orderId && selectedIds.has(p.orderId))
+        .map((p) => p.id),
+    [packlists, selectedIds],
+  );
+
   const toggleOrder = React.useCallback((orderId: string, checked: boolean) => {
     setSelectedIds((prev) => {
       const next = new Set(prev);
@@ -143,23 +167,43 @@ export function PacklistTable() {
   }, []);
 
   const allSelected =
-    eligibleOrderIds.length > 0 &&
-    eligibleOrderIds.every((id) => selectedIds.has(id));
+    selectableOrderIds.length > 0 &&
+    selectableOrderIds.every((id) => selectedIds.has(id));
   const someSelected =
-    !allSelected && eligibleOrderIds.some((id) => selectedIds.has(id));
+    !allSelected && selectableOrderIds.some((id) => selectedIds.has(id));
 
   const toggleAll = React.useCallback(() => {
     setSelectedIds((prev) => {
       const next = new Set(prev);
-      const allOn = eligibleOrderIds.every((id) => next.has(id));
+      const allOn = selectableOrderIds.every((id) => next.has(id));
       if (allOn) {
-        for (const id of eligibleOrderIds) next.delete(id);
+        for (const id of selectableOrderIds) next.delete(id);
       } else {
-        for (const id of eligibleOrderIds) next.add(id);
+        for (const id of selectableOrderIds) next.add(id);
       }
       return next;
     });
-  }, [eligibleOrderIds]);
+  }, [selectableOrderIds]);
+
+  const handleBulkRevert = React.useCallback(async () => {
+    if (selectedPacklistIds.length === 0) return;
+
+    try {
+      const result = await revertPacklists.mutateAsync(selectedPacklistIds);
+      setSelectedIds(new Set());
+      setRevertConfirmOpen(false);
+
+      if (result.failed_count > 0) {
+        toast.warning("Sebagian packing tidak dikembalikan", {
+          description: `${result.success_count} berhasil, ${result.failed_count} gagal. Pesanan yang sudah masuk pengiriman tetap dipertahankan.`,
+        });
+      } else {
+        toast.success(`${result.success_count} packing dikembalikan ke Belum Mulai.`);
+      }
+    } catch (error) {
+      apiError(error, "Gagal mengembalikan packing.");
+    }
+  }, [revertPacklists, selectedPacklistIds]);
 
   const handleReadyToShip = React.useCallback(() => {
     const ids = packlists
@@ -197,12 +241,17 @@ export function PacklistTable() {
             }
             onCheckedChange={toggleAll}
             aria-label="Pilih semua"
-            disabled={!canExportShipping && !canExportOrder && !canEditOrder}
+            disabled={
+              !canEditPacking &&
+              !canExportShipping &&
+              !canExportOrder &&
+              !canEditOrder
+            }
           />
         ),
         cell: ({ row }) => {
           const el = packlistLabelEligible(row.original);
-          if (!el.eligible || !row.original.orderId) {
+          if ((!el.eligible && !canEditPacking) || !row.original.orderId) {
             return (
               <TooltipProvider delayDuration={200}>
                 <Tooltip>
@@ -229,7 +278,12 @@ export function PacklistTable() {
                 toggleOrder(row.original.orderId as string, !!v)
               }
               aria-label="Pilih pesanan"
-              disabled={!canExportShipping && !canExportOrder && !canEditOrder}
+              disabled={
+                !canEditPacking &&
+                !canExportShipping &&
+                !canExportOrder &&
+                !canEditOrder
+              }
             />
           );
         },
@@ -448,6 +502,7 @@ export function PacklistTable() {
             onReadyToShip={canEditOrder ? handleReadyToShip : undefined}
             onPrintLabel={canExportShipping ? handlePrintLabel : undefined}
             onPrintInvoice={canExportOrder ? handlePrintInvoice : undefined}
+            onRevert={canEditPacking ? () => setRevertConfirmOpen(true) : undefined}
           />
         </div>
         <DataTable
@@ -504,6 +559,19 @@ export function PacklistTable() {
         onOpenChange={setAmbilResiOpen}
         orderIds={resiOrderIds}
       />
+
+      {canEditPacking && (
+        <ConfirmDialog
+          open={revertConfirmOpen}
+          onOpenChange={setRevertConfirmOpen}
+          title={`Kembalikan ${selectedPacklistIds.length} packing?`}
+          description="Packing yang dipilih akan dihapus dari tahap Diproses dan pesanan dikembalikan ke Packing — Belum Mulai. Pesanan yang sudah masuk pengiriman atau sudah dikirim tidak akan diubah."
+          confirmLabel="Kembalikan"
+          variant="destructive"
+          loading={revertPacklists.isPending}
+          onConfirm={() => void handleBulkRevert()}
+        />
+      )}
     </div>
   );
 }

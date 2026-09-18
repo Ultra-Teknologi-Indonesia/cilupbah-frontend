@@ -818,6 +818,33 @@ export const OutboundService = {
   revertPicklist: async (id: string): Promise<void> => {
     await fetchClient(`/outbound/picklists/${id}/revert`, { method: "POST" });
   },
+  revertPacklists: async (
+    packlistIds: string[],
+  ): Promise<{
+    success_count: number;
+    failed_count: number;
+    results: Array<{
+      packlist_id: string;
+      status: "success" | "failed";
+      message: string;
+    }>;
+  }> => {
+    const res = await fetchClient<{
+      data: {
+        success_count: number;
+        failed_count: number;
+        results: Array<{
+          packlist_id: string;
+          status: "success" | "failed";
+          message: string;
+        }>;
+      };
+    }>(`/outbound/packlists/bulk-revert`, {
+      method: "POST",
+      data: { packlist_ids: packlistIds },
+    });
+    return res.data;
+  },
 
   getOrderByNo: async (
     orderNo: string,

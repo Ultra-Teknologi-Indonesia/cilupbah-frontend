@@ -5,6 +5,7 @@ import {
   PrinterIcon,
   Trash2Icon,
   TruckIcon,
+  Undo2Icon,
   XIcon,
 } from "lucide-react";
 
@@ -19,6 +20,7 @@ interface FulfillmentBulkActionBarProps {
   onPrintInvoice?: () => void;
   onPrintInvoiceAndLabel?: () => void;
   onDelete?: () => void;
+  onRevert?: () => void;
   readyToShipDisabled?: string;
   createShipmentDisabled?: string;
   printLabelDisabled?: string;
@@ -34,6 +36,7 @@ export function FulfillmentBulkActionBar({
   onPrintInvoice,
   onPrintInvoiceAndLabel,
   onDelete,
+  onRevert,
   readyToShipDisabled,
   createShipmentDisabled,
   printLabelDisabled,
@@ -132,6 +135,18 @@ export function FulfillmentBulkActionBar({
           >
             <Trash2Icon className="size-4" />
             Hapus Pesanan
+          </Button>
+        )}
+
+        {onRevert && (
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={onRevert}
+            className="rounded-full border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive"
+          >
+            <Undo2Icon className="size-4" />
+            Kembalikan ke Belum Mulai
           </Button>
         )}
       </div>
