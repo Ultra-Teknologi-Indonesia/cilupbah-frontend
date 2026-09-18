@@ -3,8 +3,15 @@ import Image from "next/image";
 
 import * as React from "react";
 import type { ColumnDef, PaginationState } from "@tanstack/react-table";
-import { ImageIcon, Loader2Icon, Trash2Icon, UploadIcon } from "lucide-react";
+import {
+  ImageIcon,
+  Loader2Icon,
+  RefreshCwIcon,
+  Trash2Icon,
+  UploadIcon,
+} from "lucide-react";
 
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { LiquidGlass } from "@/components/ui/liquid-glass";
 import { DataTable } from "@/components/ui/data-table";
@@ -69,15 +76,16 @@ export function DraftTab({
     return () => clearTimeout(t);
   }, [searchInput]);
 
-  const { data, isLoading } = useChannelDrafts({
+  const query = useChannelDrafts({
     search: search || undefined,
     status: (status === "all" ? undefined : status) as DraftStatus | undefined,
     page: pagination.pageIndex + 1,
     perPage: pagination.pageSize,
   });
 
-  const items = data?.items ?? [];
-  const total = data?.meta?.total ?? 0;
+  const items = query.data?.items ?? [];
+  const total = query.data?.meta?.total ?? 0;
+  const isLoading = query.isLoading;
 
   const uploadDraft = useUploadDraft();
   const deleteDraft = useDeleteDraft();
@@ -219,6 +227,22 @@ export function DraftTab({
           <div className="overflow-x-auto">{tabBar}</div>
           <div className="flex items-center gap-3 pb-2">
             {actionButton}
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 gap-1.5"
+              onClick={() => query.refetch()}
+              disabled={query.isFetching}
+              title="Muat ulang data"
+            >
+              <RefreshCwIcon
+                className={cn(
+                  "size-4",
+                  query.isFetching && "animate-spin motion-reduce:animate-none",
+                )}
+              />
+              Refresh
+            </Button>
             <span className="text-sm text-muted-foreground">
               Total{" "}
               <span className="font-medium text-foreground tabular-nums">
@@ -233,6 +257,8 @@ export function DraftTab({
           searchPlaceholder="Cari produk…"
           onReset={hasFilter ? onReset : undefined}
           hasFilter={hasFilter}
+          onRefresh={() => query.refetch()}
+          isRefreshing={query.isFetching}
           activeCount={[status !== "all"].filter(Boolean).length}
         >
           <Select

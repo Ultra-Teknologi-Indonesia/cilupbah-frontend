@@ -156,12 +156,6 @@ export function useChannelDrafts(params: DraftParams) {
     queryFn: () => UploadService.drafts(params),
     placeholderData: keepPreviousData,
     staleTime: 30 * 1000,
-    refetchInterval: (query) => {
-      const items = query.state.data?.items ?? [];
-      return items.some((d) => d.status === "ready" && !d.canUpload)
-        ? 5000
-        : false;
-    },
   });
 }
 
@@ -201,10 +195,6 @@ export function useUploadHistories(params: HistoryParams) {
     queryFn: () => UploadService.histories(params),
     placeholderData: keepPreviousData,
     staleTime: 30 * 1000,
-    refetchInterval: (query) => {
-      const items = query.state.data?.items ?? [];
-      return items.some((h) => !h.success && !h.canReupload) ? 5000 : false;
-    },
   });
 }
 

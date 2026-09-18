@@ -3,8 +3,15 @@ import Image from "next/image";
 
 import * as React from "react";
 import Link from "next/link";
-import { ChevronDownIcon, ImageIcon, TriangleAlertIcon } from "lucide-react";
+import {
+  ChevronDownIcon,
+  ImageIcon,
+  RefreshCwIcon,
+  TriangleAlertIcon,
+} from "lucide-react";
 
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Combobox } from "@/components/ui/combobox";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -116,6 +123,23 @@ export function TransactionDetailSheet({
             searchPlaceholder="Status"
             className="h-9 w-52"
           />
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="h-9 w-9 shrink-0 rounded-full p-0"
+            onClick={() => query.refetch()}
+            disabled={query.isFetching}
+            title="Muat ulang detail transaksi"
+            aria-label="Muat ulang detail transaksi"
+          >
+            <RefreshCwIcon
+              className={cn(
+                "size-4",
+                query.isFetching && "animate-spin motion-reduce:animate-none",
+              )}
+            />
+          </Button>
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-6">

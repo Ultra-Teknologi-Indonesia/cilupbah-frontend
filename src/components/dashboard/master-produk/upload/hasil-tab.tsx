@@ -11,6 +11,7 @@ import {
   ExternalLinkIcon,
   ImageIcon,
   InfoIcon,
+  RefreshCwIcon,
   RotateCcwIcon,
   WrenchIcon,
   XCircleIcon,
@@ -18,6 +19,7 @@ import {
 
 import { format, parseISO } from "date-fns";
 
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
 import { DatePicker } from "@/components/ui/date-picker";
@@ -276,7 +278,7 @@ export function HasilTab({
     [stores],
   );
 
-  const { data, isLoading } = useUploadHistories({
+  const query = useUploadHistories({
     search: search || undefined,
     status: status === "all" ? undefined : status,
     shopId: shopId || undefined,
@@ -286,8 +288,9 @@ export function HasilTab({
     perPage: pagination.pageSize,
   });
 
-  const items = data?.items ?? [];
-  const total = data?.meta?.total ?? 0;
+  const items = query.data?.items ?? [];
+  const total = query.data?.meta?.total ?? 0;
+  const isLoading = query.isLoading;
 
   const reupload = useReuploadHistory();
   const bulkDelete = useBulkDeleteHistories();
@@ -483,6 +486,22 @@ export function HasilTab({
           <div className="overflow-x-auto">{tabBar}</div>
           <div className="flex items-center gap-3 pb-2">
             {actionButton}
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 gap-1.5"
+              onClick={() => query.refetch()}
+              disabled={query.isFetching}
+              title="Muat ulang data"
+            >
+              <RefreshCwIcon
+                className={cn(
+                  "size-4",
+                  query.isFetching && "animate-spin motion-reduce:animate-none",
+                )}
+              />
+              Refresh
+            </Button>
             <span className="text-sm text-muted-foreground">
               Total{" "}
               <span className="font-medium text-foreground tabular-nums">
@@ -497,6 +516,8 @@ export function HasilTab({
           searchPlaceholder="Cari produk…"
           onReset={hasFilter ? onReset : undefined}
           hasFilter={hasFilter}
+          onRefresh={() => query.refetch()}
+          isRefreshing={query.isFetching}
           activeCount={
             [
               shopId !== null,
