@@ -422,7 +422,7 @@ export function PacklistTable() {
         fields={["courier", "date", "label_printed"]}
         search={list.search}
         onSearchChange={list.setSearch}
-        searchPlaceholder="Cari no. packing…"
+        searchPlaceholder="Cari no. packing, pesanan…"
       />
       <div className="flex items-center justify-end gap-3 border-b border-border/40 px-4 py-2 text-sm text-muted-foreground sm:px-5">
         <button
