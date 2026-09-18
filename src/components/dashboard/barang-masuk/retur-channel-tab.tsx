@@ -153,6 +153,7 @@ function getChannelCode(item: SalesReturn): ChannelCode {
 
 export function ReturChannelTab() {
   const { can } = usePermissions();
+  const canViewReturn = can("view-retur-penjualan");
   const canEditReturn = can("edit-retur-penjualan");
   const canCreateReturn = can("create-retur-penjualan");
   const canExportReturn = can("export-retur-penjualan");
@@ -247,13 +248,17 @@ export function ReturChannelTab() {
 
   const unprocessedQuery = useSalesReturnsUnprocessed(
     isUnprocessed ? params : {},
+    canViewReturn && isUnprocessed,
   );
-  const listQuery = useSalesReturns(!isUnprocessed ? params : {});
+  const listQuery = useSalesReturns(
+    !isUnprocessed ? params : {},
+    canViewReturn && !isUnprocessed,
+  );
 
   const activeQuery = isUnprocessed ? unprocessedQuery : listQuery;
   const { data, isLoading, isFetching } = activeQuery;
-  const { data: locData } = useLocations({ perPage: 100 });
-  const { data: filterOptions } = useSalesReturnFilterOptions();
+  const { data: locData } = useLocations({ perPage: 100 }, canViewReturn);
+  const { data: filterOptions } = useSalesReturnFilterOptions(canViewReturn);
 
   const columns = useMemo<ColumnDef<SalesReturn>[]>(() => {
     const cols: ColumnDef<SalesReturn>[] = [
@@ -624,6 +629,16 @@ export function ReturChannelTab() {
     ],
     [filterOptions?.shops],
   );
+
+  if (!canViewReturn) {
+    return (
+      <EmptyState
+        icon={CornerDownLeftIcon}
+        title="Akses Ditolak"
+        description="Anda tidak memiliki hak akses untuk melihat data retur dari channel online (view-retur-penjualan)."
+      />
+    );
+  }
 
   return (
     <div className="flex flex-col gap-3">

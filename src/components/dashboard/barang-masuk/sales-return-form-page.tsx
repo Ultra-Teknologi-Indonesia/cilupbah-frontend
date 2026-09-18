@@ -17,6 +17,8 @@ import { LiquidGlass } from "@/components/ui/liquid-glass";
 import { PageTitle } from "@/components/dashboard/page-title";
 import { FormFooter } from "@/components/dashboard/shared/form-footer";
 import { UserSelect } from "@/components/dashboard/shared/user-select";
+import { EmptyState } from "@/components/ui/empty-state";
+import { usePermissions } from "@/hooks/auth/use-permissions";
 import { useLocations } from "@/hooks/manajemen-rak/use-locations";
 import { useCreateSalesReturn } from "@/hooks/barang-masuk/use-sales-return-actions";
 import {
@@ -41,6 +43,8 @@ interface LineDraft {
 
 export function SalesReturnFormPage() {
   const router = useRouter();
+  const { can } = usePermissions();
+  const canCreateReturn = can("create-retur-penjualan");
   const [locationId, setLocationId] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [reason, setReason] = useState("");
@@ -48,7 +52,7 @@ export function SalesReturnFormPage() {
   const [lines, setLines] = useState<LineDraft[]>([]);
   const [pickerOpen, setPickerOpen] = useState(false);
 
-  const { data: locData } = useLocations({ perPage: 100 });
+  const { data: locData } = useLocations({ perPage: 100 }, canCreateReturn);
   const createMut = useCreateSalesReturn();
 
   const locationOptions = useMemo(
@@ -108,6 +112,27 @@ export function SalesReturnFormPage() {
       },
     );
   };
+
+  if (!canCreateReturn) {
+    return (
+      <div className="flex flex-col gap-5">
+        <PageTitle
+          title="Buat Retur Manual"
+          backHref={LIST_HREF}
+          breadcrumb={[
+            { label: "Gudang" },
+            { label: "Barang Masuk", href: "/dashboard/barang-masuk" },
+            { label: "Retur", href: LIST_HREF },
+            { label: "Buat Retur" },
+          ]}
+        />
+        <EmptyState
+          title="Akses Ditolak"
+          description="Anda tidak memiliki hak akses untuk membuat data retur penjualan (create-retur-penjualan)."
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-5">

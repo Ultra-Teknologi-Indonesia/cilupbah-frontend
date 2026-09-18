@@ -6,28 +6,37 @@ import type { SalesReturnListParams } from "@/types/barang-masuk/sales-return";
 
 const STALE = 30 * 1000;
 
-export function useSalesReturnsUnprocessed(params: SalesReturnListParams = {}) {
+export function useSalesReturnsUnprocessed(
+  params: SalesReturnListParams = {},
+  enabled = true,
+) {
   return useQuery({
     queryKey: ["sales-return", "unprocessed", params],
     queryFn: () => SalesReturnService.unprocessed(params),
     staleTime: STALE,
+    enabled,
   });
 }
 
-export function useSalesReturns(params: SalesReturnListParams = {}) {
+export function useSalesReturns(
+  params: SalesReturnListParams = {},
+  enabled = true,
+) {
   return useQuery({
     queryKey: ["sales-return", "list", params],
     placeholderData: keepPreviousData,
     queryFn: () => SalesReturnService.list(params),
     staleTime: STALE,
+    enabled,
   });
 }
 
-export function useSalesReturnFilterOptions() {
+export function useSalesReturnFilterOptions(enabled = true) {
   return useQuery({
     queryKey: ["sales-return", "filter-options"],
     queryFn: () => SalesReturnService.filterOptions(),
     staleTime: 5 * 60 * 1000,
+    enabled,
   });
 }
 

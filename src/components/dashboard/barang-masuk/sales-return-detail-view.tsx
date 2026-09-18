@@ -92,11 +92,15 @@ function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
 export function SalesReturnDetailView({ id }: { id: string }) {
   const router = useRouter();
   const { can } = usePermissions();
+  const canViewReturn = can("view-retur-penjualan");
   const canEditReturn = can("edit-retur-penjualan");
-  const { data: ret, isLoading } = useSalesReturn(id);
+  const { data: ret, isLoading } = useSalesReturn(id, canViewReturn);
   const isMarketplace = ret?.source === "marketplace";
   const isCancelledShipped = ret?.reason_category === "CANCEL_SHIPPED";
-  const { data: appeals = [] } = useSalesReturnAppeals(id, isMarketplace);
+  const { data: appeals = [] } = useSalesReturnAppeals(
+    id,
+    canViewReturn && isMarketplace,
+  );
 
   const acceptMut = useAcceptSalesReturn();
   const rejectMut = useRejectSalesReturn();
@@ -120,8 +124,19 @@ export function SalesReturnDetailView({ id }: { id: string }) {
 
   const { data: channelRejectReasons = [] } = useChannelRejectReasons(
     id,
-    action === "channel-reject",
+    canViewReturn && action === "channel-reject",
   );
+
+  if (!canViewReturn) {
+    return (
+      <div className="py-32">
+        <EmptyState
+          title="Akses Ditolak"
+          description="Anda tidak memiliki hak akses untuk melihat detail data retur penjualan (view-retur-penjualan)."
+        />
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (

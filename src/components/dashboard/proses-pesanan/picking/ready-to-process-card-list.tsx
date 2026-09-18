@@ -133,6 +133,7 @@ export function ReadyToProcessCardList() {
   const someSelected = pageIds.some((id) => selected.has(id));
 
   const selectedOrders = orders.filter((o) => selected.has(o.id));
+  const hasSelection = selected.size > 0;
   const distinctLocations = Array.from(
     new Set(selectedOrders.map((o) => o.locationId).filter(Boolean)),
   ) as string[];
@@ -290,83 +291,91 @@ export function ReadyToProcessCardList() {
           </div>
         ) : (
           <div className="flex flex-col gap-3 py-2">
-            <BulkActionBar
-              count={selected.size}
-              onClear={clearSelection}
-              label={(n) => `${n} pesanan dipilih`}
-              message={
-                multiLocation ? (
-                  <span className="text-xs text-destructive">
-                    Pesanan dari lokasi berbeda — pilih dari satu lokasi saja
-                  </span>
-                ) : null
-              }
-              actions={
-                <>
-                  {!multiLocation && (
-                    <>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground">
-                          Picker
-                        </span>
-                        <UserSelectById
-                          value={pickerId}
-                          onChange={(id) => setPickerId(id)}
-                          options={pickerOptions}
-                          isLoading={pickers.isLoading}
-                          currentUserId={me?.id}
-                          disabled={!locationId || pickers.isLoading}
-                          placeholder={
-                            pickers.isLoading ? "Memuat…" : "Pilih picker…"
-                          }
-                          emptyText="Tidak ada picker di lokasi ini."
-                          className="w-72"
-                        />
-                      </div>
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        onClick={() => setConfirmOpen(true)}
-                        disabled={createPicklist.isPending || !pickerId}
-                      >
-                        {createPicklist.isPending && (
-                          <Loader2Icon className="animate-spin" />
-                        )}
-                        Buat Picklist
-                      </Button>
-                      <Button
-                        size="sm"
-                        className="rounded-full gap-1.5"
-                        onClick={handleOpenAmbilResi}
-                      >
-                        <TruckIcon className="size-4" />
-                        Siap Kirim
-                      </Button>
+            <div
+              aria-hidden={!hasSelection}
+              className={cn(
+                "transition-opacity",
+                !hasSelection && "invisible pointer-events-none select-none",
+              )}
+            >
+              <BulkActionBar
+                count={hasSelection ? selected.size : 1}
+                onClear={clearSelection}
+                label={(n) => `${n} pesanan dipilih`}
+                message={
+                  multiLocation ? (
+                    <span className="text-xs text-destructive">
+                      Pesanan dari lokasi berbeda — pilih dari satu lokasi saja
+                    </span>
+                  ) : null
+                }
+                actions={
+                  <>
+                    {!multiLocation && (
+                      <>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-muted-foreground">
+                            Picker
+                          </span>
+                          <UserSelectById
+                            value={pickerId}
+                            onChange={(id) => setPickerId(id)}
+                            options={pickerOptions}
+                            isLoading={pickers.isLoading}
+                            currentUserId={me?.id}
+                            disabled={!locationId || pickers.isLoading}
+                            placeholder={
+                              pickers.isLoading ? "Memuat…" : "Pilih picker…"
+                            }
+                            emptyText="Tidak ada picker di lokasi ini."
+                            className="w-72"
+                          />
+                        </div>
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          onClick={() => setConfirmOpen(true)}
+                          disabled={createPicklist.isPending || !pickerId}
+                        >
+                          {createPicklist.isPending && (
+                            <Loader2Icon className="animate-spin" />
+                          )}
+                          Buat Picklist
+                        </Button>
+                        <Button
+                          size="sm"
+                          className="rounded-full gap-1.5"
+                          onClick={handleOpenAmbilResi}
+                        >
+                          <TruckIcon className="size-4" />
+                          Siap Kirim
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="rounded-full gap-1.5"
+                          onClick={handleOpenAmbilResi}
+                        >
+                          <PrinterIcon className="size-4" />
+                          Cetak Label
+                        </Button>
+                      </>
+                    )}
+                    {canDeleteOrder && (
                       <Button
                         variant="outline"
                         size="sm"
-                        className="rounded-full gap-1.5"
-                        onClick={handleOpenAmbilResi}
+                        className="rounded-full gap-1.5 text-destructive hover:text-destructive"
+                        onClick={() => setDeleteOpen(true)}
                       >
-                        <PrinterIcon className="size-4" />
-                        Cetak Label
+                        <Trash2Icon className="size-4" />
+                        Hapus
                       </Button>
-                    </>
-                  )}
-                  {canDeleteOrder && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="rounded-full gap-1.5 text-destructive hover:text-destructive"
-                      onClick={() => setDeleteOpen(true)}
-                    >
-                      <Trash2Icon className="size-4" />
-                      Hapus
-                    </Button>
-                  )}
-                </>
-              }
-            />
+                    )}
+                  </>
+                }
+              />
+            </div>
 
             <OrderTable
               orders={mappedOrders.map((m) => m.ui)}

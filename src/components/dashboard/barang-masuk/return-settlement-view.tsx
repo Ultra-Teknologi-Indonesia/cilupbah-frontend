@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/table";
 import { StatusBadge } from "@/components/dashboard/shared/status-badge";
 import { EmptyState } from "@/components/ui/empty-state";
+import { usePermissions } from "@/hooks/auth/use-permissions";
 import { useSalesReturn } from "@/hooks/barang-masuk/use-sales-returns";
 import { useSalesReturnSetting } from "@/hooks/barang-masuk/use-sales-return-setting";
 import {
@@ -40,9 +41,14 @@ function money(v: number | string | null | undefined): string {
 
 export function ReturnSettlementView({ returnId }: { returnId: string }) {
   const router = useRouter();
+  const { can } = usePermissions();
+  const canView = can("view-pembayaran-penjualan") || can("view-retur-penjualan");
+  const canEdit = can("edit-pembayaran-penjualan");
+  const canCreate = can("create-pembayaran-penjualan");
+  const canDelete = can("delete-pembayaran-penjualan");
   const backHref = `/dashboard/barang-masuk/retur/${returnId}`;
 
-  const { data: ret } = useSalesReturn(returnId);
+  const { data: ret } = useSalesReturn(returnId, canView);
   const { data: setting } = useSalesReturnSetting();
   const { data: settlement, isLoading } =
     useReturnSettlementForReturn(returnId);
@@ -80,7 +86,7 @@ export function ReturnSettlementView({ returnId }: { returnId: string }) {
     !!refundDate;
 
   const handleAddRefund = () => {
-    if (!settlement || !canAddRefund) return;
+    if (!settlement || !canAddRefund || !canCreate) return;
     addRefundMut.mutate(
       {
         settlement_id: settlement.id,
@@ -100,6 +106,37 @@ export function ReturnSettlementView({ returnId }: { returnId: string }) {
     );
   };
 
+  if (!canView) {
+    return (
+      <div className="flex flex-col gap-5">
+        <PageTitle
+          title="Settlement Retur"
+          backHref={backHref}
+          breadcrumb={[
+            { label: "Gudang" },
+            { label: "Barang Masuk", href: "/dashboard/barang-masuk" },
+            { label: "Retur", href: "/dashboard/barang-masuk/retur" },
+            { label: ret?.return_number ?? "Retur", href: backHref },
+            { label: "Settlement" },
+          ]}
+          actions={
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => router.push(backHref)}
+            >
+              <ArrowLeftIcon className="mr-1.5 size-4" /> Kembali
+            </Button>
+          }
+        />
+        <EmptyState
+          title="Akses Ditolak"
+          description="Anda tidak memiliki hak akses untuk melihat data settlement retur (view-pembayaran-penjualan atau view-retur-penjualan)."
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-5">
       <PageTitle
@@ -107,6 +144,7 @@ export function ReturnSettlementView({ returnId }: { returnId: string }) {
         backHref={backHref}
         breadcrumb={[
           { label: "Gudang" },
+          { label: "Barang Masuk", href: "/dashboard/barang-masuk" },
           { label: "Retur", href: "/dashboard/barang-masuk/retur" },
           { label: ret?.return_number ?? "Retur", href: backHref },
           { label: "Settlement" },
@@ -147,15 +185,17 @@ export function ReturnSettlementView({ returnId }: { returnId: string }) {
             icon={null}
             title="Belum ada settlement untuk retur ini."
             action={
-              <Button
-                onClick={() => createMut.mutate({ return_id: returnId })}
-                disabled={createMut.isPending}
-              >
-                {createMut.isPending && (
-                  <Loader2Icon className="mr-2 size-4 animate-spin" />
-                )}
-                Buat Settlement
-              </Button>
+              canCreate ? (
+                <Button
+                  onClick={() => createMut.mutate({ return_id: returnId })}
+                  disabled={createMut.isPending}
+                >
+                  {createMut.isPending && (
+                    <Loader2Icon className="mr-2 size-4 animate-spin" />
+                  )}
+                  Buat Settlement
+                </Button>
+              ) : undefined
             }
           />
         </LiquidGlass>
@@ -194,29 +234,33 @@ export function ReturnSettlementView({ returnId }: { returnId: string }) {
               <div className="flex items-center gap-2">
                 {settlement.status === "DRAFT" && (
                   <>
-                    <Button
-                      size="sm"
-                      onClick={() => confirmMut.mutate(settlement.id)}
-                      disabled={confirmMut.isPending}
-                    >
-                      Konfirmasi
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-destructive"
-                      onClick={() =>
-                        deleteMut.mutate(settlement.id, {
-                          onSuccess: () => router.push(backHref),
-                        })
-                      }
-                      disabled={deleteMut.isPending}
-                    >
-                      Hapus
-                    </Button>
+                    {canEdit && (
+                      <Button
+                        size="sm"
+                        onClick={() => confirmMut.mutate(settlement.id)}
+                        disabled={confirmMut.isPending}
+                      >
+                        Konfirmasi
+                      </Button>
+                    )}
+                    {canDelete && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-destructive"
+                        onClick={() =>
+                          deleteMut.mutate(settlement.id, {
+                            onSuccess: () => router.push(backHref),
+                          })
+                        }
+                        disabled={deleteMut.isPending}
+                      >
+                        Hapus
+                      </Button>
+                    )}
                   </>
                 )}
-                {settlement.status === "CONFIRMED" && (
+                {settlement.status === "CONFIRMED" && canEdit && (
                   <Button
                     size="sm"
                     onClick={() => completeMut.mutate(settlement.id)}
