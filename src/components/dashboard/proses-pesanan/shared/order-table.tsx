@@ -122,38 +122,6 @@ function SortableTableHead({
   );
 }
 
-const ItemSummary = React.memo(function ItemSummary({
-  order,
-}: {
-  order: Order;
-}) {
-  const qty = order.items.reduce((sum, i) => sum + i.qty_in_base, 0);
-  const skuCount = order.items.length;
-  const first = order.items[0];
-  if (!first) return <span className="text-muted-foreground">—</span>;
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <div className="max-w-[220px]">
-          <p className="truncate text-sm">{first.description || first.sku}</p>
-          <p className="text-xs text-muted-foreground tabular-nums">
-            {qty} item · {skuCount} SKU
-          </p>
-        </div>
-      </TooltipTrigger>
-      <TooltipContent className="max-w-xs">
-        <ul className="space-y-0.5 text-xs">
-          {order.items.map((i) => (
-            <li key={i.id}>
-              {i.description || i.sku}{" "}
-              <span className="text-muted-foreground">×{i.qty_in_base}</span>
-            </li>
-          ))}
-        </ul>
-      </TooltipContent>
-    </Tooltip>
-  );
-});
 
 function OrderRow({
   order,
@@ -263,10 +231,10 @@ function OrderRow({
         </span>
       </TableCell>
 
-      <TableCell>
-        <ItemSummary order={order} />
+      <TableCell className="text-center font-medium tabular-nums text-sm">
+        {order.items.length} / {order.items.reduce((sum, i) => sum + i.qty_in_base, 0)}
       </TableCell>
-
+      
       <TableCell>
         <StatusBadge
           domain="sales-order"
@@ -369,9 +337,11 @@ export function OrderTable({
     orders.length > 40 ? 30 : orders.length,
   );
 
+  const orderIdsStr = orders.map((o) => o.id).join(",");
   React.useEffect(() => {
     setRenderedCount(orders.length > 40 ? 30 : orders.length);
-  }, [orders]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderIdsStr, orders.length]);
 
   React.useEffect(() => {
     if (renderedCount < orders.length) {
@@ -406,7 +376,7 @@ export function OrderTable({
             onSortingChange={onSortingChange}
           />
           <TableHead>Pelanggan</TableHead>
-          <TableHead>Produk</TableHead>
+          <TableHead className="text-center whitespace-nowrap">Total SKU/ Qty</TableHead>
           <SortableTableHead
             id="status"
             title="Status"

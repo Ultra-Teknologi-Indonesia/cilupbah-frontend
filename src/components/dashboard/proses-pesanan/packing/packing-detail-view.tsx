@@ -610,7 +610,7 @@ export function PackingDetailView({ id }: { id: string }) {
                           {item.qtyPacked}/{item.qtyOrdered}
                         </p>
                         <p className="truncate text-2xs text-white/80">
-                          {item.description ?? item.sku}
+                          {item.sku}
                         </p>
                       </div>
                     </div>
