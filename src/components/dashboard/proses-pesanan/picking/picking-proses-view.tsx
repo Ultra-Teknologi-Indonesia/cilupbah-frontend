@@ -316,18 +316,18 @@ export function PickingProsesView({ id }: { id: string }) {
     }
   }, [pl]);
 
-  const didAutoStart = React.useRef(false);
-  React.useEffect(() => {
-    if (!pl || didAutoStart.current) return;
-    if (pl.status === "DRAFT" && canEditPicking) {
-      didAutoStart.current = true;
-      startPicklist.mutate(id, {
-        onSuccess: () =>
-          toast.success(`Picking dimulai untuk ${pl.picklistNo}.`),
-        onError: (e) => apiError(e, "Gagal memulai picking."),
-      });
-    }
-  }, [pl, id, startPicklist, canEditPicking]);
+  const didStartOnScan = React.useRef(false);
+  const startPickingAfterScan = React.useCallback(() => {
+    if (!pl || pl.status !== "DRAFT" || didStartOnScan.current) return;
+
+    didStartOnScan.current = true;
+    startPicklist.mutate(id, {
+      onError: (e) => {
+        didStartOnScan.current = false;
+        apiError(e, "Gagal memulai picking.");
+      },
+    });
+  }, [pl, id, startPicklist]);
 
   const [completeDialogDismissed, setCompleteDialogDismissed] =
     React.useState(false);
@@ -389,6 +389,7 @@ export function PickingProsesView({ id }: { id: string }) {
         binCode: null,
         hintActiveBinCode: scannedBinCode,
       });
+      startPickingAfterScan();
       setScannedBinCode(res.bin_code);
 
       if ((res.candidates?.length ?? 0) > 1) {
