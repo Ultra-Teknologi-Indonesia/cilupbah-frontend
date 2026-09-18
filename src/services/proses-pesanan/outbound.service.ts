@@ -175,6 +175,12 @@ function mapOrder(raw: RawFulfillmentOrder): FulfillmentOrder {
       description: i.description,
       qty: i.qty_in_base,
       imageUrl: i.image_url ?? null,
+      bundleComponents: i.bundle_components
+        ? i.bundle_components.map((component) => ({
+            sku: component.sku ?? null,
+            qty: Number(component.qty ?? 0),
+          }))
+        : null,
     })),
   };
 }

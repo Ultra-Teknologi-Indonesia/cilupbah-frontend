@@ -167,6 +167,11 @@ export interface RawFulfillmentOrderItem {
   description: string;
   qty_in_base: number;
   image_url?: string | null;
+  bundle_components?: Array<{
+    variant_id?: string | null;
+    sku?: string | null;
+    qty?: number | null;
+  }> | null;
 }
 
 export interface RawFulfillmentOrder {
@@ -233,6 +238,10 @@ export interface FulfillmentOrderItem {
   description: string;
   qty: number;
   imageUrl: string | null;
+  bundleComponents: Array<{
+    sku: string | null;
+    qty: number;
+  }> | null;
 }
 
 export interface FulfillmentOrder {

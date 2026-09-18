@@ -82,6 +82,7 @@ import {
   useSetPaid,
   useMarkComplete,
   useDeleteOrderItem,
+  useDownloadOrderItem,
   useRetryBuyerCancellationSync,
 } from "@/hooks/pesanan/use-order-actions";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -676,6 +677,7 @@ export function OrderDetailView({ orderId }: { orderId: string }) {
   const setPaid = useSetPaid();
   const _markComplete = useMarkComplete();
   const deleteItem = useDeleteOrderItem();
+  const downloadOrderItem = useDownloadOrderItem();
   const retryBuyerCancellationSync = useRetryBuyerCancellationSync();
   const [contactOpen, setContactOpen] = React.useState(false);
   const [pickupOpen, setPickupOpen] = React.useState(false);
@@ -1190,9 +1192,41 @@ export function OrderDetailView({ orderId }: { orderId: string }) {
                             <span className="font-medium whitespace-normal break-words">
                               {item.description || "—"}
                             </span>
-                            <span className="font-mono text-2xs text-muted-foreground">
-                              SKU: {item.sku}
-                            </span>
+                            <div className="flex flex-wrap items-center gap-1.5">
+                              <span className="font-mono text-2xs text-muted-foreground">
+                                SKU: {item.sku || "—"}
+                              </span>
+                              {canEditOrder &&
+                                !item.item_id &&
+                                order.status !== "cancelled" &&
+                                (item.sku || item.channel_product_id) && (
+                                  <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    className="h-6 gap-1 rounded-full border-amber-500/40 px-2 text-2xs font-medium text-amber-700 hover:border-amber-500/70 hover:bg-amber-500/10 hover:text-amber-800 dark:text-amber-300 dark:hover:text-amber-200"
+                                    disabled={
+                                      downloadOrderItem.isPending &&
+                                      downloadOrderItem.variables?.itemId ===
+                                        item.id
+                                    }
+                                    onClick={() =>
+                                      downloadOrderItem.mutate({
+                                        orderId: order.id,
+                                        itemId: item.id,
+                                      })
+                                    }
+                                    title="Download dan hubungkan SKU ke Master Produk"
+                                  >
+                                    <DownloadIcon className="size-3" />
+                                    {downloadOrderItem.isPending &&
+                                    downloadOrderItem.variables?.itemId ===
+                                      item.id
+                                      ? "Memproses..."
+                                      : "Download SKU"}
+                                  </Button>
+                                )}
+                            </div>
                           </div>
                         </TableCell>
                         <TableCell className="px-3 py-2.5 text-right tabular-nums">

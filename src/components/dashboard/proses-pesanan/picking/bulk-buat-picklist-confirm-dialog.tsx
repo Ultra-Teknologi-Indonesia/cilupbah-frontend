@@ -20,6 +20,19 @@ import {
 } from "@/components/ui/table";
 import type { FulfillmentOrder } from "@/types/proses-pesanan/fulfillment";
 
+function pickableLines(order: FulfillmentOrder) {
+  return order.items.flatMap((item) => {
+    if (item.bundleComponents !== null) {
+      return item.bundleComponents.map((component) => ({
+        sku: component.sku ?? item.sku,
+        qty: item.qty * component.qty,
+      }));
+    }
+
+    return [{ sku: item.sku, qty: item.qty }];
+  });
+}
+
 interface BulkBuatPicklistConfirmDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -45,9 +58,9 @@ export function BulkBuatPicklistConfirmDialog({
     const skuSet = new Set<string>();
     let qty = 0;
     for (const order of selectedOrders) {
-      for (const item of order.items) {
+      for (const item of pickableLines(order)) {
         if (item.sku) skuSet.add(item.sku);
-        qty += Number(item.qty ?? 0);
+        qty += item.qty;
       }
     }
     return { totalSku: skuSet.size, totalQty: qty };

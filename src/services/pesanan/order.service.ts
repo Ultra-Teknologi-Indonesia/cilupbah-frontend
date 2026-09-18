@@ -400,6 +400,16 @@ export const OrderService = {
     );
   },
 
+  downloadOrderItem: (orderId: string, itemId: string, variantId?: string) => {
+    return fetchClient<ApiResponse<Order>>(
+      `/sales/${orderId}/items/${itemId}/download`,
+      {
+        method: "POST",
+        data: variantId ? { variant_id: variantId } : undefined,
+      },
+    );
+  },
+
   deleteOrderItem: (orderId: string, itemId: string) => {
     return fetchClient<ApiResponse<Order>>(
       `/sales/orders/${orderId}/items/${itemId}`,
