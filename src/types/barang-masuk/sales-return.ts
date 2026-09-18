@@ -83,6 +83,8 @@ export interface SalesReturn {
     id: string;
     salesorder_no?: string;
     customer_name?: string | null;
+    tracking_number?: string | null;
+    shipping_provider?: string | null;
   } | null;
   location?: { id: string; location_name: string } | null;
   items: SalesReturnItem[];
