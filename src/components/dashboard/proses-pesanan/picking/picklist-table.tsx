@@ -181,6 +181,7 @@ export function PicklistTable() {
     [list.debouncedSearch, list.filters, list.page, list.perPage, list.sorting],
   );
   const { data, isLoading, isFetching, refetch } = usePicklists(params);
+  const showInitialLoading = isLoading && data === undefined;
 
   const picklists = React.useMemo(() => data?.items ?? [], [data]);
 
@@ -607,7 +608,7 @@ export function PicklistTable() {
         <DataTable
           columns={columns}
           data={picklists}
-          isLoading={isLoading}
+          isLoading={showInitialLoading}
           hideToolbar
           manualPagination
           manualSorting

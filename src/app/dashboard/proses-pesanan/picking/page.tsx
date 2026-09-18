@@ -11,19 +11,50 @@ const READY_PARAMS: FulfillmentListParams = {
   exclude_transit: "1",
 };
 
-export default async function PickingPage() {
+const LIST_PARAMS: FulfillmentListParams = {
+  page: 1,
+  per_page: 20,
+};
+
+type PickingPageProps = {
+  searchParams: Promise<{ sub?: string }>;
+};
+
+export default async function PickingPage({
+  searchParams,
+}: PickingPageProps) {
+  const { sub } = await searchParams;
   const qc = getServerQueryClient();
-  await qc.prefetchQuery({
-    queryKey: [
-      "proses-pesanan",
-      "board",
-      "orders",
-      "ready-to-process",
-      READY_PARAMS,
-    ],
-    queryFn: () =>
-      OutboundService.ordersByStage("ready-to-process", READY_PARAMS),
-  });
+
+  if (sub === "diproses") {
+    await qc.prefetchQuery({
+      queryKey: ["proses-pesanan", "board", "picklists", LIST_PARAMS],
+      queryFn: () => OutboundService.picklists(LIST_PARAMS),
+    });
+  } else if (sub === "selesai") {
+    await qc.prefetchQuery({
+      queryKey: [
+        "proses-pesanan",
+        "board",
+        "orders",
+        "finish-pick",
+        LIST_PARAMS,
+      ],
+      queryFn: () => OutboundService.ordersByStage("finish-pick", LIST_PARAMS),
+    });
+  } else {
+    await qc.prefetchQuery({
+      queryKey: [
+        "proses-pesanan",
+        "board",
+        "orders",
+        "ready-to-process",
+        READY_PARAMS,
+      ],
+      queryFn: () =>
+        OutboundService.ordersByStage("ready-to-process", READY_PARAMS),
+    });
+  }
 
   return (
     <HydrationBoundary state={dehydrate(qc)}>

@@ -332,28 +332,6 @@ export function OrderTable({
   sorting,
   onSortingChange,
 }: OrderTableProps) {
-  // Progressive streaming render for large datasets (> 30 items) to prevent UI thread freezing
-  const [renderedCount, setRenderedCount] = React.useState(() =>
-    orders.length > 40 ? 30 : orders.length,
-  );
-
-  const orderIdsStr = orders.map((o) => o.id).join(",");
-  React.useEffect(() => {
-    setRenderedCount(orders.length > 40 ? 30 : orders.length);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderIdsStr, orders.length]);
-
-  React.useEffect(() => {
-    if (renderedCount < orders.length) {
-      const handle = requestAnimationFrame(() => {
-        setRenderedCount((prev) => Math.min(prev + 40, orders.length));
-      });
-      return () => cancelAnimationFrame(handle);
-    }
-  }, [renderedCount, orders.length]);
-
-  const visibleOrders = orders.slice(0, renderedCount);
-
   return (
     <Table containerClassName="rounded-xl border border-border/60">
       <TableHeader className="bg-muted/40">
@@ -406,7 +384,7 @@ export function OrderTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {visibleOrders.map((order) => (
+        {orders.map((order) => (
           <OrderRow
             key={order.id}
             order={order}

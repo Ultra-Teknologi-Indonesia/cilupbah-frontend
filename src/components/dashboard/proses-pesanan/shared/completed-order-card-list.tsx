@@ -195,6 +195,7 @@ export function FulfillmentCardList({
     stage,
     params,
   );
+  const showInitialLoading = isLoading && data === undefined;
   const orders = React.useMemo(() => data?.items ?? [], [data]);
   const meta = data?.meta ?? {
     current_page: 1,
@@ -442,7 +443,7 @@ export function FulfillmentCardList({
       </div>
 
       <div className="px-4 pb-4 sm:px-5">
-        {isLoading ? (
+        {showInitialLoading ? (
           <div className="flex flex-col gap-3 py-3">
             {Array.from({ length: 3 }).map((_, i) => (
               <div

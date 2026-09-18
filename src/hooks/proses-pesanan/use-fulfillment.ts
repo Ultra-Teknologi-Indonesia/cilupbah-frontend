@@ -64,7 +64,6 @@ export function useOrdersByStage(
     queryKey: fulfillmentKeys.ordersByStage(stage, params),
     queryFn: () => OutboundService.ordersByStage(stage, params),
     staleTime: STALE,
-    placeholderData: keepPreviousData,
     enabled,
   });
 }
@@ -74,7 +73,6 @@ export function usePicklists(params: FulfillmentListParams, enabled = true) {
     queryKey: fulfillmentKeys.picklists(params),
     queryFn: () => OutboundService.picklists(params),
     staleTime: STALE,
-    placeholderData: keepPreviousData,
     enabled,
   });
 }
