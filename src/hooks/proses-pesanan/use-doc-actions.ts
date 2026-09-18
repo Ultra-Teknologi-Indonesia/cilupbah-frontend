@@ -112,6 +112,10 @@ export const DocActions = {
     openQueuedPdf("export picklist", "picklist-by-orders-export", () =>
       OutboundService.picklistBulkPdfAsync(ids),
     ),
+  pickListByPicklistIds: (ids: string[]) =>
+    openQueuedPdf("export picklist", "picklist-by-orders-export", () =>
+      OutboundService.picklistBulkPdfByPicklistIdsAsync(ids),
+    ),
   pickListById: (picklistId: string) =>
     run("Picklist", "Menyiapkan picklist…", () =>
       OutboundService.pickListByPicklist(picklistId),

@@ -55,6 +55,16 @@ export type ProcessOrdersExportScope = {
 
 type Meta = ApiPaginated<unknown>["meta"];
 
+export interface BulkPicklistActionResult {
+  success_count: number;
+  failed_count: number;
+  results: Array<{
+    picklist_id: string;
+    status: "success" | "failed";
+    message: string;
+  }>;
+}
+
 export interface ListResult<T> {
   items: T[];
   meta: Meta;
@@ -673,6 +683,30 @@ export const OutboundService = {
       { method: "POST", data: { picker_id: pickerId } },
     );
     return mapPicklist(res.data);
+  },
+
+  bulkAssignPicker: async (
+    picklistIds: string[],
+    pickerId: string,
+  ): Promise<BulkPicklistActionResult> => {
+    const res = await fetchClient<{ data: BulkPicklistActionResult }>(
+      `/outbound/picklists/bulk-assign-picker`,
+      {
+        method: "POST",
+        data: { picklist_ids: picklistIds, picker_id: pickerId },
+      },
+    );
+    return res.data;
+  },
+
+  bulkRevertPicklists: async (
+    picklistIds: string[],
+  ): Promise<BulkPicklistActionResult> => {
+    const res = await fetchClient<{ data: BulkPicklistActionResult }>(
+      `/outbound/picklists/bulk-revert`,
+      { method: "POST", data: { picklist_ids: picklistIds } },
+    );
+    return res.data;
   },
 
   picklistDetail: async (id: string): Promise<PicklistDetail> => {
@@ -1334,6 +1368,16 @@ export const OutboundService = {
     >(`/outbound/picklists/documents/bulk/pdf/async`, {
       method: "POST",
       data: { order_ids: orderIds },
+    });
+    return res.data;
+  },
+
+  picklistBulkPdfByPicklistIdsAsync: async (picklistIds: string[]) => {
+    const res = await fetchClient<
+      ApiResponse<{ export_id: string; status: string; total: number }>
+    >(`/outbound/picklists/documents/bulk-by-picklists/pdf/async`, {
+      method: "POST",
+      data: { picklist_ids: picklistIds },
     });
     return res.data;
   },

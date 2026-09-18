@@ -178,6 +178,27 @@ export const useAssignPicker = createMutationHook({
   invalidates: () => [fulfillmentKeys.board],
 });
 
+export function useBulkAssignPicker() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ picklistIds, pickerId }: { picklistIds: string[]; pickerId: string }) =>
+      OutboundService.bulkAssignPicker(picklistIds, pickerId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: fulfillmentKeys.all }),
+  });
+}
+
+export function useBulkRevertPicklists() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (picklistIds: string[]) =>
+      OutboundService.bulkRevertPicklists(picklistIds),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: fulfillmentKeys.all });
+      invalidateStockViews(qc);
+    },
+  });
+}
+
 export const useAssignPacker = createMutationHook({
   mutationFn: ({
     packlistId,
