@@ -9,6 +9,7 @@ export type BulkLabelItemStatus =
   | "waiting_awb"
   | "waiting_shopee_prep"
   | "waiting_lazada_prep"
+  | "ready"
   | "done"
   | "failed"
   | "skipped_instant";

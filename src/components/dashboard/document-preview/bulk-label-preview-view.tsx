@@ -116,7 +116,11 @@ function ItemRow({ item }: { item: BulkLabelBatchItem }) {
       </TableCell>
       <TableCell className="align-top">
         <div className="flex flex-col gap-1">
-          <StatusBadge domain="bulk-label-item" status={item.status} />
+          <StatusBadge
+            domain="bulk-label-item"
+            status={item.status}
+            label={item.status_label}
+          />
           {item.status_message && (
             <span className="text-[11px] leading-snug text-muted-foreground">
               {item.status_message}
