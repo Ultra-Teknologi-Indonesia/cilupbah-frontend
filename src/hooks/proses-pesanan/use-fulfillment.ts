@@ -27,6 +27,7 @@ import type {
   PicklistItem,
   PacklistDetail,
 } from "@/types/proses-pesanan/fulfillment";
+import type { OrderAudit } from "@/types/proses-pesanan/order-audit";
 import type { ApiPaginated } from "@/types/api.types";
 
 const STALE = 30_000;
@@ -105,6 +106,30 @@ export function useOutboundMonitoring(enabled = true) {
     refetchInterval: 60_000,
     enabled,
   });
+}
+
+export function useOrderAudit() {
+  const qc = useQueryClient();
+
+  const audit = useMutation({
+    mutationFn: (reference: string) => OutboundService.orderAudit(reference),
+  });
+
+  const replay = useMutation({
+    mutationFn: (reference: string) => OutboundService.replayOrderAudit(reference),
+    onSuccess: (data) => {
+      qc.setQueryData<OrderAudit>([...fulfillmentKeys.all, "order-audit", data.reference], data);
+    },
+  });
+
+  const remove = useMutation({
+    mutationFn: (reference: string) => OutboundService.deleteOrderAudit(reference),
+    onSuccess: (data) => {
+      qc.setQueryData<OrderAudit>([...fulfillmentKeys.all, "order-audit", data.reference], data);
+    },
+  });
+
+  return { audit, replay, remove };
 }
 
 export function useExportProcessOrdersCsv() {

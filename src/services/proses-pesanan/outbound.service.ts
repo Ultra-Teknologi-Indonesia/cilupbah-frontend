@@ -37,6 +37,10 @@ import type {
   OutboundMonitoring,
   RawOutboundMonitoring,
 } from "@/types/proses-pesanan/fulfillment";
+import type {
+  OrderAudit,
+  RawOrderAudit,
+} from "@/types/proses-pesanan/order-audit";
 
 export interface CreateShipmentPayload {
   shipment_no?: string | null;
@@ -68,6 +72,36 @@ export interface BulkPicklistActionResult {
 export interface ListResult<T> {
   items: T[];
   meta: Meta;
+}
+
+function mapOrderAudit(raw: RawOrderAudit): OrderAudit {
+  return {
+    reference: raw.reference,
+    foundInWms: raw.found_in_wms,
+    orders: (raw.orders ?? []).map((order) => ({
+      ...order,
+      internalOrderNo: order.internal_order_no,
+      channelOrderNo: order.channel_order_no ?? null,
+      locationCode: order.location_code ?? null,
+      locationName: order.location_name ?? null,
+      internalStatus: order.internal_status ?? null,
+      wmsStatus: order.wms_status ?? null,
+      channelStatus: order.channel_status ?? null,
+      channelFulfillmentStatus: order.channel_fulfillment_status ?? null,
+      shopId: order.shop_id ?? null,
+      shopName: order.shop_name ?? null,
+      childCounts: order.child_counts ?? {},
+    })),
+    webhooks: (raw.webhooks ?? []).map((webhook) => ({
+      ...webhook,
+      shopId: webhook.shop_id,
+      locationCode: webhook.location_code,
+    })),
+    actions: {
+      canInclude: raw.actions?.can_include ?? false,
+      canDelete: raw.actions?.can_delete ?? false,
+    },
+  };
 }
 
 const FALLBACK_META: Meta = {
@@ -567,6 +601,36 @@ export const OutboundService = {
       },
       periods,
     };
+  },
+
+  orderAudit: async (reference: string): Promise<OrderAudit> => {
+    const query = new URLSearchParams({ reference: reference.trim() });
+    const res = await fetchClient<ApiResponse<RawOrderAudit>>(
+      `/operations/order-audit?${query.toString()}`,
+    );
+    return mapOrderAudit(res.data);
+  },
+
+  replayOrderAudit: async (reference: string): Promise<OrderAudit> => {
+    const res = await fetchClient<ApiResponse<{ audit: RawOrderAudit }>>(
+      "/operations/order-audit/replay",
+      {
+        method: "POST",
+        data: { reference: reference.trim(), confirmation: "REPLAY-ORDER" },
+      },
+    );
+    return mapOrderAudit(res.data.audit);
+  },
+
+  deleteOrderAudit: async (reference: string): Promise<OrderAudit> => {
+    const res = await fetchClient<ApiResponse<{ audit: RawOrderAudit }>>(
+      "/operations/order-audit/delete",
+      {
+        method: "POST",
+        data: { reference: reference.trim(), confirmation: "DELETE-ORDER" },
+      },
+    );
+    return mapOrderAudit(res.data.audit);
   },
 
   exportProcessOrdersCsv: async (
