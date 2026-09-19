@@ -43,7 +43,7 @@ function shippingLabelSelectability(order: Order): RowSelectability {
   return { selectable: true };
 }
 
-function shipmentSelectability(order: Order): RowSelectability {
+function fulfillmentSelectability(order: Order): RowSelectability {
   if (order.is_canceled) {
     return { selectable: false, reason: "Pesanan sudah dibatalkan" };
   }
@@ -225,9 +225,11 @@ export function FulfillmentCardList({
     setSelectedIds(new Set());
   }, [stage, tab]);
 
-  const rowSelectability = shipmentCreationEnabled
-    ? shipmentSelectability
-    : shippingLabelSelectability;
+  // Pemilihan order untuk operasi WMS tidak boleh bergantung pada dukungan
+  // cetak label marketplace. Order manual tetap dapat dipacking, dicetak
+  // faktur, atau dikembalikan tahapnya; pembatasan resi/label tetap diterapkan
+  // di action masing-masing melalui shippingLabelSelectability.
+  const rowSelectability = fulfillmentSelectability;
 
   const eligibleIds = React.useMemo(() => {
     const ids = new Set<string>();
@@ -470,7 +472,9 @@ export function FulfillmentCardList({
               <FulfillmentBulkActionBar
                 selectedCount={selectedIds.size}
                 onReset={() => setSelectedIds(new Set())}
-                onReadyToShip={handleReadyToShip}
+                onReadyToShip={
+                  shipmentCreationEnabled ? handleReadyToShip : undefined
+                }
                 onCreateShipment={
                   shipmentCreationEnabled ? handleCreateShipment : undefined
                 }
