@@ -57,13 +57,13 @@ const EMPTY_FILTERS: FilterState = { category_id: "", status: "" };
 export function PelangganTab() {
   const list = useListState<FilterState>(EMPTY_FILTERS, {
     perPage: 20,
-    debounceMs: 300,
     namespace: "pelanggan",
   });
   const {
     search,
     setSearch,
-    debouncedSearch,
+    applySearch,
+    appliedSearch,
     page,
     perPage,
     filters,
@@ -89,14 +89,14 @@ export function PelangganTab() {
 
   const params = useMemo<ContactListParams>(
     () => ({
-      search: debouncedSearch || undefined,
+      search: appliedSearch || undefined,
       page,
       per_page: perPage,
       "filter[type]": typeFilter,
       "filter[category_id]": filters.category_id || undefined,
       "filter[status]": filters.status || undefined,
     }),
-    [debouncedSearch, page, perPage, typeFilter, filters],
+    [appliedSearch, page, perPage, typeFilter, filters],
   );
 
   const { data, isLoading, isFetching } = useContacts(params);
@@ -295,14 +295,12 @@ export function PelangganTab() {
         <FilterToolbar
           search={search}
           onSearchChange={setSearch}
+          onSearch={applySearch}
           searchPlaceholder="Cari nama, perusahaan, email..."
           align="end"
           onReset={
             hasActiveFilter || !!search
-              ? () => {
-                  setFilters(EMPTY_FILTERS);
-                  setSearch("");
-                }
+              ? list.resetAll
               : undefined
           }
           hasFilter={hasActiveFilter || !!search}

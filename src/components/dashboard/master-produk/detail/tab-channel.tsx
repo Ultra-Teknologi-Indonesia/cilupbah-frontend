@@ -308,7 +308,7 @@ function VariantCard({
 export function TabChannel({ productId }: { productId: string }) {
   const [shopId, setShopId] = React.useState("");
   const [search, setSearch] = React.useState("");
-  const [searchDebounced, setSearchDebounced] = React.useState("");
+  const [appliedSearch, setAppliedSearch] = React.useState("");
   const [sort, setSort] = React.useState("sku");
   const [viewMode, setViewMode] = React.useState<"table" | "card">("table");
   const [page, setPage] = React.useState(1);
@@ -325,13 +325,12 @@ export function TabChannel({ productId }: { productId: string }) {
     sku: string;
   } | null>(null);
 
-  React.useEffect(() => {
-    const t = setTimeout(() => {
-      setSearchDebounced(search);
-      setPage(1);
-    }, 500);
-    return () => clearTimeout(t);
-  }, [search]);
+  const applySearch = (nextSearch?: string) => {
+    const trimmed = (nextSearch ?? search).trim();
+    setSearch(trimmed);
+    setAppliedSearch(trimmed);
+    setPage(1);
+  };
 
   const { data: stores } = useConnectedStores();
 
@@ -342,7 +341,7 @@ export function TabChannel({ productId }: { productId: string }) {
         page,
         perPage,
         shopId: shopId || undefined,
-        search: searchDebounced || undefined,
+        search: appliedSearch || undefined,
         sort,
       },
       true,
@@ -457,8 +456,22 @@ export function TabChannel({ productId }: { productId: string }) {
             placeholder="Cari SKU atau Varian..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="h-9 w-[200px]"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                applySearch();
+              }
+            }}
+            className="h-9 w-[200px] pr-14"
           />
+          <Button
+            type="button"
+            size="sm"
+            onClick={() => applySearch()}
+            className="h-9"
+          >
+            Cari
+          </Button>
           <Select
             value={shopId || "all"}
             onValueChange={(v) => {
@@ -575,7 +588,7 @@ export function TabChannel({ productId }: { productId: string }) {
           icon={StoreIcon}
           title="Belum ada listing channel"
           description={
-            shopId || searchDebounced
+            shopId || appliedSearch
               ? "Tidak ditemukan listing untuk pencarian atau toko yang dipilih."
               : "Produk ini belum diunggah atau terhubung ke marketplace mana pun."
           }

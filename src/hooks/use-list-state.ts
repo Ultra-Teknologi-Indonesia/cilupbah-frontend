@@ -10,7 +10,6 @@ export function useListState<F extends object>(
   emptyFilters: F,
   opts?: {
     perPage?: number;
-    debounceMs?: number;
     urlSync?: boolean;
     namespace?: string;
     filterUrlSync?: boolean;
@@ -111,7 +110,7 @@ export function useListState<F extends object>(
   }, [filterUrlSync, searchParams, filterKeyFor]);
 
   const [search, setSearchRaw] = useState<string>(() => readSearch());
-  const [debouncedSearch, setDebouncedSearch] = useState<string>(() =>
+  const [appliedSearch, setAppliedSearch] = useState<string>(() =>
     readSearch().trim(),
   );
   const [page, setPageRaw] = useState<number>(() => readNumber(pageKey, 1));
@@ -150,7 +149,7 @@ export function useListState<F extends object>(
     if (nextTrimmed !== lastPushedSearchRef.current) {
       lastPushedSearchRef.current = nextTrimmed;
       setSearchRaw((prev) => (prev === nextSearch ? prev : nextSearch));
-      setDebouncedSearch((prev) => (prev === nextTrimmed ? prev : nextTrimmed));
+      setAppliedSearch((prev) => (prev === nextTrimmed ? prev : nextTrimmed));
     }
     setFiltersRaw((prev) => {
       const prevR = prev as Record<string, FilterPrimitive>;
@@ -223,33 +222,24 @@ export function useListState<F extends object>(
     setSearchRaw(s);
   }, []);
 
+  const applySearch = useCallback((nextSearch?: string) => {
+    const trimmed = (nextSearch ?? search).trim();
+    setSearchRaw((prev) => (prev === trimmed ? prev : trimmed));
+
+    if (trimmed === appliedSearch) return;
+
+    lastPushedSearchRef.current = trimmed;
+    setAppliedSearch(trimmed);
+    setPageRaw(1);
+    if (urlSync) {
+      writeUrl({ [searchKey]: trimmed || null, [pageKey]: 1 });
+    }
+  }, [search, appliedSearch, urlSync, writeUrl, searchKey, pageKey]);
+
   const resetPage = useCallback(() => {
     setPageRaw(1);
     writeUrl({ [pageKey]: 1 });
   }, [writeUrl, pageKey]);
-
-  const debounceMs = opts?.debounceMs ?? 300;
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const trimmed = search.trim();
-      if (trimmed === debouncedSearch) return;
-      lastPushedSearchRef.current = trimmed;
-      setDebouncedSearch(trimmed);
-      setPageRaw(1);
-      if (urlSync) {
-        writeUrl({ [searchKey]: trimmed || null, [pageKey]: 1 });
-      }
-    }, debounceMs);
-    return () => clearTimeout(timer);
-  }, [
-    search,
-    debouncedSearch,
-    debounceMs,
-    urlSync,
-    writeUrl,
-    searchKey,
-    pageKey,
-  ]);
 
   const setFilters = useCallback(
     (f: F) => {
@@ -298,7 +288,7 @@ export function useListState<F extends object>(
 
   const resetAll = useCallback(() => {
     setSearchRaw("");
-    setDebouncedSearch("");
+    setAppliedSearch("");
     lastPushedSearchRef.current = "";
     setFiltersRaw(emptyFilters);
     setPageRaw(1);
@@ -389,7 +379,8 @@ export function useListState<F extends object>(
   return {
     search,
     setSearch,
-    debouncedSearch,
+    appliedSearch,
+    applySearch,
     page,
     setPage,
     perPage,

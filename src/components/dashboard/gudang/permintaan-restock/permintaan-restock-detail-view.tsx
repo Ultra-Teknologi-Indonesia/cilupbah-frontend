@@ -41,7 +41,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDateTime, formatDateTimeFull } from "@/lib/format";
-import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import {
   useRejectReplenishment,
   useRemoveReplenishmentItem,
@@ -63,6 +62,7 @@ interface Props {
 export function PermintaanRestockDetailView({ id }: Props) {
   const { data: req, isLoading } = useStockReplenishmentDetail(id);
   const [search, setSearch] = useState("");
+  const [appliedSearch, setAppliedSearch] = useState("");
   const [channel, setChannel] = useState("");
   const [shopId, setShopId] = useState("");
   const [page, setPage] = useState(1);
@@ -76,16 +76,21 @@ export function PermintaanRestockDetailView({ id }: Props) {
   );
   const rejectMut = useRejectReplenishment();
   const removeItemMut = useRemoveReplenishmentItem();
-  const debouncedSearch = useDebouncedValue(search, 300);
+  const applySearch = (nextSearch?: string) => {
+    const trimmed = (nextSearch ?? search).trim();
+    setSearch(trimmed);
+    setAppliedSearch(trimmed);
+    setPage(1);
+  };
   const itemParams = useMemo<StockReplenishmentItemsParams>(
     () => ({
       page,
       per_page: perPage,
-      search: debouncedSearch.trim() || undefined,
+      search: appliedSearch || undefined,
       channel: channel || undefined,
       shop_id: shopId || undefined,
     }),
-    [channel, debouncedSearch, page, perPage, shopId],
+    [channel, appliedSearch, page, perPage, shopId],
   );
   const {
     data: itemData,
@@ -114,6 +119,7 @@ export function PermintaanRestockDetailView({ id }: Props) {
 
   const resetItemFilters = () => {
     setSearch("");
+    setAppliedSearch("");
     setChannel("");
     setShopId("");
     setPage(1);
@@ -302,12 +308,25 @@ export function PermintaanRestockDetailView({ id }: Props) {
               value={search}
               onChange={(event) => {
                 setSearch(event.target.value);
-                setPage(1);
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  applySearch();
+                }
               }}
               placeholder="Cari SKU atau nama produk…"
               aria-label="Cari SKU atau nama produk"
-              className="pl-9"
+              className="pl-9 pr-16"
             />
+            <Button
+              type="button"
+              size="sm"
+              onClick={() => applySearch()}
+              className="absolute right-1 top-1/2 h-7 -translate-y-1/2 rounded-full px-2.5 text-xs"
+            >
+              Cari
+            </Button>
           </div>
           <Combobox
             options={channelOptions}

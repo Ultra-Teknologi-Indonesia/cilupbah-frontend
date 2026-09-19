@@ -73,14 +73,14 @@ export function UserListView() {
 
   const list = useListState<Record<string, never>>(
     {},
-    { perPage: 20, debounceMs: 350, namespace: "users" },
+    { perPage: 20, namespace: "users" },
   );
   const [selectedIds, setSelectedIds] = React.useState<Set<string>>(new Set());
   const [deleteTarget, setDeleteTarget] = React.useState<User | null>(null);
   const [bulkOpen, setBulkOpen] = React.useState(false);
 
   const { data, isLoading, isError } = useUsers({
-    search: list.debouncedSearch,
+    search: list.appliedSearch,
     page: list.page,
     perPage: list.perPage,
   });
@@ -298,9 +298,23 @@ export function UserListView() {
             <Input
               value={list.search}
               onChange={(e) => list.setSearch(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  list.applySearch();
+                }
+              }}
               placeholder="Cari pengguna"
-              className="pl-9"
+              className="pl-9 pr-16"
             />
+            <Button
+              type="button"
+              size="sm"
+              onClick={() => list.applySearch()}
+              className="absolute right-1 top-1/2 h-7 -translate-y-1/2 rounded-full px-2.5 text-xs"
+            >
+              Cari
+            </Button>
           </div>
 
           <div className="flex items-center gap-2">
@@ -340,9 +354,9 @@ export function UserListView() {
           </div>
         ) : users.length === 0 ? (
           <EmptyState
-            icon={list.debouncedSearch ? SearchXIcon : FileXIcon}
+            icon={list.appliedSearch ? SearchXIcon : FileXIcon}
             title={
-              list.debouncedSearch ? "Tidak ditemukan" : "Belum ada pengguna"
+              list.appliedSearch ? "Tidak ditemukan" : "Belum ada pengguna"
             }
           />
         ) : (
@@ -358,9 +372,9 @@ export function UserListView() {
               tableContainerClassName="border-0 bg-transparent backdrop-blur-none [&_[data-slot=table-header]]:bg-transparent"
               emptyState={
                 <EmptyState
-                  icon={list.debouncedSearch ? SearchXIcon : FileXIcon}
+                  icon={list.appliedSearch ? SearchXIcon : FileXIcon}
                   title={
-                    list.debouncedSearch
+                    list.appliedSearch
                       ? "Tidak ditemukan"
                       : "Belum ada pengguna"
                   }

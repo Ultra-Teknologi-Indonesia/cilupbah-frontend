@@ -62,14 +62,13 @@ function joinCityProvince(row: CompletedShipmentOrderRow): string {
 export function CompletedShipmentTable() {
   const list = useListState<PageFilterState>(EMPTY_FILTERS, {
     perPage: 20,
-    debounceMs: 350,
     namespace: "shipment_done",
   });
 
   const params = React.useMemo(
     () => ({
       status: list.filters.status || undefined,
-      q: list.debouncedSearch || undefined,
+      q: list.appliedSearch || undefined,
       page: list.page,
       per_page: list.perPage,
       courier_code: list.filters.courier_code || undefined,
@@ -86,7 +85,7 @@ export function CompletedShipmentTable() {
           : "asc"
         : undefined,
     }),
-    [list.debouncedSearch, list.page, list.perPage, list.filters, list.sorting],
+    [list.appliedSearch, list.page, list.perPage, list.filters, list.sorting],
   );
 
   const { data, isLoading, isFetching, refetch } =
@@ -262,6 +261,7 @@ export function CompletedShipmentTable() {
         statusOptions={STATUS_OPTIONS}
         search={list.search}
         onSearchChange={list.setSearch}
+        onSearch={list.applySearch}
         searchPlaceholder="Cari no. resi…"
       />
       <div className="flex items-center justify-end gap-3 border-b border-border/40 px-4 py-2 text-sm text-muted-foreground sm:px-5">

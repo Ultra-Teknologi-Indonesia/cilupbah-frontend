@@ -239,12 +239,12 @@ export function SyncStokHargaView({
 
   const params: SyncMatrixParams = useMemo(
     () => ({
-      search: list.debouncedSearch || undefined,
+      search: list.appliedSearch || undefined,
       channelCode: list.filters.channel || undefined,
       page: list.page,
       perPage: list.perPage,
     }),
-    [list.debouncedSearch, list.filters.channel, list.page, list.perPage],
+    [list.appliedSearch, list.filters.channel, list.page, list.perPage],
   );
 
   const { data, isLoading, isFetching } = useInventorySync(params);
@@ -351,8 +351,9 @@ export function SyncStokHargaView({
         className="bg-white/30 dark:bg-white/[0.04]"
       >
         <FilterToolbar
-          search={list.search}
-          onSearchChange={list.setSearch}
+        search={list.search}
+        onSearchChange={list.setSearch}
+        onSearch={list.applySearch}
           searchPlaceholder="Cari produk atau SKU..."
           align="end"
           leading={embedded ? undefined : modeTabs}

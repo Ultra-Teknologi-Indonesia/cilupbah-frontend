@@ -92,7 +92,6 @@ const SHIPMENT_STATUS_OPTIONS = [
 export function ShipmentTable() {
   const list = useListState<PageFilterState>(EMPTY_FILTERS, {
     perPage: 20,
-    debounceMs: 350,
     namespace: "shipment",
   });
   const [cancelTarget, setCancelTarget] = React.useState<Shipment | null>(null);
@@ -140,7 +139,7 @@ export function ShipmentTable() {
   const params = React.useMemo(
     () => ({
       status: list.filters.status || "SCHEDULED",
-      q: list.debouncedSearch || undefined,
+      q: list.appliedSearch || undefined,
       page: list.page,
       per_page: list.perPage,
       courier_code: list.filters.courier_code || undefined,
@@ -154,7 +153,7 @@ export function ShipmentTable() {
           : "asc"
         : undefined,
     }),
-    [list.debouncedSearch, list.page, list.perPage, list.filters, list.sorting],
+    [list.appliedSearch, list.page, list.perPage, list.filters, list.sorting],
   );
   const { data, isLoading, isFetching, refetch } = useShipments(params);
   const cancel = useCancelShipment();
@@ -379,6 +378,7 @@ export function ShipmentTable() {
         statusOptions={SHIPMENT_STATUS_OPTIONS}
         search={list.search}
         onSearchChange={list.setSearch}
+        onSearch={list.applySearch}
         searchPlaceholder="Cari no. pengiriman…"
       />
       <div className="flex items-center justify-between gap-3 border-b border-border/40 px-4 py-2 text-sm text-muted-foreground sm:px-5">

@@ -90,7 +90,7 @@ export function PenyesuaianTab() {
 
   const params = useMemo<StockAdjustmentListParams>(
     () => ({
-      search: list.debouncedSearch || undefined,
+      search: list.appliedSearch || undefined,
       page: list.page,
       per_page: list.perPage,
       "filter[location_id]": list.filters.location_id || undefined,
@@ -98,7 +98,7 @@ export function PenyesuaianTab() {
       "filter[date_to]": list.filters.date_to || undefined,
       sort: sortParam,
     }),
-    [list.debouncedSearch, list.page, list.perPage, list.filters, sortParam],
+    [list.appliedSearch, list.page, list.perPage, list.filters, sortParam],
   );
 
   const dateRange: DateRange | undefined = useMemo(() => {

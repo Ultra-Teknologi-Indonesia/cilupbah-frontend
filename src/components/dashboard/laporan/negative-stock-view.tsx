@@ -63,7 +63,6 @@ export function NegativeStockView() {
   });
   const list = useListState<NegativeStockFilters>(EMPTY_FILTERS, {
     perPage: 20,
-    debounceMs: 300,
     namespace: "negstock",
   });
 
@@ -85,7 +84,7 @@ export function NegativeStockView() {
       from: toIsoDate(dateRange?.from) || undefined,
       to: toIsoDate(dateRange?.to) || undefined,
       location_id: list.filters.locationId || undefined,
-      search: list.debouncedSearch || undefined,
+      search: list.appliedSearch || undefined,
       still_negative: list.filters.stillNegative || undefined,
       page: list.page,
       per_page: list.perPage,
@@ -94,7 +93,7 @@ export function NegativeStockView() {
       dateRange,
       list.filters.locationId,
       list.filters.stillNegative,
-      list.debouncedSearch,
+      list.appliedSearch,
       list.page,
       list.perPage,
     ],
@@ -262,14 +261,31 @@ export function NegativeStockView() {
             <Label className="text-xs text-muted-foreground">
               Cari SKU / Produk
             </Label>
-            <div className="relative">
-              <SearchIcon className="absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                value={list.search}
-                onChange={(e) => list.setSearch(e.target.value)}
-                placeholder="Ketik SKU atau nama..."
-                className="h-9 bg-background pl-9"
-              />
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <SearchIcon className="absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  value={list.search}
+                  onChange={(e) => list.setSearch(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      list.applySearch();
+                    }
+                  }}
+                  placeholder="Ketik SKU atau nama..."
+                  className="h-9 bg-background pl-9"
+                />
+              </div>
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={() => list.applySearch()}
+                className="h-9"
+              >
+                Cari
+              </Button>
             </div>
           </div>
           <div className="flex items-center gap-3 sm:col-span-2 lg:col-span-4">

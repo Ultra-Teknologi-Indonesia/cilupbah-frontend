@@ -68,7 +68,6 @@ export function ReadyToProcessCardList() {
   const qc = useQueryClient();
   const list = useListState<ReadyFilterState>(EMPTY_READY_FILTERS, {
     perPage: 20,
-    debounceMs: 350,
     namespace: "ready",
   });
   const [selected, setSelected] = React.useState<Set<string>>(new Set());
@@ -87,7 +86,7 @@ export function ReadyToProcessCardList() {
 
   const params = React.useMemo(
     () => ({
-      q: list.debouncedSearch || undefined,
+      q: list.appliedSearch || undefined,
       shipping_provider: list.filters.shipping_provider || undefined,
       location_id: list.filters.location_id || undefined,
       source: list.filters.source || undefined,
@@ -107,7 +106,7 @@ export function ReadyToProcessCardList() {
           : "asc"
         : undefined,
     }),
-    [list.debouncedSearch, list.filters, list.page, list.perPage, list.sorting],
+    [list.appliedSearch, list.filters, list.page, list.perPage, list.sorting],
   );
 
   const { data, isLoading, isFetching, refetch } = useOrdersByStage(
@@ -240,6 +239,7 @@ export function ReadyToProcessCardList() {
         excludeTransit
         search={list.search}
         onSearchChange={list.setSearch}
+        onSearch={list.applySearch}
         searchPlaceholder="Cari no. pesanan, resi, SKU, ekspedisi…"
       />
 

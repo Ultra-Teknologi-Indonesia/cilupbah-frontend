@@ -83,7 +83,7 @@ export function OpnameTab() {
 
   const params = useMemo<StockOpnameListParams>(
     () => ({
-      search: list.debouncedSearch || undefined,
+      search: list.appliedSearch || undefined,
       page: list.page,
       per_page: list.perPage,
       "filter[status]": list.filters.status || undefined,
@@ -92,7 +92,7 @@ export function OpnameTab() {
       "filter[date_to]": list.filters.date_to || undefined,
       sort: sortParam,
     }),
-    [list.debouncedSearch, list.page, list.perPage, list.filters, sortParam],
+    [list.appliedSearch, list.page, list.perPage, list.filters, sortParam],
   );
 
   const dateRange: DateRange | undefined = useMemo(() => {

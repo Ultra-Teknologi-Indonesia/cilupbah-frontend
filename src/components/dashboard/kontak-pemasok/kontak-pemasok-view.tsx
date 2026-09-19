@@ -65,13 +65,13 @@ const TYPE_VALUES: readonly TypeFilter[] = ["SUPPLIER", "BOTH"];
 export function KontakPemasokView() {
   const list = useListState<FilterState>(EMPTY_FILTERS, {
     perPage: 20,
-    debounceMs: 300,
     namespace: "pemasok",
   });
   const {
     search,
     setSearch,
-    debouncedSearch,
+    applySearch,
+    appliedSearch,
     page,
     perPage,
     filters,
@@ -98,14 +98,14 @@ export function KontakPemasokView() {
 
   const params = useMemo<ContactListParams>(
     () => ({
-      search: debouncedSearch || undefined,
+      search: appliedSearch || undefined,
       page,
       per_page: perPage,
       "filter[type]": typeFilter,
       "filter[category_id]": filters.category_id || undefined,
       "filter[status]": filters.status || undefined,
     }),
-    [debouncedSearch, page, perPage, typeFilter, filters],
+    [appliedSearch, page, perPage, typeFilter, filters],
   );
 
   const { data, isLoading, isFetching } = useContacts(params);
@@ -299,14 +299,12 @@ export function KontakPemasokView() {
         <FilterToolbar
           search={search}
           onSearchChange={setSearch}
+          onSearch={applySearch}
           searchPlaceholder="Cari nama, perusahaan, email..."
           align="end"
           onReset={
             hasActiveFilter || !!search
-              ? () => {
-                  setFilters(EMPTY_FILTERS);
-                  setSearch("");
-                }
+              ? list.resetAll
               : undefined
           }
           hasFilter={hasActiveFilter || !!search}

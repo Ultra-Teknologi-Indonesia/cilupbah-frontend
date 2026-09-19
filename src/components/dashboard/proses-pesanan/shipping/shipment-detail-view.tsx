@@ -64,7 +64,6 @@ import { apiError } from "@/lib/toast";
 import { ChannelBadge } from "../channel-badge";
 import { DocActions } from "../picking/doc-actions";
 import { DeleteOrderDialog } from "../shared/delete-order-dialog";
-import { useDebouncedValue } from "@/hooks/use-debounced-value";
 
 const SHIPPER_ROLES = [
   "Shipper",
@@ -544,13 +543,19 @@ export function ShipmentDetailView({ id }: { id: string }) {
 
   const [page, setPage] = React.useState(1);
   const [perPage, setPerPage] = React.useState(20);
-  const debouncedSearch = useDebouncedValue(searchQuery, 400);
+  const [appliedSearch, setAppliedSearch] = React.useState("");
+  const applySearch = (nextSearch?: string) => {
+    const trimmed = (nextSearch ?? searchQuery).trim();
+    setSearchQuery(trimmed);
+    setAppliedSearch(trimmed);
+    setPage(1);
+  };
 
   const { data: detail, isLoading } = useShipmentDetail(id, !!id);
   const { data: ordersData, isFetching: isFetchingOrders } =
     useShipmentOrdersPaginated(
       id,
-      { page, per_page: perPage, q: debouncedSearch },
+      { page, per_page: perPage, q: appliedSearch },
       !!id,
     );
 
@@ -587,13 +592,6 @@ export function ShipmentDetailView({ id }: { id: string }) {
     return () => window.removeEventListener("keydown", handleGlobalKeyDown);
   }, [detail?.status]);
 
-  const [prevDebouncedSearch, setPrevDebouncedSearch] =
-    React.useState(debouncedSearch);
-  if (debouncedSearch !== prevDebouncedSearch) {
-    setPrevDebouncedSearch(debouncedSearch);
-    setPage(1);
-  }
-
   const handleScan = async () => {
     primeScanAudio();
     const code = barcode.trim();
@@ -607,6 +605,7 @@ export function ShipmentDetailView({ id }: { id: string }) {
       });
       setLatestScannedOrder(result.shipmentOrder);
       setSearchQuery("");
+      setAppliedSearch("");
       setPage(1);
       if (result.status === "already_added") {
         playScanFeedback("package_already_scanned");
@@ -842,8 +841,22 @@ export function ShipmentDetailView({ id }: { id: string }) {
                 placeholder="Cari No. Pesanan / Resi..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 h-8 text-sm"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    applySearch();
+                  }
+                }}
+                className="pl-9 pr-14 h-8 text-sm"
               />
+              <Button
+                type="button"
+                size="sm"
+                onClick={() => applySearch()}
+                className="absolute right-1 top-1/2 h-6 -translate-y-1/2 rounded-full px-2 text-xs"
+              >
+                Cari
+              </Button>
             </div>
           </div>
 
@@ -870,7 +883,7 @@ export function ShipmentDetailView({ id }: { id: string }) {
                         colSpan={isScheduled ? 9 : 8}
                         className="py-16 text-center text-sm text-muted-foreground"
                       >
-                        {searchQuery.trim()
+                        {appliedSearch
                           ? "Pesanan tidak ditemukan."
                           : "Belum ada pesanan. Scan untuk menambahkan."}
                       </TableCell>

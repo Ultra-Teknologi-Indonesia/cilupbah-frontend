@@ -26,7 +26,7 @@ export function KategoriView() {
   });
   const list = useListState<Record<string, never>>(
     {},
-    { debounceMs: 300, namespace: "kategori" },
+    { namespace: "kategori" },
   );
 
   return (
@@ -51,6 +51,12 @@ export function KategoriView() {
                 <Input
                   value={list.search}
                   onChange={(e) => list.setSearch(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      list.applySearch();
+                    }
+                  }}
                   placeholder="Cari kategori…"
                   className="h-9 border-border bg-background pl-9 pr-8"
                 />
@@ -59,7 +65,7 @@ export function KategoriView() {
                     variant="ghost"
                     size="icon"
                     type="button"
-                    onClick={() => list.setSearch("")}
+                    onClick={() => list.applySearch("")}
                     aria-label="Bersihkan pencarian"
                     className="absolute right-2.5 top-1/2 size-5 -translate-y-1/2 text-muted-foreground"
                   >
@@ -67,6 +73,14 @@ export function KategoriView() {
                   </Button>
                 )}
               </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-9 gap-1.5"
+                onClick={() => list.applySearch()}
+              >
+                Cari
+              </Button>
               <Button
                 variant="outline"
                 size="sm"
@@ -90,10 +104,10 @@ export function KategoriView() {
 
           <div className="px-4 py-5 sm:px-5">
             <TabsContent value="daftar" className="mt-0">
-              <KategoriListTab search={list.debouncedSearch} />
+              <KategoriListTab search={list.appliedSearch} />
             </TabsContent>
             <TabsContent value="pemetaan" className="mt-0">
-              <KategoriMappingTab search={list.debouncedSearch} />
+              <KategoriMappingTab search={list.appliedSearch} />
             </TabsContent>
           </div>
         </LiquidGlass>

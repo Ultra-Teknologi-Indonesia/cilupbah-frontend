@@ -170,7 +170,6 @@ export function PenempatanBarangTab() {
   );
   const list = useListState<FilterState>(EMPTY_FILTERS, {
     perPage: 20,
-    debounceMs: 350,
     namespace: "penempatan",
   });
   const [deleteTarget, setDeleteTarget] = useState<Putaway | null>(null);
@@ -202,7 +201,7 @@ export function PenempatanBarangTab() {
 
   const params = useMemo(
     () => ({
-      search: list.debouncedSearch || undefined,
+      search: list.appliedSearch || undefined,
       page: list.page,
       per_page: list.perPage,
       "filter[status]": statusTab === "ALL" ? undefined : statusTab,
@@ -212,7 +211,7 @@ export function PenempatanBarangTab() {
       sort: sortParam,
     }),
     [
-      list.debouncedSearch,
+      list.appliedSearch,
       list.page,
       list.perPage,
       list.filters.location_id,
@@ -558,6 +557,7 @@ export function PenempatanBarangTab() {
         <FilterToolbar
           search={list.search}
           onSearchChange={list.setSearch}
+          onSearch={list.applySearch}
           searchPlaceholder="Cari nomor atau nama pembuat/pelaksana..."
           align="end"
           onReset={

@@ -77,7 +77,7 @@ export function PindahBinListTable({ status }: { status: BinTransferStatus }) {
 
   const params = useMemo(
     () => ({
-      q: list.debouncedSearch || undefined,
+      q: list.appliedSearch || undefined,
       status,
       page: list.page,
       perPage: list.perPage,
@@ -87,7 +87,7 @@ export function PindahBinListTable({ status }: { status: BinTransferStatus }) {
       sort: sortParam,
     }),
     [
-      list.debouncedSearch,
+      list.appliedSearch,
       list.page,
       list.perPage,
       list.filters,

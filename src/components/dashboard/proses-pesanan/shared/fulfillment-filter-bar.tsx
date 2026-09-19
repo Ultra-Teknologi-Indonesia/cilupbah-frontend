@@ -61,6 +61,7 @@ interface Props {
   excludeTransit?: boolean;
   search?: string;
   onSearchChange?: (v: string) => void;
+  onSearch?: (value?: string) => void;
   searchPlaceholder?: string;
   className?: string;
 }
@@ -183,6 +184,7 @@ export function FulfillmentFilterBar({
   excludeTransit,
   search,
   onSearchChange,
+  onSearch,
   searchPlaceholder = "Cari…",
   className,
 }: Props) {
@@ -325,13 +327,22 @@ export function FulfillmentFilterBar({
             <Input
               value={search ?? ""}
               onChange={(e) => onSearchChange(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && onSearch) {
+                  e.preventDefault();
+                  onSearch();
+                }
+              }}
               placeholder={searchPlaceholder}
               className="h-9 rounded-full bg-background pl-9 pr-8"
             />
             {(search?.length ?? 0) > 0 && (
               <button
                 type="button"
-                onClick={() => onSearchChange("")}
+                onClick={() => {
+                  onSearchChange("");
+                  onSearch?.("");
+                }}
                 aria-label="Bersihkan pencarian"
                 className="absolute right-2.5 top-1/2 flex size-5 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
@@ -339,6 +350,18 @@ export function FulfillmentFilterBar({
               </button>
             )}
           </div>
+        )}
+
+        {onSearch && (
+          <Button
+            type="button"
+            size="sm"
+            onClick={() => onSearch()}
+            className="h-9 gap-1.5 rounded-full"
+          >
+            <SearchIcon className="size-4" />
+            Cari
+          </Button>
         )}
 
         {hasChildren && (

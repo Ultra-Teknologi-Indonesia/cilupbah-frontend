@@ -55,14 +55,14 @@ export function BinTransferReceiptListTable() {
 
   const params = useMemo(
     () => ({
-      q: list.debouncedSearch || undefined,
+      q: list.appliedSearch || undefined,
       page: list.page,
       perPage: list.perPage,
       locationId: list.filters.locationId || undefined,
       dateFrom: list.filters.dateFrom || undefined,
       dateTo: list.filters.dateTo || undefined,
     }),
-    [list.debouncedSearch, list.page, list.perPage, list.filters],
+    [list.appliedSearch, list.page, list.perPage, list.filters],
   );
 
   const { data, isLoading, isFetching } = useBinTransferReceiptList(params);

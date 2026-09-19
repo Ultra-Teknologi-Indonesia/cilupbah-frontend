@@ -98,13 +98,10 @@ export function ProductPickerDialog({
   const [page, setPage] = React.useState(1);
   const [perPage, setPerPage] = React.useState(20);
 
-  React.useEffect(() => {
-    const t = setTimeout(() => {
-      setSearch(searchInput);
-      setPage(1);
-    }, 350);
-    return () => clearTimeout(t);
-  }, [searchInput]);
+  const applySearch = (nextSearch?: string) => {
+    setSearch(nextSearch ?? searchInput);
+    setPage(1);
+  };
 
   const handleOpenChange = (next: boolean) => {
     if (!next) {
@@ -224,18 +221,29 @@ export function ProductPickerDialog({
         </DialogHeader>
 
         <div className="shrink-0 px-6 py-4">
-          <div className="relative">
-            <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              autoFocus
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="Cari nama produk / SKU…"
-              className="h-10 rounded-full border-border bg-background pl-9 pr-9"
-            />
-            {isFetching && (
-              <Loader2Icon className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground" />
-            )}
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                autoFocus
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    applySearch();
+                  }
+                }}
+                placeholder="Cari nama produk / SKU…"
+                className="h-10 rounded-full border-border bg-background pl-9"
+              />
+              {isFetching && (
+                <Loader2Icon className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground" />
+              )}
+            </div>
+            <Button type="button" size="sm" onClick={() => applySearch()}>
+              Cari
+            </Button>
           </div>
         </div>
 

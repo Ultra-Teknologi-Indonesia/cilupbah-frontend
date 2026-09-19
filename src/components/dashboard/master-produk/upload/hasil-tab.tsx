@@ -255,12 +255,9 @@ export function HasilTab({
     pageSize: 20,
   });
 
-  React.useEffect(() => {
-    const t = setTimeout(() => {
-      setSearch(searchInput);
-      setPagination((p) => ({ ...p, pageIndex: 0 }));
-    }, 350);
-    return () => clearTimeout(t);
+  const applySearch = React.useCallback((nextSearch?: string) => {
+    setSearch((nextSearch ?? searchInput).trim());
+    setPagination((p) => ({ ...p, pageIndex: 0 }));
   }, [searchInput]);
 
   const resetPage = () => setPagination((p) => ({ ...p, pageIndex: 0 }));
@@ -494,6 +491,7 @@ export function HasilTab({
         <FilterToolbar
           search={searchInput}
           onSearchChange={setSearchInput}
+          onSearch={applySearch}
           searchPlaceholder="Cari produk…"
           onReset={hasFilter ? onReset : undefined}
           hasFilter={hasFilter}

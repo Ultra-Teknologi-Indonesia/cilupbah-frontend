@@ -74,13 +74,13 @@ const EMPTY_FILTERS: SalesmanFilters = { status: "" };
 export function SalesmanTab() {
   const list = useListState<SalesmanFilters>(EMPTY_FILTERS, {
     perPage: 20,
-    debounceMs: 300,
     namespace: "salesman",
   });
   const {
     search,
     setSearch,
-    debouncedSearch,
+    applySearch,
+    appliedSearch,
     perPage,
     filters,
     setFilters,
@@ -96,12 +96,12 @@ export function SalesmanTab() {
 
   const params = useMemo(
     () => ({
-      search: debouncedSearch || undefined,
+      search: appliedSearch || undefined,
       page: pagination.pageIndex + 1,
       per_page: perPage,
       "filter[status]": statusFilter || undefined,
     }),
-    [debouncedSearch, pagination.pageIndex, perPage, statusFilter],
+    [appliedSearch, pagination.pageIndex, perPage, statusFilter],
   );
 
   const { data, isLoading, isFetching } = useSalesmen(params);
@@ -290,14 +290,12 @@ export function SalesmanTab() {
         <FilterToolbar
           search={search}
           onSearchChange={setSearch}
+          onSearch={applySearch}
           searchPlaceholder="Cari nama, kode, email..."
           align="end"
           onReset={
             hasFilter
-              ? () => {
-                  setFilters(EMPTY_FILTERS);
-                  setSearch("");
-                }
+              ? list.resetAll
               : undefined
           }
           hasFilter={hasFilter}

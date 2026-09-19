@@ -42,13 +42,13 @@ export function LocationListView() {
   const canEditSystemSettings = can("edit-pengaturan-sistem");
   const list = useListState<Record<string, never>>(
     {},
-    { perPage: 20, debounceMs: 350, namespace: "lokasi" },
+    { perPage: 20, namespace: "lokasi" },
   );
   const [deleteTarget, setDeleteTarget] = React.useState<Location | null>(null);
   const [togglingId, setTogglingId] = React.useState<string | null>(null);
 
   const { data, isLoading, isError, isFetching } = useLocations({
-    search: list.debouncedSearch,
+    search: list.appliedSearch,
     page: list.page,
     perPage: list.perPage,
     excludeTransit: false,
@@ -134,9 +134,23 @@ export function LocationListView() {
               <Input
                 value={list.search}
                 onChange={(e) => list.setSearch(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    list.applySearch();
+                  }
+                }}
                 placeholder="Cari lokasi"
-                className="pl-9"
+                className="pl-9 pr-16"
               />
+              <Button
+                type="button"
+                size="sm"
+                onClick={() => list.applySearch()}
+                className="absolute right-1 top-1/2 h-7 -translate-y-1/2 rounded-full px-2.5 text-xs"
+              >
+                Cari
+              </Button>
             </div>
             {canCreateLocation && (
               <Button variant="primary" asChild>

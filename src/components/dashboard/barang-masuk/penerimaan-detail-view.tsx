@@ -74,7 +74,7 @@ export function PenerimaanDetailView({ id }: { id: string }) {
   const [page, setPage] = React.useState(1);
   const [perPage, setPerPage] = React.useState(20);
   const [search, setSearch] = React.useState("");
-  const [debouncedSearch, setDebouncedSearch] = React.useState("");
+  const [appliedSearch, setAppliedSearch] = React.useState("");
   const [sort, setSort] = React.useState<string | undefined>(undefined);
   const [openItemId, setOpenItemId] = React.useState<string | null>(null);
   const [savingItemId, setSavingItemId] = React.useState<string | null>(null);
@@ -82,18 +82,17 @@ export function PenerimaanDetailView({ id }: { id: string }) {
     null,
   );
 
-  React.useEffect(() => {
-    const t = setTimeout(() => {
-      setDebouncedSearch(search.trim());
-      setPage(1);
-    }, 300);
-    return () => clearTimeout(t);
-  }, [search]);
+  const applySearch = (nextSearch?: string) => {
+    const trimmed = (nextSearch ?? search).trim();
+    setSearch(trimmed);
+    setAppliedSearch(trimmed);
+    setPage(1);
+  };
 
   const { data: itemsRes, isFetching: isFetchingItems } = useInboundItems(id, {
     page,
     perPage,
-    search: debouncedSearch || undefined,
+    search: appliedSearch || undefined,
     sort,
   });
   const items: InboundItem[] = itemsRes?.data ?? [];
@@ -343,9 +342,23 @@ export function PenerimaanDetailView({ id }: { id: string }) {
                   <Input
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        applySearch();
+                      }
+                    }}
                     placeholder="Cari SKU atau nama produk..."
-                    className="pl-8"
+                    className="pl-8 pr-16"
                   />
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => applySearch()}
+                    className="absolute right-1 top-1/2 h-7 -translate-y-1/2 rounded-full px-2.5 text-xs"
+                  >
+                    Cari
+                  </Button>
                 </div>
 
                 <Table containerClassName="rounded-xl border border-border/40">
@@ -405,8 +418,8 @@ export function PenerimaanDetailView({ id }: { id: string }) {
                           colSpan={7}
                           className="py-8 text-center text-sm text-muted-foreground"
                         >
-                          {debouncedSearch
-                            ? `Tidak ada item cocok "${debouncedSearch}".`
+                          {appliedSearch
+                            ? `Tidak ada item cocok "${appliedSearch}".`
                             : "Belum ada item."}
                         </TableCell>
                       </TableRow>
