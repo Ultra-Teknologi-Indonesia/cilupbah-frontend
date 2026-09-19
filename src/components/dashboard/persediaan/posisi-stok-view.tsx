@@ -637,7 +637,7 @@ export function PosisiStokView() {
           trailing={
             <div className="flex items-center gap-2">
               <StockPositionExportMenu
-                search={list.debouncedSearch}
+                search={list.appliedSearch}
                 sort={sortParam}
                 isBundle={bundleFilter}
                 channel={list.filters.channel || undefined}
