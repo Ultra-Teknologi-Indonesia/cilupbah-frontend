@@ -111,6 +111,12 @@ export function useOutboundMonitoring(enabled = true) {
 export function useOrderAudit() {
   const qc = useQueryClient();
 
+  const shops = useQuery({
+    queryKey: [...fulfillmentKeys.all, "order-audit-shops"],
+    queryFn: () => OutboundService.orderAuditShops(),
+    staleTime: 5 * 60_000,
+  });
+
   const audit = useMutation({
     mutationFn: (reference: string) => OutboundService.orderAudit(reference),
   });
@@ -129,7 +135,15 @@ export function useOrderAudit() {
     },
   });
 
-  return { audit, replay, remove };
+  const pullMarketplace = useMutation({
+    mutationFn: (payload: { reference: string; channel: string; shopId: string }) =>
+      OutboundService.pullMarketplaceOrder(payload),
+    onSuccess: (data) => {
+      qc.setQueryData<OrderAudit>([...fulfillmentKeys.all, "order-audit", data.reference], data);
+    },
+  });
+
+  return { audit, replay, remove, pullMarketplace, shops: shops.data ?? [], shopsQuery: shops };
 }
 
 export function useExportProcessOrdersCsv() {

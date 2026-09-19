@@ -6,6 +6,22 @@ export type OrderAuditWebhookState =
   | "skipped"
   | "unknown";
 
+export interface OrderAuditShop {
+  id: string;
+  shopId: string;
+  shopName: string;
+  channel: "shopee" | "tiktok" | "lazada" | "woocommerce" | string;
+  channelName: string;
+}
+
+export interface RawOrderAuditShop {
+  id: string;
+  shop_id: string;
+  shop_name: string;
+  channel: string;
+  channel_name: string;
+}
+
 export interface RawOrderAuditWebhook {
   id: string;
   channel: string;

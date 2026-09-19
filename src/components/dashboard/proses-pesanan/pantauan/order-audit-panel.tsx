@@ -126,18 +126,28 @@ function AuditResult({
   result,
   onReplay,
   onDelete,
+  onPull,
   isReplayPending,
   isDeletePending,
+  isPullPending,
   canReplay,
   canDelete,
+  canPull,
+  canPullFromMarketplace,
+  selectedShopName,
 }: {
   result: OrderAudit;
   onReplay: () => void;
   onDelete: () => void;
+  onPull: () => void;
   isReplayPending: boolean;
   isDeletePending: boolean;
+  isPullPending: boolean;
   canReplay: boolean;
   canDelete: boolean;
+  canPull: boolean;
+  canPullFromMarketplace: boolean;
+  selectedShopName: string;
 }) {
   const replayable = result.webhooks.some((webhook) => webhook.replayable);
   const statusTitle = result.foundInWms
@@ -168,8 +178,20 @@ function AuditResult({
               Buang order
             </Button>
           ) : null}
+          {canPull && canPullFromMarketplace && !result.foundInWms ? (
+            <Button type="button" size="sm" variant="outline" onClick={onPull} disabled={isPullPending}>
+              {isPullPending ? <Loader2Icon className="animate-spin" /> : <RefreshCwIcon />}
+              Tarik dari marketplace
+            </Button>
+          ) : null}
         </div>
       </div>
+
+      {canPullFromMarketplace && !result.foundInWms ? (
+        <p className="rounded-xl bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
+          Pull langsung memakai toko <span className="font-medium text-foreground">{selectedShopName}</span> dan hanya mengambil nomor pesanan ini. Sistem tetap mengecek ulang agar tidak duplikat.
+        </p>
+      ) : null}
 
       {result.orders.length > 0 ? (
         <div className="space-y-2">
@@ -198,14 +220,22 @@ function AuditResult({
 export function OrderAuditPanel() {
   const [reference, setReference] = useState("");
   const [searchedReference, setSearchedReference] = useState("");
+  const [channel, setChannel] = useState("");
+  const [shopId, setShopId] = useState("");
   const [result, setResult] = useState<OrderAudit | null>(null);
-  const [confirmAction, setConfirmAction] = useState<"replay" | "delete" | null>(null);
+  const [confirmAction, setConfirmAction] = useState<"replay" | "delete" | "pull" | null>(null);
   const { can } = usePermissions();
-  const { audit, replay, remove } = useOrderAudit();
+  const { audit, replay, remove, pullMarketplace, shops, shopsQuery } = useOrderAudit();
 
   const canReplay = can("edit-pesanan");
   const canDelete = can("delete-pesanan");
-  const busy = audit.isPending || replay.isPending || remove.isPending;
+  const canPull = can("edit-pesanan");
+  const filteredShops = shops.filter((shop) => !channel || shop.channel === channel);
+  const selectedShop = shops.find(
+    (shop) => shop.shopId === shopId && shop.channel === channel,
+  );
+  const canPullFromMarketplace = Boolean(!result?.foundInWms && channel && shopId && searchedReference);
+  const busy = audit.isPending || replay.isPending || remove.isPending || pullMarketplace.isPending;
   const submitLabel = useMemo(() => (audit.isPending ? "Memeriksa…" : "Periksa"), [audit.isPending]);
 
   async function handleSearch(event: React.FormEvent<HTMLFormElement>) {
@@ -217,7 +247,18 @@ export function OrderAuditPanel() {
     }
     setSearchedReference(value);
     try {
-      setResult(await audit.mutateAsync(value));
+      const next = await audit.mutateAsync(value);
+      setResult(next);
+      const webhookShop = next.webhooks.find((webhook) => webhook.channel && webhook.shopId);
+      if (webhookShop) {
+        const matchingShop = shops.find(
+          (shop) => shop.channel === webhookShop.channel && shop.shopId === webhookShop.shopId,
+        );
+        if (matchingShop) {
+          setChannel(matchingShop.channel);
+          setShopId(matchingShop.shopId);
+        }
+      }
     } catch (error) {
       setResult(null);
       apiError(error, "Gagal memeriksa pesanan.");
@@ -229,12 +270,31 @@ export function OrderAuditPanel() {
     try {
       const next = confirmAction === "replay"
         ? await replay.mutateAsync(searchedReference)
-        : await remove.mutateAsync(searchedReference);
+        : confirmAction === "delete"
+          ? await remove.mutateAsync(searchedReference)
+          : await pullMarketplace.mutateAsync({
+              reference: searchedReference,
+              channel,
+              shopId,
+            });
       setResult(next);
       setConfirmAction(null);
-      toast.success(confirmAction === "replay" ? "Order dimasukkan ke antrean WMS." : "Order berhasil dibuang.");
+      toast.success(
+        confirmAction === "replay"
+          ? "Order dimasukkan ke antrean WMS."
+          : confirmAction === "delete"
+            ? "Order berhasil dibuang."
+            : "Order berhasil ditarik dari marketplace.",
+      );
     } catch (error) {
-      apiError(error, confirmAction === "replay" ? "Order belum dapat dimasukkan." : "Order belum dapat dibuang.");
+      apiError(
+        error,
+        confirmAction === "replay"
+          ? "Order belum dapat dimasukkan."
+          : confirmAction === "delete"
+            ? "Order belum dapat dibuang."
+            : "Order belum dapat ditarik dari marketplace.",
+      );
     }
   }
 
@@ -273,15 +333,58 @@ export function OrderAuditPanel() {
               </Button>
             </form>
 
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              <select
+                value={channel}
+                onChange={(event) => {
+                  setChannel(event.target.value);
+                  setShopId("");
+                }}
+                disabled={busy || shopsQuery.isPending}
+                aria-label="Channel marketplace untuk pull langsung"
+                className="h-10 rounded-xl border border-input bg-background px-3 text-sm"
+              >
+                <option value="">Pilih channel untuk pull langsung</option>
+                <option value="shopee">Shopee</option>
+                <option value="tiktok">TikTok Shop</option>
+                <option value="lazada">Lazada</option>
+                <option value="woocommerce">WooCommerce</option>
+              </select>
+              <select
+                value={shopId}
+                onChange={(event) => setShopId(event.target.value)}
+                disabled={busy || !channel || shopsQuery.isPending}
+                aria-label="Toko marketplace untuk pull langsung"
+                className="h-10 rounded-xl border border-input bg-background px-3 text-sm"
+              >
+                <option value="">
+                  {shopsQuery.isPending ? "Memuat toko…" : "Pilih toko marketplace"}
+                </option>
+                {filteredShops.map((shop) => (
+                  <option key={shop.id} value={shop.shopId}>
+                    {shop.shopName} ({shop.shopId})
+                  </option>
+                ))}
+              </select>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Untuk pull langsung, masukkan nomor pesanan channel lalu pilih channel dan toko yang tepat. Nomor internal hanya bisa diaudit atau diproses dari webhook.
+            </p>
+
             {result ? (
               <AuditResult
                 result={result}
                 onReplay={() => canReplay && setConfirmAction("replay")}
                 onDelete={() => canDelete && setConfirmAction("delete")}
+                onPull={() => canPull && canPullFromMarketplace && setConfirmAction("pull")}
                 isReplayPending={replay.isPending}
                 isDeletePending={remove.isPending}
+                isPullPending={pullMarketplace.isPending}
                 canReplay={canReplay}
                 canDelete={canDelete}
+                canPull={canPull}
+                canPullFromMarketplace={canPullFromMarketplace}
+                selectedShopName={selectedShop?.shopName ?? "toko terpilih"}
               />
             ) : null}
           </CardContent>
@@ -291,13 +394,15 @@ export function OrderAuditPanel() {
       <ConfirmDialog
         open={confirmAction !== null}
         onOpenChange={(open) => !open && setConfirmAction(null)}
-        title={confirmAction === "replay" ? "Masukkan order ke antrean WMS?" : "Buang order dari WMS?"}
+        title={confirmAction === "replay" ? "Masukkan order ke antrean WMS?" : confirmAction === "delete" ? "Buang order dari WMS?" : "Tarik order dari marketplace?"}
         description={confirmAction === "replay"
           ? "Sistem akan melakukan pengecekan kedua dan hanya mengirim ulang webhook jika order belum ada di WMS."
-          : "Order hanya dapat dibuang jika belum diproses dan belum memiliki relasi proses gudang. Tindakan ini tidak menghapus order di marketplace."}
-        confirmLabel={confirmAction === "replay" ? "Ya, masukkan" : "Ya, buang order"}
+          : confirmAction === "delete"
+            ? "Order hanya dapat dibuang jika belum diproses dan belum memiliki relasi proses gudang. Tindakan ini tidak menghapus order di marketplace."
+            : `Sistem hanya mengambil order ${searchedReference} dari ${selectedShop?.shopName ?? "toko yang dipilih"}. Jika order sudah ada, proses dibatalkan agar tidak duplikat.`}
+        confirmLabel={confirmAction === "replay" ? "Ya, masukkan" : confirmAction === "delete" ? "Ya, buang order" : "Ya, tarik order"}
         variant={confirmAction === "delete" ? "destructive" : "default"}
-        loading={replay.isPending || remove.isPending}
+        loading={replay.isPending || remove.isPending || pullMarketplace.isPending}
         onConfirm={handleConfirmedAction}
       >
         <p className="rounded-xl bg-muted/60 px-3 py-2 text-xs text-muted-foreground">

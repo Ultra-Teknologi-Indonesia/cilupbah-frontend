@@ -39,7 +39,9 @@ import type {
 } from "@/types/proses-pesanan/fulfillment";
 import type {
   OrderAudit,
+  OrderAuditShop,
   RawOrderAudit,
+  RawOrderAuditShop,
 } from "@/types/proses-pesanan/order-audit";
 
 export interface CreateShipmentPayload {
@@ -101,6 +103,16 @@ function mapOrderAudit(raw: RawOrderAudit): OrderAudit {
       canInclude: raw.actions?.can_include ?? false,
       canDelete: raw.actions?.can_delete ?? false,
     },
+  };
+}
+
+function mapOrderAuditShop(raw: RawOrderAuditShop): OrderAuditShop {
+  return {
+    id: raw.id,
+    shopId: raw.shop_id,
+    shopName: raw.shop_name,
+    channel: raw.channel,
+    channelName: raw.channel_name,
   };
 }
 
@@ -611,6 +623,13 @@ export const OutboundService = {
     return mapOrderAudit(res.data);
   },
 
+  orderAuditShops: async (): Promise<OrderAuditShop[]> => {
+    const res = await fetchClient<ApiResponse<RawOrderAuditShop[]>>(
+      "/operations/order-audit/shops",
+    );
+    return (res.data ?? []).map(mapOrderAuditShop);
+  },
+
   replayOrderAudit: async (reference: string): Promise<OrderAudit> => {
     const res = await fetchClient<ApiResponse<{ audit: RawOrderAudit }>>(
       "/operations/order-audit/replay",
@@ -628,6 +647,26 @@ export const OutboundService = {
       {
         method: "POST",
         data: { reference: reference.trim(), confirmation: "DELETE-ORDER" },
+      },
+    );
+    return mapOrderAudit(res.data.audit);
+  },
+
+  pullMarketplaceOrder: async (payload: {
+    reference: string;
+    channel: string;
+    shopId: string;
+  }): Promise<OrderAudit> => {
+    const res = await fetchClient<ApiResponse<{ audit: RawOrderAudit }>>(
+      "/operations/order-audit/marketplace-pull",
+      {
+        method: "POST",
+        data: {
+          reference: payload.reference.trim(),
+          channel: payload.channel,
+          shop_id: payload.shopId,
+          confirmation: "PULL-MARKETPLACE",
+        },
       },
     );
     return mapOrderAudit(res.data.audit);
