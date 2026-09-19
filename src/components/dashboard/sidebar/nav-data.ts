@@ -182,7 +182,6 @@ export const dashboardGroups: NavGroup[] = [
         title: "Audit Pesanan",
         icon: FileSearch,
         link: "/dashboard/proses-pesanan/audit",
-        permission: "view-pesanan",
       },
       {
         id: "manajemen-rak",
@@ -286,6 +285,7 @@ export const NAV_PERMISSION: Record<string, string | string[]> = {
   "barang-masuk": ["view-barang-masuk", "view-penempatan"],
   "barang-keluar": "view-barang-keluar",
   "proses-pesanan": ["view-picking", "view-packing", "view-pengiriman"],
+  "audit-pesanan": "view-pesanan",
   "manajemen-rak": "view-manajemen-rak",
   "permintaan-restock": "view-permintaan-restock",
   "laporan-penjualan": "view-laporan-penjualan",
