@@ -43,7 +43,7 @@ function shippingLabelSelectability(order: Order): RowSelectability {
   return { selectable: true };
 }
 
-function shipmentSelectability(order: Order): RowSelectability {
+function fulfillmentSelectability(order: Order): RowSelectability {
   if (order.is_canceled) {
     return { selectable: false, reason: "Pesanan sudah dibatalkan" };
   }
@@ -194,6 +194,7 @@ export function FulfillmentCardList({
     stage,
     params,
   );
+  const showInitialLoading = isLoading && data === undefined;
   const orders = React.useMemo(() => data?.items ?? [], [data]);
   const meta = data?.meta ?? {
     current_page: 1,
@@ -223,9 +224,11 @@ export function FulfillmentCardList({
     setSelectedIds(new Set());
   }, [stage, tab]);
 
-  const rowSelectability = shipmentCreationEnabled
-    ? shipmentSelectability
-    : shippingLabelSelectability;
+  // Pemilihan order untuk operasi WMS tidak boleh bergantung pada dukungan
+  // cetak label marketplace. Order manual tetap dapat dipacking, dicetak
+  // faktur, atau dikembalikan tahapnya; pembatasan resi/label tetap diterapkan
+  // di action masing-masing melalui shippingLabelSelectability.
+  const rowSelectability = fulfillmentSelectability;
 
   const eligibleIds = React.useMemo(() => {
     const ids = new Set<string>();
@@ -442,7 +445,7 @@ export function FulfillmentCardList({
       </div>
 
       <div className="px-4 pb-4 sm:px-5">
-        {isLoading ? (
+        {showInitialLoading ? (
           <div className="flex flex-col gap-3 py-3">
             {Array.from({ length: 3 }).map((_, i) => (
               <div
@@ -469,7 +472,9 @@ export function FulfillmentCardList({
               <FulfillmentBulkActionBar
                 selectedCount={selectedIds.size}
                 onReset={() => setSelectedIds(new Set())}
-                onReadyToShip={handleReadyToShip}
+                onReadyToShip={
+                  shipmentCreationEnabled ? handleReadyToShip : undefined
+                }
                 onCreateShipment={
                   shipmentCreationEnabled ? handleCreateShipment : undefined
                 }

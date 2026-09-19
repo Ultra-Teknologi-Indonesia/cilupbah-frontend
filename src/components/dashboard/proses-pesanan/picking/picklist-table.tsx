@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/tooltip";
 import {
   usePicklists,
+  useBulkRevertPicklists,
   usePrefetchPicklistDetail,
   useRevertPicklist,
 } from "@/hooks/proses-pesanan/use-fulfillment";
@@ -41,6 +42,10 @@ import { type Picklist } from "@/types/proses-pesanan/fulfillment";
 import { StatusBadge } from "@/components/dashboard/shared/status-badge";
 import { apiError } from "@/lib/toast";
 import { usePermissions } from "@/hooks/auth/use-permissions";
+import { DocActions } from "@/hooks/proses-pesanan/use-doc-actions";
+import { Checkbox } from "@/components/ui/checkbox";
+import { BulkActionBar } from "@/components/ui/bulk-action-bar";
+import { BulkUbahPickerDialog } from "./bulk-ubah-picker-dialog";
 
 type PicklistFilterState = {
   status: string;
@@ -144,7 +149,11 @@ export function PicklistTable() {
   });
   const [editPicker, setEditPicker] = React.useState<Picklist | null>(null);
   const [revertTarget, setRevertTarget] = React.useState<Picklist | null>(null);
+  const [selectedIds, setSelectedIds] = React.useState<Set<string>>(new Set());
+  const [bulkPickerOpen, setBulkPickerOpen] = React.useState(false);
+  const [bulkRevertOpen, setBulkRevertOpen] = React.useState(false);
   const revertPicklist = useRevertPicklist();
+  const bulkRevertPicklists = useBulkRevertPicklists();
 
   const params = React.useMemo(
     () => ({
@@ -171,8 +180,83 @@ export function PicklistTable() {
     [list.appliedSearch, list.filters, list.page, list.perPage, list.sorting],
   );
   const { data, isLoading, isFetching, refetch } = usePicklists(params);
+  const showInitialLoading = isLoading && data === undefined;
 
-  const picklists = data?.items ?? [];
+  const picklists = React.useMemo(() => data?.items ?? [], [data]);
+
+  const selectablePicklistIds = React.useMemo(
+    () =>
+      picklists
+        .filter(
+          (picklist) =>
+            picklist.status === "DRAFT" || picklist.status === "IN_PROGRESS",
+        )
+        .map((picklist) => picklist.id),
+    [picklists],
+  );
+
+  const selectedPicklists = React.useMemo(
+    () => picklists.filter((picklist) => selectedIds.has(picklist.id)),
+    [picklists, selectedIds],
+  );
+
+  const selectedLocationIds = React.useMemo(
+    () => new Set(selectedPicklists.map((picklist) => picklist.locationId)),
+    [selectedPicklists],
+  );
+
+  const bulkPickerLocationId =
+    selectedLocationIds.size === 1 ? selectedPicklists[0]?.locationId ?? null : null;
+  const hasMultipleLocations = selectedLocationIds.size > 1;
+
+  const allSelected =
+    selectablePicklistIds.length > 0 &&
+    selectablePicklistIds.every((id) => selectedIds.has(id));
+  const someSelected =
+    !allSelected && selectablePicklistIds.some((id) => selectedIds.has(id));
+
+  const togglePicklist = React.useCallback((id: string, checked: boolean) => {
+    setSelectedIds((previous) => {
+      const next = new Set(previous);
+      if (checked) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  }, []);
+
+  const toggleAll = React.useCallback(() => {
+    setSelectedIds((previous) => {
+      const next = new Set(previous);
+      const shouldClear = selectablePicklistIds.every((id) => next.has(id));
+      if (shouldClear) {
+        selectablePicklistIds.forEach((id) => next.delete(id));
+      } else {
+        selectablePicklistIds.forEach((id) => next.add(id));
+      }
+      return next;
+    });
+  }, [selectablePicklistIds]);
+
+  const handleBulkRevert = async () => {
+    if (selectedPicklists.length === 0) return;
+
+    try {
+      const result = await bulkRevertPicklists.mutateAsync(
+        selectedPicklists.map((picklist) => picklist.id),
+      );
+      setSelectedIds(new Set());
+      setBulkRevertOpen(false);
+      if (result.failed_count > 0) {
+        toast.warning("Sebagian picklist tidak dimundurkan", {
+          description: `${result.success_count} berhasil, ${result.failed_count} gagal.`,
+        });
+      } else {
+        toast.success(`${result.success_count} picklist dimundurkan ke Belum Mulai.`);
+      }
+    } catch (error) {
+      apiError(error, "Gagal memundurkan picklist.");
+    }
+  };
 
   const meta = data?.meta ?? {
     current_page: 1,
@@ -183,6 +267,43 @@ export function PicklistTable() {
 
   const columns = React.useMemo<ColumnDef<Picklist>[]>(
     () => [
+      {
+        id: "select",
+        header: () => (
+          <Checkbox
+            checked={allSelected ? true : someSelected ? "indeterminate" : false}
+            onCheckedChange={toggleAll}
+            aria-label="Pilih semua picklist"
+            disabled={!canEditPicking && !canExportPicking}
+          />
+        ),
+        cell: ({ row }) => {
+          const selectable =
+            row.original.status === "DRAFT" ||
+            row.original.status === "IN_PROGRESS";
+          if (!selectable) {
+            return (
+              <Checkbox
+                checked={false}
+                disabled
+                aria-label="Picklist tidak dapat dipilih"
+              />
+            );
+          }
+
+          return (
+            <Checkbox
+              checked={selectedIds.has(row.original.id)}
+              onCheckedChange={(value) =>
+                togglePicklist(row.original.id, !!value)
+              }
+              aria-label={`Pilih ${row.original.picklistNo}`}
+              disabled={!canEditPicking && !canExportPicking}
+            />
+          );
+        },
+        enableSorting: false,
+      },
       {
         id: "picklist_no",
         accessorFn: (row) => row.picklistNo,
@@ -361,7 +482,17 @@ export function PicklistTable() {
         ),
       },
     ],
-    [canEditPicking, canExportPicking, canRevertPicking, prefetchPicklist],
+    [
+      allSelected,
+      canEditPicking,
+      canExportPicking,
+      canRevertPicking,
+      prefetchPicklist,
+      selectedIds,
+      someSelected,
+      toggleAll,
+      togglePicklist,
+    ],
   );
 
   const handleRevertConfirm = () => {
@@ -420,10 +551,64 @@ export function PicklistTable() {
       </div>
 
       <div className="px-4 pb-4 sm:px-5">
+        <BulkActionBar
+          count={selectedIds.size}
+          onClear={() => setSelectedIds(new Set())}
+          label={(count) => `${count} picklist dipilih`}
+          message={
+            hasMultipleLocations ? (
+              <span className="text-xs text-destructive">
+                Ubah picker hanya bisa untuk satu lokasi sekaligus.
+              </span>
+            ) : null
+          }
+          actions={
+            <>
+              {canEditPicking && (
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => setBulkPickerOpen(true)}
+                  disabled={hasMultipleLocations || selectedPicklists.length === 0}
+                >
+                  <UserCogIcon className="size-4" />
+                  Ubah Picker
+                </Button>
+              )}
+              {canExportPicking && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    void DocActions.pickListByPicklistIds(
+                      selectedPicklists.map((picklist) => picklist.id),
+                    )
+                  }
+                  disabled={selectedPicklists.length === 0}
+                >
+                  <PrinterIcon className="size-4" />
+                  Cetak Picklist
+                </Button>
+              )}
+              {canEditPicking && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setBulkRevertOpen(true)}
+                  disabled={selectedPicklists.length === 0}
+                  className="border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                >
+                  <Trash2Icon className="size-4" />
+                  Mundurkan
+                </Button>
+              )}
+            </>
+          }
+        />
         <DataTable
           columns={columns}
           data={picklists}
-          isLoading={isLoading}
+          isLoading={showInitialLoading}
           hideToolbar
           manualPagination
           manualSorting
@@ -476,6 +661,28 @@ export function PicklistTable() {
           variant="destructive"
           loading={revertPicklist.isPending}
           onConfirm={handleRevertConfirm}
+        />
+      )}
+
+      {canEditPicking && (
+        <BulkUbahPickerDialog
+          open={bulkPickerOpen}
+          onOpenChange={setBulkPickerOpen}
+          picklistIds={selectedPicklists.map((picklist) => picklist.id)}
+          locationId={bulkPickerLocationId}
+        />
+      )}
+
+      {canEditPicking && (
+        <ConfirmDialog
+          open={bulkRevertOpen}
+          onOpenChange={setBulkRevertOpen}
+          title={`Mundurkan ${selectedPicklists.length} picklist?`}
+          description="Picklist yang dipilih akan dihapus dan semua pesanan di dalamnya dikembalikan ke tahap Pengambilan — Belum Mulai. Stok yang sudah diambil akan dikembalikan ke rak."
+          confirmLabel="Mundurkan Picklist"
+          variant="destructive"
+          loading={bulkRevertPicklists.isPending}
+          onConfirm={() => void handleBulkRevert()}
         />
       )}
     </div>

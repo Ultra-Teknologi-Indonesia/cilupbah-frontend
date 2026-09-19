@@ -127,6 +127,8 @@ export function ProgressTab({
       <FilterToolbar
         onReset={hasFilter ? reset : undefined}
         hasFilter={hasFilter}
+        onRefresh={() => query.refetch()}
+        isRefreshing={query.isFetching}
         activeCount={
           [shop, state !== "all", dateFrom, dateTo].filter(Boolean).length
         }

@@ -26,6 +26,7 @@ import {
   BarChart3,
   AlertTriangle,
   HelpCircle,
+  FileSearch,
 } from "lucide-react";
 import type React from "react";
 import type { Route } from "./nav-main";
@@ -177,6 +178,12 @@ export const dashboardGroups: NavGroup[] = [
         link: "/dashboard/proses-pesanan",
       },
       {
+        id: "audit-pesanan",
+        title: "Audit Pesanan",
+        icon: FileSearch,
+        link: "/dashboard/proses-pesanan/audit",
+      },
+      {
         id: "manajemen-rak",
         title: "Manajemen Rak & Lokasi",
         icon: Archive,
@@ -278,6 +285,7 @@ export const NAV_PERMISSION: Record<string, string | string[]> = {
   "barang-masuk": ["view-barang-masuk", "view-penempatan"],
   "barang-keluar": "view-barang-keluar",
   "proses-pesanan": ["view-picking", "view-packing", "view-pengiriman"],
+  "audit-pesanan": "view-pesanan",
   "manajemen-rak": "view-manajemen-rak",
   "permintaan-restock": "view-permintaan-restock",
   "laporan-penjualan": "view-laporan-penjualan",
@@ -414,6 +422,7 @@ const ROUTE_PERMISSION_RULES: Array<{
     permission: { all: ["view-pesanan", "view-pengiriman"] },
   },
   { link: "/dashboard/proses-pesanan/pantauan", permission: "view-pesanan" },
+  { link: "/dashboard/proses-pesanan/audit", permission: "view-pesanan" },
   {
     link: "/dashboard/proses-pesanan/delivered",
     permission: "view-pengiriman",

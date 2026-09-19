@@ -3,6 +3,7 @@ import type { ApiPaginated, ApiResponse } from "@/types/api.types";
 import type {
   StockItem,
   StockListParams,
+  StockPositionExportParams,
   StockMovement,
   StockMovementParams,
   BinInventory,
@@ -15,6 +16,19 @@ interface StockListResponse extends ApiResponse<StockItem[]> {
 }
 
 export const InventoryStockService = {
+  exportPositionAsync: async (
+    params: StockPositionExportParams,
+  ): Promise<string> => {
+    const res = await fetchClient<
+      ApiResponse<{ export_id: string; status: string }>
+    >(`/inventory/stock-position/export/async`, {
+      method: "POST",
+      data: params,
+    });
+
+    return res.data.export_id;
+  },
+
   exportReport: async (params: {
     report_type: "by_location" | "as_of_date" | "by_rack";
     item_ids?: string[];

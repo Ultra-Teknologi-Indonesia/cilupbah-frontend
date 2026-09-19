@@ -301,6 +301,25 @@ export function SalesReturnDetailView({ id }: { id: string }) {
             value={ret.customer_name ?? ret.order?.customer_name ?? "—"}
           />
           <InfoRow
+            label="No. Resi"
+            value={
+              ret.return_tracking_number || ret.order?.tracking_number ? (
+                <div>
+                  <div className="font-medium tabular-nums">
+                    {ret.return_tracking_number || ret.order?.tracking_number}
+                  </div>
+                  {(ret.return_carrier || ret.order?.shipping_provider) && (
+                    <div className="text-xs text-muted-foreground">
+                      {ret.return_carrier || ret.order?.shipping_provider}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                "—"
+              )
+            }
+          />
+          <InfoRow
             label="Lokasi Restock"
             value={ret.location?.location_name ?? "—"}
           />

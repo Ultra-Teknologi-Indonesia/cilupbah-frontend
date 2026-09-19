@@ -252,6 +252,7 @@ function FulfillmentBoard({ stage }: { stage: FulfillmentStage }) {
           searchPlaceholder="Cari no. pesanan, resi, SKU, ekspedisi…"
           filterFields={["courier", "status", "date"]}
           channelStatusOptions={[
+            { value: "TO_CONFIRM_RECEIVE", label: "Konfirmasi Terima" },
             { value: "COMPLETED", label: "Selesai" },
             { value: "LOST,TO_RETURN", label: "Paket Hilang" },
           ]}

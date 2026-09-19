@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   AlertTriangleIcon,
   CheckCircle2Icon,
@@ -34,6 +34,7 @@ import type {
 import { apiError } from "@/lib/toast";
 import { notifyShippingLabelPrinted } from "@/lib/pesanan/shipping-label-audit-event";
 import { cn } from "@/lib/utils";
+import { bulkLabelRefetchInterval } from "@/lib/proses-pesanan/bulk-label-polling";
 import { useRealtimeEvents } from "@/hooks/realtime/use-realtime-events";
 
 const CHANNEL_LABEL: Record<string, string> = {
@@ -115,7 +116,11 @@ function ItemRow({ item }: { item: BulkLabelBatchItem }) {
       </TableCell>
       <TableCell className="align-top">
         <div className="flex flex-col gap-1">
-          <StatusBadge domain="bulk-label-item" status={item.status} />
+          <StatusBadge
+            domain="bulk-label-item"
+            status={item.status}
+            label={item.status_label}
+          />
           {item.status_message && (
             <span className="text-[11px] leading-snug text-muted-foreground">
               {item.status_message}
@@ -128,7 +133,6 @@ function ItemRow({ item }: { item: BulkLabelBatchItem }) {
 }
 
 export function BulkLabelPreviewView({ batchId }: { batchId: string }) {
-  const queryClient = useQueryClient();
   const [retrying, setRetrying] = React.useState(false);
   const [pdfUrl, setPdfUrl] = React.useState<string | null>(null);
   const [pdfError, setPdfError] = React.useState<unknown>(null);
@@ -137,6 +141,9 @@ export function BulkLabelPreviewView({ batchId }: { batchId: string }) {
     queryKey: ["bulk-label-batch", batchId],
     queryFn: () => OutboundService.getBulkShippingLabelBatch(batchId),
     refetchOnWindowFocus: true,
+    refetchInterval: (query) =>
+      bulkLabelRefetchInterval(query.state.data?.status),
+    refetchIntervalInBackground: false,
     retry: 2,
   });
 
@@ -144,9 +151,7 @@ export function BulkLabelPreviewView({ batchId }: { batchId: string }) {
     bulkLabelBatchId: batchId,
     onEvent: (event) => {
       if (event.type !== "bulk-label.progress") return;
-      void queryClient.invalidateQueries({
-        queryKey: ["bulk-label-batch", batchId],
-      });
+      void refetch({ cancelRefetch: false });
     },
   });
 

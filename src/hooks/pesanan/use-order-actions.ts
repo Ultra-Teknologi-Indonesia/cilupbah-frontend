@@ -294,6 +294,18 @@ export const useUpdateOrderItem = createMutationHook({
   invalidates: ({ orderId }) => forOrder(orderId),
 });
 
+export const useDownloadOrderItem = createMutationHook({
+  mutationFn: (data: {
+    orderId: string;
+    itemId: string;
+    variantId?: string;
+  }) =>
+    OrderService.downloadOrderItem(data.orderId, data.itemId, data.variantId),
+  successMessage: "SKU berhasil di-download dan dipetakan",
+  errorMessage: "Gagal download SKU",
+  invalidates: ({ orderId }) => forOrder(orderId),
+});
+
 export const useDeleteOrderItem = createMutationHook({
   mutationFn: (data: { orderId: string; itemId: string }) =>
     OrderService.deleteOrderItem(data.orderId, data.itemId),

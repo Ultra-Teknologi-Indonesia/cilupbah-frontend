@@ -41,15 +41,6 @@ export function useDownloadTransactions(params: DownloadTransactionParams) {
     queryFn: () => DownloadService.listTransactions(params),
     placeholderData: keepPreviousData,
     staleTime: 15 * 1000,
-
-    refetchInterval: (query) => {
-      const items = query.state.data?.items ?? [];
-      return items.some(
-        (t) => t.state === "downloading" || t.state === "queued",
-      )
-        ? 5000
-        : false;
-    },
   });
 }
 
@@ -63,11 +54,6 @@ export function useDownloadTransactionDetail(
     enabled: !!id,
     placeholderData: keepPreviousData,
     staleTime: 15 * 1000,
-
-    refetchInterval: (query) => {
-      const state = query.state.data?.state;
-      return state === "downloading" || state === "queued" ? 5000 : false;
-    },
   });
 }
 

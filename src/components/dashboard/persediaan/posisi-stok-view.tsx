@@ -51,6 +51,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { InfoIcon } from "lucide-react";
 import { FilterToolbar } from "@/components/dashboard/master-produk/filter-toolbar";
+import { StockPositionExportMenu } from "@/components/dashboard/persediaan/stock-position-export-menu";
 import { CopySku } from "@/components/dashboard/shared/copy-sku";
 import { useListState } from "@/hooks/use-list-state";
 import { useUrlTab } from "@/hooks/use-url-tab";
@@ -634,11 +635,22 @@ export function PosisiStokView() {
           onRefresh={() => refetch()}
           isRefreshing={isFetching}
           trailing={
-            <VisibleLocationsControl
-              locations={meta.locations}
-              hidden={hiddenLocations}
-              onChange={updateHiddenLocations}
-            />
+            <div className="flex items-center gap-2">
+              <StockPositionExportMenu
+                search={list.debouncedSearch}
+                sort={sortParam}
+                isBundle={bundleFilter}
+                channel={list.filters.channel || undefined}
+                visibleLocationIds={visibleLocations.map(
+                  (location) => location.location_id,
+                )}
+              />
+              <VisibleLocationsControl
+                locations={meta.locations}
+                hidden={hiddenLocations}
+                onChange={updateHiddenLocations}
+              />
+            </div>
           }
           onReset={
             list.hasActiveFilter || !!list.search ? list.resetAll : undefined

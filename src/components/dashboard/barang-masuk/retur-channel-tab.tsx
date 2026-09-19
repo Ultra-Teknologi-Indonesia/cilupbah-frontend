@@ -318,15 +318,18 @@ export function ReturChannelTab() {
           const isSyncing =
             syncTrackingMutation.isPending &&
             syncTrackingMutation.variables === item.id;
+          const trackingNumber =
+            item.return_tracking_number || item.order?.tracking_number;
+          const carrier = item.return_carrier || item.order?.shipping_provider;
           return (
             <div className="flex items-center gap-1.5">
               <div className="flex min-w-0 flex-col">
                 <span className="font-medium tabular-nums text-foreground">
-                  {item.return_tracking_number ?? "—"}
+                  {trackingNumber ?? "—"}
                 </span>
-                {item.return_carrier && (
+                {carrier && (
                   <span className="truncate text-xs text-muted-foreground">
-                    {item.return_carrier}
+                    {carrier}
                   </span>
                 )}
               </div>

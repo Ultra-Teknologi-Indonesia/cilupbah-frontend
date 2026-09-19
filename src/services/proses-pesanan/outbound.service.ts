@@ -37,6 +37,12 @@ import type {
   OutboundMonitoring,
   RawOutboundMonitoring,
 } from "@/types/proses-pesanan/fulfillment";
+import type {
+  OrderAudit,
+  OrderAuditShop,
+  RawOrderAudit,
+  RawOrderAuditShop,
+} from "@/types/proses-pesanan/order-audit";
 
 export interface CreateShipmentPayload {
   shipment_no?: string | null;
@@ -55,9 +61,59 @@ export type ProcessOrdersExportScope = {
 
 type Meta = ApiPaginated<unknown>["meta"];
 
+export interface BulkPicklistActionResult {
+  success_count: number;
+  failed_count: number;
+  results: Array<{
+    picklist_id: string;
+    status: "success" | "failed";
+    message: string;
+  }>;
+}
+
 export interface ListResult<T> {
   items: T[];
   meta: Meta;
+}
+
+function mapOrderAudit(raw: RawOrderAudit): OrderAudit {
+  return {
+    reference: raw.reference,
+    foundInWms: raw.found_in_wms,
+    orders: (raw.orders ?? []).map((order) => ({
+      ...order,
+      internalOrderNo: order.internal_order_no,
+      channelOrderNo: order.channel_order_no ?? null,
+      locationCode: order.location_code ?? null,
+      locationName: order.location_name ?? null,
+      internalStatus: order.internal_status ?? null,
+      wmsStatus: order.wms_status ?? null,
+      channelStatus: order.channel_status ?? null,
+      channelFulfillmentStatus: order.channel_fulfillment_status ?? null,
+      shopId: order.shop_id ?? null,
+      shopName: order.shop_name ?? null,
+      childCounts: order.child_counts ?? {},
+    })),
+    webhooks: (raw.webhooks ?? []).map((webhook) => ({
+      ...webhook,
+      shopId: webhook.shop_id,
+      locationCode: webhook.location_code,
+    })),
+    actions: {
+      canInclude: raw.actions?.can_include ?? false,
+      canDelete: raw.actions?.can_delete ?? false,
+    },
+  };
+}
+
+function mapOrderAuditShop(raw: RawOrderAuditShop): OrderAuditShop {
+  return {
+    id: raw.id,
+    shopId: raw.shop_id,
+    shopName: raw.shop_name,
+    channel: raw.channel,
+    channelName: raw.channel_name,
+  };
 }
 
 const FALLBACK_META: Meta = {
@@ -175,6 +231,12 @@ function mapOrder(raw: RawFulfillmentOrder): FulfillmentOrder {
       description: i.description,
       qty: i.qty_in_base,
       imageUrl: i.image_url ?? null,
+      bundleComponents: i.bundle_components
+        ? i.bundle_components.map((component) => ({
+            sku: component.sku ?? null,
+            qty: Number(component.qty ?? 0),
+          }))
+        : null,
     })),
   };
 }
@@ -553,6 +615,63 @@ export const OutboundService = {
     };
   },
 
+  orderAudit: async (reference: string): Promise<OrderAudit> => {
+    const query = new URLSearchParams({ reference: reference.trim() });
+    const res = await fetchClient<ApiResponse<RawOrderAudit>>(
+      `/operations/order-audit?${query.toString()}`,
+    );
+    return mapOrderAudit(res.data);
+  },
+
+  orderAuditShops: async (): Promise<OrderAuditShop[]> => {
+    const res = await fetchClient<ApiResponse<RawOrderAuditShop[]>>(
+      "/operations/order-audit/shops",
+    );
+    return (res.data ?? []).map(mapOrderAuditShop);
+  },
+
+  replayOrderAudit: async (reference: string): Promise<OrderAudit> => {
+    const res = await fetchClient<ApiResponse<{ audit: RawOrderAudit }>>(
+      "/operations/order-audit/replay",
+      {
+        method: "POST",
+        data: { reference: reference.trim(), confirmation: "REPLAY-ORDER" },
+      },
+    );
+    return mapOrderAudit(res.data.audit);
+  },
+
+  deleteOrderAudit: async (reference: string): Promise<OrderAudit> => {
+    const res = await fetchClient<ApiResponse<{ audit: RawOrderAudit }>>(
+      "/operations/order-audit/delete",
+      {
+        method: "POST",
+        data: { reference: reference.trim(), confirmation: "DELETE-ORDER" },
+      },
+    );
+    return mapOrderAudit(res.data.audit);
+  },
+
+  pullMarketplaceOrder: async (payload: {
+    reference: string;
+    channel: string;
+    shopId: string;
+  }): Promise<OrderAudit> => {
+    const res = await fetchClient<ApiResponse<{ audit: RawOrderAudit }>>(
+      "/operations/order-audit/marketplace-pull",
+      {
+        method: "POST",
+        data: {
+          reference: payload.reference.trim(),
+          channel: payload.channel,
+          shop_id: payload.shopId,
+          confirmation: "PULL-MARKETPLACE",
+        },
+      },
+    );
+    return mapOrderAudit(res.data.audit);
+  },
+
   exportProcessOrdersCsv: async (
     scope: ProcessOrdersExportScope,
   ): Promise<string> => {
@@ -667,6 +786,30 @@ export const OutboundService = {
       { method: "POST", data: { picker_id: pickerId } },
     );
     return mapPicklist(res.data);
+  },
+
+  bulkAssignPicker: async (
+    picklistIds: string[],
+    pickerId: string,
+  ): Promise<BulkPicklistActionResult> => {
+    const res = await fetchClient<{ data: BulkPicklistActionResult }>(
+      `/outbound/picklists/bulk-assign-picker`,
+      {
+        method: "POST",
+        data: { picklist_ids: picklistIds, picker_id: pickerId },
+      },
+    );
+    return res.data;
+  },
+
+  bulkRevertPicklists: async (
+    picklistIds: string[],
+  ): Promise<BulkPicklistActionResult> => {
+    const res = await fetchClient<{ data: BulkPicklistActionResult }>(
+      `/outbound/picklists/bulk-revert`,
+      { method: "POST", data: { picklist_ids: picklistIds } },
+    );
+    return res.data;
   },
 
   picklistDetail: async (id: string): Promise<PicklistDetail> => {
@@ -811,6 +954,33 @@ export const OutboundService = {
   },
   revertPicklist: async (id: string): Promise<void> => {
     await fetchClient(`/outbound/picklists/${id}/revert`, { method: "POST" });
+  },
+  revertPacklists: async (
+    packlistIds: string[],
+  ): Promise<{
+    success_count: number;
+    failed_count: number;
+    results: Array<{
+      packlist_id: string;
+      status: "success" | "failed";
+      message: string;
+    }>;
+  }> => {
+    const res = await fetchClient<{
+      data: {
+        success_count: number;
+        failed_count: number;
+        results: Array<{
+          packlist_id: string;
+          status: "success" | "failed";
+          message: string;
+        }>;
+      };
+    }>(`/outbound/packlists/bulk-revert`, {
+      method: "POST",
+      data: { packlist_ids: packlistIds },
+    });
+    return res.data;
   },
 
   getOrderByNo: async (
@@ -1301,6 +1471,16 @@ export const OutboundService = {
     >(`/outbound/picklists/documents/bulk/pdf/async`, {
       method: "POST",
       data: { order_ids: orderIds },
+    });
+    return res.data;
+  },
+
+  picklistBulkPdfByPicklistIdsAsync: async (picklistIds: string[]) => {
+    const res = await fetchClient<
+      ApiResponse<{ export_id: string; status: string; total: number }>
+    >(`/outbound/picklists/documents/bulk-by-picklists/pdf/async`, {
+      method: "POST",
+      data: { picklist_ids: picklistIds },
     });
     return res.data;
   },

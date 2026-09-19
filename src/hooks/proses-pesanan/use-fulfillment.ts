@@ -27,6 +27,7 @@ import type {
   PicklistItem,
   PacklistDetail,
 } from "@/types/proses-pesanan/fulfillment";
+import type { OrderAudit } from "@/types/proses-pesanan/order-audit";
 import type { ApiPaginated } from "@/types/api.types";
 
 const STALE = 30_000;
@@ -64,7 +65,6 @@ export function useOrdersByStage(
     queryKey: fulfillmentKeys.ordersByStage(stage, params),
     queryFn: () => OutboundService.ordersByStage(stage, params),
     staleTime: STALE,
-    placeholderData: keepPreviousData,
     enabled,
   });
 }
@@ -74,7 +74,6 @@ export function usePicklists(params: FulfillmentListParams, enabled = true) {
     queryKey: fulfillmentKeys.picklists(params),
     queryFn: () => OutboundService.picklists(params),
     staleTime: STALE,
-    placeholderData: keepPreviousData,
     enabled,
   });
 }
@@ -107,6 +106,44 @@ export function useOutboundMonitoring(enabled = true) {
     refetchInterval: 60_000,
     enabled,
   });
+}
+
+export function useOrderAudit() {
+  const qc = useQueryClient();
+
+  const shops = useQuery({
+    queryKey: [...fulfillmentKeys.all, "order-audit-shops"],
+    queryFn: () => OutboundService.orderAuditShops(),
+    staleTime: 5 * 60_000,
+  });
+
+  const audit = useMutation({
+    mutationFn: (reference: string) => OutboundService.orderAudit(reference),
+  });
+
+  const replay = useMutation({
+    mutationFn: (reference: string) => OutboundService.replayOrderAudit(reference),
+    onSuccess: (data) => {
+      qc.setQueryData<OrderAudit>([...fulfillmentKeys.all, "order-audit", data.reference], data);
+    },
+  });
+
+  const remove = useMutation({
+    mutationFn: (reference: string) => OutboundService.deleteOrderAudit(reference),
+    onSuccess: (data) => {
+      qc.setQueryData<OrderAudit>([...fulfillmentKeys.all, "order-audit", data.reference], data);
+    },
+  });
+
+  const pullMarketplace = useMutation({
+    mutationFn: (payload: { reference: string; channel: string; shopId: string }) =>
+      OutboundService.pullMarketplaceOrder(payload),
+    onSuccess: (data) => {
+      qc.setQueryData<OrderAudit>([...fulfillmentKeys.all, "order-audit", data.reference], data);
+    },
+  });
+
+  return { audit, replay, remove, pullMarketplace, shops: shops.data ?? [], shopsQuery: shops };
 }
 
 export function useExportProcessOrdersCsv() {
@@ -177,6 +214,27 @@ export const useAssignPicker = createMutationHook({
   silentError: true,
   invalidates: () => [fulfillmentKeys.board],
 });
+
+export function useBulkAssignPicker() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ picklistIds, pickerId }: { picklistIds: string[]; pickerId: string }) =>
+      OutboundService.bulkAssignPicker(picklistIds, pickerId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: fulfillmentKeys.all }),
+  });
+}
+
+export function useBulkRevertPicklists() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (picklistIds: string[]) =>
+      OutboundService.bulkRevertPicklists(picklistIds),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: fulfillmentKeys.all });
+      invalidateStockViews(qc);
+    },
+  });
+}
 
 export const useAssignPacker = createMutationHook({
   mutationFn: ({
@@ -470,6 +528,18 @@ export function useRevertPicklist() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => OutboundService.revertPicklist(id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: fulfillmentKeys.all });
+      invalidateStockViews(qc);
+    },
+  });
+}
+
+export function useRevertPacklists() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (packlistIds: string[]) =>
+      OutboundService.revertPacklists(packlistIds),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: fulfillmentKeys.all });
       invalidateStockViews(qc);

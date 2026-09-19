@@ -144,6 +144,18 @@ function KnownDocumentPreview({
     };
   }, [config, id, queryString, type]);
 
+  const scrollToPage = React.useCallback(
+    (targetPage: number) => {
+      const clamped = Math.min(numPages || 1, Math.max(1, targetPage));
+      setPageNumber(clamped);
+      const el = document.getElementById(`pdf-page-${clamped}`);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    },
+    [numPages],
+  );
+
   React.useEffect(() => {
     if (state.kind !== "ready") return;
     const handler = (e: KeyboardEvent) => {
@@ -154,14 +166,14 @@ function KnownDocumentPreview({
       )
         return;
       if (e.key === "PageDown" || e.key === "ArrowRight") {
-        setPageNumber((p) => Math.min(numPages || 1, p + 1));
+        scrollToPage(pageNumber + 1);
       } else if (e.key === "PageUp" || e.key === "ArrowLeft") {
-        setPageNumber((p) => Math.max(1, p - 1));
+        scrollToPage(pageNumber - 1);
       }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [state.kind, numPages]);
+  }, [state.kind, pageNumber, scrollToPage]);
 
   const meta = state.kind === "ready" ? state.meta : undefined;
   const subtitle = config.subtitle(id, meta);
@@ -321,9 +333,7 @@ function KnownDocumentPreview({
           pageNumber={pageNumber}
           numPages={numPages}
           scale={scale}
-          onPageChange={(n) =>
-            setPageNumber(Math.min(numPages, Math.max(1, n)))
-          }
+          onPageChange={scrollToPage}
           onScaleChange={setScale}
           onFit={() => setScale(1)}
         />
@@ -343,10 +353,11 @@ function KnownDocumentPreview({
           <div className="mx-auto w-full max-w-5xl px-3 py-6 sm:px-6 sm:py-10">
             <PdfViewer
               file={state.objectUrl}
-              pageNumber={pageNumber}
+              numPages={numPages}
               scale={scale}
               pageWidth={type === "shipping-label" ? 480 : undefined}
               onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+              onVisiblePageChange={(p) => setPageNumber(p)}
               onLoadError={(err) =>
                 setState({
                   kind: "error",

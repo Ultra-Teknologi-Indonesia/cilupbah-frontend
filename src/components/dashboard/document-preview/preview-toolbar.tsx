@@ -37,6 +37,21 @@ export function PreviewToolbar({
 }: PreviewToolbarProps) {
   const canPrev = pageNumber > 1;
   const canNext = pageNumber < numPages;
+  const [inputVal, setInputVal] = React.useState(String(pageNumber));
+
+  React.useEffect(() => {
+    setInputVal(String(pageNumber));
+  }, [pageNumber]);
+
+  const handleInputSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    const parsed = parseInt(inputVal, 10);
+    if (!isNaN(parsed) && parsed >= 1 && parsed <= numPages) {
+      onPageChange(parsed);
+    } else {
+      setInputVal(String(pageNumber));
+    }
+  };
 
   const zoomOut = () => {
     const below = [...ZOOM_STEPS].reverse().find((z) => z < scale - 0.001);
@@ -64,9 +79,23 @@ export function PreviewToolbar({
         >
           <ChevronLeftIcon className="size-4" />
         </Button>
-        <div className="min-w-[88px] text-center text-xs font-medium tabular-nums text-muted-foreground">
-          Hal. {pageNumber} / {numPages || "—"}
-        </div>
+        <form
+          onSubmit={handleInputSubmit}
+          className="flex items-center gap-1 text-xs font-medium tabular-nums text-muted-foreground"
+        >
+          <span>Hal.</span>
+          <input
+            type="number"
+            min={1}
+            max={numPages || 1}
+            value={inputVal}
+            onChange={(e) => setInputVal(e.target.value)}
+            onBlur={handleInputSubmit}
+            aria-label="Nomor Halaman"
+            className="h-6 w-11 rounded border border-input bg-background/90 px-1 text-center text-xs font-semibold tabular-nums text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
+          />
+          <span>/ {numPages || "—"}</span>
+        </form>
         <Button
           variant="ghost"
           size="icon-sm"

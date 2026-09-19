@@ -136,6 +136,15 @@ export interface StockListParams {
   sort?: string;
 }
 
+export interface StockPositionExportParams {
+  format: "csv" | "pdf";
+  search?: string;
+  sort?: string;
+  is_bundle?: "0" | "1";
+  channel?: string;
+  visible_location_ids: string[];
+}
+
 export interface StockMovementParams {
   page?: number;
   per_page?: number;
