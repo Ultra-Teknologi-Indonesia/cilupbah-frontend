@@ -50,11 +50,10 @@ const EMPTY_FORM: CategoryFormData = {
 const EMPTY_FILTERS = {};
 
 export function KategoriTab() {
-  const { search, setSearch, debouncedSearch } = useListState<
+  const { search, setSearch, applySearch, appliedSearch } = useListState<
     typeof EMPTY_FILTERS
   >(EMPTY_FILTERS, {
     perPage: 20,
-    debounceMs: 300,
     namespace: "kat_pelanggan",
   });
 
@@ -62,7 +61,7 @@ export function KategoriTab() {
     data: categories = [],
     isLoading,
     isFetching,
-  } = useContactCategories(debouncedSearch || undefined);
+  } = useContactCategories(appliedSearch || undefined);
   const createMut = useCreateCategory();
   const updateMut = useUpdateCategory();
   const deleteMut = useDeleteCategory();
@@ -181,6 +180,7 @@ export function KategoriTab() {
         <FilterToolbar
           search={search}
           onSearchChange={setSearch}
+          onSearch={applySearch}
           searchPlaceholder="Cari kode atau nama..."
           align="end"
           trailing={
@@ -211,12 +211,12 @@ export function KategoriTab() {
               <EmptyState
                 icon={TagIcon}
                 title={
-                  debouncedSearch
+                  appliedSearch
                     ? "Kategori tidak ditemukan"
                     : "Belum ada kategori"
                 }
                 description={
-                  debouncedSearch
+                  appliedSearch
                     ? "Coba kata kunci lain."
                     : "Buat kategori untuk mengelompokkan kontak."
                 }

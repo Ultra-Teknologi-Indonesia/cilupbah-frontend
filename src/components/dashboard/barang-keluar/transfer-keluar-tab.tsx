@@ -294,7 +294,6 @@ export function TransferKeluarTab() {
   });
   const list = useListState<FilterState>(EMPTY_FILTERS, {
     perPage: 20,
-    debounceMs: 350,
     namespace: "transfer_out",
   });
 
@@ -445,7 +444,7 @@ export function TransferKeluarTab() {
 
   const params = useMemo(
     () => ({
-      search: list.debouncedSearch || undefined,
+      search: list.appliedSearch || undefined,
       page: list.page,
       per_page: list.perPage,
       "filter[source_location_id]": list.filters.location_id || undefined,
@@ -453,7 +452,7 @@ export function TransferKeluarTab() {
       "filter[date_to]": list.filters.date_to || undefined,
       sort: sortParam,
     }),
-    [list.debouncedSearch, list.page, list.perPage, list.filters, sortParam],
+    [list.appliedSearch, list.page, list.perPage, list.filters, sortParam],
   );
 
   const dateRange: DateRange | undefined = useMemo(() => {
@@ -749,6 +748,7 @@ export function TransferKeluarTab() {
         <FilterToolbar
           search={list.search}
           onSearchChange={list.setSearch}
+          onSearch={list.applySearch}
           searchPlaceholder="Cari no. transfer..."
           align="end"
           onReset={

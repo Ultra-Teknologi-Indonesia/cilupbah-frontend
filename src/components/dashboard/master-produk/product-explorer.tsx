@@ -250,6 +250,7 @@ export function ProductExplorer({ query }: { query: Query }) {
         <FilterToolbar
           search={query.search}
           onSearchChange={query.setSearch}
+          onSearch={query.applySearch}
           searchPlaceholder="Cari nama / SKU…"
           onReset={query.hasFilter ? query.reset : undefined}
           hasFilter={query.hasFilter}

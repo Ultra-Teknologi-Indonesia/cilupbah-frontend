@@ -147,6 +147,7 @@ function FilterRadioGroup({
 export function OrderFilters({
   query,
   onQueryChange,
+  onQuerySubmit,
   filters,
   onChange,
   leading,
@@ -161,6 +162,7 @@ export function OrderFilters({
 }: {
   query: string;
   onQueryChange: (v: string) => void;
+  onQuerySubmit?: (value?: string) => void;
   filters: FilterState;
   onChange: (f: FilterState) => void;
   leading?: React.ReactNode;
@@ -253,6 +255,7 @@ export function OrderFilters({
     <FilterToolbar
       search={query}
       onSearchChange={onQueryChange}
+      onSearch={onQuerySubmit}
       searchPlaceholder="Cari no. pesanan, nama, SKU…"
       onReset={
         hasActive

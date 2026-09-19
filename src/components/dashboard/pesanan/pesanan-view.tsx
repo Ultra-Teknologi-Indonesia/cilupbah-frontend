@@ -69,7 +69,7 @@ export function PesananView() {
 
   const listSearch = useListState<{ _: string }>(
     { _: "" },
-    { perPage: 20, debounceMs: 350 },
+    { perPage: 20 },
   );
   const [filters, setFilters] = useState<FilterState>(() => ({
     ...EMPTY_FILTERS,
@@ -110,7 +110,7 @@ export function PesananView() {
     () => ({
       tab,
       sub: subFilter || undefined,
-      q: listSearch.debouncedSearch || undefined,
+      q: listSearch.appliedSearch || undefined,
       channel: filters.channel || undefined,
       store_id: filters.store_id || undefined,
       location_id: filters.location_id || undefined,
@@ -138,7 +138,7 @@ export function PesananView() {
     [
       tab,
       subFilter,
-      listSearch.debouncedSearch,
+      listSearch.appliedSearch,
       listSearch.page,
       listSearch.perPage,
       filters,
@@ -246,6 +246,7 @@ export function PesananView() {
         <OrderFilters
           query={listSearch.search}
           onQueryChange={listSearch.setSearch}
+          onQuerySubmit={listSearch.applySearch}
           filters={filters}
           onChange={handleFilterChange}
           leading={selectAllCheckbox}

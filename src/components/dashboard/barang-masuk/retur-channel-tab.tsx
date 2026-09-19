@@ -162,7 +162,6 @@ export function ReturChannelTab() {
   });
   const list = useListState<FilterState>(EMPTY_FILTERS, {
     perPage: 20,
-    debounceMs: 350,
     namespace: "retur_channel",
   });
 
@@ -225,7 +224,7 @@ export function ReturChannelTab() {
 
   const params = useMemo(
     () => ({
-      search: list.debouncedSearch || undefined,
+      search: list.appliedSearch || undefined,
       page: list.page,
       per_page: list.perPage,
       sort: list.sorting[0]
@@ -237,7 +236,7 @@ export function ReturChannelTab() {
       "filter[reason]": list.filters.reason || undefined,
     }),
     [
-      list.debouncedSearch,
+      list.appliedSearch,
       list.page,
       list.perPage,
       list.sorting,
@@ -690,6 +689,7 @@ export function ReturChannelTab() {
         <FilterToolbar
           search={list.search}
           onSearchChange={list.setSearch}
+          onSearch={list.applySearch}
           searchPlaceholder="Cari no. retur, no. resi, kurir, pesanan, pelanggan..."
           align="end"
           onReset={

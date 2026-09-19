@@ -758,7 +758,7 @@ export function FulfillmentOrdersTable({
     ],
   );
   const [search, setSearch] = React.useState("");
-  const [debounced, setDebounced] = React.useState("");
+  const [appliedSearch, setAppliedSearch] = React.useState("");
   const [page, setPage] = React.useState(1);
   const [perPage, setPerPage] = React.useState(20);
   const [selected, setSelected] = React.useState<Set<string>>(new Set());
@@ -777,14 +777,19 @@ export function FulfillmentOrdersTable({
     setSelected(new Set());
     setPage(1);
     setSearch("");
-    setDebounced("");
+    setAppliedSearch("");
     setFilter({});
   }
 
-  React.useEffect(() => {
-    const t = setTimeout(() => setDebounced(search.trim()), 350);
-    return () => clearTimeout(t);
-  }, [search]);
+  const applySearch = React.useCallback(
+    (nextSearch?: string) => {
+      const trimmed = (nextSearch ?? search).trim();
+      setSearch(trimmed);
+      setAppliedSearch(trimmed);
+      setPage(1);
+    },
+    [search],
+  );
 
   const [prevFilter, setPrevFilter] = React.useState(filter);
   if (filter !== prevFilter) {
@@ -794,7 +799,7 @@ export function FulfillmentOrdersTable({
 
   const params = React.useMemo(
     () => ({
-      q: debounced || undefined,
+      q: appliedSearch || undefined,
       page,
       per_page: perPage,
       shipping_provider: filter.shipping_provider || undefined,
@@ -811,7 +816,7 @@ export function FulfillmentOrdersTable({
       channel_status: filter.channel_status || undefined,
       exclude_transit: excludeTransit ? ("1" as const) : undefined,
     }),
-    [debounced, page, perPage, filter, excludeTransit],
+    [appliedSearch, page, perPage, filter, excludeTransit],
   );
   const { data, isLoading, isFetching, refetch } = useOrdersByStage(
     stage,
@@ -984,10 +989,8 @@ export function FulfillmentOrdersTable({
             channelStatusOptions={channelStatusOptions}
             excludeTransit={excludeTransit}
             search={search}
-            onSearchChange={(v) => {
-              setSearch(v);
-              setPage(1);
-            }}
+            onSearchChange={setSearch}
+            onSearch={applySearch}
             searchPlaceholder={searchPlaceholder}
           />
           <div className="flex items-center justify-end gap-3 px-4 py-2 text-sm text-muted-foreground sm:px-5">
@@ -1019,13 +1022,24 @@ export function FulfillmentOrdersTable({
             <SearchIcon className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                setPage(1);
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  applySearch();
+                }
               }}
               placeholder={searchPlaceholder}
-              className="pl-9"
+              className="pl-9 pr-16"
             />
+            <Button
+              type="button"
+              size="sm"
+              onClick={() => applySearch()}
+              className="absolute right-1 top-1/2 h-7 -translate-y-1/2 rounded-full px-2.5 text-xs"
+            >
+              Cari
+            </Button>
           </div>
           <div className="flex items-center gap-3 text-sm text-muted-foreground">
             {actions.buatPengiriman && can("export-pengiriman") && (

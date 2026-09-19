@@ -66,13 +66,13 @@ const EMPTY_FILTERS: FilterState = {
 export function PesananListView() {
   const list = useListState<FilterState>(EMPTY_FILTERS, {
     perPage: 20,
-    debounceMs: 300,
     namespace: "po",
   });
   const {
     search,
     setSearch,
-    debouncedSearch,
+    applySearch,
+    appliedSearch,
     page,
     perPage,
     filters,
@@ -114,7 +114,7 @@ export function PesananListView() {
   const params = useMemo<PurchaseOrderListParams>(() => {
     const sort = list.sorting[0];
     const p: PurchaseOrderListParams = {
-      search: debouncedSearch || undefined,
+      search: appliedSearch || undefined,
       page,
       per_page: perPage,
       "filter[location_id]": filters.location_id || undefined,
@@ -125,7 +125,7 @@ export function PesananListView() {
     if (filters.date_to) p["filter[date_to]"] = filters.date_to;
 
     return p;
-  }, [debouncedSearch, page, perPage, filters, list.sorting]);
+  }, [appliedSearch, page, perPage, filters, list.sorting]);
 
   const handleExportList = async () => {
     await exportList.mutateAsync(params);
@@ -262,14 +262,12 @@ export function PesananListView() {
         <FilterToolbar
           search={search}
           onSearchChange={setSearch}
+          onSearch={applySearch}
           searchPlaceholder="Cari no. pesanan, pemasok..."
           align="end"
           onReset={
             hasActiveFilter || !!search
-              ? () => {
-                  setFilters(EMPTY_FILTERS);
-                  setSearch("");
-                }
+              ? list.resetAll
               : undefined
           }
           hasFilter={hasActiveFilter || !!search}

@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 export function FilterToolbar({
   search,
   onSearchChange,
+  onSearch,
   searchPlaceholder = "Cari…",
   onReset,
   hasFilter,
@@ -32,6 +33,7 @@ export function FilterToolbar({
 }: {
   search?: string;
   onSearchChange?: (value: string) => void;
+  onSearch?: (value?: string) => void;
   searchPlaceholder?: string;
   onReset?: () => void;
   hasFilter?: boolean;
@@ -73,9 +75,10 @@ export function FilterToolbar({
               value={search ?? ""}
               onChange={(e) => onSearchChange(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter" && onRefresh) {
+                if (e.key === "Enter" && (onSearch || onRefresh)) {
                   e.preventDefault();
-                  onRefresh();
+                  if (onSearch) onSearch();
+                  else onRefresh?.();
                 }
               }}
               placeholder={searchPlaceholder}
@@ -84,7 +87,10 @@ export function FilterToolbar({
             {(search?.length ?? 0) > 0 && (
               <button
                 type="button"
-                onClick={() => onSearchChange("")}
+                onClick={() => {
+                  onSearchChange("");
+                  onSearch?.("");
+                }}
                 aria-label="Bersihkan pencarian"
                 className="absolute right-2.5 top-1/2 flex size-5 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
@@ -92,6 +98,19 @@ export function FilterToolbar({
               </button>
             )}
           </div>
+        )}
+
+        {onSearch && (
+          <Button
+            type="button"
+            size="sm"
+            onClick={() => onSearch()}
+            disabled={isRefreshing}
+            className="h-9 gap-1.5 rounded-full"
+          >
+            <SearchIcon className="size-4" />
+            Cari
+          </Button>
         )}
 
         {onRefresh && (

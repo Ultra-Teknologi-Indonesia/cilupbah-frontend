@@ -60,17 +60,10 @@ export function KategoriListTab({ search }: { search: string }) {
   );
   const [editTarget, setEditTarget] = React.useState<FlatKategori | null>(null);
 
-  const [debouncedSearch, setDebouncedSearch] = React.useState("");
-
   const { data: tree, isLoading, isError } = useEnabledCategories();
-  const searchQuery = useSearchKategori(debouncedSearch);
+  const searchQuery = useSearchKategori(search);
   const deleteMut = useDeleteKategori();
   const disableMut = useDisableKategori();
-
-  React.useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(search.trim()), 300);
-    return () => clearTimeout(timer);
-  }, [search]);
 
   const [prevSearch, setPrevSearch] = React.useState(search);
   if (prevSearch !== search) {
@@ -86,11 +79,11 @@ export function KategoriListTab({ search }: { search: string }) {
   );
 
   const filtered = React.useMemo(() => {
-    if (debouncedSearch.length < 2) return flat;
+    if (search.length < 2) return flat;
     return (searchQuery.data ?? [])
       .map((item) => flatById.get(item.id))
       .filter((f): f is FlatKategori => f !== undefined);
-  }, [flat, flatById, debouncedSearch, searchQuery.data]);
+  }, [flat, flatById, search, searchQuery.data]);
 
   const total = filtered.length;
   const lastPage = Math.max(1, Math.ceil(total / perPage));
@@ -118,7 +111,7 @@ export function KategoriListTab({ search }: { search: string }) {
         </span>
       </div>
 
-      {isLoading || (debouncedSearch.length >= 2 && searchQuery.isFetching) ? (
+      {isLoading || (search.length >= 2 && searchQuery.isFetching) ? (
         <div className="flex items-center justify-center gap-2 py-16 text-muted-foreground">
           <Loader2Icon className="size-4 animate-spin" />
         </div>

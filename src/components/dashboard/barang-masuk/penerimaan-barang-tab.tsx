@@ -196,7 +196,6 @@ export function PenerimaanBarangTab() {
   const canExportInbound = can("export-barang-masuk");
   const list = useListState<FilterState>(EMPTY_FILTERS, {
     perPage: 20,
-    debounceMs: 300,
     namespace: "penerimaan",
   });
   const [sourceTab, setSourceTab] = useUrlTab<SourceTab>("tab", "pesanan", {
@@ -220,7 +219,7 @@ export function PenerimaanBarangTab() {
 
   const params = useMemo(
     () => ({
-      search: list.debouncedSearch || undefined,
+      search: list.appliedSearch || undefined,
       page: list.page,
       per_page: list.perPage,
       "filter[location_id]": list.filters.location_id || undefined,
@@ -230,7 +229,7 @@ export function PenerimaanBarangTab() {
       sort: sortParam,
     }),
     [
-      list.debouncedSearch,
+      list.appliedSearch,
       list.page,
       list.perPage,
       list.filters,
@@ -611,6 +610,7 @@ export function PenerimaanBarangTab() {
         <FilterToolbar
           search={list.search}
           onSearchChange={list.setSearch}
+          onSearch={list.applySearch}
           searchPlaceholder="Cari no. penerimaan, referensi, nama pembuat..."
           align="end"
           onReset={hasActiveFilter || !!list.search ? list.resetAll : undefined}

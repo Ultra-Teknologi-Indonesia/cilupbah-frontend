@@ -17,20 +17,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useInternalStores } from "@/hooks/penjualan/use-internal-stores";
 
 export function TokoInternalView() {
   const [query, setQuery] = useState("");
+  const [appliedQuery, setAppliedQuery] = useState("");
   const [onlyActive, setOnlyActive] = useState(false);
   const [page, setPage] = useState(1);
 
-  const debouncedQuery = useDebouncedValue(query, 250);
+  const applySearch = (nextQuery?: string) => {
+    setAppliedQuery((nextQuery ?? query).trim());
+    setQuery((nextQuery ?? query).trim());
+    setPage(1);
+  };
 
   const { data, isLoading } = useInternalStores({
     page,
     per_page: 20,
-    search: debouncedQuery || undefined,
+    search: appliedQuery || undefined,
     "filter[is_active]": onlyActive ? 1 : undefined,
   });
 
@@ -39,10 +43,10 @@ export function TokoInternalView() {
 
   const emptyMessage = useMemo(() => {
     if (isLoading) return "Memuat…";
-    if (debouncedQuery)
-      return `Tidak ada toko yang cocok dengan "${debouncedQuery}".`;
+    if (appliedQuery)
+      return `Tidak ada toko yang cocok dengan "${appliedQuery}".`;
     return "Belum ada toko internal.";
-  }, [debouncedQuery, isLoading]);
+  }, [appliedQuery, isLoading]);
 
   return (
     <LiquidGlass
@@ -57,11 +61,24 @@ export function TokoInternalView() {
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
-              setPage(1);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                applySearch();
+              }
             }}
             placeholder="Cari nama atau kode toko"
-            className="pl-9"
+            className="pl-9 pr-16"
           />
+          <Button
+            type="button"
+            size="sm"
+            onClick={() => applySearch()}
+            className="absolute right-1 top-1/2 h-7 -translate-y-1/2 rounded-full px-2.5 text-xs"
+          >
+            Cari
+          </Button>
         </div>
         <label className="flex items-center gap-2 text-sm">
           <Switch checked={onlyActive} onCheckedChange={setOnlyActive} />

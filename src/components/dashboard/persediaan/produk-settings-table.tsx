@@ -73,7 +73,7 @@ const IMPORT_ITEMS: { type: ImportSettingType; label: string; desc: string }[] =
 export function ProdukSettingsTable() {
   const list = useListState<Record<string, never>>({}, { perPage: 20 });
   const { data, isLoading, isFetching } = useInventorySettingProducts({
-    search: list.debouncedSearch || undefined,
+    search: list.appliedSearch || undefined,
     page: list.page,
     perPage: list.perPage,
   });
@@ -93,7 +93,7 @@ export function ProdukSettingsTable() {
   const meta = data?.meta;
 
   const handleExport = () => {
-    exportMut.mutate({ search: list.debouncedSearch || undefined });
+    exportMut.mutate({ search: list.appliedSearch || undefined });
   };
 
   const toolbar = (
@@ -154,6 +154,7 @@ export function ProdukSettingsTable() {
         <FilterToolbar
           search={list.search}
           onSearchChange={list.setSearch}
+          onSearch={list.applySearch}
           searchPlaceholder="Cari produk, SKU, atau barcode..."
           align="end"
           trailing={toolbar}

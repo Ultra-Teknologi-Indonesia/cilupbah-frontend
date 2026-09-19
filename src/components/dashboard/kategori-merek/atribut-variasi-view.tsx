@@ -54,7 +54,7 @@ export function AtributVariasiView({
 }: AtributVariasiViewProps) {
   const list = useListState<Record<string, never>>(
     {},
-    { debounceMs: 250, namespace: "atribut" },
+    { namespace: "atribut" },
   );
   const [filterOpen, setFilterOpen] = React.useState(false);
   const [addOpen, setAddOpen] = React.useState(false);
@@ -70,10 +70,10 @@ export function AtributVariasiView({
   const items = React.useMemo(() => {
     const source = type === "spec" ? data?.specifications : data?.variant_types;
     if (!source) return [];
-    const q = list.debouncedSearch.toLowerCase();
+    const q = list.appliedSearch.toLowerCase();
     if (!q) return source;
     return source.filter((a) => a.name.toLowerCase().includes(q));
-  }, [data, type, list.debouncedSearch]);
+  }, [data, type, list.appliedSearch]);
 
   function handleDelete() {
     if (!deleteTarget) return;
@@ -120,20 +120,36 @@ export function AtributVariasiView({
           open={filterOpen}
           onOpenChange={setFilterOpen}
           activeCount={list.search ? 1 : 0}
-          onReset={list.search ? () => list.setSearch("") : undefined}
+          onReset={list.search ? () => list.applySearch("") : undefined}
         >
           <div className={cn("sm:col-span-2 lg:col-span-3")}>
             <label className="mb-1.5 block text-sm font-medium text-muted-foreground">
               Pencarian
             </label>
-            <div className="relative">
-              <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                value={list.search}
-                onChange={(e) => list.setSearch(e.target.value)}
-                placeholder={`Cari ${label.toLowerCase()}`}
-                className="h-10 pl-9"
-              />
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  value={list.search}
+                  onChange={(e) => list.setSearch(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      list.applySearch();
+                    }
+                  }}
+                  placeholder={`Cari ${label.toLowerCase()}`}
+                  className="h-10 pl-9"
+                />
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => list.applySearch()}
+                className="h-10"
+              >
+                Cari
+              </Button>
             </div>
           </div>
         </FilterShell>

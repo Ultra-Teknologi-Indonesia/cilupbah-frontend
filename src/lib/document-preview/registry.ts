@@ -452,8 +452,11 @@ export const DOCUMENT_TYPES: Record<DocumentTypeKey, DocumentTypeConfig> = {
     subtitle: (id, meta) =>
       (meta?.shipment_no as string | undefined) ?? `SHP-${id.slice(0, 8)}…`,
     fetchPdf: async (id) => {
-      const blob = await OutboundService.manifestPdf(id);
-      return { blob };
+      const [blob, shipment] = await Promise.all([
+        OutboundService.manifestPdf(id),
+        OutboundService.shipmentDetail(id),
+      ]);
+      return { blob, meta: { shipment_no: shipment.shipmentNo } };
     },
     backUrl: () => "/dashboard/proses-pesanan/shipping",
     filename: (id, meta) =>

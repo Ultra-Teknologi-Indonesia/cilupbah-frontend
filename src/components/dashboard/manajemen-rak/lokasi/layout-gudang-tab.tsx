@@ -1425,7 +1425,7 @@ export function LayoutGudangTab({
 
   const list = useListState<Record<string, never>>(
     {},
-    { perPage: 50, debounceMs: 300, namespace: "layout" },
+    { perPage: 50, namespace: "layout" },
   );
   const sort = list.sorting.length
     ? `${list.sorting[0].desc ? "-" : ""}${list.sorting[0].id}`
@@ -1448,7 +1448,7 @@ export function LayoutGudangTab({
   const params: BinListParams = {
     page: list.page,
     perPage: list.perPage,
-    search: list.debouncedSearch || undefined,
+    search: list.appliedSearch || undefined,
     sort,
     filter,
   };
@@ -1673,22 +1673,22 @@ export function LayoutGudangTab({
 
   const pendingVisible: BinRow[] =
     serverMode && list.page === 1
-      ? list.debouncedSearch
+      ? list.appliedSearch
         ? pendingBins.filter((b) =>
             b.binFinalCode
               .toLowerCase()
-              .includes(list.debouncedSearch.toLowerCase()),
+              .includes(list.appliedSearch.toLowerCase()),
           )
         : pendingBins
       : [];
 
   const pageItems: BinRow[] = serverMode
     ? [...pendingVisible, ...serverRows]
-    : list.debouncedSearch
+    : list.appliedSearch
       ? localBins.filter((b) =>
           b.binFinalCode
             .toLowerCase()
-            .includes(list.debouncedSearch.toLowerCase()),
+            .includes(list.appliedSearch.toLowerCase()),
         )
       : localBins;
 
@@ -1787,7 +1787,7 @@ export function LayoutGudangTab({
           zone_id: values.zoneId || null,
         },
         search: selectAllAcrossPages
-          ? list.debouncedSearch || undefined
+          ? list.appliedSearch || undefined
           : undefined,
         filter: selectAllAcrossPages ? filter : undefined,
       });
@@ -1975,9 +1975,23 @@ export function LayoutGudangTab({
             <Input
               value={list.search}
               onChange={(e) => list.setSearch(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  list.applySearch();
+                }
+              }}
               placeholder="Cari kode rak atau SKU"
-              className="pl-9"
+              className="pl-9 pr-16"
             />
+            <Button
+              type="button"
+              size="sm"
+              onClick={() => list.applySearch()}
+              className="absolute right-1 top-1/2 h-7 -translate-y-1/2 rounded-full px-2.5 text-xs"
+            >
+              Cari
+            </Button>
           </div>
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1.5 text-sm text-muted-foreground">

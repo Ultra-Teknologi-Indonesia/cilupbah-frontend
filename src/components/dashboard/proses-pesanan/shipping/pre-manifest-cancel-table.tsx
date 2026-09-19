@@ -74,7 +74,6 @@ export function PreManifestCancelTable() {
   const canExportShipping = can("export-pengiriman");
   const list = useListState<PageFilterState>(EMPTY_FILTERS, {
     perPage: 20,
-    debounceMs: 350,
     namespace: "premanifest",
   });
   const [dismissTarget, setDismissTarget] =
@@ -84,7 +83,7 @@ export function PreManifestCancelTable() {
 
   const params = React.useMemo(
     () => ({
-      q: list.debouncedSearch || undefined,
+      q: list.appliedSearch || undefined,
       source: list.filters.source || undefined,
       location_id: list.filters.location_id || undefined,
       page: list.page,
@@ -96,7 +95,7 @@ export function PreManifestCancelTable() {
           : "asc"
         : undefined,
     }),
-    [list.debouncedSearch, list.page, list.perPage, list.filters, list.sorting],
+    [list.appliedSearch, list.page, list.perPage, list.filters, list.sorting],
   );
 
   const { data, isLoading, isFetching, refetch } =
@@ -281,6 +280,7 @@ export function PreManifestCancelTable() {
         fields={["channel", "location"]}
         search={list.search}
         onSearchChange={list.setSearch}
+        onSearch={list.applySearch}
         searchPlaceholder="Cari no. pesanan / resi / pelanggan…"
       />
 

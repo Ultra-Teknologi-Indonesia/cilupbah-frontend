@@ -9,7 +9,6 @@ import {
   RefreshCwIcon,
   TriangleAlertIcon,
 } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,7 +27,6 @@ import {
   useDownloadTransactionDetail,
   useDownloadFailures,
 } from "@/hooks/master-produk/use-download";
-import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import type { DownloadTransaction } from "@/hooks/master-produk/use-download";
 
 const MASTER_FILTER: { value: string; label: string }[] = [
@@ -47,6 +45,7 @@ export function TransactionDetailSheet({
   onOpenChange: (open: boolean) => void;
 }) {
   const [search, setSearch] = React.useState("");
+  const [appliedSearch, setAppliedSearch] = React.useState("");
   const [masterFilter, setMasterFilter] = React.useState<string>("all");
 
   const resetKey = open ? (trx?.trxId ?? "") : null;
@@ -54,17 +53,22 @@ export function TransactionDetailSheet({
   if (prevKey !== resetKey) {
     setPrevKey(resetKey);
     setSearch("");
+    setAppliedSearch("");
     setMasterFilter("all");
   }
 
   const isMaster =
     masterFilter === "all" ? undefined : masterFilter === "master";
-  const debouncedSearch = useDebouncedValue(search);
+  const applySearch = (nextSearch?: string) => {
+    const trimmed = (nextSearch ?? search).trim();
+    setSearch(trimmed);
+    setAppliedSearch(trimmed);
+  };
 
   const query = useDownloadTransactionDetail(
     open ? (trx?.trxId ?? null) : null,
     {
-      search: debouncedSearch || undefined,
+      search: appliedSearch || undefined,
       isMaster,
       perPage: 100,
     },
@@ -111,9 +115,23 @@ export function TransactionDetailSheet({
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  applySearch();
+                }
+              }}
               placeholder="Cari nama / SKU…"
-              className="h-9"
+              className="h-9 pr-16"
             />
+            <Button
+              type="button"
+              size="sm"
+              onClick={() => applySearch()}
+              className="absolute right-1 top-1/2 h-7 -translate-y-1/2 rounded-full px-2.5 text-xs"
+            >
+              Cari
+            </Button>
           </div>
           <Combobox
             options={MASTER_FILTER}

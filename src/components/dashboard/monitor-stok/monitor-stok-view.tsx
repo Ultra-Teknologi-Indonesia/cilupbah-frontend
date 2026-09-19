@@ -147,13 +147,13 @@ const MAX_MONITOR_PAGE_SIZE = 200;
 export function MonitorStokView() {
   const list = useListState<MonitorFilters>(EMPTY_FILTERS, {
     perPage: 20,
-    debounceMs: 300,
     namespace: "monitor",
   });
   const {
     search,
     setSearch,
-    debouncedSearch,
+    applySearch,
+    appliedSearch,
     page,
     perPage,
     filters,
@@ -218,11 +218,11 @@ export function MonitorStokView() {
   );
   const baseFilters = useMemo(
     () => ({
-      search: debouncedSearch || undefined,
+      search: appliedSearch || undefined,
       location_id: locationId || undefined,
       category_id: categoryId || undefined,
     }),
-    [debouncedSearch, locationId, categoryId],
+    [appliedSearch, locationId, categoryId],
   );
 
   const listParams = useMemo(
@@ -239,17 +239,17 @@ export function MonitorStokView() {
 
   const syncParams = useMemo(
     () => ({
-      search: debouncedSearch || undefined,
+      search: appliedSearch || undefined,
       page,
       per_page: effectivePerPage,
     }),
-    [debouncedSearch, page, effectivePerPage],
+    [appliedSearch, page, effectivePerPage],
   );
 
   const kronologiParams = useMemo(
     () => ({
       view: kronologiView,
-      search: debouncedSearch || undefined,
+      search: appliedSearch || undefined,
       location_id: locationId || undefined,
       source: kronologiSource || undefined,
       direction:
@@ -263,7 +263,7 @@ export function MonitorStokView() {
     }),
     [
       kronologiView,
-      debouncedSearch,
+      appliedSearch,
       locationId,
       kronologiSource,
       kronologiDirection,
@@ -370,7 +370,7 @@ export function MonitorStokView() {
       tab={tab}
       subMode={subMode}
       kronologiView={kronologiView}
-      search={debouncedSearch}
+              search={appliedSearch}
       locationId={locationId}
       categoryId={categoryId}
       period={period}
@@ -475,6 +475,7 @@ export function MonitorStokView() {
             <FilterToolbar
               search={search}
               onSearchChange={setSearch}
+              onSearch={(value) => onFilter(() => applySearch(value))}
               searchPlaceholder="Cari produk (SKU / nama)..."
               align="end"
               hasFilter={false}
@@ -506,6 +507,7 @@ export function MonitorStokView() {
             <FilterToolbar
               search={search}
               onSearchChange={setSearch}
+              onSearch={(value) => onFilter(() => applySearch(value))}
               searchPlaceholder="Cari produk (SKU / nama)..."
               align="end"
               hasFilter={false}
@@ -621,6 +623,7 @@ export function MonitorStokView() {
             <FilterToolbar
               search={search}
               onSearchChange={setSearch}
+              onSearch={(value) => onFilter(() => applySearch(value))}
               searchPlaceholder="Cari produk (SKU / nama)..."
               align="end"
               onReset={
@@ -628,8 +631,12 @@ export function MonitorStokView() {
                   ? () =>
                       onFilter(() => {
                         setSearch("");
-                        setLocationId("");
-                        setCategoryId("");
+                        applySearch("");
+                        setFilters({
+                          ...filters,
+                          location_id: "",
+                          category_id: "",
+                        });
                       })
                   : undefined
               }

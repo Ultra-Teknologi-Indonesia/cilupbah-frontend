@@ -401,7 +401,6 @@ export function PosisiStokView() {
 
   const list = useListState<FilterState>(EMPTY_FILTERS, {
     perPage: 20,
-    debounceMs: 350,
   });
 
   const [hiddenLocations, setHiddenLocations] = useState<string[]>([]);
@@ -472,7 +471,7 @@ export function PosisiStokView() {
 
   const params = useMemo<StockListParams>(
     () => ({
-      search: list.debouncedSearch || undefined,
+      search: list.appliedSearch || undefined,
       page: list.page,
       per_page: list.perPage,
       sort: sortParam,
@@ -480,7 +479,7 @@ export function PosisiStokView() {
       "filter[channel]": list.filters.channel || undefined,
     }),
     [
-      list.debouncedSearch,
+      list.appliedSearch,
       list.page,
       list.perPage,
       sortParam,
@@ -543,7 +542,7 @@ export function PosisiStokView() {
   const somePageSelected = pageItemIds.some((id) => selected.has(id));
 
   const hasActiveFilter =
-    Boolean(list.debouncedSearch) ||
+    Boolean(list.appliedSearch) ||
     stockFilter !== "all" ||
     Boolean(list.filters.channel);
 
@@ -627,8 +626,9 @@ export function PosisiStokView() {
         className="bg-white/30 dark:bg-white/[0.04]"
       >
         <FilterToolbar
-          search={list.search}
-          onSearchChange={list.setSearch}
+        search={list.search}
+        onSearchChange={list.setSearch}
+        onSearch={list.applySearch}
           searchPlaceholder="Cari produk atau SKU..."
           align="end"
           leading={filterTabs}
@@ -637,7 +637,7 @@ export function PosisiStokView() {
           trailing={
             <div className="flex items-center gap-2">
               <StockPositionExportMenu
-                search={list.debouncedSearch}
+                search={list.appliedSearch}
                 sort={sortParam}
                 isBundle={bundleFilter}
                 channel={list.filters.channel || undefined}

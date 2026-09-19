@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -67,20 +67,19 @@ export function PesananDetailView({ id }: { id: string }) {
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
   const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [appliedSearch, setAppliedSearch] = useState("");
   const [sort, setSort] = useState<string | undefined>(undefined);
 
-  useEffect(() => {
-    const t = setTimeout(() => {
-      setDebouncedSearch(search.trim());
-      setPage(1);
-    }, 300);
-    return () => clearTimeout(t);
-  }, [search]);
+  const applySearch = (nextSearch?: string) => {
+    const trimmed = (nextSearch ?? search).trim();
+    setSearch(trimmed);
+    setAppliedSearch(trimmed);
+    setPage(1);
+  };
 
   const { data: itemsRes, isFetching: isFetchingItems } = usePurchaseOrderItems(
     id,
-    { page, perPage, search: debouncedSearch || undefined, sort },
+    { page, perPage, search: appliedSearch || undefined, sort },
   );
   const items = itemsRes?.data ?? [];
   const itemsMeta = itemsRes?.meta;
@@ -271,9 +270,23 @@ export function PesananDetailView({ id }: { id: string }) {
                 <Input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      applySearch();
+                    }
+                  }}
                   placeholder="Cari SKU atau nama produk..."
-                  className="pl-8"
+                  className="pl-8 pr-16"
                 />
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => applySearch()}
+                  className="absolute right-1 top-1/2 h-7 -translate-y-1/2 rounded-full px-2.5 text-xs"
+                >
+                  Cari
+                </Button>
               </div>
             </div>
             <div className="overflow-x-auto rounded-lg border border-border/40">
@@ -461,8 +474,8 @@ export function PesananDetailView({ id }: { id: string }) {
                         colSpan={8}
                         className="py-8 text-center text-sm text-muted-foreground"
                       >
-                        {debouncedSearch
-                          ? `Tidak ada produk cocok "${debouncedSearch}".`
+                        {appliedSearch
+                          ? `Tidak ada produk cocok "${appliedSearch}".`
                           : "Belum ada produk."}
                       </TableCell>
                     </TableRow>

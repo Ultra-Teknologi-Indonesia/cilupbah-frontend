@@ -68,12 +68,9 @@ export function DraftTab({
   const [deletePending, setDeletePending] =
     React.useState<DeletePending | null>(null);
 
-  React.useEffect(() => {
-    const t = setTimeout(() => {
-      setSearch(searchInput);
-      setPagination((p) => ({ ...p, pageIndex: 0 }));
-    }, 350);
-    return () => clearTimeout(t);
+  const applySearch = React.useCallback((nextSearch?: string) => {
+    setSearch((nextSearch ?? searchInput).trim());
+    setPagination((p) => ({ ...p, pageIndex: 0 }));
   }, [searchInput]);
 
   const query = useChannelDrafts({
@@ -254,6 +251,7 @@ export function DraftTab({
         <FilterToolbar
           search={searchInput}
           onSearchChange={setSearchInput}
+          onSearch={applySearch}
           searchPlaceholder="Cari produk…"
           onReset={hasFilter ? onReset : undefined}
           hasFilter={hasFilter}

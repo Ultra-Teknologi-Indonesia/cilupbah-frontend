@@ -80,7 +80,6 @@ export function PacklistTable() {
   const prefetchPacklistDetail = usePrefetchPacklistDetail();
   const list = useListState<PageFilterState>(EMPTY_FILTERS, {
     perPage: 20,
-    debounceMs: 350,
     namespace: "packlist",
     persistPerPage: true,
   });
@@ -94,7 +93,7 @@ export function PacklistTable() {
 
   const params = React.useMemo(
     () => ({
-      q: list.debouncedSearch || undefined,
+      q: list.appliedSearch || undefined,
       page: list.page,
       per_page: list.perPage,
       status: "DRAFT,IN_PROGRESS",
@@ -110,7 +109,7 @@ export function PacklistTable() {
           : "asc"
         : undefined,
     }),
-    [list.debouncedSearch, list.page, list.perPage, list.filters, list.sorting],
+    [list.appliedSearch, list.page, list.perPage, list.filters, list.sorting],
   );
   const { data, isLoading, isFetching, refetch } = usePacklists(params);
 
@@ -476,6 +475,7 @@ export function PacklistTable() {
         fields={["courier", "date", "label_printed"]}
         search={list.search}
         onSearchChange={list.setSearch}
+        onSearch={list.applySearch}
         searchPlaceholder="Cari no. packing, pesanan…"
       />
       <div className="flex items-center justify-end gap-3 border-b border-border/40 px-4 py-2 text-sm text-muted-foreground sm:px-5">

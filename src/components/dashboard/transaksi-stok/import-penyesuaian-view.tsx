@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import {
   DownloadIcon,
   FileSpreadsheetIcon,
@@ -40,7 +40,6 @@ import {
   useConfirmStockAdjustmentImport,
   usePreviewStockAdjustmentImportPage,
 } from "@/hooks/transaksi-stok/use-stock-adjustment-import";
-import { useDebouncedValue } from "@/hooks/use-debounced-value";
 
 // eslint-disable-next-line no-restricted-imports
 import { StockAdjustmentImportService } from "@/services/transaksi-stok/stock-adjustment-import.service";
@@ -312,7 +311,7 @@ export function ImportPenyesuaianDialog({
               </>
             )}
 
-            {preview && <PreviewPanel preview={preview} />}
+            {preview && <PreviewPanel key={preview.token} preview={preview} />}
           </div>
         </ScrollArea>
 
@@ -368,29 +367,24 @@ function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(preview.pagination?.per_page ?? 25);
   const [search, setSearch] = useState("");
+  const [appliedSearch, setAppliedSearch] = useState("");
   const [sort, setSort] = useState("row_no");
-  const debouncedSearch = useDebouncedValue(search, 300);
+  const applySearch = useCallback((nextSearch?: string) => {
+    const trimmed = (nextSearch ?? search).trim();
+    setSearch(trimmed);
+    setAppliedSearch(trimmed);
+    setPage(1);
+  }, [search]);
   const pageQuery = usePreviewStockAdjustmentImportPage({
     token: preview.token,
     query: {
       page,
       per_page: perPage,
-      search: debouncedSearch,
+      search: appliedSearch,
       sort,
     },
   });
   const pageData = pageQuery.data?.data ?? preview;
-
-  useEffect(() => {
-    setPage(1);
-  }, [debouncedSearch, perPage, sort]);
-
-  useEffect(() => {
-    setPage(1);
-    setPerPage(preview.pagination?.per_page ?? 25);
-    setSearch("");
-    setSort("row_no");
-  }, [preview.token]);
 
   const pagination = pageData.pagination ?? {
     current_page: 1,
@@ -456,16 +450,33 @@ function PreviewPanel({ preview }: { preview: ImportPreviewResponse }) {
               <Input
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    applySearch();
+                  }
+                }}
                 placeholder="Cari SKU, produk, atau rak…"
-                className="h-9 pl-9"
+                className="h-9 pl-9 pr-16"
                 aria-label="Cari hasil preview import"
               />
+              <Button
+                type="button"
+                size="sm"
+                onClick={() => applySearch()}
+                className="absolute right-1 top-1/2 h-7 -translate-y-1/2 rounded-full px-2.5 text-xs"
+              >
+                Cari
+              </Button>
             </div>
             <label className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground">
               Urutkan
               <select
                 value={sort}
-                onChange={(event) => setSort(event.target.value)}
+                onChange={(event) => {
+                  setSort(event.target.value);
+                  setPage(1);
+                }}
                 className="h-9 rounded-md border border-input bg-background px-2 text-sm text-foreground"
                 aria-label="Urutkan hasil preview import"
               >

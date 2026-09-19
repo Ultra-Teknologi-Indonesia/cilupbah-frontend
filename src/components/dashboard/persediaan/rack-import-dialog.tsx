@@ -34,7 +34,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import {
   downloadRackImportErrors,
   downloadRackImportTemplate,
@@ -393,13 +392,13 @@ function PreviewStep({
 }) {
   const [status, setStatus] = React.useState<StatusFilter>("all");
   const [searchInput, setSearchInput] = React.useState("");
+  const [appliedSearch, setAppliedSearch] = React.useState("");
   const [page, setPage] = React.useState(1);
   const [perPage, setPerPage] = React.useState(DEFAULT_PER_PAGE);
-  const search = useDebouncedValue(searchInput.trim(), 350);
 
   const { data, isFetching } = useRackImportRows(batchId, {
     status: status === "all" ? undefined : status,
-    search: search || undefined,
+    search: appliedSearch || undefined,
     page,
     perPage,
   });
@@ -407,7 +406,7 @@ function PreviewStep({
   const rows = data?.items ?? [];
   const total = data?.meta?.total ?? 0;
   const lastPage = data?.meta?.last_page ?? 1;
-  const filtering = status !== "all" || search.length > 0;
+  const filtering = status !== "all" || appliedSearch.length > 0;
 
   const hasProblems = batch.errorRows + batch.manualMoveRows > 0;
   const canApply = batch.placeRows > 0;
@@ -433,6 +432,10 @@ function PreviewStep({
     changeStatus(status === next ? "all" : next);
   const changeSearch = (value: string) => {
     setSearchInput(value);
+  };
+  const applySearch = (value = searchInput) => {
+    setSearchInput(value.trim());
+    setAppliedSearch(value.trim());
     setPage(1);
   };
 
@@ -492,24 +495,35 @@ function PreviewStep({
         )}
       </div>
 
-      <div className="relative">
-        <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          value={searchInput}
-          onChange={(e) => changeSearch(e.target.value)}
-          placeholder="Cari SKU, kode rak, atau gudang…"
-          className="pl-9"
-        />
-        {searchInput && (
-          <button
-            type="button"
-            onClick={() => changeSearch("")}
-            aria-label="Bersihkan pencarian"
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:bg-muted/60"
-          >
-            <XIcon className="size-3.5" />
-          </button>
-        )}
+      <div className="flex gap-2">
+        <div className="relative flex-1">
+          <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={searchInput}
+            onChange={(e) => changeSearch(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                applySearch();
+              }
+            }}
+            placeholder="Cari SKU, kode rak, atau gudang…"
+            className="pl-9 pr-8"
+          />
+          {searchInput && (
+            <button
+              type="button"
+              onClick={() => applySearch("")}
+              aria-label="Bersihkan pencarian"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:bg-muted/60"
+            >
+              <XIcon className="size-3.5" />
+            </button>
+          )}
+        </div>
+        <Button type="button" size="sm" onClick={() => applySearch()}>
+          Cari
+        </Button>
       </div>
 
       <div className="max-h-[46vh] overflow-auto rounded-2xl border border-border">

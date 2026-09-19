@@ -116,7 +116,7 @@ function MoneyCell({
 export function SettlementView() {
   const router = useRouter();
   const list = useListState(EMPTY_FILTERS, { perPage: 20, namespace: "stl" });
-  const { filters, debouncedSearch } = list;
+  const { filters, appliedSearch } = list;
 
   const fallbackRange = useMemo(() => defaultRange(), []);
   const effectiveFrom = filters.date_from || toIsoDate(fallbackRange.from);
@@ -149,7 +149,7 @@ export function SettlementView() {
 
   const params: SettlementParams = useMemo(
     () => ({
-      search: debouncedSearch || undefined,
+      search: appliedSearch || undefined,
       channel: filters.source || undefined,
       channel_shop_id: filters.channel_shop_id || undefined,
       is_settled:
@@ -160,7 +160,7 @@ export function SettlementView() {
       per_page: list.perPage,
     }),
     [
-      debouncedSearch,
+      appliedSearch,
       filters.source,
       filters.channel_shop_id,
       filters.is_settled,

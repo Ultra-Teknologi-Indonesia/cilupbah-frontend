@@ -145,7 +145,6 @@ export function PicklistTable() {
   const prefetchPicklist = usePrefetchPicklistDetail();
   const list = useListState<PicklistFilterState>(EMPTY_PICKLIST_FILTERS, {
     perPage: 20,
-    debounceMs: 350,
     namespace: "picklist",
   });
   const [editPicker, setEditPicker] = React.useState<Picklist | null>(null);
@@ -158,7 +157,7 @@ export function PicklistTable() {
 
   const params = React.useMemo(
     () => ({
-      q: list.debouncedSearch || undefined,
+      q: list.appliedSearch || undefined,
       status: list.filters.status || undefined,
       shipping_provider: list.filters.shipping_provider || undefined,
       location_id: list.filters.location_id || undefined,
@@ -178,7 +177,7 @@ export function PicklistTable() {
       page: list.page,
       per_page: list.perPage,
     }),
-    [list.debouncedSearch, list.filters, list.page, list.perPage, list.sorting],
+    [list.appliedSearch, list.filters, list.page, list.perPage, list.sorting],
   );
   const { data, isLoading, isFetching, refetch } = usePicklists(params);
   const showInitialLoading = isLoading && data === undefined;
@@ -532,6 +531,7 @@ export function PicklistTable() {
         statusOptions={STATUS_OPTIONS}
         search={list.search}
         onSearchChange={list.setSearch}
+        onSearch={list.applySearch}
         searchPlaceholder="Cari no. picklist, pesanan, picker…"
       />
       <div className="flex flex-wrap items-center justify-end gap-3 border-b border-border/40 px-4 py-2 text-sm text-muted-foreground sm:px-5">

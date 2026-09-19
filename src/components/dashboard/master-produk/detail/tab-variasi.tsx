@@ -100,13 +100,11 @@ export function TabVariasi({ productId }: { productId: string }) {
   const [perPage, setPerPage] = React.useState(20);
   const [selected, setSelected] = React.useState<Set<string>>(new Set());
 
-  React.useEffect(() => {
-    const t = setTimeout(() => {
-      setSearch(searchInput);
-      setPage(1);
-    }, 300);
-    return () => clearTimeout(t);
-  }, [searchInput]);
+  const applySearch = (nextSearch?: string) => {
+    setSearch((nextSearch ?? searchInput).trim());
+    setSearchInput((nextSearch ?? searchInput).trim());
+    setPage(1);
+  };
 
   const sortParam = `${sort.dir === "desc" ? "-" : ""}${sort.col}`;
   const { data, isLoading, isError, refetch, isFetching } = useProductVariants(
@@ -185,9 +183,23 @@ export function TabVariasi({ productId }: { productId: string }) {
           <Input
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                applySearch();
+              }
+            }}
             placeholder="Cari SKU…"
-            className="h-9 pl-8"
+            className="h-9 pl-8 pr-14"
           />
+          <Button
+            type="button"
+            size="sm"
+            onClick={() => applySearch()}
+            className="absolute right-1 top-1/2 h-7 -translate-y-1/2 rounded-full px-2.5 text-xs"
+          >
+            Cari
+          </Button>
         </div>
         <div className="text-sm text-muted-foreground">
           Total{" "}

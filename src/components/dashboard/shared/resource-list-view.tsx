@@ -19,6 +19,8 @@ interface ResourceListViewProps<T> {
     ListState,
     | "search"
     | "setSearch"
+    | "appliedSearch"
+    | "applySearch"
     | "hasActiveFilter"
     | "activeFilterCount"
     | "pagination"
@@ -82,6 +84,7 @@ export function ResourceListView<T>({
       <FilterToolbar
         search={list.search}
         onSearchChange={list.setSearch}
+        onSearch={list.applySearch}
         searchPlaceholder={searchPlaceholder}
         align="end"
         onReset={
@@ -130,11 +133,11 @@ export function ResourceListView<T>({
           getRowId={getRowId}
           tableContainerClassName="border-0 bg-transparent backdrop-blur-none [&_[data-slot=table-header]]:bg-transparent"
           emptyState={
-            list.search ? (
+            list.appliedSearch ? (
               <EmptyState
                 icon={SearchXIcon}
                 title="Tidak ditemukan"
-                description={`Tidak ada hasil untuk "${list.search}"`}
+                description={`Tidak ada hasil untuk "${list.appliedSearch}"`}
               />
             ) : (
               <EmptyState

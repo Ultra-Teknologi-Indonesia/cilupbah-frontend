@@ -55,10 +55,11 @@ export function UploadToChannelView({ id }: { id: string }) {
   const [search, setSearch] = React.useState("");
   const [channel, setChannel] = React.useState<string | null>(null);
 
-  React.useEffect(() => {
-    const t = setTimeout(() => setSearch(searchInput.trim()), 350);
-    return () => clearTimeout(t);
-  }, [searchInput]);
+  const applySearch = (nextSearch?: string) => {
+    const trimmed = (nextSearch ?? searchInput).trim();
+    setSearchInput(trimmed);
+    setSearch(trimmed);
+  };
 
   return (
     <div className="flex flex-col gap-5">
@@ -108,15 +109,29 @@ export function UploadToChannelView({ id }: { id: string }) {
                 <Input
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      applySearch();
+                    }
+                  }}
                   placeholder="Cari toko…"
-                  className="h-9 rounded-full border-border bg-background pl-9 pr-8"
+                  className="h-9 rounded-full border-border bg-background pl-9 pr-16"
                 />
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => applySearch()}
+                  className="absolute right-1 top-1/2 h-7 -translate-y-1/2 rounded-full px-2.5 text-xs"
+                >
+                  Cari
+                </Button>
                 {searchInput.length > 0 && (
                   <button
                     type="button"
-                    onClick={() => setSearchInput("")}
+                    onClick={() => applySearch("")}
                     aria-label="Bersihkan pencarian"
-                    className="absolute right-2.5 top-1/2 flex size-5 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    className="absolute right-12 top-1/2 flex size-5 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                   >
                     <XIcon className="size-3.5" />
                   </button>

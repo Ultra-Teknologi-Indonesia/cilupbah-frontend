@@ -7,6 +7,7 @@ import { ImageIcon, Loader2Icon, SearchIcon, SearchXIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
@@ -31,10 +32,9 @@ export function ProductPickerDialog({
   const [searchInput, setSearchInput] = React.useState("");
   const [search, setSearch] = React.useState("");
 
-  React.useEffect(() => {
-    const t = setTimeout(() => setSearch(searchInput), 350);
-    return () => clearTimeout(t);
-  }, [searchInput]);
+  const applySearch = (nextSearch?: string) => {
+    setSearch(nextSearch ?? searchInput);
+  };
 
   const handleOpenChange = (next: boolean) => {
     if (!next) {
@@ -68,18 +68,29 @@ export function ProductPickerDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="relative">
-          <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            autoFocus
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Cari nama / SKU…"
-            className="h-9 rounded-full border-border bg-background pl-9 pr-9"
-          />
-          {isFetching && (
-            <Loader2Icon className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground" />
-          )}
+        <div className="flex gap-2">
+          <div className="relative flex-1">
+            <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              autoFocus
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  applySearch();
+                }
+              }}
+              placeholder="Cari nama / SKU…"
+              className="h-9 rounded-full border-border bg-background pl-9"
+            />
+            {isFetching && (
+              <Loader2Icon className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground" />
+            )}
+          </div>
+          <Button type="button" size="sm" onClick={() => applySearch()}>
+            Cari
+          </Button>
         </div>
 
         <div className="max-h-80 overflow-y-auto overscroll-contain">

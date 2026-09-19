@@ -20,7 +20,7 @@ export function useProductListQuery() {
   const urlStatus = searchParams.get("status");
 
   const [search, setSearch] = React.useState("");
-  const [debouncedSearch, setDebouncedSearch] = React.useState("");
+  const [appliedSearch, setAppliedSearch] = React.useState("");
   const [status, setStatusRaw] = React.useState<string | null>(urlStatus);
   const [prevUrlStatus, setPrevUrlStatus] = React.useState<string | null>(
     urlStatus,
@@ -46,13 +46,15 @@ export function useProductListQuery() {
     resetPage();
   }
 
-  React.useEffect(() => {
-    const t = setTimeout(() => {
-      setDebouncedSearch(search);
+  const applySearch = React.useCallback(
+    (nextSearch?: string) => {
+      const trimmed = (nextSearch ?? search).trim();
+      setSearch(trimmed);
+      setAppliedSearch(trimmed);
       resetPage();
-    }, 350);
-    return () => clearTimeout(t);
-  }, [search, resetPage]);
+    },
+    [search, resetPage],
+  );
 
   const setStatus = React.useCallback(
     (v: string | null) => {
@@ -81,7 +83,7 @@ export function useProductListQuery() {
 
   const reset = React.useCallback(() => {
     setSearch("");
-    setDebouncedSearch("");
+    setAppliedSearch("");
     setCategoryRaw(null);
     setTypeRaw(null);
     setSorting([]);
@@ -99,7 +101,7 @@ export function useProductListQuery() {
     : undefined;
 
   const result = useMasterProducts({
-    search: debouncedSearch || undefined,
+    search: appliedSearch || undefined,
     status: status || undefined,
     categoryId: category?.id || undefined,
     type: type || undefined,
@@ -115,6 +117,8 @@ export function useProductListQuery() {
   return {
     search,
     setSearch,
+    appliedSearch,
+    applySearch,
     status,
     setStatus,
     category,

@@ -145,14 +145,13 @@ export function FulfillmentCardList({
   const { can } = usePermissions();
   const list = useListState<CardFilterState>(EMPTY_CARD_FILTERS, {
     perPage: 20,
-    debounceMs: 350,
     namespace: stage.replace(/[^a-z0-9]+/gi, "_"),
     persistPerPage: true,
   });
 
   const params = React.useMemo(
     () => ({
-      q: list.debouncedSearch || undefined,
+      q: list.appliedSearch || undefined,
       page: list.page,
       per_page: list.perPage,
       shipping_provider: list.filters.shipping_provider || undefined,
@@ -181,7 +180,7 @@ export function FulfillmentCardList({
       ...baseParams,
     }),
     [
-      list.debouncedSearch,
+      list.appliedSearch,
       list.page,
       list.perPage,
       list.filters,
@@ -426,6 +425,7 @@ export function FulfillmentCardList({
         excludeTransit={excludeTransit}
         search={list.search}
         onSearchChange={list.setSearch}
+        onSearch={list.applySearch}
         searchPlaceholder={searchPlaceholder}
       />
       <div className="flex items-center justify-end gap-3 border-b border-border/40 px-4 py-2 text-sm text-muted-foreground sm:px-5">

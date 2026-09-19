@@ -87,11 +87,11 @@ function RestoreButton({
 export function ArchiveView() {
   const list = useListState<Record<string, never>>(
     {},
-    { perPage: 20, debounceMs: 350, namespace: "arsip" },
+    { perPage: 20, namespace: "arsip" },
   );
 
   const { data, isLoading, isError, refetch } = useArchivedProducts({
-    search: list.debouncedSearch || undefined,
+    search: list.appliedSearch || undefined,
     page: list.page,
     perPage: list.perPage,
   });
@@ -210,8 +210,9 @@ export function ArchiveView() {
       <FilterToolbar
         search={list.search}
         onSearchChange={list.setSearch}
+        onSearch={list.applySearch}
         searchPlaceholder="Cari nama / SKU…"
-        onReset={hasFilter ? () => list.setSearch("") : undefined}
+        onReset={hasFilter ? list.resetAll : undefined}
         hasFilter={hasFilter}
         activeCount={0}
       />

@@ -282,7 +282,7 @@ export function ZonaTab({ locationId, bins, disabled }: ZonaTabProps) {
   );
   const list = useListState<Record<string, never>>(
     {},
-    { debounceMs: 250, namespace: "zona" },
+    { namespace: "zona" },
   );
 
   const assignedMap = React.useMemo(() => {
@@ -297,14 +297,14 @@ export function ZonaTab({ locationId, bins, disabled }: ZonaTabProps) {
 
   const filtered = React.useMemo(() => {
     if (!zones) return [];
-    const q = list.debouncedSearch.toLowerCase();
+    const q = list.appliedSearch.toLowerCase();
     if (!q) return zones;
     return zones.filter(
       (z) =>
         z.zone_code.toLowerCase().includes(q) ||
         (z.zone_name ?? "").toLowerCase().includes(q),
     );
-  }, [zones, list.debouncedSearch]);
+  }, [zones, list.appliedSearch]);
 
   function openCreate() {
     setDialogMode("create");
@@ -377,9 +377,23 @@ export function ZonaTab({ locationId, bins, disabled }: ZonaTabProps) {
           <Input
             value={list.search}
             onChange={(e) => list.setSearch(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                list.applySearch();
+              }
+            }}
             placeholder="Cari zona..."
-            className="pl-9"
+            className="pl-9 pr-16"
           />
+          <Button
+            type="button"
+            size="sm"
+            onClick={() => list.applySearch()}
+            className="absolute right-1 top-1/2 h-7 -translate-y-1/2 rounded-full px-2.5 text-xs"
+          >
+            Cari
+          </Button>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">
@@ -404,10 +418,10 @@ export function ZonaTab({ locationId, bins, disabled }: ZonaTabProps) {
         <EmptyState
           icon={MapPinIcon}
           title={
-            list.debouncedSearch ? "Zona tidak ditemukan" : "Belum ada zona"
+            list.appliedSearch ? "Zona tidak ditemukan" : "Belum ada zona"
           }
           description={
-            list.debouncedSearch
+            list.appliedSearch
               ? "Coba kata kunci lain"
               : "Buat zona untuk mengelompokkan rak dalam gudang"
           }
