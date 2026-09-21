@@ -498,6 +498,7 @@ export function OrderActions({
             onOpenChange={setContactOpen}
             orderId={order.id}
             orderNo={order.salesorder_no}
+            items={order.items}
             defaultChannel={order.contact_channel ?? undefined}
             defaultDecision={order.customer_decision ?? undefined}
             defaultNote={order.contact_note ?? undefined}

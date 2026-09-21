@@ -376,12 +376,19 @@ export const OrderService = {
     orderId: string,
     decision: CustomerDecision,
     note?: string,
+    replacementSku?: string,
+    replacementItemId?: string,
   ) => {
     return fetchClient<ApiResponse<Order>>(
       `/sales/orders/${orderId}/customer-decision`,
       {
         method: "POST",
-        data: { decision, note },
+        data: {
+          decision,
+          note,
+          replacement_sku: replacementSku,
+          replacement_item_id: replacementItemId,
+        },
       },
     );
   },

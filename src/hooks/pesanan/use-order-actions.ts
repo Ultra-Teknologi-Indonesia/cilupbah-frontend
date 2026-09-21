@@ -276,8 +276,16 @@ export const useSetCustomerDecision = createMutationHook({
     orderId: string;
     decision: CustomerDecision;
     note?: string;
+    replacementSku?: string;
+    replacementItemId?: string;
   }) =>
-    OrderService.setCustomerDecision(data.orderId, data.decision, data.note),
+    OrderService.setCustomerDecision(
+      data.orderId,
+      data.decision,
+      data.note,
+      data.replacementSku,
+      data.replacementItemId,
+    ),
   successMessage: "Keputusan pembeli tersimpan",
   errorMessage: "Gagal menyimpan keputusan pembeli",
   invalidates: ({ orderId }) => forOrder(orderId),
