@@ -22,10 +22,10 @@ export function useSyncStock() {
       SyncStockService.syncStock(payload),
     onSuccess: (res, payload) => {
       if (payload.mode === "all") {
-        toast.success("Sinkronisasi semua stok diproses di latar belakang");
+        toast.success("Semua stok berhasil disinkronkan");
       } else {
         const count = res?.data?.queued ?? payload.productIds?.length ?? 0;
-        toast.success(`Stok ${count} produk langsung diproses`);
+        toast.success(`Stok ${count} produk berhasil disinkronkan`);
       }
       qc.invalidateQueries({ queryKey: ["master-produk"] });
     },
