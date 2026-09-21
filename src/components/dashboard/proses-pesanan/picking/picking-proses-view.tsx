@@ -574,9 +574,9 @@ export function PickingProsesView({ id }: { id: string }) {
             <div className="space-y-0.5">
               <span
                 className={cn(
-                  "inline-flex h-6 min-w-10 items-center justify-center rounded-xl px-2 text-xs font-medium tabular-nums",
+                  "inline-flex h-7 min-w-12 items-center justify-center rounded-xl px-2 text-sm font-semibold tabular-nums",
                   done
-                    ? "bg-success/10 text-success"
+                    ? "bg-indigo-500/10 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-300"
                     : it.qtyPicked > 0
                       ? "bg-warning/10 text-warning"
                       : "text-muted-foreground",
@@ -585,7 +585,7 @@ export function PickingProsesView({ id }: { id: string }) {
                 {it.qtyPicked} / {it.qtyOrdered}
               </span>
               {it.lastPickedByName && (
-                <div className="text-[11px] text-muted-foreground">
+                <div className="text-xs text-muted-foreground">
                   oleh {it.lastPickedByName}
                 </div>
               )}

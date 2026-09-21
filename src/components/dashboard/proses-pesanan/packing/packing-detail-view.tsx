@@ -536,7 +536,7 @@ export function PackingDetailView({ id }: { id: string }) {
                             className={cn(
                               "inline-flex h-7 min-w-12 items-center justify-center rounded-xl px-2.5 text-sm font-semibold tabular-nums",
                               done
-                                ? "bg-success/10 text-success"
+                                ? "bg-indigo-500/10 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-300"
                                 : item.qtyPacked > 0
                                   ? "bg-warning/10 text-warning"
                                   : "bg-muted text-muted-foreground",
