@@ -25,7 +25,7 @@ export function useSyncStock() {
         toast.success("Sinkronisasi semua stok diproses di latar belakang");
       } else {
         const count = res?.data?.queued ?? payload.productIds?.length ?? 0;
-        toast.success(`Stok ${count} produk diantrekan untuk sinkronisasi`);
+        toast.success(`Stok ${count} produk langsung diproses`);
       }
       qc.invalidateQueries({ queryKey: ["master-produk"] });
     },
