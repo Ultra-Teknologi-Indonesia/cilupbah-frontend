@@ -1,13 +1,37 @@
 import { fetchClient } from "@/lib/api-client";
-import type { ApiResponse } from "@/types/api.types";
+import type { ApiPaginated, ApiResponse } from "@/types/api.types";
 import type { ChannelCode } from "@/types/channel";
 
+export type StockPushStatus =
+  | "idle"
+  | "processing"
+  | "success"
+  | "failed"
+  | "skipped";
+
+export interface StockSyncState {
+  status: StockPushStatus;
+  outboxStatus: string | null;
+  lastError: string | null;
+  attemptCount: number;
+  nextAttemptAt: string | null;
+  updatedAt: string | null;
+}
+
+export interface InternalStock {
+  onHand: number;
+  onOrder: number;
+  available: number;
+}
+
 export interface SyncStoreCell {
+  mappingId: string;
   channelShopId: string;
   hasListing: boolean;
   syncEnabled: boolean;
   externalSkuId: string | null;
   syncStatus: string | null;
+  stockSync: StockSyncState;
 }
 
 export interface SyncVariationValue {
@@ -23,6 +47,7 @@ export interface SyncMatrixRow {
   isBundle: boolean;
   variationValues: SyncVariationValue[];
   thumbnail: string | null;
+  internalStock: InternalStock;
   stores: SyncStoreCell[];
 }
 
@@ -67,11 +92,20 @@ export interface SyncBulkToggleInput {
 }
 
 interface RawStoreCell {
+  mapping_id: string;
   channel_shop_id: string;
   has_listing: boolean;
   sync_enabled: boolean;
   external_sku_id: string | null;
   sync_status: string | null;
+  stock_sync?: {
+    status?: StockPushStatus;
+    outbox_status?: string | null;
+    last_error?: string | null;
+    attempt_count?: number;
+    next_attempt_at?: string | null;
+    updated_at?: string | null;
+  };
 }
 
 interface RawMatrixRow {
@@ -82,6 +116,11 @@ interface RawMatrixRow {
   is_bundle: boolean;
   variation_values: SyncVariationValue[];
   thumbnail: string | null;
+  internal_stock?: {
+    on_hand?: number;
+    on_order?: number;
+    available?: number;
+  };
   stores: RawStoreCell[];
 }
 
@@ -110,22 +149,52 @@ function mapRow(raw: RawMatrixRow): SyncMatrixRow {
     isBundle: raw.is_bundle,
     variationValues: raw.variation_values ?? [],
     thumbnail: raw.thumbnail,
+    internalStock: {
+      onHand: raw.internal_stock?.on_hand ?? 0,
+      onOrder: raw.internal_stock?.on_order ?? 0,
+      available: raw.internal_stock?.available ?? 0,
+    },
     stores: (raw.stores ?? []).map((s) => ({
+      mappingId: s.mapping_id,
       channelShopId: s.channel_shop_id,
       hasListing: s.has_listing,
       syncEnabled: s.sync_enabled,
       externalSkuId: s.external_sku_id,
       syncStatus: s.sync_status,
+      stockSync: {
+        status: s.stock_sync?.status ?? "idle",
+        outboxStatus: s.stock_sync?.outbox_status ?? null,
+        lastError: s.stock_sync?.last_error ?? null,
+        attemptCount: s.stock_sync?.attempt_count ?? 0,
+        nextAttemptAt: s.stock_sync?.next_attempt_at ?? null,
+        updatedAt: s.stock_sync?.updated_at ?? null,
+      },
     })),
   };
+}
+
+export interface StockSyncHistoryItem {
+  id: string;
+  status: "success" | "failed" | "pending" | "skipped";
+  errorMessage: string | null;
+  createdAt: string;
+  response: Record<string, unknown> | null;
+}
+
+interface RawStockSyncHistoryItem {
+  id: string;
+  status: StockSyncHistoryItem["status"];
+  error_message: string | null;
+  created_at: string;
+  response: Record<string, unknown> | null;
 }
 
 export const InventorySyncService = {
   list: async (params: SyncMatrixParams = {}): Promise<SyncMatrixResult> => {
     const q = new URLSearchParams();
     if (params.search) q.set("search", params.search);
-    if (params.channelCode) q.set("channel_code", params.channelCode);
-    if (params.channelShopId) q.set("channel_shop_id", params.channelShopId);
+    if (params.channelCode) q.set("filter[channel_code]", params.channelCode);
+    if (params.channelShopId) q.set("filter[channel_shop_id]", params.channelShopId);
     q.set("page", String(params.page ?? 1));
     q.set("per_page", String(params.perPage ?? 20));
 
@@ -180,5 +249,36 @@ export const InventorySyncService = {
       },
     );
     return res.data.affected;
+  },
+
+  retry: async (
+    mappingId: string,
+  ): Promise<ApiResponse<{ mapping_id: string; outbox_id: string; status: string }>> =>
+    fetchClient<ApiResponse<{ mapping_id: string; outbox_id: string; status: string }>>(
+      "/inventory/sync-settings/retry",
+      {
+        method: "POST",
+        data: { mapping_id: mappingId },
+      },
+    ),
+
+  history: async (
+    mappingId: string,
+    perPage = 10,
+  ): Promise<{ items: StockSyncHistoryItem[]; meta: ApiPaginated<RawStockSyncHistoryItem>["meta"] }> => {
+    const res = await fetchClient<ApiPaginated<RawStockSyncHistoryItem>>(
+      "/inventory/sync-settings/" + mappingId + "/history?per_page=" + perPage,
+    );
+
+    return {
+      items: (res.data ?? []).map((item) => ({
+        id: item.id,
+        status: item.status,
+        errorMessage: item.error_message,
+        createdAt: item.created_at,
+        response: item.response,
+      })),
+      meta: res.meta,
+    };
   },
 };

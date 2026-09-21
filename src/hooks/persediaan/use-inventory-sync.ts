@@ -14,6 +14,13 @@ import {
 } from "@/services/persediaan/inventory-sync.service";
 
 export type {
+  StockPushStatus,
+  StockSyncHistoryItem,
+  StockSyncState,
+  InternalStock,
+} from "@/services/persediaan/inventory-sync.service";
+
+export type {
   SyncMatrixParams,
   SyncMatrixRow,
   SyncStoreCell,
@@ -25,6 +32,7 @@ const all = ["inventory-sync"] as const;
 export const inventorySyncKeys = {
   all,
   list: (params: SyncMatrixParams) => [...all, "list", params] as const,
+  history: (mappingId: string) => [...all, "history", mappingId] as const,
 };
 
 export function useInventorySync(params: SyncMatrixParams) {
@@ -89,5 +97,31 @@ export function useBulkToggleSync() {
     onSettled: () => {
       qc.invalidateQueries({ queryKey: inventorySyncKeys.all });
     },
+  });
+}
+
+export function useRetryStockSync() {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: (mappingId: string) => InventorySyncService.retry(mappingId),
+    onSuccess: (_result, mappingId) => {
+      toast.success("Sinkronisasi stok diantrekan");
+      qc.invalidateQueries({ queryKey: inventorySyncKeys.all });
+      qc.invalidateQueries({ queryKey: inventorySyncKeys.history(mappingId) });
+    },
+    onError: (err) => apiError(err, "Gagal mengantrekan sinkronisasi stok"),
+  });
+}
+
+export function useStockSyncHistory(mappingId: string | null) {
+  return useQuery({
+    queryKey: mappingId
+      ? inventorySyncKeys.history(mappingId)
+      : [...inventorySyncKeys.all, "history", "empty"],
+    queryFn: () => InventorySyncService.history(mappingId as string),
+    enabled: !!mappingId,
+    placeholderData: keepPreviousData,
+    staleTime: 10 * 1000,
   });
 }
