@@ -315,19 +315,7 @@ export function PesananDetailView({ id }: { id: string }) {
                         className="w-full"
                       />
                     </TableHead>
-                    <TableHead className="whitespace-nowrap text-right text-muted-foreground">
-                      <SortableHeader
-                        label="Diterima"
-                        field="received_qty"
-                        currentSort={sort}
-                        onSort={handleSort}
-                        align="right"
-                        className="w-full"
-                      />
-                    </TableHead>
-                    <TableHead className="whitespace-nowrap text-right text-muted-foreground">
-                      Ditolak
-                    </TableHead>
+
                     <TableHead className="whitespace-nowrap text-right text-muted-foreground">
                       Diskon
                     </TableHead>
@@ -423,42 +411,7 @@ export function PesananDetailView({ id }: { id: string }) {
                         <TableCell className="px-3 py-2.5 text-right tabular-nums text-foreground">
                           {item.qty}
                         </TableCell>
-                        <TableCell className="px-3 py-2.5 text-right tabular-nums">
-                          {(() => {
-                            const acceptedQty =
-                              item.accepted_qty ?? item.received_qty;
-                            return (
-                              <span
-                                className={cn(
-                                  acceptedQty >= item.qty
-                                    ? "text-success"
-                                    : acceptedQty > 0
-                                      ? "text-warning"
-                                      : "text-foreground",
-                                )}
-                              >
-                                {acceptedQty}
-                              </span>
-                            );
-                          })()}
-                        </TableCell>
-                        <TableCell className="px-3 py-2.5 text-right tabular-nums">
-                          {(item.rejected_qty ?? 0) > 0 ? (
-                            <Badge
-                              variant="outline"
-                              className="border-destructive/30 text-2xs text-destructive"
-                              title={
-                                item.rejection_notes?.length
-                                  ? item.rejection_notes.join("; ")
-                                  : undefined
-                              }
-                            >
-                              {item.rejected_qty}
-                            </Badge>
-                          ) : (
-                            <span className="text-foreground">0</span>
-                          )}
-                        </TableCell>
+
                         <TableCell className="px-3 py-2.5 text-right tabular-nums text-foreground">
                           {item.disc > 0 ? `${item.disc}%` : "—"}
                         </TableCell>
@@ -471,7 +424,7 @@ export function PesananDetailView({ id }: { id: string }) {
                   {items.length === 0 && (
                     <TableRow>
                       <TableCell
-                        colSpan={8}
+                        colSpan={6}
                         className="py-8 text-center text-sm text-muted-foreground"
                       >
                         {appliedSearch
