@@ -44,6 +44,7 @@ import { CopySku } from "@/components/dashboard/shared/copy-sku";
 import { ChannelLogo } from "@/components/dashboard/integrasi-channel/channel-logo";
 import { GlobalSyncToggle } from "@/components/dashboard/channel/global-sync-toggle";
 import { TableSkeleton } from "@/components/ui/page-skeleton";
+import { StockSyncStatusCell } from "@/components/dashboard/persediaan/stock-sync-status-cell";
 import { useListState } from "@/hooks/use-list-state";
 import {
   useInventorySync,
@@ -54,6 +55,7 @@ import {
 } from "@/hooks/persediaan/use-inventory-sync";
 import { useSyncStock } from "@/hooks/master-produk/use-sync-stock";
 import { usePermissions } from "@/hooks/auth/use-permissions";
+import { cn } from "@/lib/utils";
 
 type Mode = "sync" | "produk";
 
@@ -65,6 +67,12 @@ const MODE_TABS: { key: Mode; label: string }[] = [
 const PRODUCT_COL_W = 320;
 const STORE_COL_W = 128;
 const HIDDEN_STORES_KEY = "sync-stok-harga:hidden-stores";
+
+const STOCK_FORMATTER = new Intl.NumberFormat("id-ID");
+
+function formatStock(value: number): string {
+  return STOCK_FORMATTER.format(value);
+}
 
 const CHANNEL_LABEL: Record<string, string> = {
   shopee: "Shopee",
@@ -526,6 +534,24 @@ export function SyncStokHargaView({
                                   </span>
                                 )}
                                 <CopySku sku={row.itemCode} />
+                                <div className="flex flex-wrap items-center gap-1 text-2xs text-muted-foreground">
+                                  <span>Internal tersedia</span>
+                                  <span
+                                    className={cn(
+                                      "font-semibold",
+                                      row.internalStock.available < 0
+                                        ? "text-destructive"
+                                        : "text-foreground",
+                                    )}
+                                  >
+                                    {formatStock(row.internalStock.available)}
+                                  </span>
+                                  {row.internalStock.onOrder > 0 && (
+                                    <span>
+                                      · {formatStock(row.internalStock.onOrder)} on order
+                                    </span>
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </TableCell>
@@ -545,24 +571,36 @@ export function SyncStokHargaView({
                                   <span className="text-sm text-muted-foreground/50">
                                     —
                                   </span>
-                                ) : mode === "sync" && canEdit ? (
-                                  <Switch
-                                    size="sm"
-                                    checked={cell.syncEnabled}
-                                    disabled={toggle.isPending}
-                                    onCheckedChange={(checked) =>
-                                      handleToggle(
-                                        row.itemId,
-                                        store.channelShopId,
-                                        checked,
-                                      )
-                                    }
-                                    aria-label={`Sync ${row.itemCode} di ${store.shopName}`}
-                                  />
                                 ) : mode === "sync" ? (
-                                  <span className="text-2xs text-muted-foreground">
-                                    {cell.syncEnabled ? "Aktif" : "Nonaktif"}
-                                  </span>
+                                  <div className="flex flex-col items-center gap-2">
+                                    <div className="flex items-center gap-1.5">
+                                      {canEdit && (
+                                        <Switch
+                                          size="sm"
+                                          checked={cell.syncEnabled}
+                                          disabled={toggle.isPending}
+                                          onCheckedChange={(checked) =>
+                                            handleToggle(
+                                              row.itemId,
+                                              store.channelShopId,
+                                              checked,
+                                            )
+                                          }
+                                          aria-label={"Aktifkan sync " + row.itemCode + " di " + store.shopName}
+                                        />
+                                      )}
+                                      <span className="text-2xs text-muted-foreground">
+                                        {cell.syncEnabled ? "Aktif" : "Nonaktif"}
+                                      </span>
+                                    </div>
+                                    <StockSyncStatusCell
+                                      mappingId={cell.mappingId}
+                                      itemCode={row.itemCode}
+                                      shopName={store.shopName}
+                                      stockSync={cell.stockSync}
+                                      canEdit={canEdit}
+                                    />
+                                  </div>
                                 ) : (
                                   <CheckIcon className="mx-auto size-4 text-success" />
                                 )}
