@@ -256,7 +256,7 @@ export function OrderFilters({
       search={query}
       onSearchChange={onQueryChange}
       onSearch={onQuerySubmit}
-      searchPlaceholder="Cari no. pesanan, nama, SKU…"
+      searchPlaceholder="Cari no. pesanan, resi, nama, SKU…"
       onReset={
         hasActive
           ? () => {
