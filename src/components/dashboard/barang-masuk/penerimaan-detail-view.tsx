@@ -116,6 +116,8 @@ export function PenerimaanDetailView({ id }: { id: string }) {
   const canReset = canEditInbound;
   const canEdit =
     canEditInbound && !!inbound && inbound.status !== "CANCELLED" && !isLocked;
+  const canEditReceivedQty =
+    canEdit && inbound?.placement_status !== "COMPLETED";
 
   const [unassignOpen, setUnassignOpen] = React.useState(false);
   const [resetOpen, setResetOpen] = React.useState(false);
@@ -487,7 +489,7 @@ export function PenerimaanDetailView({ id }: { id: string }) {
                                 <InlineQtyEdit
                                   value={item.received_qty}
                                   minQty={item.putaway_qty ?? 0}
-                                  disabled={!canEdit}
+                                  disabled={!canEditReceivedQty}
                                   saving={savingItemId === item.id}
                                   onSave={(qty) =>
                                     saveReceivedQty(item.id, qty)
