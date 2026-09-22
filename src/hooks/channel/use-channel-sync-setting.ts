@@ -3,7 +3,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { ChannelService } from "@/services/channel/channel.service";
+import {
+  ChannelService,
+  type ChannelSyncSetting,
+} from "@/services/channel/channel.service";
 import { apiError } from "@/lib/toast";
 
 export const CHANNEL_SYNC_SETTING_KEY = ["channel-sync-setting"] as const;
@@ -21,10 +24,10 @@ export function useSetChannelSyncSetting() {
 
   return useMutation({
     mutationFn: (enabled: boolean) => ChannelService.setSyncSetting(enabled),
-    onSuccess: (enabled) => {
-      qc.setQueryData(CHANNEL_SYNC_SETTING_KEY, enabled);
+    onSuccess: (setting) => {
+      qc.setQueryData<ChannelSyncSetting>(CHANNEL_SYNC_SETTING_KEY, setting);
       toast.success(
-        enabled
+        setting.sync_enabled
           ? "Sinkronisasi channel diaktifkan"
           : "Sinkronisasi channel dijeda",
       );

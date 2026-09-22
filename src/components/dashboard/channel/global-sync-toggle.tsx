@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { RefreshCwIcon, Loader2Icon } from "lucide-react";
+import { Clock3Icon, Loader2Icon, RefreshCwIcon } from "lucide-react";
 
 import { Switch } from "@/components/ui/switch";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -13,11 +13,11 @@ import {
 } from "@/hooks/channel/use-channel-sync-setting";
 
 export function GlobalSyncToggle({ className }: { className?: string }) {
-  const { data: enabled, isLoading } = useChannelSyncSetting();
+  const { data: setting, isLoading } = useChannelSyncSetting();
   const setSync = useSetChannelSyncSetting();
   const [confirmPause, setConfirmPause] = useState(false);
 
-  const isOn = enabled ?? true;
+  const isOn = setting?.sync_enabled ?? true;
   const pending = isLoading || setSync.isPending;
 
   const handleChange = (checked: boolean) => {
@@ -41,7 +41,7 @@ export function GlobalSyncToggle({ className }: { className?: string }) {
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <div className="flex items-center gap-2">
             <span className="text-sm font-semibold text-foreground">
-              Sinkronisasi Channel
+              Penerimaan & Sinkronisasi Channel
             </span>
             {!isLoading && (
               <span
@@ -55,9 +55,9 @@ export function GlobalSyncToggle({ className }: { className?: string }) {
             )}
           </div>
           <p className="text-xs text-muted-foreground">
-            Master global untuk semua toko & channel. Saat dijeda, seluruh
-            sinkronisasi stok, harga, produk, dan pesanan berhenti sementara
-            tanpa mengubah pengaturan sync per-produk.
+            Global untuk semua marketplace. Saat dijeda, webhook valid dibalas
+            tanpa disimpan, pull/push tidak dijalankan, dan queue internal WMS
+            tetap berjalan.
           </p>
         </div>
         {pending ? (
@@ -71,11 +71,21 @@ export function GlobalSyncToggle({ className }: { className?: string }) {
         )}
       </div>
 
+      <div className="flex items-center gap-2 border-t border-border/60 px-4 py-2.5 text-xs text-muted-foreground sm:px-5">
+        <Clock3Icon className="size-3.5 shrink-0" />
+        <span>
+          Auto-pause setiap hari pukul 12.00 WIB
+          {setting?.pause_reason === "auto_schedule" && !isOn
+            ? " · sedang dijeda otomatis"
+            : ""}
+        </span>
+      </div>
+
       <ConfirmDialog
         open={confirmPause}
         onOpenChange={(o) => !o && setConfirmPause(false)}
         title="Jeda Sinkronisasi Channel"
-        description="Menghentikan SEMUA sinkronisasi (stok, harga, produk, pesanan) untuk seluruh toko & channel. Pesanan yang masuk selama jeda otomatis ditarik saat sync dinyalakan lagi, dan pengaturan sync per-produk tetap tersimpan. Lanjutkan?"
+        description="Menghentikan penerimaan dan pengiriman data marketplace untuk semua toko. Webhook yang datang selama jeda tidak disimpan dan tidak akan diproses ulang. Pesanan marketplace yang sudah masuk sebelum jeda juga tidak ditarik ulang saat dinyalakan kembali. Lanjutkan?"
         confirmLabel="Jeda sync"
         variant="destructive"
         loading={setSync.isPending}

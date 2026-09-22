@@ -11,6 +11,16 @@ import type {
 
 export type { StoreFlags };
 
+export interface ChannelSyncSetting {
+  sync_enabled: boolean;
+  paused_at: string | null;
+  resumed_at: string | null;
+  pause_reason: "manual" | "auto_schedule" | null;
+  auto_pause_at: string;
+  auto_pause_timezone: string;
+  auto_pause_due: boolean;
+}
+
 export interface StockAllocationParams {
   page?: number;
   perPage?: number;
@@ -126,18 +136,18 @@ export const ChannelService = {
     return res.data;
   },
 
-  getSyncSetting: async (): Promise<boolean> => {
-    const res = await fetchClient<ApiResponse<{ sync_enabled: boolean }>>(
+  getSyncSetting: async (): Promise<ChannelSyncSetting> => {
+    const res = await fetchClient<ApiResponse<ChannelSyncSetting>>(
       "/channel-sync-setting",
     );
-    return res.data.sync_enabled;
+    return res.data;
   },
 
-  setSyncSetting: async (enabled: boolean): Promise<boolean> => {
-    const res = await fetchClient<ApiResponse<{ sync_enabled: boolean }>>(
+  setSyncSetting: async (enabled: boolean): Promise<ChannelSyncSetting> => {
+    const res = await fetchClient<ApiResponse<ChannelSyncSetting>>(
       "/channel-sync-setting",
       { method: "PUT", data: { sync_enabled: enabled } },
     );
-    return res.data.sync_enabled;
+    return res.data;
   },
 };
