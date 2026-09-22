@@ -6,7 +6,7 @@ import { Download, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useAsyncExport } from "@/hooks/laporan/use-async-export";
-import { DateTimePicker } from "@/components/ui/date-picker";
+import { DatePicker } from "@/components/ui/date-picker";
 import {
   Dialog,
   DialogContent,
@@ -38,8 +38,8 @@ export function ExportOrdersDialog({ tab }: Props) {
     try {
       await exportMutation.mutateAsync({
         tab: tab && tab !== "all" ? tab : undefined,
-        date_from: dateFrom ? format(dateFrom, "yyyy-MM-dd HH:mm:ss") : undefined,
-        date_to: dateTo ? format(dateTo, "yyyy-MM-dd HH:mm:ss") : undefined,
+        date_from: dateFrom ? format(dateFrom, "yyyy-MM-dd") : undefined,
+        date_to: dateTo ? format(dateTo, "yyyy-MM-dd") : undefined,
       });
       setOpen(false);
     } catch (e) {
@@ -61,27 +61,28 @@ export function ExportOrdersDialog({ tab }: Props) {
         <DialogHeader>
           <DialogTitle>Export Pesanan</DialogTitle>
           <DialogDescription>
-            Unduh semua status pesanan ke file Excel. Pilih tanggal dan jam agar
-            rentang data sesuai kebutuhan; kosongkan untuk mengambil semua data.
+            Unduh semua status pesanan ke file Excel. Rentang tanggal mengikuti
+            waktu WIB dari awal sampai akhir hari; kosongkan untuk mengambil
+            semua data.
           </DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 py-2">
           <div className="grid grid-cols-2 gap-3">
             <div className="grid gap-1.5">
-              <label className="text-sm font-medium">Mulai</label>
-              <DateTimePicker
+              <label className="text-sm font-medium">Tanggal mulai (WIB)</label>
+              <DatePicker
                 value={dateFrom}
                 onChange={setDateFrom}
-                placeholder="Pilih tanggal & jam"
+                placeholder="Pilih tanggal"
               />
             </div>
             <div className="grid gap-1.5">
-              <label className="text-sm font-medium">Sampai</label>
-              <DateTimePicker
+              <label className="text-sm font-medium">Tanggal akhir (WIB)</label>
+              <DatePicker
                 value={dateTo}
                 onChange={setDateTo}
-                placeholder="Pilih tanggal & jam"
+                placeholder="Pilih tanggal"
               />
             </div>
           </div>
