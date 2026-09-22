@@ -16,7 +16,7 @@ export interface ChannelSyncSetting {
   paused_at: string | null;
   resumed_at: string | null;
   pause_reason: "manual" | "auto_schedule" | null;
-  auto_pause_at: string;
+  auto_pause_at: string | null;
   auto_pause_timezone: string;
   auto_pause_due: boolean;
 }

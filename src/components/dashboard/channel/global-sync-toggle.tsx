@@ -19,6 +19,13 @@ export function GlobalSyncToggle({ className }: { className?: string }) {
 
   const isOn = setting?.sync_enabled ?? true;
   const pending = isLoading || setSync.isPending;
+  const autoPauseLabel = setting?.auto_pause_at
+    ? new Intl.DateTimeFormat("id-ID", {
+        dateStyle: "medium",
+        timeStyle: "short",
+        timeZone: setting.auto_pause_timezone,
+      }).format(new Date(setting.auto_pause_at))
+    : "belum dijadwalkan";
 
   const handleChange = (checked: boolean) => {
     if (!checked) {
@@ -74,7 +81,7 @@ export function GlobalSyncToggle({ className }: { className?: string }) {
       <div className="flex items-center gap-2 border-t border-border/60 px-4 py-2.5 text-xs text-muted-foreground sm:px-5">
         <Clock3Icon className="size-3.5 shrink-0" />
         <span>
-          Auto-pause setiap hari pukul 12.00 WIB
+          Auto-pause satu kali pada {autoPauseLabel}
           {setting?.pause_reason === "auto_schedule" && !isOn
             ? " · sedang dijeda otomatis"
             : ""}
