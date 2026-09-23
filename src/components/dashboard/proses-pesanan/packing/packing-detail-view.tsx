@@ -202,13 +202,15 @@ export function PackingDetailView({ id }: { id: string }) {
   const completePacklist = useCompletePacklist();
 
   const commitPack = React.useCallback(
-    (itemId: string, qty: number) =>
-      packItem.mutateAsync({
+    (itemId: string, qty: number, scanEventId?: string) => {
+      if (!scanEventId) return Promise.reject(new Error("ID scan tidak ditemukan."));
+      return packItem.mutateAsync({
         packlistId: id,
         itemId,
         qtyPacked: qty,
-        barcodeVerified: true,
-      }),
+        scanEventId,
+      });
+    },
     [packItem, id],
   );
   const { bump } = useQtyBumpQueue(commitPack, {
@@ -319,6 +321,7 @@ export function PackingDetailView({ id }: { id: string }) {
       base: item.qtyPacked,
       max: item.qtyOrdered,
       delta: 1,
+      eventId: crypto.randomUUID(),
     });
     refocusScan();
   };

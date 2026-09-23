@@ -1083,7 +1083,7 @@ export const OutboundService = {
   packItem: async (
     packlistId: string,
     itemId: string,
-    payload: { qty_packed: number; barcode_verified?: boolean },
+    payload: { scan_event_id: string },
   ): Promise<void> => {
     await fetchClient(
       `/outbound/packlists/${packlistId}/items/${itemId}/pack`,

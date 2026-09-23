@@ -685,16 +685,15 @@ export function usePackItem() {
       packlistId,
       itemId,
       qtyPacked,
-      barcodeVerified,
+      scanEventId,
     }: {
       packlistId: string;
       itemId: string;
       qtyPacked: number;
-      barcodeVerified?: boolean;
+      scanEventId: string;
     }) =>
       OutboundService.packItem(packlistId, itemId, {
-        qty_packed: qtyPacked,
-        barcode_verified: barcodeVerified,
+        scan_event_id: scanEventId,
       }),
 
     onMutate: async (v) => {
@@ -709,7 +708,7 @@ export function usePackItem() {
               ? {
                   ...it,
                   qtyPacked: v.qtyPacked,
-                  barcodeVerified: v.barcodeVerified ?? it.barcodeVerified,
+                  barcodeVerified: true,
                 }
               : it,
           ),

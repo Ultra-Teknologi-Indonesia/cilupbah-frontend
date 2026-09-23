@@ -11,7 +11,11 @@ export interface QtyBumpQueueOptions {
 }
 
 export function useQtyBumpQueue(
-  commit: (itemId: string, absoluteQty: number) => Promise<unknown>,
+  commit: (
+    itemId: string,
+    absoluteQty: number,
+    eventId?: string,
+  ) => Promise<unknown>,
   options?: QtyBumpQueueOptions,
 ) {
   const commitRef = React.useRef(commit);
@@ -25,6 +29,9 @@ export function useQtyBumpQueue(
   });
 
   const targetRef = React.useRef<Map<string, number>>(new Map());
+  const pendingRef = React.useRef<
+    Map<string, Array<{ absoluteQty: number; eventId?: string }>>
+  >(new Map());
   const inflightRef = React.useRef<Set<string>>(new Set());
 
   const flush = React.useCallback(async (itemId: string) => {
@@ -32,8 +39,9 @@ export function useQtyBumpQueue(
     inflightRef.current.add(itemId);
     try {
       for (;;) {
-        const target = targetRef.current.get(itemId);
-        if (target === undefined) break;
+        const pending = pendingRef.current.get(itemId);
+        const event = pending?.[0];
+        if (!pending || !event) break;
 
         const retries = optionsRef.current?.retries ?? 2;
         const retryDelayMs = optionsRef.current?.retryDelayMs ?? 600;
@@ -41,7 +49,7 @@ export function useQtyBumpQueue(
 
         for (let attempt = 0; attempt <= retries; attempt++) {
           try {
-            await commitRef.current(itemId, target);
+            await commitRef.current(itemId, event.absoluteQty, event.eventId);
             committed = true;
             break;
           } catch {
@@ -55,11 +63,14 @@ export function useQtyBumpQueue(
 
         if (!committed) {
           targetRef.current.delete(itemId);
+          pendingRef.current.delete(itemId);
           optionsRef.current?.onGiveUp?.(itemId);
           break;
         }
 
-        if (targetRef.current.get(itemId) === target) {
+        pending.shift();
+        if (pending.length === 0) {
+          pendingRef.current.delete(itemId);
           targetRef.current.delete(itemId);
           break;
         }
@@ -75,16 +86,21 @@ export function useQtyBumpQueue(
       base,
       max,
       delta = 1,
+      eventId,
     }: {
       itemId: string;
       base: number;
       max: number;
       delta?: number;
+      eventId?: string;
     }): number | null => {
       const cur = targetRef.current.get(itemId) ?? base;
       const next = Math.max(0, Math.min(max, cur + delta));
       if (next === cur) return null;
       targetRef.current.set(itemId, next);
+      const pending = pendingRef.current.get(itemId) ?? [];
+      pending.push({ absoluteQty: next, eventId });
+      pendingRef.current.set(itemId, pending);
       void flush(itemId);
       return next;
     },
@@ -93,6 +109,7 @@ export function useQtyBumpQueue(
 
   const reset = React.useCallback(() => {
     targetRef.current.clear();
+    pendingRef.current.clear();
     inflightRef.current.clear();
   }, []);
 

@@ -328,14 +328,15 @@ export function PackingProsesView() {
   }, [packlistIds]);
 
   const commitPack = React.useCallback(
-    (itemId: string, qty: number) => {
+    (itemId: string, qty: number, scanEventId?: string) => {
       const plId = itemIndexRef.current.get(itemId);
       if (!plId) return Promise.reject(new Error("Packlist tidak ditemukan."));
+      if (!scanEventId) return Promise.reject(new Error("ID scan tidak ditemukan."));
       return packItem.mutateAsync({
         packlistId: plId,
         itemId,
         qtyPacked: qty,
-        barcodeVerified: true,
+        scanEventId,
       });
     },
     [packItem],
@@ -500,6 +501,7 @@ export function PackingProsesView() {
       base: item.qtyPacked,
       max: item.qtyOrdered,
       delta: 1,
+      eventId: crypto.randomUUID(),
     });
   };
 
