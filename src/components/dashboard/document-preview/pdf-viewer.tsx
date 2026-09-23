@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Document, Page, pdfjs } from "react-pdf";
+import type { PDFDocumentProxy } from "pdfjs-dist";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
@@ -13,7 +14,7 @@ export interface PdfViewerProps {
   file: string | File | null;
   numPages: number;
   scale: number;
-  onLoadSuccess: (info: { numPages: number }) => void;
+  onLoadSuccess: (document: PDFDocumentProxy) => void;
   onLoadError: (err: Error) => void;
   className?: string;
   pageWidth?: number;

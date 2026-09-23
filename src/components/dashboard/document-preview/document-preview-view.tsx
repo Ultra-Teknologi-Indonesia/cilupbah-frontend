@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
+import type { PDFDocumentProxy } from "pdfjs-dist";
 import {
   ArrowLeftIcon,
   DownloadIcon,
@@ -28,6 +29,7 @@ import {
 
 import { PreviewToolbar } from "./preview-toolbar";
 import { LabelPrintOptions } from "./label-print-options";
+import { PdfSearchPanel } from "./pdf-search-panel";
 
 const PdfViewer = dynamic(
   () => import("./pdf-viewer").then((m) => m.PdfViewer),
@@ -92,6 +94,9 @@ function KnownDocumentPreview({
   const [pageNumber, setPageNumber] = React.useState(1);
   const [numPages, setNumPages] = React.useState(0);
   const [scale, setScale] = React.useState(1);
+  const [pdfDocument, setPdfDocument] =
+    React.useState<PDFDocumentProxy | null>(null);
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const [isResetting, setIsResetting] = React.useState(false);
   const [isExcelLoading, setIsExcelLoading] = React.useState(false);
 
@@ -165,7 +170,10 @@ function KnownDocumentPreview({
         (target.tagName === "INPUT" || target.tagName === "TEXTAREA")
       )
         return;
-      if (e.key === "PageDown" || e.key === "ArrowRight") {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "f") {
+        e.preventDefault();
+        setIsSearchOpen(true);
+      } else if (e.key === "PageDown" || e.key === "ArrowRight") {
         scrollToPage(pageNumber + 1);
       } else if (e.key === "PageUp" || e.key === "ArrowLeft") {
         scrollToPage(pageNumber - 1);
@@ -336,6 +344,8 @@ function KnownDocumentPreview({
           onPageChange={scrollToPage}
           onScaleChange={setScale}
           onFit={() => setScale(1)}
+          onSearch={() => setIsSearchOpen(true)}
+          searchDisabled={!pdfDocument}
         />
       )}
 
@@ -356,7 +366,10 @@ function KnownDocumentPreview({
               numPages={numPages}
               scale={scale}
               pageWidth={type === "shipping-label" ? 480 : undefined}
-              onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+              onLoadSuccess={(document) => {
+                setNumPages(document.numPages);
+                setPdfDocument(document);
+              }}
               onVisiblePageChange={(p) => setPageNumber(p)}
               onLoadError={(err) =>
                 setState({
@@ -368,6 +381,13 @@ function KnownDocumentPreview({
           </div>
         )}
       </main>
+
+      <PdfSearchPanel
+        document={pdfDocument}
+        open={isSearchOpen}
+        onOpenChange={setIsSearchOpen}
+        onSelectPage={scrollToPage}
+      />
     </div>
   );
 }

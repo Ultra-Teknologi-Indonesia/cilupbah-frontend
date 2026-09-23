@@ -7,6 +7,7 @@ import {
   MaximizeIcon,
   MinusIcon,
   PlusIcon,
+  SearchIcon,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -19,6 +20,8 @@ export interface PreviewToolbarProps {
   onPageChange: (n: number) => void;
   onScaleChange: (s: number) => void;
   onFit: () => void;
+  onSearch?: () => void;
+  searchDisabled?: boolean;
 }
 
 const ZOOM_STEPS = [0.5, 0.75, 1, 1.25, 1.5, 2, 3];
@@ -34,22 +37,20 @@ export function PreviewToolbar({
   onPageChange,
   onScaleChange,
   onFit,
+  onSearch,
+  searchDisabled = false,
 }: PreviewToolbarProps) {
   const canPrev = pageNumber > 1;
   const canNext = pageNumber < numPages;
-  const [inputVal, setInputVal] = React.useState(String(pageNumber));
-
-  React.useEffect(() => {
-    setInputVal(String(pageNumber));
-  }, [pageNumber]);
+  const pageInputRef = React.useRef<HTMLInputElement>(null);
 
   const handleInputSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const parsed = parseInt(inputVal, 10);
+    const parsed = parseInt(pageInputRef.current?.value ?? "", 10);
     if (!isNaN(parsed) && parsed >= 1 && parsed <= numPages) {
       onPageChange(parsed);
-    } else {
-      setInputVal(String(pageNumber));
+    } else if (pageInputRef.current) {
+      pageInputRef.current.value = String(pageNumber);
     }
   };
 
@@ -85,11 +86,12 @@ export function PreviewToolbar({
         >
           <span>Hal.</span>
           <input
+            key={pageNumber}
+            ref={pageInputRef}
             type="number"
             min={1}
             max={numPages || 1}
-            value={inputVal}
-            onChange={(e) => setInputVal(e.target.value)}
+            defaultValue={pageNumber}
             onBlur={handleInputSubmit}
             aria-label="Nomor Halaman"
             className="h-6 w-11 rounded border border-input bg-background/90 px-1 text-center text-xs font-semibold tabular-nums text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
@@ -142,6 +144,22 @@ export function PreviewToolbar({
           Fit
         </Button>
       </div>
+
+      {onSearch && (
+        <>
+          <div className="hidden h-5 w-px bg-border sm:block" />
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-1.5"
+            onClick={onSearch}
+            disabled={searchDisabled}
+          >
+            <SearchIcon className="size-4" />
+            <span className="hidden sm:inline">Cari</span>
+          </Button>
+        </>
+      )}
     </div>
   );
 }
