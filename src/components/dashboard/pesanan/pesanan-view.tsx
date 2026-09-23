@@ -15,6 +15,7 @@ import { useListState } from "@/hooks/use-list-state";
 import { useUrlTab } from "@/hooks/use-url-tab";
 import type {
   OrderTab,
+  OrderCountParams,
   OrderListParams,
   SubFilter,
 } from "@/types/pesanan/order";
@@ -149,6 +150,26 @@ export function PesananView() {
 
   const { data, isLoading, isFetching, refetch } = useOrders(params);
 
+  const countParams = useMemo<OrderCountParams | undefined>(() => {
+    const {
+      tab: _tab,
+      sub: _sub,
+      page: _page,
+      per_page: _perPage,
+      sort: _sort,
+      sort_by: _sortBy,
+      sort_dir: _sortDir,
+      ...filters
+    } = params;
+    const activeFilters = Object.fromEntries(
+      Object.entries(filters).filter(([, value]) =>
+        Array.isArray(value) ? value.length > 0 : value !== undefined,
+      ),
+    ) as OrderCountParams;
+
+    return Object.keys(activeFilters).length > 0 ? activeFilters : undefined;
+  }, [params]);
+
   const orders = useMemo(() => data?.data ?? [], [data]);
   const meta = data?.meta ?? {
     current_page: 1,
@@ -192,6 +213,7 @@ export function PesananView() {
       <OrderStatusTabs
         active={tab}
         onChange={handleTabChange}
+        countParams={countParams}
         isFetching={isFetching}
       />
 

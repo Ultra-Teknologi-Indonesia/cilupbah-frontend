@@ -2,7 +2,7 @@ export type StockReplenishmentStatus =
   "PENDING" | "ACCEPTED" | "REJECTED" | "DONE" | "CANCELLED";
 
 export interface StockReplenishmentReasonDetail {
-  type: "stock_shortage";
+  type: "stock_shortage" | "auto_safe_stock";
   label: string;
   demand_qty: number;
   available_qty: number;

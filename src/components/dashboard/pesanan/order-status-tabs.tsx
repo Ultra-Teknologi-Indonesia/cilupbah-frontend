@@ -3,6 +3,7 @@
 import { useOrderCounts } from "@/hooks/pesanan/use-orders";
 import {
   TAB_CONFIG,
+  type OrderCountParams,
   SUB_PILL_CONFIG,
   type OrderTab,
   type SubFilter,
@@ -14,13 +15,15 @@ import { Tabs, TabsList } from "@/components/ui/tabs";
 export function OrderStatusTabs({
   active,
   onChange,
+  countParams,
   isFetching = false,
 }: {
   active: OrderTab;
   onChange: (tab: OrderTab) => void;
+  countParams?: OrderCountParams;
   isFetching?: boolean;
 }) {
-  const { data, isLoading } = useOrderCounts();
+  const { data, isLoading } = useOrderCounts(countParams);
   const counts = data?.data;
 
   const zones = ["lifecycle", "problem", "admin"] as const;

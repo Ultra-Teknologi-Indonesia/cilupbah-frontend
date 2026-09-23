@@ -1097,6 +1097,7 @@ export function OrderCard({
   const { copy } = useCopyToClipboard();
   const isCancelView =
     tab === "cancellation" || tab === "channel-cancel" || order.is_canceled;
+  const isCompletedTab = tab === "completed";
   const groupedItems = React.useMemo(() => {
     const map = new Map<string, OrderItem>();
     for (const item of order.items) {
@@ -1360,31 +1361,66 @@ export function OrderCard({
             "grid flex-1 grid-cols-2 gap-x-6 gap-y-3 lg:items-start",
             isCancelView
               ? "sm:grid-cols-3 xl:grid-cols-4"
-              : "sm:grid-cols-3 xl:grid-cols-5",
+              : isCompletedTab
+                ? "sm:grid-cols-3 lg:grid-cols-6"
+                : "sm:grid-cols-3 xl:grid-cols-5",
           )}
         >
-          <div className="min-w-0">
-            <p className="mb-0.5 text-2xs font-medium uppercase tracking-wider text-muted-foreground/70">
-              Status SuperApps
-            </p>
-            <StatusBadge
-              domain="sales-order"
-              status={getOrderStatusBadgeStatus(order)}
-              label={order.status_label}
-              className="text-xs font-semibold whitespace-nowrap"
-            />
-            {order.channel_status && (
-              <div className="mt-1.5 flex flex-col items-start gap-0.5">
-                <span className="text-2xs font-medium text-muted-foreground/70 uppercase tracking-wider">
-                  Status Channel
-                </span>
-                <StatusBadge
-                  domain="channel-status"
-                  status={order.channel_status}
-                  className="text-2xs font-medium whitespace-nowrap"
-                />
-              </div>
+          <div
+            className={cn(
+              "min-w-0",
+              isCompletedTab && "sm:col-span-2 lg:col-span-2",
             )}
+          >
+            <div
+              className={cn(
+                isCompletedTab &&
+                  "grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4",
+              )}
+            >
+              {isCompletedTab && (
+                <div className="min-w-0">
+                  <p className="mb-0.5 text-2xs font-medium uppercase tracking-wider text-muted-foreground/70">
+                    Status Marketplace
+                  </p>
+                  {order.channel_status ? (
+                    <StatusBadge
+                      domain="channel-status"
+                      status={order.channel_status}
+                      className="text-xs font-semibold whitespace-nowrap"
+                    />
+                  ) : (
+                    <span className="text-xs text-muted-foreground">
+                      Tidak tersedia
+                    </span>
+                  )}
+                </div>
+              )}
+
+              <div className="min-w-0">
+                <p className="mb-0.5 text-2xs font-medium uppercase tracking-wider text-muted-foreground/70">
+                  Status SuperApps
+                </p>
+                <StatusBadge
+                  domain="sales-order"
+                  status={getOrderStatusBadgeStatus(order)}
+                  label={order.status_label}
+                  className="text-xs font-semibold whitespace-nowrap"
+                />
+                {!isCompletedTab && order.channel_status && (
+                  <div className="mt-1.5 flex flex-col items-start gap-0.5">
+                    <span className="text-2xs font-medium text-muted-foreground/70 uppercase tracking-wider">
+                      Status Marketplace
+                    </span>
+                    <StatusBadge
+                      domain="channel-status"
+                      status={order.channel_status}
+                      className="text-2xs font-medium whitespace-nowrap"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
             {order.cancel_requested_at && !order.is_canceled && (
               <p className="mt-1 text-2xs font-medium text-warning">
                 Pembatalan diminta

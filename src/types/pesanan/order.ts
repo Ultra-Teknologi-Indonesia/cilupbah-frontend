@@ -64,6 +64,11 @@ export interface OrderListParams {
   item_id?: string;
 }
 
+export type OrderCountParams = Omit<
+  OrderListParams,
+  "tab" | "sub" | "page" | "per_page" | "sort" | "sort_by" | "sort_dir"
+>;
+
 export const STATUS_FILTER_OPTIONS: { value: string; label: string }[] = [
   { value: "cancelled", label: "Batal" },
   { value: "unpaid", label: "Belum Bayar" },
@@ -267,6 +272,7 @@ export interface OrderTabCounts {
   "empty-stock": number;
   "failed-pick": number;
   cancellation: number;
+  "channel-cancel": number;
   returned: number;
 }
 

@@ -306,6 +306,19 @@ export function MonitorStokView() {
     [locData],
   );
 
+  const warehouseOptions = useMemo(
+    () => [
+      { value: "", label: "Semua Gudang" },
+      ...(locData?.items ?? [])
+        .filter((location) => location.isWarehouse)
+        .map((location) => ({
+          value: location.id,
+          label: location.locationName,
+        })),
+    ],
+    [locData],
+  );
+
   const categoryOptions = useMemo(
     () => [
       { value: "", label: "Semua Kategori" },
@@ -349,6 +362,7 @@ export function MonitorStokView() {
 
   const hasFilter = Boolean(locationId || categoryId || search);
   const activeCount = [locationId, categoryId, search].filter(Boolean).length;
+  const isMinusTab = tab === "stok-kosong" && subMode === "minus";
 
   const subTotal = (key: OutOfStockMode): number | undefined => {
     if (!summary) return undefined;
@@ -408,25 +422,41 @@ export function MonitorStokView() {
       >
         <div className="flex flex-wrap items-center justify-between gap-2 px-4 pt-4 sm:px-5">
           {tab === "stok-kosong" ? (
-            <Tabs
-              value={subMode}
-              onValueChange={(v) => changeSub(v as OutOfStockMode)}
-            >
-              <TabsList variant="line" className="h-auto">
-                {SUB_TABS.map(({ key, label }) => (
-                  <TabsTrigger key={key} value={key}>
-                    {label}
-                    {summaryQuery.isPending || summaryQuery.isPlaceholderData ? (
-                      <Loader2Icon className="ml-1 size-3 animate-spin text-muted-foreground" aria-label="Memuat total" />
-                    ) : subTotal(key) !== undefined ? (
-                      <span className="ml-0.5 rounded-full bg-muted px-1.5 text-2xs tabular-nums">
-                        {subTotal(key)}
-                      </span>
-                    ) : null}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
+            <div className="flex flex-wrap items-center gap-2">
+              <Tabs
+                value={subMode}
+                onValueChange={(v) => changeSub(v as OutOfStockMode)}
+              >
+                <TabsList variant="line" className="h-auto">
+                  {SUB_TABS.map(({ key, label }) => (
+                    <TabsTrigger key={key} value={key}>
+                      {label}
+                      {summaryQuery.isPending || summaryQuery.isPlaceholderData ? (
+                        <Loader2Icon className="ml-1 size-3 animate-spin text-muted-foreground" aria-label="Memuat total" />
+                      ) : subTotal(key) !== undefined ? (
+                        <span className="ml-0.5 rounded-full bg-muted px-1.5 text-2xs tabular-nums">
+                          {subTotal(key)}
+                        </span>
+                      ) : null}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+              {isMinusTab ? (
+                <div className="w-44">
+                  <Combobox
+                    options={warehouseOptions}
+                    value={locationId}
+                    onChange={(value) =>
+                      onFilter(() => setLocationId(value ?? ""))
+                    }
+                    placeholder="Semua Gudang"
+                    searchPlaceholder="Cari gudang"
+                    className="h-8 bg-background"
+                  />
+                </div>
+              ) : null}
+            </div>
           ) : isAnalyticsTab(tab) ? (
             <div className="w-52">
               <Combobox
@@ -642,17 +672,19 @@ export function MonitorStokView() {
               }
               hasFilter={hasFilter}
               activeCount={activeCount}
-              gridCols={2}
+              gridCols={isMinusTab ? 1 : 2}
               trailing={exportMenu}
             >
-              <Combobox
-                options={locationOptions}
-                value={locationId}
-                onChange={(v) => onFilter(() => setLocationId(v ?? ""))}
-                placeholder="Lokasi"
-                searchPlaceholder="Cari lokasi"
-                className="h-9 bg-background"
-              />
+              {!isMinusTab ? (
+                <Combobox
+                  options={locationOptions}
+                  value={locationId}
+                  onChange={(v) => onFilter(() => setLocationId(v ?? ""))}
+                  placeholder="Lokasi"
+                  searchPlaceholder="Cari lokasi"
+                  className="h-9 bg-background"
+                />
+              ) : null}
               <Combobox
                 options={categoryOptions}
                 value={categoryId}

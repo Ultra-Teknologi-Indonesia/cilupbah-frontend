@@ -375,6 +375,14 @@ export function PickingProsesView({ id }: { id: string }) {
       startPickingAfterScan();
       setScannedBinCode(res.bin_code);
 
+      if (res.remaining_to_pick === 1 && res.max_pickable >= 1) {
+        pickBinRef.current.set(res.item_id, res.bin_code);
+        playScanFeedback("ok");
+        bumpPick({ itemId: res.item_id, delta: 1 });
+        setSkuRefocusKey((k) => k + 1);
+        return;
+      }
+
       if ((res.candidates?.length ?? 0) > 1) {
         playScanFeedback("ok");
         setActiveItemId(res.item_id);
@@ -844,8 +852,8 @@ export function PickingProsesView({ id }: { id: string }) {
                     scanPlaceholder="Scan SKU / barcode barang…"
                     hint={
                       scannedBinCode
-                        ? `Rak aktif: ${scannedBinCode}. Scan SKU = ambil +1; multi-rak minta konfirmasi.`
-                        : "Scan SKU = ambil +1. Kalau ada beberapa rak, muncul pilihan rak."
+                        ? `Rak aktif: ${scannedBinCode}. Sisa qty 1 langsung diambil; qty lebih dari 1 minta konfirmasi.`
+                        : "Scan SKU dengan sisa qty 1 langsung diproses; qty lebih dari 1 meminta input qty."
                     }
                     sound={false}
                   />

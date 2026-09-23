@@ -167,7 +167,8 @@ export function PermintaanRestockDetailView({ id }: Props) {
 
   const items = (itemData?.items ?? []) as StockReplenishmentItem[];
   const totalQty = req.items_qty ?? 0;
-  const editable = req.status === "PENDING";
+  const editable =
+    req.status === "PENDING" && req.source !== "AUTO";
 
   return (
     <div className="flex flex-col gap-5">
@@ -588,6 +589,8 @@ function ReasonSummary({ item }: { item: StockReplenishmentItem }) {
     );
   }
 
+  const isAutoFill = detail.type === "auto_safe_stock";
+
   return (
     <div className="min-w-0 space-y-1">
       <p className="truncate font-medium text-foreground" title={detail.label}>
@@ -595,7 +598,9 @@ function ReasonSummary({ item }: { item: StockReplenishmentItem }) {
       </p>
       <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[11px] leading-4">
         <span>
-          <span className="text-muted-foreground/75">Kebutuhan</span>{" "}
+          <span className="text-muted-foreground/75">
+            {isAutoFill ? "Batas aman" : "Kebutuhan"}
+          </span>{" "}
           <strong className="font-semibold tabular-nums text-foreground">
             {detail.demand_qty}
           </strong>
@@ -620,7 +625,9 @@ function ReasonSummary({ item }: { item: StockReplenishmentItem }) {
           </strong>
         </span>
         <span>
-          <span className="text-muted-foreground/75">Disarankan</span>{" "}
+          <span className="text-muted-foreground/75">
+            {isAutoFill ? "Target isi" : "Disarankan"}
+          </span>{" "}
           <strong className="font-semibold tabular-nums text-foreground">
             {detail.suggested_qty}
           </strong>

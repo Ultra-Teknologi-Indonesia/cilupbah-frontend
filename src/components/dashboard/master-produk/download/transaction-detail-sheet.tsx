@@ -12,28 +12,21 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Combobox } from "@/components/ui/combobox";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ProductStatusBadge } from "../product-status-badge";
 import type { ProductStatus } from "@/types/master-produk";
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   useDownloadTransactionDetail,
   useDownloadFailures,
 } from "@/hooks/master-produk/use-download";
 import type { DownloadTransaction } from "@/hooks/master-produk/use-download";
-
-const MASTER_FILTER: { value: string; label: string }[] = [
-  { value: "all", label: "Semua" },
-  { value: "master", label: "Sudah Master" },
-  { value: "not_master", label: "Belum Master" },
-];
 
 export function TransactionDetailSheet({
   trx,
@@ -46,7 +39,6 @@ export function TransactionDetailSheet({
 }) {
   const [search, setSearch] = React.useState("");
   const [appliedSearch, setAppliedSearch] = React.useState("");
-  const [masterFilter, setMasterFilter] = React.useState<string>("all");
 
   const resetKey = open ? (trx?.trxId ?? "") : null;
   const [prevKey, setPrevKey] = React.useState<string | null>(resetKey);
@@ -54,11 +46,8 @@ export function TransactionDetailSheet({
     setPrevKey(resetKey);
     setSearch("");
     setAppliedSearch("");
-    setMasterFilter("all");
   }
 
-  const isMaster =
-    masterFilter === "all" ? undefined : masterFilter === "master";
   const applySearch = (nextSearch?: string) => {
     const trimmed = (nextSearch ?? search).trim();
     setSearch(trimmed);
@@ -69,7 +58,6 @@ export function TransactionDetailSheet({
     open ? (trx?.trxId ?? null) : null,
     {
       search: appliedSearch || undefined,
-      isMaster,
       perPage: 100,
     },
   );
@@ -82,14 +70,14 @@ export function TransactionDetailSheet({
   const showFailures = !!trx && (trx.state === "failed" || trx.isPartial);
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full sm:max-w-2xl">
-        <SheetHeader className="border-b border-border/60">
-          <SheetDescription>Download dari toko</SheetDescription>
-          <SheetTitle>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="flex h-[min(44rem,calc(100dvh-2rem))] max-w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden p-0 sm:max-w-4xl">
+        <DialogHeader className="border-b border-border/60 p-6 pr-14">
+          <DialogDescription>Produk yang berhasil diunduh dari toko</DialogDescription>
+          <DialogTitle>
             Mendownload dari{" "}
             {trx?.storeName ?? detail?.transaction.storeName ?? "—"}
-          </SheetTitle>
+          </DialogTitle>
           <div className="mt-1 text-sm text-muted-foreground">
             No. Transaksi:{" "}
             <span className="font-medium text-foreground">
@@ -108,121 +96,117 @@ export function TransactionDetailSheet({
           <div className="mt-1 text-xs text-muted-foreground">
             {detail ? `${detail.count} produk` : "Memuat…"}
           </div>
-        </SheetHeader>
+        </DialogHeader>
 
-        <div className="flex flex-wrap items-center gap-2 px-6 py-3">
-          <div className="relative min-w-0 flex-1">
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  applySearch();
-                }
-              }}
-              placeholder="Cari nama / SKU…"
-              className="h-9 pr-16"
-            />
+        <div className="border-b border-border/60 px-6 py-4">
+          <div className="mx-auto flex w-full max-w-2xl items-center gap-2">
+            <div className="relative min-w-0 flex-1">
+              <Input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    applySearch();
+                  }
+                }}
+                placeholder="Cari nama / SKU…"
+                className="h-10 pr-16"
+              />
+              <Button
+                type="button"
+                size="sm"
+                onClick={() => applySearch()}
+                className="absolute right-1 top-1/2 h-7 -translate-y-1/2 rounded-full px-2.5 text-xs"
+              >
+                Cari
+              </Button>
+            </div>
             <Button
               type="button"
+              variant="outline"
               size="sm"
-              onClick={() => applySearch()}
-              className="absolute right-1 top-1/2 h-7 -translate-y-1/2 rounded-full px-2.5 text-xs"
+              className="h-9 w-9 shrink-0 rounded-full p-0"
+              onClick={() => query.refetch()}
+              disabled={query.isFetching}
+              title="Muat ulang detail transaksi"
+              aria-label="Muat ulang detail transaksi"
             >
-              Cari
+              <RefreshCwIcon
+                className={cn(
+                  "size-4",
+                  query.isFetching && "animate-spin motion-reduce:animate-none",
+                )}
+              />
             </Button>
           </div>
-          <Combobox
-            options={MASTER_FILTER}
-            value={masterFilter}
-            onChange={(v) => setMasterFilter(v ?? "all")}
-            placeholder="Status Produk"
-            searchPlaceholder="Status"
-            className="h-9 w-52"
-          />
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="h-9 w-9 shrink-0 rounded-full p-0"
-            onClick={() => query.refetch()}
-            disabled={query.isFetching}
-            title="Muat ulang detail transaksi"
-            aria-label="Muat ulang detail transaksi"
-          >
-            <RefreshCwIcon
-              className={cn(
-                "size-4",
-                query.isFetching && "animate-spin motion-reduce:animate-none",
-              )}
-            />
-          </Button>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-6">
-          {showFailures && trx && (
-            <FailureSummary
-              trxId={trx.trxId}
-              tone={trx.state === "failed" ? "destructive" : "warning"}
-            />
-          )}
-          {query.isLoading ? (
-            <div className="flex flex-col gap-2">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} className="h-14 rounded-lg" />
-              ))}
-            </div>
-          ) : products.length === 0 ? (
-            <div className="py-12 text-center text-sm text-muted-foreground">
-              Tidak ada produk.
-            </div>
-          ) : (
-            <div className="divide-y divide-border/60">
-              {products.map((p) => (
-                <div key={p.itemId} className="flex items-center gap-3 py-3">
-                  <div className="size-10 shrink-0 overflow-hidden rounded-xl bg-muted/40">
-                    {p.imgUrl ? (
-                      <Image
-                        unoptimized
-                        width={400}
-                        height={400}
-                        src={p.imgUrl}
-                        alt={p.itemName}
-                        className="size-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex size-full items-center justify-center">
-                        <ImageIcon className="size-4 text-muted-foreground" />
-                      </div>
-                    )}
-                  </div>
+        <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6">
+          <div className="mx-auto w-full max-w-3xl">
+            {showFailures && trx && (
+              <FailureSummary
+                trxId={trx.trxId}
+                tone={trx.state === "failed" ? "destructive" : "warning"}
+              />
+            )}
+            {query.isLoading ? (
+              <div className="flex flex-col gap-2">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <Skeleton key={i} className="h-14 rounded-lg" />
+                ))}
+              </div>
+            ) : products.length === 0 ? (
+              <div className="py-12 text-center text-sm text-muted-foreground">
+                Belum ada produk yang berhasil diunduh pada transaksi ini.
+              </div>
+            ) : (
+              <div className="divide-y divide-border/60">
+                {products.map((p) => (
+                  <div key={p.itemId} className="flex items-center gap-3 py-3">
+                    <div className="size-10 shrink-0 overflow-hidden rounded-xl bg-muted/40">
+                      {p.imgUrl ? (
+                        <Image
+                          unoptimized
+                          width={400}
+                          height={400}
+                          src={p.imgUrl}
+                          alt={p.itemName}
+                          className="size-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex size-full items-center justify-center">
+                          <ImageIcon className="size-4 text-muted-foreground" />
+                        </div>
+                      )}
+                    </div>
 
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium">
-                      <Link
-                        href={`/dashboard/produk/${p.itemId}`}
-                        className="hover:text-primary hover:underline"
-                      >
-                        {p.itemName}
-                      </Link>
-                    </p>
-                    <p className="truncate font-mono text-xs text-muted-foreground">
-                      {p.itemCode ?? "—"}
-                    </p>
-                  </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium">
+                        <Link
+                          href={`/dashboard/produk/${p.itemId}`}
+                          className="hover:text-primary hover:underline"
+                        >
+                          {p.itemName}
+                        </Link>
+                      </p>
+                      <p className="truncate font-mono text-xs text-muted-foreground">
+                        {p.itemCode ?? "—"}
+                      </p>
+                    </div>
 
-                  <ProductStatusBadge
-                    status={p.status as ProductStatus}
-                    className="shrink-0"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
+                    <ProductStatusBadge
+                      status={p.status as ProductStatus}
+                      className="shrink-0"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
   );
 }
 

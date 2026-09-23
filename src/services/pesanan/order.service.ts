@@ -4,6 +4,7 @@ import type {
   ContactChannel,
   CustomerDecision,
   Order,
+  OrderCountParams,
   OrderListParams,
   OrderTabCounts,
 } from "@/types/pesanan/order";
@@ -29,39 +30,47 @@ export interface BulkActionResult {
   results: Array<{ id: string; status: "success" | "failed"; message?: string }>;
 }
 
+function appendOrderFilters(
+  sp: URLSearchParams,
+  params: OrderCountParams,
+) {
+  if (params.q) sp.set("q", params.q);
+  if (params.channel?.toLowerCase() === "tokopedia") {
+    sp.set("filter[commerce_platform]", "TOKOPEDIA");
+  } else if (params.channel) {
+    sp.set("filter[channel]", params.channel);
+  }
+  if (params.store_id) sp.set("filter[store_id]", params.store_id);
+  if (params.location_id) sp.set("filter[location_id]", params.location_id);
+  if (params.content_type)
+    sp.set("filter[content_type]", params.content_type);
+  if (params.date_from) sp.set("filter[date_from]", params.date_from);
+  if (params.date_to) sp.set("filter[date_to]", params.date_to);
+  if (params.shipping_provider) {
+    if (Array.isArray(params.shipping_provider)) {
+      for (const p of params.shipping_provider) {
+        if (p) sp.append("filter[shipping_provider][]", p);
+      }
+    } else {
+      sp.set("filter[shipping_provider]", params.shipping_provider);
+    }
+  }
+  if (params.payment) sp.set("filter[payment]", params.payment);
+  if (params.label_printed)
+    sp.set("filter[label_printed]", params.label_printed);
+  if (params.contact_status)
+    sp.set("filter[contact_status]", params.contact_status);
+  if (params.decision) sp.set("filter[decision]", params.decision);
+  if (params.item_id) sp.set("filter[item_id]", params.item_id);
+  for (const s of params.status ?? []) sp.append("filter[status][]", s);
+}
+
 export const OrderService = {
   list: (params: OrderListParams) => {
     const sp = new URLSearchParams();
     if (params.tab && params.tab !== "all") sp.set("tab", params.tab);
     if (params.sub) sp.set("sub", params.sub);
-    if (params.q) sp.set("q", params.q);
-    if (params.channel?.toLowerCase() === "tokopedia") {
-      sp.set("filter[commerce_platform]", "TOKOPEDIA");
-    } else if (params.channel) {
-      sp.set("filter[channel]", params.channel);
-    }
-    if (params.store_id) sp.set("filter[store_id]", params.store_id);
-    if (params.location_id) sp.set("filter[location_id]", params.location_id);
-    if (params.content_type)
-      sp.set("filter[content_type]", params.content_type);
-    if (params.date_from) sp.set("filter[date_from]", params.date_from);
-    if (params.shipping_provider) {
-      if (Array.isArray(params.shipping_provider)) {
-        for (const p of params.shipping_provider) {
-          if (p) sp.append("filter[shipping_provider][]", p);
-        }
-      } else {
-        sp.set("filter[shipping_provider]", params.shipping_provider);
-      }
-    }
-    if (params.payment) sp.set("filter[payment]", params.payment);
-    if (params.label_printed)
-      sp.set("filter[label_printed]", params.label_printed);
-    if (params.contact_status)
-      sp.set("filter[contact_status]", params.contact_status);
-    if (params.decision) sp.set("filter[decision]", params.decision);
-    if (params.item_id) sp.set("filter[item_id]", params.item_id);
-    for (const s of params.status ?? []) sp.append("filter[status][]", s);
+    appendOrderFilters(sp, params);
     if (params.page) sp.set("page", String(params.page));
     if (params.per_page) sp.set("per_page", String(params.per_page));
     if (params.sort) {
@@ -110,8 +119,13 @@ export const OrderService = {
     return fetchClient<ApiResponse<Order>>(`/sales/${id}?include=items`);
   },
 
-  getCounts: () => {
-    return fetchClient<ApiResponse<OrderTabCounts>>("/sales/counts");
+  getCounts: (params?: OrderCountParams) => {
+    const sp = new URLSearchParams();
+    if (params) appendOrderFilters(sp, params);
+
+    return fetchClient<ApiResponse<OrderTabCounts>>(
+      `/sales/counts${sp.size > 0 ? `?${sp}` : ""}`,
+    );
   },
 
   setPaid: (orderId: string, data?: { payment_method?: string }) => {

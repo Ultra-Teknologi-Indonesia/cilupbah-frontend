@@ -212,7 +212,7 @@ function resolveTransactionHref(source: string, trxNo: string): string | null {
     case "ORDER_RELEASE":
     case "ORDER_CANCELLED":
       // pesanan tidak pakai namespace → search key = search
-      return `/dashboard/pesanan?search=${enc}`;
+      return `/dashboard/pesanan?tab=all&search=${enc}`;
     case "TRANSFER_IN":
     case "TRANSIT_IN":
     case "TRANSIT_OUT":
@@ -244,7 +244,7 @@ function resolveTransactionDisplay(m: StockMovement) {
   if (isPick && m.order_no) {
     return {
       label: m.order_no,
-      href: `/dashboard/pesanan?search=${encodeURIComponent(m.order_no)}`,
+      href: `/dashboard/pesanan?tab=all&search=${encodeURIComponent(m.order_no)}`,
       hint: m.transaction_number,
       extraOrders: Math.max(0, (m.order_count ?? 1) - 1),
     };
