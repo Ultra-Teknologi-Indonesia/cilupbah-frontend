@@ -67,7 +67,6 @@ import { playScanFeedback } from "@/lib/scan-feedback";
 import { matchesKnownBin } from "@/lib/validators/bin-code";
 import { apiError, apiSuccess } from "@/lib/toast";
 import { usePermissions } from "@/hooks/auth/use-permissions";
-import { DocActions } from "@/hooks/proses-pesanan/use-doc-actions";
 
 const LIST_HREF = "/dashboard/proses-pesanan/picking";
 
@@ -335,26 +334,11 @@ export function PickingProsesView({ id }: { id: string }) {
   const completeDialogOpen =
     !!pl && editable && allResolved && !completeDialogDismissed;
 
-  const redirectToInvoicePreview = async () => {
-    const orderIds = Array.from(
-      new Set(items.map((it) => it.orderId).filter(Boolean)),
-    ) as string[];
-
-    if (orderIds.length === 1) {
-      await DocActions.invoice(orderIds);
-    } else if (orderIds.length > 1) {
-      await DocActions.invoice(orderIds);
-    } else {
-      router.push(LIST_HREF);
-    }
-  };
-
   const handleCompletePicking = () => {
     completePicklist.mutate(id, {
       onSuccess: () => {
-        toast.success("Picking selesai. Membuka preview faktur...");
+        toast.success("Picking selesai.");
         setCompleteDialogDismissed(true);
-        void redirectToInvoicePreview();
       },
       onError: (e) => apiError(e, "Gagal menyelesaikan picking."),
     });
@@ -498,8 +482,7 @@ export function PickingProsesView({ id }: { id: string }) {
   const handleComplete = () => {
     completePicklist.mutate(id, {
       onSuccess: () => {
-        toast.success("Picking selesai. Membuka preview faktur...");
-        redirectToInvoicePreview();
+        toast.success("Picking selesai.");
       },
       onError: (e) => apiError(e, "Gagal menyelesaikan picking."),
     });
