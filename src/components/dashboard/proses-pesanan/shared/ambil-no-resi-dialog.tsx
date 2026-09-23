@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   AlertTriangleIcon,
   CheckCircle2Icon,
@@ -39,7 +39,10 @@ import type {
 import { apiError } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { notifyShippingLabelPrinted } from "@/lib/pesanan/shipping-label-audit-event";
-import { bulkLabelRefetchInterval } from "@/lib/proses-pesanan/bulk-label-polling";
+import {
+  applyBulkLabelProgress,
+  isTerminalBulkLabelProgress,
+} from "@/lib/proses-pesanan/bulk-label-realtime";
 import { useRealtimeEvents } from "@/hooks/realtime/use-realtime-events";
 
 const CHANNEL_LABEL: Record<string, string> = {
@@ -156,6 +159,7 @@ export function AmbilNoResiDialog({
   initialBatchId = null,
   documentSize = "thermal_100x120",
 }: AmbilNoResiDialogProps) {
+  const queryClient = useQueryClient();
   const [activeBatchId, setActiveBatchId] = React.useState<string | null>(
     initialBatchId,
   );
@@ -215,9 +219,6 @@ export function AmbilNoResiDialog({
     queryKey: ["bulk-label-batch", activeBatchId],
     queryFn: () => OutboundService.getBulkShippingLabelBatch(activeBatchId!),
     enabled: open && !isInitializing && !!activeBatchId,
-    refetchInterval: (query) =>
-      bulkLabelRefetchInterval(query.state.data?.status),
-    refetchIntervalInBackground: false,
   });
 
   useRealtimeEvents({
@@ -225,7 +226,14 @@ export function AmbilNoResiDialog({
     enabled: open && !isInitializing && !!activeBatchId,
     onEvent: (event) => {
       if (!activeBatchId || event.type !== "bulk-label.progress") return;
-      void refetch({ cancelRefetch: false });
+      queryClient.setQueryData<BulkLabelBatch>(
+        ["bulk-label-batch", activeBatchId],
+        (current) => applyBulkLabelProgress(current, event.data),
+      );
+
+      if (isTerminalBulkLabelProgress(event.data)) {
+        void refetch({ cancelRefetch: false });
+      }
     },
   });
 

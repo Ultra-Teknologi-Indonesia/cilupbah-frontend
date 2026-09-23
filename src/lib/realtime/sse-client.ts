@@ -14,7 +14,6 @@ type Listener = {
 let nextListenerId = 1;
 let source: EventSource | null = null;
 let lastEventId: string | undefined;
-let consecutiveErrors = 0;
 let reconnectTimer: number | undefined;
 let visibilityListenerRegistered = false;
 const listeners = new Map<number, Listener>();
@@ -126,17 +125,11 @@ function connect(): void {
   source.addEventListener("bulk-label.progress", handleMessage);
   source.addEventListener("export.progress", handleMessage);
   source.addEventListener("realtime.error", handleMessage);
-  source.onopen = () => {
-    consecutiveErrors = 0;
-  };
+  source.onopen = () => undefined;
   source.onerror = () => {
-    consecutiveErrors += 1;
-    // EventSource retries transient errors itself. Surface only a stable
-    // failure so the export hook can activate its REST fallback.
-    if (consecutiveErrors >= 3) {
-      const error = new Error("Koneksi realtime tidak tersedia.");
-      for (const listener of listeners.values()) listener.options.onError?.(error);
-    }
+    // Native EventSource performs the reconnect with the server-provided
+    // retry delay and the latest Redis Stream cursor. Do not start REST
+    // polling here: it duplicates load precisely when realtime is degraded.
   };
 }
 
