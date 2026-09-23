@@ -289,13 +289,15 @@ export function TransferKeluarFormPage({
     thumbnail_url: string | null;
     primary_bin: { id: string; code: string; on_hand: number } | null;
     available_bins: { id: string; code: string; on_hand: number }[];
-  }): LineDraft => {
+  }, usedBinIds = new Set<string>()): LineDraft | null => {
     const bins: LineBin[] = (stock.available_bins ?? []).map((b) => ({
       id: b.id,
       code: b.code,
       onHand: b.on_hand,
     }));
-    const chosen = bins[0];
+    const chosen = bins.find((bin) => !usedBinIds.has(bin.id));
+    if (!chosen) return null;
+
     return {
       rowId: newRowId(),
       serverItemId: undefined,
@@ -343,7 +345,10 @@ export function TransferKeluarFormPage({
         return;
       }
 
-      setLines((prev) => [...prev, buildLineFromStock(stock)]);
+      const line = buildLineFromStock(stock);
+      if (line) {
+        setLines((prev) => [...prev, line]);
+      }
       flash("ok");
     } catch (err) {
       const status = (err as { status?: number })?.status;
@@ -363,28 +368,40 @@ export function TransferKeluarFormPage({
   const handlePicked = async (products: StockedPickedProduct[]) => {
     setPickerOpen(false);
     setPickerSearch(undefined);
-    const existing = new Set(lines.map((l) => l.itemId));
-    const fresh = products.filter((p) => !existing.has(p.itemId));
-    if (fresh.length === 0) return;
 
     const bulk = await InventoryStockService.bulkBySku(
-      fresh.map((product) => product.sku),
+      products.map((product) => product.sku),
       sourceLocationId,
       { strategy: "fifo" },
     );
 
     const newLines: LineDraft[] = [];
     let skippedNoStock = 0;
-    bulk.results.forEach((result, i) => {
+    let skippedNoAvailableBin = 0;
+    const usedBinIdsByItem = new Map<string, Set<string>>();
+    lines.forEach((line) => {
+      if (!line.binId) return;
+      const usedBinIds = usedBinIdsByItem.get(line.itemId) ?? new Set<string>();
+      usedBinIds.add(line.binId);
+      usedBinIdsByItem.set(line.itemId, usedBinIds);
+    });
+
+    bulk.results.forEach((result) => {
       if (result.status !== "success" || !result.data) return;
       const stock = result.data;
       if (!stock.available_bins || stock.available_bins.length === 0) {
         skippedNoStock += 1;
         return;
       }
-      if (newLines.some((l) => l.itemId === stock.id)) return;
-      newLines.push(buildLineFromStock(stock));
-      void i;
+      const usedBinIds = usedBinIdsByItem.get(stock.id) ?? new Set<string>();
+      const line = buildLineFromStock(stock, usedBinIds);
+      if (!line) {
+        skippedNoAvailableBin += 1;
+        return;
+      }
+      usedBinIds.add(line.binId);
+      usedBinIdsByItem.set(stock.id, usedBinIds);
+      newLines.push(line);
     });
 
     if (newLines.length > 0) {
@@ -393,6 +410,11 @@ export function TransferKeluarFormPage({
     if (skippedNoStock > 0) {
       toast.warning(
         `${skippedNoStock} produk dilewati karena tidak punya stok di lokasi asal`,
+      );
+    }
+    if (skippedNoAvailableBin > 0) {
+      toast.warning(
+        `${skippedNoAvailableBin} SKU dilewati karena semua rak berstok sudah dipakai`,
       );
     }
     setTimeout(() => scanRef.current?.focus(), 250);
@@ -896,12 +918,14 @@ export function TransferKeluarFormPage({
                         <div className="flex items-center justify-end gap-1">
                           <Button
                             variant="ghost"
-                            size="icon-sm"
+                            size="sm"
                             onClick={() => addRakRow(l.rowId)}
                             aria-label="Tambah rak untuk SKU ini"
                             title="Ambil SKU ini dari rak lain"
+                            className="gap-1.5"
                           >
                             <CopyPlusIcon className="size-4" />
+                            Tambah rak
                           </Button>
                           <Button
                             variant="ghost"
@@ -969,7 +993,6 @@ export function TransferKeluarFormPage({
         }}
         onPick={handlePicked}
         locationId={sourceLocationId}
-        excludeIds={lines.map((l) => l.itemId)}
         initialSearch={pickerSearch}
       />
     </div>
