@@ -104,15 +104,10 @@ function ProgressBar({ value, total }: { value: number; total: number }) {
 }
 
 function isSelectable(item: Inbound): boolean {
-  if (item.status === "CANCELLED") return false;
-  const isReturn = item.type === "SALES_RETURN";
+  if (["DRAFT", "CANCELLED"].includes(item.status)) return false;
   const totalRecv =
     item.items?.reduce(
-      (s, i) =>
-        s +
-        (isReturn && (i.received_qty || 0) === 0
-          ? i.expected_qty || 0
-          : i.received_qty || 0),
+      (s, i) => s + (i.received_qty || 0),
       0,
     ) ?? 0;
   const totalPutaway =
@@ -120,15 +115,7 @@ function isSelectable(item: Inbound): boolean {
   const totalReserved =
     item.items?.reduce((s, i) => s + (i.reserved_qty || 0), 0) ?? 0;
 
-  if (isReturn) {
-    return totalRecv > 0 && totalPutaway + totalReserved < totalRecv;
-  }
-
-  return (
-    !["DRAFT", "CANCELLED"].includes(item.status) &&
-    totalRecv > 0 &&
-    totalPutaway + totalReserved < totalRecv
-  );
+  return totalRecv > 0 && totalPutaway + totalReserved < totalRecv;
 }
 
 function isTransitReceivable(item: Inbound): boolean {
@@ -379,14 +366,7 @@ export function PenerimaanBarangTab() {
         cell: ({ row }) => {
           const item = row.original;
           const fallbackTotalRecv =
-            item.items?.reduce(
-              (s, i) =>
-                s +
-                (item.type === "SALES_RETURN" && (i.received_qty || 0) === 0
-                  ? i.expected_qty || 0
-                  : i.received_qty || 0),
-              0,
-            ) ?? 0;
+            item.items?.reduce((s, i) => s + (i.received_qty || 0), 0) ?? 0;
           const fallbackTotalPutaway =
             item.items?.reduce((s, i) => s + (i.putaway_qty || 0), 0) ?? 0;
           const totalRecv =
