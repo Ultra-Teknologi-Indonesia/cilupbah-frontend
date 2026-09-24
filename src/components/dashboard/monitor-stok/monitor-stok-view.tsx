@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo } from "react";
+import { formatDateInput } from "@/lib/format";
 
 import { useListState } from "@/hooks/use-list-state";
 import { useUrlTab } from "@/hooks/use-url-tab";
@@ -558,8 +559,7 @@ export function MonitorStokView() {
                     to: kronologiDateTo ? new Date(kronologiDateTo) : undefined,
                   }}
                   onChange={(range) => {
-                    const toStr = (d?: Date) =>
-                      d ? d.toISOString().slice(0, 10) : "";
+                      const toStr = (d?: Date) => formatDateInput(d);
                     setKronologiDates(toStr(range?.from), toStr(range?.to));
                   }}
                   placeholder="Pilih rentang tanggal"

@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { formatDateInput } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -50,7 +51,7 @@ import type {
 } from "@/types/transaksi-stok/stock-adjustment-import";
 
 function todayStr(): string {
-  return new Date().toISOString().slice(0, 10);
+  return formatDateInput(new Date());
 }
 
 interface ImportPenyesuaianDialogProps {

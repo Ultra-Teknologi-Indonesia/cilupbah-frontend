@@ -80,6 +80,30 @@ export function formatDateLong(
   return date ? dateLong.format(date) : "—";
 }
 
+/**
+ * Serializes a date-picker calendar value without converting it through UTC.
+ * Date-only filters are calendar dates in WIB, not instants in time.
+ */
+export function formatDateInput(
+  d: Date | null | undefined,
+): string {
+  if (!d || Number.isNaN(d.getTime())) return "";
+
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+/** Parses a date-only filter as a local calendar value (not UTC midnight). */
+export function parseDateInput(value: string | null | undefined): Date | undefined {
+  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return undefined;
+
+  const [year, month, day] = value.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
 export function formatDateTime(
   d: string | number | Date | null | undefined,
 ): string {

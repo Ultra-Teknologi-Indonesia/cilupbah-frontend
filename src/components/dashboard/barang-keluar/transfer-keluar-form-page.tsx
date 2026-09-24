@@ -45,6 +45,7 @@ import { InventoryStockService } from "@/services/persediaan/inventory.service";
 // eslint-disable-next-line no-restricted-imports
 import { OutboundTransferService } from "@/services/barang-keluar/outbound-transfer.service";
 import { cn } from "@/lib/utils";
+import { formatDateInput } from "@/lib/format";
 import { playScanFeedback } from "@/lib/scan-feedback";
 import { useAuthStore } from "@/store/use-auth-store";
 
@@ -79,7 +80,7 @@ interface TransferKeluarFormPageProps {
 }
 
 function todayStr(): string {
-  return new Date().toISOString().slice(0, 10);
+  return formatDateInput(new Date());
 }
 
 function newRowId(): string {

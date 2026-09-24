@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { formatCurrency, formatDateTimeWib, formatNumber } from "@/lib/format";
+import { formatCurrency, formatDateInput, formatDateTimeWib, formatNumber, parseDateInput } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
@@ -67,9 +67,7 @@ const SETTLED_OPTIONS = [
 ];
 
 function toIsoDate(d?: Date): string {
-  if (!d) return "";
-  const tzOffset = d.getTimezoneOffset() * 60_000;
-  return new Date(d.getTime() - tzOffset).toISOString().slice(0, 10);
+  return formatDateInput(d);
 }
 
 function defaultRange(): DateRange {
@@ -124,9 +122,9 @@ export function SettlementView() {
 
   const dateRange = useMemo<DateRange | undefined>(() => {
     const from = filters.date_from
-      ? new Date(filters.date_from)
+      ? parseDateInput(filters.date_from)
       : fallbackRange.from;
-    const to = filters.date_to ? new Date(filters.date_to) : fallbackRange.to;
+    const to = filters.date_to ? parseDateInput(filters.date_to) : fallbackRange.to;
     return { from, to };
   }, [filters.date_from, filters.date_to, fallbackRange]);
 

@@ -14,7 +14,6 @@ import {
   Loader2Icon,
   ChevronDownIcon,
 } from "lucide-react";
-import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
@@ -49,7 +48,7 @@ import type {
   PurchaseOrder,
   PurchaseOrderListParams,
 } from "@/types/transaksi-pembelian/purchase-order";
-import { formatDate, formatTime, formatCurrency } from "@/lib/format";
+import { formatDate, formatDateInput, formatTime, formatCurrency, parseDateInput } from "@/lib/format";
 
 interface FilterState {
   location_id: string;
@@ -345,12 +344,11 @@ export function PesananListView() {
           />
           <DateRangePicker
             value={{
-              from: filters.date_from ? new Date(filters.date_from) : undefined,
-              to: filters.date_to ? new Date(filters.date_to) : undefined,
+              from: parseDateInput(filters.date_from),
+              to: parseDateInput(filters.date_to),
             }}
             onChange={(range) => {
-              const toStr = (d?: Date) =>
-                d ? d.toISOString().slice(0, 10) : "";
+              const toStr = (d?: Date) => formatDateInput(d);
               setFilters({
                 ...filters,
                 date_from: toStr(range?.from),

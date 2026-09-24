@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeftIcon, Loader2Icon, PlusIcon, Trash2Icon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { formatDateInput } from "@/lib/format";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Combobox } from "@/components/ui/combobox";
@@ -64,7 +65,7 @@ export function ReturnSettlementView({ returnId }: { returnId: string }) {
   const [amount, setAmount] = useState("");
   const [method, setMethod] = useState("cash");
   const [refundDate, setRefundDate] = useState(() =>
-    new Date().toISOString().slice(0, 10),
+    formatDateInput(new Date()),
   );
   const [notes, setNotes] = useState("");
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { formatDateTimeWib } from "@/lib/format";
+import { formatDateInput, formatDateTimeWib } from "@/lib/format";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { DateRange } from "react-day-picker";
 import {
@@ -110,8 +110,7 @@ function formatCurrency(value: number): string {
 }
 
 function toIsoDate(d?: Date): string {
-  if (!d) return "";
-  return d.toISOString().slice(0, 10);
+  return formatDateInput(d);
 }
 
 export function LaporanReturView() {

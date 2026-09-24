@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { PageTitle } from "@/components/dashboard/page-title";
+import { formatDateInput } from "@/lib/format";
 import { useDashboardSummary } from "@/hooks/dashboard/use-dashboard";
 import { KpiRow } from "./kpi-row";
 import { IntegrationStatus } from "./integration-status";
@@ -24,7 +25,7 @@ function rangeForPeriod(period: PeriodValue) {
   const to = new Date();
   const from = new Date();
   from.setDate(from.getDate() - (days - 1));
-  const iso = (d: Date) => d.toISOString().slice(0, 10);
+  const iso = (d: Date) => formatDateInput(d);
   return { date_from: iso(from), date_to: iso(to) };
 }
 

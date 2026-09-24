@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { formatDateTimeWib } from "@/lib/format";
+import { formatDateInput, formatDateTimeWib } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
@@ -39,8 +39,7 @@ import type {
 const EMPTY_META = { current_page: 1, last_page: 1, per_page: 20, total: 0 };
 
 function toIsoDate(d?: Date): string {
-  if (!d) return "";
-  return d.toISOString().slice(0, 10);
+  return formatDateInput(d);
 }
 
 interface NegativeStockFilters {

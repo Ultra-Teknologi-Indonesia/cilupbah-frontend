@@ -56,6 +56,7 @@ import {
 // eslint-disable-next-line no-restricted-imports
 import { InventoryStockService } from "@/services/persediaan/inventory.service";
 import { cn } from "@/lib/utils";
+import { formatDateInput } from "@/lib/format";
 import { playScanFeedback } from "@/lib/scan-feedback";
 import { usePermissions } from "@/hooks/auth/use-permissions";
 import { FormErrorAlert } from "@/components/dashboard/shared/form-error-alert";
@@ -129,7 +130,7 @@ function saveErrorBanner(error: unknown): {
 }
 
 function todayStr(): string {
-  return new Date().toISOString().slice(0, 10);
+  return formatDateInput(new Date());
 }
 
 function isAdjustableBinCode(code: string | null | undefined): boolean {
