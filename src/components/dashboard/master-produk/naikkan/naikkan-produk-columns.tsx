@@ -127,7 +127,22 @@ export function buildProdukColumns(opts: {
     {
       id: "result",
       header: "Hasil",
-      cell: ({ row }) => resultBadge(row.original.isSuccess),
+      cell: ({ row }) => {
+        const detail = row.original;
+        return (
+          <div className="flex max-w-[280px] items-center gap-2">
+            {resultBadge(detail.isSuccess)}
+            {detail.isSuccess === false && detail.reason && (
+              <span
+                className="line-clamp-2 text-xs text-muted-foreground"
+                title={detail.reason}
+              >
+                {detail.reason}
+              </span>
+            )}
+          </div>
+        );
+      },
     },
     {
       id: "actions",

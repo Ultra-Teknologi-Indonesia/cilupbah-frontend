@@ -142,10 +142,13 @@ export function useExecuteRaise(raiseProductId: string) {
     mutationFn: (detailIds?: string[]) =>
       NaikkanService.raise(raiseProductId, detailIds),
     onSuccess: () => {
-      toast.success("Produk diantrekan untuk dinaikkan");
+      toast.success("Produk diantrekan untuk dinaikkan", {
+        description:
+          "Hasil dari Shopee akan tampil di tab Aktivitas setelah proses selesai.",
+      });
       qc.invalidateQueries({ queryKey: [KEY] });
     },
-    onError: (err) => apiError(err, "Gagal menaikkan produk"),
+    onError: (err) => apiError(err, "Gagal mengantrekan kenaikan produk"),
   });
 }
 
