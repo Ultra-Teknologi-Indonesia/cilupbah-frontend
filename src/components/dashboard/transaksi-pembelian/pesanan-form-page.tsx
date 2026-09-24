@@ -51,7 +51,7 @@ import type {
   PurchaseOrderItemFormData,
   PurchaseOrderPatchData,
 } from "@/types/transaksi-pembelian/purchase-order";
-import { formatCurrency } from "@/lib/format";
+import { formatCurrency, formatDateInput } from "@/lib/format";
 
 interface Props {
   mode: "create" | "edit";
@@ -327,7 +327,7 @@ export function PesananFormPage({ mode, id }: Props) {
     const payload: PurchaseOrderFormData = {
       contact_id: contactId,
       location_id: locationId,
-      order_date: orderDate!.toISOString().split("T")[0],
+      order_date: formatDateInput(orderDate),
       ref_no: refNo || undefined,
       payment_term: paymentTerm ? Number(paymentTerm) : null,
       notes: notes || undefined,
@@ -355,7 +355,7 @@ export function PesananFormPage({ mode, id }: Props) {
         po_number: poNumberAuto ? null : poNumber || null,
         contact_id: contactId,
         location_id: locationId,
-        order_date: orderDate!.toISOString().split("T")[0],
+        order_date: formatDateInput(orderDate),
         ref_no: refNo || null,
         payment_term: paymentTerm ? Number(paymentTerm) : null,
         notes: notes || null,
