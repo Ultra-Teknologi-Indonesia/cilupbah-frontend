@@ -12,5 +12,5 @@ services:
       - PORT=6001
       # URL backend production — dibaca di runtime (bukan di-bake ke image),
       # lihat catatan di Dockerfile.
-      - API_URL=https://backend.ultra-fit.id
+      - API_URL=https://be-superapp.ultra-fit.id/
     restart: unless-stopped

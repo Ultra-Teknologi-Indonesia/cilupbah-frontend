@@ -75,7 +75,7 @@ export function usePrintWithDriverCall() {
         );
       } else if (result.label_preparing) {
         toast.warning(
-          "Driver terpanggil. Label masih disiapkan, coba unduh lagi dalam beberapa detik.",
+          "Permintaan marketplace diterima. Resi/label masih disiapkan; driver belum dikonfirmasi.",
         );
       } else if (result.label_error) {
         toast.warning(
@@ -162,10 +162,15 @@ export function useCallInstantDriverBulk() {
       }),
     onSuccess: (result) => {
       const successCount = result.summary.success;
+      const pendingCount = result.summary.pending ?? 0;
       const failedCount = result.summary.failed.length;
-      if (failedCount === 0) {
+      if (failedCount === 0 && pendingCount === 0) {
         toast.success(
           `Sukses memanggil kurir instan untuk ${successCount} pesanan.`,
+        );
+      } else if (successCount === 0 && pendingCount > 0 && failedCount === 0) {
+        toast.warning(
+          `${pendingCount} pesanan diterima marketplace, tetapi resi masih disiapkan. Driver belum dikonfirmasi.`,
         );
       } else if (successCount === 0) {
         toast.error(
@@ -173,7 +178,7 @@ export function useCallInstantDriverBulk() {
         );
       } else {
         toast.warning(
-          `${successCount} sukses, ${failedCount} gagal — cek detail per pesanan.`,
+          `${successCount} sukses, ${pendingCount} masih menunggu resi, ${failedCount} gagal — cek detail per pesanan.`,
         );
       }
       qc.invalidateQueries({ queryKey: fulfillmentKeys.all });

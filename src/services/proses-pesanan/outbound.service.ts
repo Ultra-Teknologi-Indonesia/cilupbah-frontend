@@ -1322,6 +1322,7 @@ export const OutboundService = {
   }): Promise<{
     summary: {
       success: number;
+      pending: number;
       failed: Array<{
         order_id: string;
         status: string;
@@ -1339,6 +1340,7 @@ export const OutboundService = {
       ApiResponse<{
         summary: {
           success: number;
+          pending: number;
           failed: Array<{
             order_id: string;
             status: string;
