@@ -30,7 +30,9 @@ export function ExportOrdersDialog({ tab }: Props) {
   const [dateFrom, setDateFrom] = useState<Date | undefined>();
   const [dateTo, setDateTo] = useState<Date | undefined>();
   const [error, setError] = useState<string | null>(null);
-  const exportMutation = useAsyncExport(OrderService.exportOrders);
+  const exportMutation = useAsyncExport(OrderService.exportOrders, {
+    autoDownload: true,
+  });
   const loading = exportMutation.isPending;
 
   const onSubmit = async () => {

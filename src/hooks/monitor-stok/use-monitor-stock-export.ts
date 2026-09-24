@@ -9,6 +9,7 @@ import type { MonitorStockExportParams } from "@/types/monitor-stok/monitor";
 export function useMonitorStockExport() {
   const exportXlsx = useAsyncExport((params: MonitorStockExportParams) =>
     MonitorStockService.exportAsync(params),
+    { autoDownload: true },
   );
   const exportPdf = useMutation({
     mutationFn: (params: MonitorStockExportParams) =>

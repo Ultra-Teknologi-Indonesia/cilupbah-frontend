@@ -25,7 +25,9 @@ export const downloadImportSettingTemplate = (type: ImportSettingType) =>
   InventorySettingService.downloadTemplate(type);
 
 export function useExportRackAllocation() {
-  return useAsyncExport(InventorySettingService.exportRackAllocation);
+  return useAsyncExport(InventorySettingService.exportRackAllocation, {
+    autoDownload: true,
+  });
 }
 
 export function useInventorySettingProducts(

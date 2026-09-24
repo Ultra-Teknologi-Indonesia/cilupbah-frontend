@@ -89,7 +89,9 @@ export const useDeleteStockAdjustment = createMutationHook({
 });
 
 export function useExportStockAdjustments() {
-  return useAsyncExport(StockAdjustmentService.exportXlsx);
+  return useAsyncExport(StockAdjustmentService.exportXlsx, {
+    autoDownload: true,
+  });
 }
 
 export function useStockAdjustmentBulkPdfAsync() {

@@ -26,7 +26,9 @@ export function ExportCancelDialog() {
   const [dateTo, setDateTo] = useState("");
   const [postPackOnly, setPostPackOnly] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const exportMutation = useAsyncExport(OrderService.exportCancelled);
+  const exportMutation = useAsyncExport(OrderService.exportCancelled, {
+    autoDownload: true,
+  });
   const loading = exportMutation.isPending;
 
   const onSubmit = async () => {

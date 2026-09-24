@@ -53,8 +53,9 @@ export function ProductExplorer({ query }: { query: Query }) {
     null,
   );
   const { data: categoryTree = [] } = useCategoryTree();
-  const catalogExport = useAsyncExport<ProductCatalogExportParams>((params) =>
-    ProductListService.exportCatalog(params),
+  const catalogExport = useAsyncExport<ProductCatalogExportParams>(
+    (params) => ProductListService.exportCatalog(params),
+    { autoDownload: true },
   );
 
   const items = query.result.data?.items ?? [];

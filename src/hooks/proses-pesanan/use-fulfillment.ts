@@ -147,8 +147,9 @@ export function useOrderAudit() {
 }
 
 export function useExportProcessOrdersCsv() {
-  return useAsyncExport((scope: ProcessOrdersExportScope) =>
-    OutboundService.exportProcessOrdersCsv(scope),
+  return useAsyncExport(
+    (scope: ProcessOrdersExportScope) => OutboundService.exportProcessOrdersCsv(scope),
+    { autoDownload: true },
   );
 }
 

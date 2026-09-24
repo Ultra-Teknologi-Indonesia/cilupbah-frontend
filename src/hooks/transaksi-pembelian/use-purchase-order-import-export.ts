@@ -40,13 +40,15 @@ export async function downloadPurchaseOrderTemplate() {
 }
 
 export function usePurchaseOrderListExport() {
-  return useAsyncExport((params: PurchaseOrderListParams = {}) =>
-    PurchaseOrderService.exportListAsync(params),
+  return useAsyncExport(
+    (params: PurchaseOrderListParams = {}) => PurchaseOrderService.exportListAsync(params),
+    { autoDownload: true },
   );
 }
 
 export function usePurchaseOrderDetailExport() {
-  return useAsyncExport((params: PurchaseOrderListParams = {}) =>
-    PurchaseOrderService.exportDetailAsync(params),
+  return useAsyncExport(
+    (params: PurchaseOrderListParams = {}) => PurchaseOrderService.exportDetailAsync(params),
+    { autoDownload: true },
   );
 }

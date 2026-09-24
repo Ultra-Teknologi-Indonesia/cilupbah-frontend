@@ -7,9 +7,11 @@ import type { StockPositionExportParams } from "@/types/persediaan/stock";
 export function useStockPositionExport() {
   const exportCsv = useAsyncExport((params: StockPositionExportParams) =>
     InventoryStockService.exportPositionAsync(params),
+    { autoDownload: true },
   );
   const exportPdf = useAsyncExport((params: StockPositionExportParams) =>
     InventoryStockService.exportPositionAsync(params),
+    { autoDownload: true },
   );
 
   return { exportCsv, exportPdf };

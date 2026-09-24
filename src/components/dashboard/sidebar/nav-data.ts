@@ -27,6 +27,7 @@ import {
   AlertTriangle,
   HelpCircle,
   FileSearch,
+  Download,
 } from "lucide-react";
 import type React from "react";
 import type { Route } from "./nav-main";
@@ -233,6 +234,13 @@ export const dashboardGroups: NavGroup[] = [
         title: "Riwayat Stok Minus",
         icon: AlertTriangle,
         link: "/dashboard/laporan/stok-minus",
+      },
+      {
+        id: "laporan-download",
+        title: "Download Report",
+        icon: Download,
+        link: "/dashboard/laporan/download",
+        permission: "view-laporan-download",
       },
     ],
   },
