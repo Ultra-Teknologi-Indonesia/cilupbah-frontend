@@ -41,7 +41,7 @@ import { cn } from "@/lib/utils";
 import { notifyShippingLabelPrinted } from "@/lib/pesanan/shipping-label-audit-event";
 import {
   applyBulkLabelProgress,
-  isTerminalBulkLabelProgress,
+  canPrintReadyLabels,
 } from "@/lib/proses-pesanan/bulk-label-realtime";
 import { useRealtimeEvents } from "@/hooks/realtime/use-realtime-events";
 
@@ -64,6 +64,7 @@ function fmtDate(iso: string | null | undefined): string {
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit",
+      timeZone: "Asia/Jakarta",
     });
   } catch {
     return "—";
@@ -77,6 +78,8 @@ function ItemRow({ item }: { item: BulkLabelBatchItem }) {
     item.status === "downloading" ||
     item.status === "waiting_awb" ||
     item.status === "waiting_shopee_prep" ||
+    item.status === "waiting_marketplace" ||
+    item.status === "waiting_tiktok_prep" ||
     item.status === "waiting_lazada_prep";
 
   return (
@@ -166,6 +169,12 @@ export function AmbilNoResiDialog({
   const [isInitializing, setIsInitializing] = React.useState(false);
   const [retrying, setRetrying] = React.useState(false);
   const [printing, setPrinting] = React.useState(false);
+  const progressRefresh = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  React.useEffect(() => () => {
+    if (progressRefresh.current) clearTimeout(progressRefresh.current);
+    progressRefresh.current = null;
+  }, [open, activeBatchId]);
 
   // When dialog opens, create batch if not already present
   React.useEffect(() => {
@@ -219,6 +228,9 @@ export function AmbilNoResiDialog({
     queryKey: ["bulk-label-batch", activeBatchId],
     queryFn: () => OutboundService.getBulkShippingLabelBatch(activeBatchId!),
     enabled: open && !isInitializing && !!activeBatchId,
+    // SSE is the fast path; bounded polling recovers missed/disconnected events.
+    refetchInterval: (query) => query.state.data?.status === "processing" ? 10_000 : false,
+    refetchIntervalInBackground: false,
   });
 
   useRealtimeEvents({
@@ -231,8 +243,13 @@ export function AmbilNoResiDialog({
         (current) => applyBulkLabelProgress(current, event.data),
       );
 
-      if (isTerminalBulkLabelProgress(event.data)) {
-        void refetch({ cancelRefetch: false });
+      // Compact events contain counts, not item rows. Coalesce bursts so rows
+      // update during processing without one HTTP request per completed label.
+      if (!progressRefresh.current) {
+        progressRefresh.current = setTimeout(() => {
+          progressRefresh.current = null;
+          void refetch({ cancelRefetch: false });
+        }, 750);
       }
     },
   });
@@ -257,7 +274,7 @@ export function AmbilNoResiDialog({
   };
 
   const handlePrintLabel = async () => {
-    if (!activeBatchId || !data || data.status !== "ready") return;
+    if (!activeBatchId || !data || data.done < 1) return;
 
     // Open synchronously from the click handler so popup blockers do not
     // reject the tab while the authenticated blob request is in flight.
@@ -273,6 +290,11 @@ export function AmbilNoResiDialog({
     setPrinting(true);
 
     try {
+      if (data.status !== "ready") {
+        const snapshot = await OutboundService.createReadyLabelSnapshot(activeBatchId);
+        printWindow.location.replace(`/dashboard/document-preview/shipping-label-bulk-async/${encodeURIComponent(snapshot.batch_id)}`);
+        return;
+      }
       const blob =
         await OutboundService.downloadBulkShippingLabelPdf(activeBatchId);
       const objectUrl = URL.createObjectURL(blob);
@@ -283,7 +305,7 @@ export function AmbilNoResiDialog({
       window.setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
       notifyShippingLabelPrinted(
         data.items
-          .filter((item) => item.status === "done")
+          .filter((item) => item.status === "done" || item.status === "ready")
           .map((item) => item.order_id),
       );
     } catch (err) {
@@ -307,7 +329,8 @@ export function AmbilNoResiDialog({
     data?.items?.filter((i) => i.status === "failed" && i.is_retryable)
       .length ??
     0;
-  const canPrint = isReady && !!data?.pdf_url && !printing;
+  const canPrint = canPrintReadyLabels(data, printing);
+  const waitingMarketplace = data?.waiting_marketplace ?? data?.waiting_shopee ?? 0;
   const anyDone = (data?.done ?? 0) > 0;
 
   return (
@@ -331,7 +354,7 @@ export function AmbilNoResiDialog({
                   {isProcessing &&
                     "Sedang menarik nomor resi dari marketplace…"}
                   {isReady &&
-                    "Seluruh nomor resi siap dan label dapat dicetak."}
+                    "Label yang berhasil disiapkan dapat dicetak."}
                   {isFailed && !anyDone && "Penarikan nomor resi gagal."}
                   {isFailed &&
                     anyDone &&
@@ -359,9 +382,9 @@ export function AmbilNoResiDialog({
                   · {waitingAwb} Menarik No. Resi
                 </span>
               )}
-              {data.waiting_shopee > 0 && (
+              {waitingMarketplace > 0 && (
                 <span className="text-warning font-medium">
-                  · {data.waiting_shopee} Menunggu Shopee
+                  · {waitingMarketplace} Menunggu Marketplace
                 </span>
               )}
               {skipped > 0 && (
@@ -470,6 +493,7 @@ export function AmbilNoResiDialog({
               size="sm"
               onClick={handlePrintLabel}
               disabled={!canPrint}
+              title="Mencetak semua label yang saat ini siap, termasuk label yang pernah dicetak. Tidak meminta resi ulang."
               className="rounded-full gap-1.5"
             >
               {printing ? (
@@ -478,7 +502,7 @@ export function AmbilNoResiDialog({
                 <PrinterIcon className="size-4" />
               )}
               <span>
-                {printing ? "Menyiapkan label…" : "Cetak Label Pengiriman"}
+                {printing ? "Menyiapkan label…" : `Cetak ${data?.done ?? 0} Label Siap`}
               </span>
             </Button>
           </div>

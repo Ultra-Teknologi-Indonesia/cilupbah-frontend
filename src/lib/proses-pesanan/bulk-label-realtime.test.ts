@@ -2,10 +2,23 @@ import { describe, expect, it } from "vitest";
 
 import {
   applyBulkLabelProgress,
+  canPrintReadyLabels,
   isTerminalBulkLabelProgress,
 } from "./bulk-label-realtime";
 
 describe("bulk label realtime progress", () => {
+  it("enables partial printing while other orders still wait", () => {
+    expect(canPrintReadyLabels({ status: "processing", done: 80, pdf_url: null }, false)).toBe(true);
+    expect(canPrintReadyLabels({ status: "processing", done: 0, pdf_url: null }, false)).toBe(false);
+  });
+
+  it("requires a final file and prevents overlapping print clicks", () => {
+    expect(canPrintReadyLabels({ status: "ready", done: 80, pdf_url: null }, false)).toBe(false);
+    expect(canPrintReadyLabels({ status: "ready", done: 80, pdf_url: "/labels.pdf" }, false)).toBe(true);
+    expect(canPrintReadyLabels({ status: "processing", done: 80, pdf_url: null }, true)).toBe(false);
+    expect(canPrintReadyLabels(undefined, false)).toBe(false);
+  });
+
   it("updates only the compact batch summary", () => {
     const result = applyBulkLabelProgress(
       {

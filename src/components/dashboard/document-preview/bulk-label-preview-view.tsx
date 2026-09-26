@@ -145,6 +145,8 @@ export function BulkLabelPreviewView({ batchId }: { batchId: string }) {
     queryKey: ["bulk-label-batch", batchId],
     queryFn: () => OutboundService.getBulkShippingLabelBatch(batchId),
     refetchOnWindowFocus: false,
+    refetchInterval: (query) => query.state.data?.status === "processing" ? 5_000 : false,
+    refetchIntervalInBackground: false,
     retry: 2,
   });
 
@@ -179,7 +181,7 @@ export function BulkLabelPreviewView({ batchId }: { batchId: string }) {
         setPdfError(null);
         notifyShippingLabelPrinted(
           (data?.items ?? [])
-            .filter((item) => item.status === "done")
+            .filter((item) => item.status === "done" || item.status === "ready")
             .map((item) => item.order_id),
         );
       })

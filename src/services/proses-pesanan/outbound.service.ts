@@ -1528,6 +1528,14 @@ export const OutboundService = {
     return res.data;
   },
 
+  createReadyLabelSnapshot: async (batchId: string): Promise<{ batch_id: string; total: number }> => {
+    const res = await fetchClient<ApiResponse<{ batch_id: string; total: number }>>(
+      `/sales/shipping-labels/bulk/${encodeURIComponent(batchId)}/ready-snapshot`,
+      { method: "POST" },
+    );
+    return res.data;
+  },
+
   downloadBulkShippingLabelPdf: async (batchId: string): Promise<Blob> => {
     return fetchBlobRaw(
       `/sales/shipping-labels/bulk/${encodeURIComponent(batchId)}/pdf`,

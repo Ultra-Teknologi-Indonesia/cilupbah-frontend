@@ -9,6 +9,9 @@ export type BulkLabelItemStatus =
   | "waiting_awb"
   | "waiting_shopee_prep"
   | "waiting_lazada_prep"
+  | "waiting_tiktok_prep"
+  | "waiting_marketplace"
+  | "transforming"
   | "ready"
   | "done"
   | "failed"
@@ -42,6 +45,7 @@ export interface BulkLabelBatch {
   failed: number;
   skipped?: number;
   waiting_shopee: number;
+  waiting_marketplace?: number;
   waiting_awb?: number;
   retryable_count?: number;
   started_at: string | null;

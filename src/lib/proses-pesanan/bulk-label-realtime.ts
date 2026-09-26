@@ -15,7 +15,7 @@ function numberOrCurrent(value: unknown, current: number): number {
 
 /**
  * Applies a compact SSE progress event without re-fetching the full item list.
- * The detailed rows are refreshed once when the batch reaches a terminal state.
+ * Consumers explicitly refetch detailed rows on coalesced progress events.
  */
 export function applyBulkLabelProgress(
   current: BulkLabelBatch | undefined,
@@ -48,4 +48,12 @@ export function isTerminalBulkLabelProgress(
     typeof event.status === "string" &&
     TERMINAL_STATUSES.has(event.status as BulkLabelBatchStatus)
   );
+}
+
+export function canPrintReadyLabels(
+  batch: Pick<BulkLabelBatch, "status" | "done" | "pdf_url"> | undefined,
+  printing: boolean,
+): boolean {
+  if (!batch || printing || batch.done < 1) return false;
+  return batch.status === "ready" ? !!batch.pdf_url : true;
 }
