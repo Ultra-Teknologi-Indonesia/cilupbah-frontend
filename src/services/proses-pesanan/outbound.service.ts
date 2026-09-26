@@ -41,6 +41,8 @@ import type {
   OrderAudit,
   OrderAuditShop,
   RawOrderAudit,
+  RawOrderAuditReport,
+  OrderAuditReport,
   RawOrderAuditShop,
 } from "@/types/proses-pesanan/order-audit";
 
@@ -113,6 +115,36 @@ function mapOrderAuditShop(raw: RawOrderAuditShop): OrderAuditShop {
     shopName: raw.shop_name,
     channel: raw.channel,
     channelName: raw.channel_name,
+  };
+}
+
+function mapOrderAuditReport(raw: RawOrderAuditReport, meta: Meta): OrderAuditReport {
+  return {
+    summary: {
+      marketplaceTotal: raw.summary?.marketplace_total ?? 0,
+      wmsTotal: raw.summary?.wms_total ?? 0,
+      matchedTotal: raw.summary?.matched_total ?? 0,
+      missingTotal: raw.summary?.missing_total ?? 0,
+      statusMismatchTotal: raw.summary?.status_mismatch_total ?? 0,
+      lastSyncAt: raw.summary?.last_sync_at ?? null,
+      lastCheckedAt: raw.summary?.last_checked_at ?? new Date().toISOString(),
+    },
+    items: (raw.items ?? []).map((item) => ({
+      ...item,
+      shopId: item.shop_id ?? null,
+      shopName: item.shop_name ?? null,
+      orderReference: item.order_reference,
+      marketplaceStatus: item.marketplace_status ?? null,
+      wmsOrderId: item.wms_order_id ?? null,
+      internalOrderNo: item.internal_order_no ?? null,
+      internalStatus: item.internal_status ?? null,
+      wmsStatus: item.wms_status ?? null,
+      channelStatusRaw: item.channel_status_raw ?? null,
+      latestReceivedAt: item.latest_received_at ?? null,
+      wmsTransactionDate: item.wms_transaction_date ?? null,
+      wmsUpdatedAt: item.wms_updated_at ?? null,
+    })),
+    meta,
   };
 }
 
@@ -628,6 +660,33 @@ export const OutboundService = {
       "/operations/order-audit/shops",
     );
     return (res.data ?? []).map(mapOrderAuditShop);
+  },
+
+  orderAuditReport: async (params: {
+    search?: string;
+    channel?: string;
+    shopId?: string;
+    status?: string;
+    dateFrom?: string;
+    dateTo?: string;
+    page?: number;
+    perPage?: number;
+  }): Promise<OrderAuditReport> => {
+    const query = new URLSearchParams();
+    if (params.search) query.set("search", params.search);
+    if (params.channel) query.set("filter[channel]", params.channel);
+    if (params.shopId) query.set("filter[shop_id]", params.shopId);
+    if (params.status) query.set("filter[status]", params.status);
+    if (params.dateFrom) query.set("filter[date_from]", params.dateFrom);
+    if (params.dateTo) query.set("filter[date_to]", params.dateTo);
+    query.set("page", String(params.page ?? 1));
+    query.set("per_page", String(params.perPage ?? 20));
+
+    const res = await fetchClient<ApiResponse<RawOrderAuditReport> & { meta?: Meta }>(
+      `/operations/order-audit/report?${query.toString()}`,
+    );
+
+    return mapOrderAuditReport(res.data, res.meta ?? FALLBACK_META);
   },
 
   replayOrderAudit: async (reference: string): Promise<OrderAudit> => {

@@ -27,7 +27,7 @@ import type {
   PicklistItem,
   PacklistDetail,
 } from "@/types/proses-pesanan/fulfillment";
-import type { OrderAudit } from "@/types/proses-pesanan/order-audit";
+import type { OrderAudit, OrderAuditReport } from "@/types/proses-pesanan/order-audit";
 import type { ApiPaginated } from "@/types/api.types";
 
 const STALE = 30_000;
@@ -54,6 +54,8 @@ export const fulfillmentKeys = {
   shipmentDetail: (id: string) => [...all, "shipment-detail", id] as const,
   shipmentOrders: (id: string, p: FulfillmentListParams) =>
     [...all, "shipment-orders", id, p] as const,
+  orderAuditReport: (params: unknown) =>
+    [...all, "order-audit-report", params] as const,
 };
 
 export function useOrdersByStage(
@@ -144,6 +146,24 @@ export function useOrderAudit() {
   });
 
   return { audit, replay, remove, pullMarketplace, shops: shops.data ?? [], shopsQuery: shops };
+}
+
+export function useOrderAuditReport(params: {
+  search?: string;
+  channel?: string;
+  shopId?: string;
+  status?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  page?: number;
+  perPage?: number;
+}) {
+  return useQuery<OrderAuditReport>({
+    queryKey: fulfillmentKeys.orderAuditReport(params),
+    queryFn: () => OutboundService.orderAuditReport(params),
+    staleTime: STALE,
+    placeholderData: keepPreviousData,
+  });
 }
 
 export function useExportProcessOrdersCsv() {

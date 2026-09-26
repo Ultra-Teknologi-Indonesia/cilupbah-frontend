@@ -1,5 +1,6 @@
 import { PageTitle } from "@/components/dashboard/page-title";
 import { OrderAuditPanel } from "@/components/dashboard/proses-pesanan/pantauan/order-audit-panel";
+import { OrderAuditReport } from "@/components/dashboard/proses-pesanan/pantauan/order-audit-report";
 
 export default function OrderAuditPage() {
   return (
@@ -14,6 +15,7 @@ export default function OrderAuditPage() {
         ]}
       />
 
+      <OrderAuditReport />
       <OrderAuditPanel />
     </div>
   );
