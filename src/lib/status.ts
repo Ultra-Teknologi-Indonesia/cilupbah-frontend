@@ -48,7 +48,8 @@ export type Domain =
   | "impex-activity"
   | "bulk-label-item"
   | "order-origin"
-  | "channel-status";
+  | "channel-status"
+  | "order-recovery";
 
 export const STATUS_REGISTRY: Record<Domain, Record<string, StatusMeta>> = {
   "channel-status": {
@@ -299,8 +300,11 @@ export const STATUS_REGISTRY: Record<Domain, Record<string, StatusMeta>> = {
     pending: { label: "Menunggu Label", variant: "muted" },
     downloading: { label: "Mengambil Label", variant: "info" },
     waiting_awb: { label: "Menunggu No. Resi", variant: "info" },
+    waiting_marketplace: { label: "Menunggu Marketplace", variant: "warning" },
     waiting_shopee_prep: { label: "Menunggu Shopee", variant: "warning" },
     waiting_lazada_prep: { label: "Menunggu Lazada", variant: "warning" },
+    waiting_tiktok_prep: { label: "Menunggu TikTok", variant: "warning" },
+    transforming: { label: "Menyesuaikan Ukuran", variant: "info" },
     ready: { label: "Siap Dicetak", variant: "success" },
     done: { label: "Berhasil", variant: "success" },
     failed: { label: "Gagal", variant: "destructive" },
@@ -309,6 +313,23 @@ export const STATUS_REGISTRY: Record<Domain, Record<string, StatusMeta>> = {
 
   "order-origin": {
     shadow: { label: "Shadow", variant: "muted" },
+  },
+  "order-recovery": {
+    processing: { label: "Sedang Diproses", variant: "info" },
+    ready: { label: "Siap", variant: "success" },
+    success: { label: "Berhasil", variant: "success" },
+    waiting_marketplace: { label: "Menunggu Marketplace", variant: "warning" },
+    skipped: { label: "Dilewati", variant: "muted" },
+    busy: { label: "Sedang Diproses", variant: "info" },
+    timed_out: { label: "Batas Waktu", variant: "warning" },
+    failed: { label: "Gagal", variant: "destructive" },
+    missing_order: { label: "Belum Masuk WMS", variant: "destructive" },
+    waiting_awb: { label: "Menunggu Resi", variant: "warning" },
+    waiting_label: { label: "Menunggu Label", variant: "info" },
+    RECEIVED: { label: "Diterima / Antri", variant: "warning" },
+    PROCESSED: { label: "Diproses", variant: "success" },
+    FAILED: { label: "Gagal", variant: "destructive" },
+    SKIPPED: { label: "Dilewati", variant: "muted" },
   },
 };
 

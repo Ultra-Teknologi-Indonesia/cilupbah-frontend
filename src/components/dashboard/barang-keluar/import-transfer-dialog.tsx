@@ -153,10 +153,11 @@ export function ImportTransferDialog({ open, onOpenChange, createdBy }: Props) {
   };
 
   const summary = preview?.summary;
+  const previewTransfers = preview?.transfers;
 
   const filteredTransfers = React.useMemo(() => {
-    if (!preview?.transfers) return [];
-    return preview.transfers.filter((doc) => {
+    if (!previewTransfers) return [];
+    return previewTransfers.filter((doc) => {
       if (statusFilter !== "all" && doc.status !== statusFilter) {
         return false;
       }
@@ -173,7 +174,7 @@ export function ImportTransferDialog({ open, onOpenChange, createdBy }: Props) {
       );
       return matchRef || matchSource || matchDest || matchItems;
     });
-  }, [preview?.transfers, search, statusFilter]);
+  }, [previewTransfers, search, statusFilter]);
 
   return (
     <Dialog

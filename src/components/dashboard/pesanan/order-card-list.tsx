@@ -107,8 +107,12 @@ export function OrderCardList({
   );
 
   useEffect(() => {
-    setRenderedCount(orders.length > 40 ? 30 : orders.length);
-  }, [orders]);
+    const nextCount = orders.length > 40 ? 30 : orders.length;
+    const handle = requestAnimationFrame(() => {
+      setRenderedCount(nextCount);
+    });
+    return () => cancelAnimationFrame(handle);
+  }, [orders.length]);
 
   useEffect(() => {
     if (renderedCount < orders.length) {

@@ -44,6 +44,10 @@ import type {
   RawOrderAuditReport,
   OrderAuditReport,
   RawOrderAuditShop,
+  OrderRecoveryAction,
+  OrderRecoveryInput,
+  OrderRecoveryResult,
+  RawOrderRecoveryResult,
 } from "@/types/proses-pesanan/order-audit";
 
 export interface CreateShipmentPayload {
@@ -140,11 +144,49 @@ function mapOrderAuditReport(raw: RawOrderAuditReport, meta: Meta): OrderAuditRe
       internalStatus: item.internal_status ?? null,
       wmsStatus: item.wms_status ?? null,
       channelStatusRaw: item.channel_status_raw ?? null,
+      trackingNumber: item.tracking_number ?? null,
+      shippingLabelStatus: item.shipping_label_status ?? null,
+      shippingLabelPreparedAt: item.shipping_label_prepared_at ?? null,
+      bulkLabelBatchId: item.bulk_label_batch_id ?? null,
+      bulkLabelBatchStatus: item.bulk_label_batch_status ?? null,
+      bulkLabelItemStatus: item.bulk_label_item_status ?? null,
+      bulkLabelItemReason: item.bulk_label_item_reason ?? null,
+      bulkLabelBatchTotal: item.bulk_label_batch_total ?? null,
+      bulkLabelBatchDone: item.bulk_label_batch_done ?? null,
+      bulkLabelBatchFailed: item.bulk_label_batch_failed ?? null,
+      bulkLabelBatchCreatedAt: item.bulk_label_batch_created_at ?? null,
+      bulkLabelBatchCount: item.bulk_label_batch_count ?? 0,
       latestReceivedAt: item.latest_received_at ?? null,
       wmsTransactionDate: item.wms_transaction_date ?? null,
       wmsUpdatedAt: item.wms_updated_at ?? null,
     })),
     meta,
+  };
+}
+
+function mapOrderRecoveryResult(raw: RawOrderRecoveryResult): OrderRecoveryResult {
+  return {
+    action: raw.action,
+    synchronous: raw.synchronous,
+    durationMs: raw.duration_ms,
+    summary: raw.summary,
+    batch: raw.batch ?? null,
+    processedInRequest: raw.processed_in_request ?? null,
+    remaining: raw.remaining ?? null,
+    hasMore: raw.has_more ?? false,
+    items: (raw.items ?? []).map((item) => ({
+      reference: item.reference,
+      orderId: item.order_id ?? null,
+      internalOrderNo: item.internal_order_no ?? null,
+      channel: item.channel ?? null,
+      shopId: item.shop_id ?? null,
+      status: item.status,
+      message: item.message,
+      trackingNumber: item.tracking_number ?? null,
+      shippingLabelStatus: item.shipping_label_status ?? null,
+      labelReady: item.label_ready,
+      durationMs: item.duration_ms,
+    })),
   };
 }
 
@@ -667,6 +709,7 @@ export const OutboundService = {
     channel?: string;
     shopId?: string;
     status?: string;
+    inboxStatus?: string;
     dateFrom?: string;
     dateTo?: string;
     page?: number;
@@ -677,6 +720,7 @@ export const OutboundService = {
     if (params.channel) query.set("filter[channel]", params.channel);
     if (params.shopId) query.set("filter[shop_id]", params.shopId);
     if (params.status) query.set("filter[status]", params.status);
+    if (params.inboxStatus) query.set("filter[inbox_status]", params.inboxStatus);
     if (params.dateFrom) query.set("filter[date_from]", params.dateFrom);
     if (params.dateTo) query.set("filter[date_to]", params.dateTo);
     query.set("page", String(params.page ?? 1));
@@ -729,6 +773,55 @@ export const OutboundService = {
       },
     );
     return mapOrderAudit(res.data.audit);
+  },
+
+  recoverOrders: async (payload: {
+    action: OrderRecoveryAction;
+    items: OrderRecoveryInput[];
+  }): Promise<OrderRecoveryResult> => {
+    const res = await fetchClient<ApiResponse<RawOrderRecoveryResult>>(
+      "/operations/order-recovery/sync",
+      {
+        method: "POST",
+        data: {
+          action: payload.action,
+          items: payload.items.map((item) => ({
+            reference: item.reference.trim(),
+            channel: item.channel || null,
+            shop_id: item.shopId || null,
+          })),
+        },
+        timeout: 35_000,
+      },
+    );
+    return mapOrderRecoveryResult(res.data);
+  },
+
+  importOrderRecovery: async (payload: {
+    action: OrderRecoveryAction;
+    file: File;
+    channel?: string | null;
+    shopId?: string | null;
+  }): Promise<OrderRecoveryResult> => {
+    const form = new FormData();
+    form.append("file", payload.file);
+    form.append("action", payload.action);
+    if (payload.channel) form.append("channel", payload.channel);
+    if (payload.shopId) form.append("shop_id", payload.shopId);
+
+    const res = await fetchClient<ApiResponse<RawOrderRecoveryResult>>(
+      "/operations/order-recovery/import",
+      { method: "POST", data: form, timeout: 35_000 },
+    );
+    return mapOrderRecoveryResult(res.data);
+  },
+
+  recoverOrderBatch: async (batchId: string): Promise<OrderRecoveryResult> => {
+    const res = await fetchClient<ApiResponse<RawOrderRecoveryResult>>(
+      `/operations/order-recovery/batches/${encodeURIComponent(batchId)}/sync`,
+      { method: "POST", timeout: 35_000 },
+    );
+    return mapOrderRecoveryResult(res.data);
   },
 
   exportProcessOrdersCsv: async (

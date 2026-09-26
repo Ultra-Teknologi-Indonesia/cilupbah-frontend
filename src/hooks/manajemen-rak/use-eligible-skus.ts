@@ -4,6 +4,14 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { LocationBinService } from "@/services/manajemen-rak/location-bin.service";
 
+interface EligibleSkuResponseItem {
+  variant_id: string | number;
+  sku: string;
+  name: string;
+  pending_qty: number;
+  thumbnail?: string | null;
+}
+
 export function useEligibleSkusInfinite(
   locationId: string,
   binId: string,
@@ -20,8 +28,8 @@ export function useEligibleSkusInfinite(
       });
 
       return {
-        data: (res.data ?? []).map((s: any) => ({
-          variantId: s.variant_id,
+        data: ((res.data ?? []) as EligibleSkuResponseItem[]).map((s) => ({
+          variantId: String(s.variant_id),
           sku: s.sku,
           name: s.name,
           pendingQty: s.pending_qty,

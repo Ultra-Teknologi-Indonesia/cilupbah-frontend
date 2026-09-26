@@ -269,13 +269,11 @@ export function PickingProsesView({ id }: { id: string }) {
   );
   const { bump: bumpPick } = useScanDeltaQueue(commitPick, {
     onSuccess: (res, _itemId) => {
-      if (
-        res &&
-        typeof res === "object" &&
-        res.status === "success" &&
-        res.already_shipped
-      ) {
-        apiSuccess(res, "Sukses");
+      if (res && typeof res === "object") {
+        const result = res as { status?: string; already_shipped?: boolean };
+        if (result.status === "success" && result.already_shipped) {
+          apiSuccess(res, "Sukses");
+        }
       }
     },
     onGiveUp: (itemId, lostQty, error) => {

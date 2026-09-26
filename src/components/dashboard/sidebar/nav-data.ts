@@ -180,7 +180,7 @@ export const dashboardGroups: NavGroup[] = [
       },
       {
         id: "audit-pesanan",
-        title: "Audit Pesanan",
+        title: "Pantauan Pesanan",
         icon: FileSearch,
         link: "/dashboard/proses-pesanan/audit",
       },

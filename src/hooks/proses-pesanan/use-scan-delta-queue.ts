@@ -4,11 +4,11 @@ import * as React from "react";
 
 export interface ScanDeltaQueueOptions {
   onGiveUp?: (itemId: string, lostQty: number, error: unknown) => void;
-  onSuccess?: (res: any, itemId: string, qty: number) => void;
+  onSuccess?: (res: unknown, itemId: string, qty: number) => void;
 }
 
 export function useScanDeltaQueue(
-  commit: (itemId: string, deltaQty: number) => Promise<any>,
+  commit: (itemId: string, deltaQty: number) => Promise<unknown>,
   options?: ScanDeltaQueueOptions,
 ) {
   const commitRef = React.useRef(commit);

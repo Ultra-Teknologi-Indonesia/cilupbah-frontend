@@ -27,7 +27,12 @@ import type {
   PicklistItem,
   PacklistDetail,
 } from "@/types/proses-pesanan/fulfillment";
-import type { OrderAudit, OrderAuditReport } from "@/types/proses-pesanan/order-audit";
+import type {
+  OrderAudit,
+  OrderAuditReport,
+  OrderRecoveryAction,
+  OrderRecoveryInput,
+} from "@/types/proses-pesanan/order-audit";
 import type { ApiPaginated } from "@/types/api.types";
 
 const STALE = 30_000;
@@ -153,6 +158,7 @@ export function useOrderAuditReport(params: {
   channel?: string;
   shopId?: string;
   status?: string;
+  inboxStatus?: string;
   dateFrom?: string;
   dateTo?: string;
   page?: number;
@@ -164,6 +170,37 @@ export function useOrderAuditReport(params: {
     staleTime: STALE,
     placeholderData: keepPreviousData,
   });
+}
+
+export function useOrderRecovery() {
+  const qc = useQueryClient();
+  const refreshReport = () => qc.refetchQueries({
+    queryKey: [...fulfillmentKeys.all, "order-audit-report"],
+    type: "active",
+  });
+
+  const sync = useMutation({
+    mutationFn: (payload: { action: OrderRecoveryAction; items: OrderRecoveryInput[] }) =>
+      OutboundService.recoverOrders(payload),
+    onSuccess: refreshReport,
+  });
+
+  const importFile = useMutation({
+    mutationFn: (payload: {
+      action: OrderRecoveryAction;
+      file: File;
+      channel?: string | null;
+      shopId?: string | null;
+    }) => OutboundService.importOrderRecovery(payload),
+    onSuccess: refreshReport,
+  });
+
+  const syncBatch = useMutation({
+    mutationFn: (batchId: string) => OutboundService.recoverOrderBatch(batchId),
+    onSuccess: refreshReport,
+  });
+
+  return { sync, importFile, syncBatch };
 }
 
 export function useExportProcessOrdersCsv() {

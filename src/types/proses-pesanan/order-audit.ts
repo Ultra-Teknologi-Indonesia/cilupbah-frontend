@@ -108,6 +108,21 @@ export interface OrderAudit {
 }
 
 export type OrderAuditMatchState = "match" | "missing" | "status_mismatch";
+export type OrderRecoveryState =
+  | "ready"
+  | "missing_order"
+  | "waiting_awb"
+  | "waiting_label"
+  | "failed";
+export type OrderRecoveryAction = "order" | "awb" | "label" | "all";
+export type OrderRecoveryStatus =
+  | "ready"
+  | "success"
+  | "waiting_marketplace"
+  | "skipped"
+  | "busy"
+  | "timed_out"
+  | "failed";
 
 export interface RawOrderAuditReportSummary {
   marketplace_total: number;
@@ -131,6 +146,19 @@ export interface RawOrderAuditReportRow {
   internal_status?: string | null;
   wms_status?: string | null;
   channel_status_raw?: string | null;
+  tracking_number?: string | null;
+  shipping_label_status?: string | null;
+  shipping_label_prepared_at?: string | null;
+  bulk_label_batch_id?: string | null;
+  bulk_label_batch_status?: string | null;
+  bulk_label_item_status?: string | null;
+  bulk_label_item_reason?: string | null;
+  bulk_label_batch_total?: number | null;
+  bulk_label_batch_done?: number | null;
+  bulk_label_batch_failed?: number | null;
+  bulk_label_batch_created_at?: string | null;
+  bulk_label_batch_count: number;
+  recovery_state: OrderRecoveryState;
   match_state: OrderAuditMatchState;
   inbox_status: string;
   attempts: number;
@@ -165,6 +193,18 @@ export interface OrderAuditReportRow extends RawOrderAuditReportRow {
   internalStatus: string | null;
   wmsStatus: string | null;
   channelStatusRaw: string | null;
+  trackingNumber: string | null;
+  shippingLabelStatus: string | null;
+  shippingLabelPreparedAt: string | null;
+  bulkLabelBatchId: string | null;
+  bulkLabelBatchStatus: string | null;
+  bulkLabelItemStatus: string | null;
+  bulkLabelItemReason: string | null;
+  bulkLabelBatchTotal: number | null;
+  bulkLabelBatchDone: number | null;
+  bulkLabelBatchFailed: number | null;
+  bulkLabelBatchCreatedAt: string | null;
+  bulkLabelBatchCount: number;
   latestReceivedAt: string | null;
   wmsTransactionDate: string | null;
   wmsUpdatedAt: string | null;
@@ -179,4 +219,79 @@ export interface OrderAuditReport {
     per_page: number;
     total: number;
   };
+}
+
+export interface OrderRecoveryInput {
+  reference: string;
+  channel?: string | null;
+  shopId?: string | null;
+}
+
+export interface RawOrderRecoveryResultItem {
+  reference: string;
+  order_id?: string | null;
+  internal_order_no?: string | null;
+  channel?: string | null;
+  shop_id?: string | null;
+  status: OrderRecoveryStatus;
+  message: string;
+  tracking_number?: string | null;
+  shipping_label_status?: string | null;
+  label_ready: boolean;
+  duration_ms: number;
+}
+
+export interface RawOrderRecoveryResult {
+  action: OrderRecoveryAction;
+  synchronous: boolean;
+  duration_ms: number;
+  summary: Record<OrderRecoveryStatus | "total", number>;
+  items: RawOrderRecoveryResultItem[];
+  batch?: RawOrderRecoveryBatch | null;
+  processed_in_request?: number;
+  remaining?: number;
+  has_more?: boolean;
+}
+
+export interface RawOrderRecoveryBatch {
+  id: string;
+  status: string;
+  total: number;
+  done: number;
+  failed: number;
+  accessible_total: number;
+  created_at?: string | null;
+}
+
+export interface OrderRecoveryResultItem {
+  reference: string;
+  orderId: string | null;
+  internalOrderNo: string | null;
+  channel: string | null;
+  shopId: string | null;
+  status: OrderRecoveryStatus;
+  message: string;
+  trackingNumber: string | null;
+  shippingLabelStatus: string | null;
+  labelReady: boolean;
+  durationMs: number;
+}
+
+export interface OrderRecoveryResult {
+  action: OrderRecoveryAction;
+  synchronous: boolean;
+  durationMs: number;
+  summary: RawOrderRecoveryResult["summary"];
+  items: OrderRecoveryResultItem[];
+  batch: RawOrderRecoveryBatch | null;
+  processedInRequest: number | null;
+  remaining: number | null;
+  hasMore: boolean;
+}
+
+export interface OrderRecoveryBatchTarget {
+  id: string;
+  total: number;
+  done: number;
+  failed: number;
 }
