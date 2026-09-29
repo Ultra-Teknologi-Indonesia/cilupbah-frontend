@@ -182,7 +182,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            NEXT_PUBLIC_API_URL=https://staging.ultra-fit.id
+            NEXT_PUBLIC_API_URL=https://dev-backend-app.ultra-fit.id
           labels: |
             org.opencontainers.image.title=cilupbah-frontend
             org.opencontainers.image.description=${{ steps.changelog.outputs.summary }}

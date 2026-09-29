@@ -9,5 +9,5 @@ services:
       - PORT=6000
       # URL backend staging — dibaca di runtime (bukan di-bake ke image),
       # lihat catatan di Dockerfile.staging.
-      - API_URL=https://staging.ultra-fit.id
+      - API_URL=https://dev-backend-app.ultra-fit.id
     restart: unless-stopped

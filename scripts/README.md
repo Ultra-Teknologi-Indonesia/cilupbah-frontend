@@ -25,7 +25,7 @@ LOGIN_EMAIL=your@email LOGIN_PASSWORD=secret \
 node scripts/bantuan-screenshot.mjs
 ```
 
-- Untuk staging: `BASE_URL=https://staging.ultra-fit.id`
+- Untuk staging: `BASE_URL=https://dev-frontend-app.ultra-fit.id`
 - Untuk lihat browser jalan: tambah `HEADFUL=1`
 - Viewport custom: `VIEWPORT_W=1600 VIEWPORT_H=1000`
 
