@@ -1,10 +1,10 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { apiError } from "@/lib/toast";
-import { subscribeRealtime } from "@/lib/realtime/sse-client";
 import { ExportJobService } from "@/services/laporan/export-job.service";
 import type { ExportJobStatus } from "@/types/laporan/export-job";
 
@@ -20,15 +20,19 @@ function mimeTypeForFileName(fileName: string | null): string | undefined {
 }
 
 /**
- * Hook generik untuk export asinkron. Secara default submit hanya memasukkan
- * job ke antrean agar user dapat melanjutkan pekerjaan dan mengunduhnya dari
- * Download Report. Alur lama yang membutuhkan auto-download dapat opt-in
- * dengan `{ autoDownload: true }`.
+ * Hook generik untuk export asinkron.
+ *
+ * Semua export tetap dimasukkan ke antrean agar request halaman tidak menunggu
+ * proses report. Jika `autoDownload` aktif, mutation menunggu status terminal.
+ * Jika tidak aktif, mutation langsung selesai setelah enqueue, tetapi listener
+ * SSE tetap menunggu `ready` lalu mengunduh file satu kali secara otomatis.
+ * Dengan begitu user boleh melanjutkan pekerjaan tanpa kehilangan hasil export.
  */
 export function useAsyncExport<TArgs = void>(
   trigger: (args: TArgs) => Promise<string>,
   options: { autoDownload?: boolean } = {},
 ) {
+  const router = useRouter();
   const autoDownload = options.autoDownload ?? false;
 
   return useMutation({
@@ -41,10 +45,11 @@ export function useAsyncExport<TArgs = void>(
         if (!autoDownload) {
           toast.success("Export masuk antrean. Anda dapat melanjutkan pekerjaan.", {
             id: toastId,
+            duration: Infinity,
             action: {
               label: "Buka Download Report",
               onClick: () => {
-                window.location.href = "/dashboard/laporan/download";
+                router.push("/dashboard/laporan/download");
               },
             },
           });
@@ -53,24 +58,49 @@ export function useAsyncExport<TArgs = void>(
             detail: { exportId },
           }));
 
-          subscribeRealtime({
-            exportId,
-            closeOnTerminal: true,
-            onEvent: (event) => {
-              if (event.type !== "export.progress") return;
-              if (event.data.status !== "ready" && event.data.status !== "failed") return;
+          // Keep the request non-blocking for the caller, but continue the
+          // shared SSE-based wait in the background. This consumes the same
+          // terminal event shown in DevTools and avoids interval polling.
+          void waitForExport(exportId)
+            .then(async (job) => {
+              if (job.status === "ready" && job.file_available) {
+                await ExportJobService.download(
+                  exportId,
+                  job.file_name ?? "export.xlsx",
+                  mimeTypeForFileName(job.file_name),
+                );
+                toast.success("Berkas export selesai diunduh.", {
+                  id: toastId,
+                  duration: 5000,
+                });
+              } else {
+                throw new Error(
+                  job.status === "ready"
+                    ? "Export sudah selesai, tetapi berkas belum tersedia untuk diunduh. Silakan coba lagi dari Download Report."
+                    : (job.error ?? "Gagal membuat berkas export."),
+                );
+              }
+
               window.dispatchEvent(new CustomEvent("report-export-updated", {
-                detail: { exportId, status: event.data.status },
+                detail: { exportId, status: job.status },
               }));
-            },
-          });
+            })
+            .catch((error: unknown) => {
+              const message = error instanceof Error
+                ? error.message
+                : "Gagal membuat berkas export.";
+              toast.error(message, { id: toastId, duration: 8000 });
+              window.dispatchEvent(new CustomEvent("report-export-updated", {
+                detail: { exportId, status: "failed" },
+              }));
+            });
 
           return exportId;
         }
 
         const job = await waitForExport(exportId);
 
-        if (job.status === "ready") {
+        if (job.status === "ready" && job.file_available) {
           await ExportJobService.download(
             exportId,
             job.file_name ?? "export.xlsx",
@@ -80,7 +110,11 @@ export function useAsyncExport<TArgs = void>(
           return;
         }
 
-        throw new Error(job.error ?? "Gagal membuat berkas export.");
+        throw new Error(
+          job.status === "ready"
+            ? "Export sudah selesai, tetapi berkas belum tersedia untuk diunduh. Silakan coba lagi dari Download Report."
+            : (job.error ?? "Gagal membuat berkas export."),
+        );
       } catch (error) {
         toast.error(
           error instanceof Error

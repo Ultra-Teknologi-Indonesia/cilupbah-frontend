@@ -82,7 +82,10 @@ async function waitForExportCompletion(
           started_at: null,
           finished_at:
             typeof event.data.finished_at === "string" ? event.data.finished_at : null,
-          file_available: status === "ready",
+          file_available:
+            typeof event.data.file_available === "boolean"
+              ? event.data.file_available
+              : status === "ready",
           file_purged_at: null,
           expires_at: null,
           error: typeof event.data.error === "string" ? event.data.error : null,

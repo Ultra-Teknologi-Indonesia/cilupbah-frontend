@@ -301,6 +301,7 @@ export const NAV_PERMISSION: Record<string, string | string[]> = {
   "laporan-gudang": "view-laporan-gudang",
   "laporan-settlement": "view-pembayaran-penjualan",
   "laporan-stok-minus": "view-laporan-stok-minus",
+  "laporan-download": "view-laporan-download",
 };
 
 const SETTINGS_SUB_PERMISSION: Record<string, string | string[]> = {

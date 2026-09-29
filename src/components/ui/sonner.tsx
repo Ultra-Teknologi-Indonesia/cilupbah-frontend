@@ -45,15 +45,15 @@ const Toaster = ({ ...props }: ToasterProps) => {
       toastOptions={{
         classNames: {
           toast:
-            "cn-toast p-5 w-[400px] max-w-[90vw] shadow-lg ring-1 ring-foreground/5 dark:ring-foreground/10 backdrop-blur-xl backdrop-saturate-150",
+            "cn-toast !grid !grid-cols-[auto_minmax(0,1fr)_auto] !items-start !gap-x-3 !gap-y-3 p-5 w-[400px] max-w-[90vw] shadow-lg ring-1 ring-foreground/5 dark:ring-foreground/10 backdrop-blur-xl backdrop-saturate-150",
           title: "text-base font-semibold",
           description: "text-sm opacity-90",
           icon: "flex items-center",
           content: "gap-0.5",
           actionButton:
-            "bg-primary! text-primary-foreground! rounded-full! px-3! text-xs! font-medium!",
+            "!col-start-2 !col-end-4 !justify-self-start bg-primary! text-primary-foreground! rounded-full! px-3! text-xs! font-medium!",
           cancelButton:
-            "bg-muted! text-muted-foreground! rounded-full! px-3! text-xs! font-medium! hover:bg-muted/70!",
+            "!col-start-2 !col-end-4 !justify-self-start bg-muted! text-muted-foreground! rounded-full! px-3! text-xs! font-medium! hover:bg-muted/70!",
           closeButton:
             "bg-background/80! text-foreground! border-border! backdrop-blur! hover:bg-muted!",
         },

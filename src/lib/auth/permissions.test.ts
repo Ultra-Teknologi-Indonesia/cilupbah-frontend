@@ -42,6 +42,9 @@ describe("dashboard route permissions", () => {
     expect(permissionForPath("/dashboard/proses-pesanan/audit")).toBe(
       "view-pesanan",
     );
+    expect(permissionForPath("/dashboard/laporan/download")).toBe(
+      "view-laporan-download",
+    );
   });
 
   it("does not silently allow an unmapped dashboard route", () => {
