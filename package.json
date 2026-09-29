@@ -1,6 +1,6 @@
 {
   "name": "cilupbah-fe",
-  "version": "1.0.343",
+  "version": "1.0.344",
   "private": true,
   "scripts": {
     "dev": "next dev",
